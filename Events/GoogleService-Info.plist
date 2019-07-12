@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>774774183385-2qkelgsed3q91oo4b67lnqc7m4vh8nor.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.774774183385-2qkelgsed3q91oo4b67lnqc7m4vh8nor</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBrYzc29J4ZVu3iAVpDxHrzG509oHjI1PY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>774774183385</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dandriyanov.Events</string>
+	<key>PROJECT_ID</key>
+	<string>events-82a37</string>
+	<key>STORAGE_BUCKET</key>
+	<string>events-82a37.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:774774183385:ios:97f6fda92c228df3</string>
+	<key>DATABASE_URL</key>
+	<string>https://events-82a37.firebaseio.com</string>
+</dict>
+</plist>
