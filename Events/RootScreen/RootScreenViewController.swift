@@ -16,12 +16,13 @@ class RootScreenViewController: UIViewController {
     let categoriesView = CategoriesView()
     let locationButton = FilterButton()
     let datesButton = FilterButton()
-    var searchBar = SearchBarViewController(nibName: nil, bundle: nil)
+    let searchBar = SearchBarViewController(nibName: nil, bundle: nil)
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         viewModel = RootScreenViewModel(onChangeLocation: onChangeLocation)
+        initializeUserLocation()
 
         setupView()
         view.addSubview(searchBar.view)
@@ -34,8 +35,6 @@ class RootScreenViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        initializeUserLocation()
         hideNavigationBar()
     }
     
@@ -88,17 +87,15 @@ extension RootScreenViewController {
     }
     
     func setupSearchBarViewConstraints() {
-        
-        guard let saerchBarView = searchBar.view else {
+        guard let searchBar = searchBar.view else {
             return
         }
         
-        saerchBarView.translatesAutoresizingMaskIntoConstraints = false
-        
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            saerchBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            saerchBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            saerchBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8)
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8)
         ])
     }
 

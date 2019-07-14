@@ -21,7 +21,8 @@ class RootScreenViewModel {
         geocodeDisposable = geocodeObserver.subscribe(
             onNext: { [weak self] geocode in
                 DispatchQueue.main.async {
-                    self?.onChangeLocation(geocode.locationName())
+                    print("coming locaiton", geocode)
+                    self?.onChangeLocation(geocode.shortLocationName())
                 }
             },
             onError: { [weak self] _ in
@@ -30,7 +31,8 @@ class RootScreenViewModel {
             onCompleted: { [weak self] in
                 self?.disposeGeocodeSubscription()
             },
-            onDisposed: nil)
+            onDisposed: nil
+        )
     }
 
     deinit {

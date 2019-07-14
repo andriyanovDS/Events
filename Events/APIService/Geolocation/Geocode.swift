@@ -109,7 +109,7 @@ struct Geocode: Decodable {
         return address_components.first(where: { $0.types.contains(type.rawValue) })
     }
 
-    func locationName() -> String {
+    func shortLocationName() -> String {
         return neighborhood.getOrElseL({
             city.getOrElseL({
                 nature.getOrElseL({
@@ -118,9 +118,24 @@ struct Geocode: Decodable {
             })
         })
     }
+
+    func fullLocationName() -> String {
+        let shortName = shortLocationName()
+        let country = self.country
+        if country == shortName {
+            return shortName
+        }
+        return "\(shortName), \(country)"
+    }
 }
 
 struct GeocodeResult: Decodable {
     let status: String
     let results: [Geocode]
+
+    func mainGeocode() -> Geocode? {
+        return results
+            .sorted(by: { $0.address_components.count > $1.address_components.count })
+            .first
+    }
 }

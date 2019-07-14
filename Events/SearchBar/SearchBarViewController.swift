@@ -10,12 +10,14 @@ import UIKit
 import SwiftIconFont
 
 class SearchBarViewController: UIViewController, UITextFieldDelegate {
-    
-    let contentHeight: CGFloat = 40.0
+
+    var delegate: SearchBarDelegate?
+
     let textField = UITextField()
-    var textFieldTrailingConstraint: NSLayoutConstraint?
-    let textFieldLeftViewStub = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 40))
-    let cancelButton = UIButton(frame: CGRect(x: 0, y: 0, width: 36, height: 40))
+    private let contentHeight: CGFloat = 40.0
+    private var textFieldTrailingConstraint: NSLayoutConstraint?
+    private let textFieldLeftViewStub = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 40))
+    private let cancelButton = UIButton(frame: CGRect(x: 0, y: 0, width: 36, height: 40))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +28,7 @@ class SearchBarViewController: UIViewController, UITextFieldDelegate {
         cancelButton.addTarget(self, action: #selector(cancelTextField), for: .touchUpInside)
     }
     
-    func animateTextFieldTrailingConstraint(value: CGFloat, onClomplete: ((Bool) -> Void)?) {
+    private func animateTextFieldTrailingConstraint(value: CGFloat, onClomplete: ((Bool) -> Void)?) {
         textFieldTrailingConstraint?.constant = value
         UIView.animate(
             withDuration: 0.5,
@@ -46,6 +48,7 @@ class SearchBarViewController: UIViewController, UITextFieldDelegate {
             onClomplete: { [weak self] finished in
                 if finished {
                     self?.cancelButton.isHidden = false
+                    self?.delegate?.searchBarDidActivate()
                 }
             }
         )
@@ -60,7 +63,9 @@ class SearchBarViewController: UIViewController, UITextFieldDelegate {
     @objc func cancelTextField() {
         textField.resignFirstResponder()
         setupSearchIcon()
-        animateTextFieldTrailingConstraint(value: -20, onClomplete: nil)
+        animateTextFieldTrailingConstraint(value: -20, onClomplete: {[weak self] _ in
+            self?.delegate?.searchBarDidCancel()
+        })
         cancelButton.isHidden = true
     }
     
@@ -68,7 +73,7 @@ class SearchBarViewController: UIViewController, UITextFieldDelegate {
 
 extension SearchBarViewController {
 
-    func setupTextField() {
+    private func setupTextField() {
         
         textField.isEnabled = true
         textField.isUserInteractionEnabled = true
@@ -95,7 +100,7 @@ extension SearchBarViewController {
         setupTextFieldConstraints()
     }
     
-    func setupSearchIcon() {
+    private func setupSearchIcon() {
         let outerView = UIView(frame: CGRect(x: 0, y: 0, width: 45, height: contentHeight))
         let image = UIImage(
             from: .materialIcon,
@@ -111,7 +116,7 @@ extension SearchBarViewController {
         imageView.image = image
     }
     
-    func setupCancelButton() {
+    private func setupCancelButton() {
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.setTitleColor(.gray, for: .normal)
         cancelButton.titleLabel?.font = UIFont.init(name: "AirbnbCerealApp-Medium", size: 14)
@@ -122,7 +127,7 @@ extension SearchBarViewController {
         setupCancelButtonConstraints()
     }
     
-    func setupCancelButtonConstraints() {
+    private func setupCancelButtonConstraints() {
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
@@ -130,7 +135,7 @@ extension SearchBarViewController {
         ])
     }
     
-    func setupTextFieldConstraints() {
+    private func setupTextFieldConstraints() {
         textField.translatesAutoresizingMaskIntoConstraints = false
         
         textFieldTrailingConstraint = textField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
