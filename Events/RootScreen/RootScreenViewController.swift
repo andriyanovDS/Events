@@ -9,9 +9,8 @@
 import UIKit
 
 class RootScreenViewController: UIViewController {
-    
-    let router = RootScreenRouter()
     var viewModel: RootScreenViewModel!
+    var coordinator: MainCoordinator?
     
     let titleLabel = UILabel()
     let categoriesView = CategoriesView()
@@ -41,14 +40,14 @@ class RootScreenViewController: UIViewController {
     }
     
     @objc func openCalendar() {
-        guard let navigationController = self.navigationController else {
-            return
-        }
-        router.navigateToCalendar(
-            navigationController: navigationController,
+        coordinator?.openCalendarScreen(
             selectedDates: viewModel.getSelectedDates(),
             onComplete: onDatesChanged
         )
+    }
+
+    @objc func openLocationSearch() {
+        coordinator?.openLocationSearch()
     }
 
     func onChangeLocation(locationName: String) {
@@ -120,6 +119,7 @@ extension RootScreenViewController {
     }
 
     func setupLocationButton(containerView: UIView) {
+        locationButton.addTarget(self, action: #selector(openLocationSearch), for: .touchUpInside)
         containerView.addSubview(locationButton)
         setupLocationButtonConstraints(containerView: containerView)
     }

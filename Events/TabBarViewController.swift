@@ -34,6 +34,7 @@ class TabBarViewController: UITabBarController {
         eventsViewController.tabBarItem = eventsScreenTabBarItem
         profileScreenViewController.tabBarItem = profileScreenTabBarItem
 
+        rootScreenViewController.coordinator = coordinator
         profileScreenViewController.coordinator = coordinator
         
         viewControllers = [

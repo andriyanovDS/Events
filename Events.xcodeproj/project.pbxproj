@@ -36,7 +36,6 @@
 		7467B6F122D52C5D00A1BFE9 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6F022D52C5D00A1BFE9 /* Coordinator.swift */; };
 		7467B6F322D53E5700A1BFE9 /* LoginTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6F222D53E5700A1BFE9 /* LoginTextField.swift */; };
 		74697FC022D0E69B00D5B5F4 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FBF22D0E69B00D5B5F4 /* CalendarViewController.swift */; };
-		74697FC422D0EB9C00D5B5F4 /* RootScreenRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FC322D0EB9C00D5B5F4 /* RootScreenRouter.swift */; };
 		74697FC622D0F67000D5B5F4 /* commonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FC522D0F67000D5B5F4 /* commonStyles.swift */; };
 		74697FC822D11F7F00D5B5F4 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FC722D11F7F00D5B5F4 /* UIViewExtension.swift */; };
 		74697FCA22D200A900D5B5F4 /* Month.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FC922D200A900D5B5F4 /* Month.swift */; };
@@ -90,7 +89,6 @@
 		7467B6F022D52C5D00A1BFE9 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		7467B6F222D53E5700A1BFE9 /* LoginTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextField.swift; sourceTree = "<group>"; };
 		74697FBF22D0E69B00D5B5F4 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
-		74697FC322D0EB9C00D5B5F4 /* RootScreenRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenRouter.swift; sourceTree = "<group>"; };
 		74697FC522D0F67000D5B5F4 /* commonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = commonStyles.swift; sourceTree = "<group>"; };
 		74697FC722D11F7F00D5B5F4 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		74697FC922D200A900D5B5F4 /* Month.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Month.swift; sourceTree = "<group>"; };
@@ -188,6 +186,8 @@
 		745243A822CE85BA00C930C8 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				748E0B1D22DB725700B061C7 /* Extensions */,
+				748E0B1C22DB721E00B061C7 /* RootScreen */,
 				748E0B1822DB6B0B00B061C7 /* LocationSearch */,
 				748E0B0C22DA249600B061C7 /* APIService */,
 				7467B6EB22D5108D00A1BFE9 /* Login */,
@@ -201,15 +201,8 @@
 				745243BB22CF7B3000C930C8 /* SearchBar */,
 				745243A922CE85BA00C930C8 /* AppDelegate.swift */,
 				7467B6F022D52C5D00A1BFE9 /* Coordinator.swift */,
-				745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */,
-				748E0B0722DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift */,
-				741DCF8822D38264005783A3 /* RootScreenViewModel.swift */,
-				74697FC322D0EB9C00D5B5F4 /* RootScreenRouter.swift */,
-				745243C022CFE2B400C930C8 /* UIColorExtension.swift */,
 				74697FC522D0F67000D5B5F4 /* commonStyles.swift */,
-				74697FC722D11F7F00D5B5F4 /* UIViewExtension.swift */,
 				7467B6DE22D4E2E300A1BFE9 /* TabBarViewController.swift */,
-				74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */,
 				748E0AFF22D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift */,
 				745243B022CE85BC00C930C8 /* Assets.xcassets */,
 				745243B222CE85BC00C930C8 /* LaunchScreen.storyboard */,
@@ -302,6 +295,26 @@
 				748E0B1922DB6B9200B061C7 /* LocationSearchViewController.swift */,
 			);
 			path = LocationSearch;
+			sourceTree = "<group>";
+		};
+		748E0B1C22DB721E00B061C7 /* RootScreen */ = {
+			isa = PBXGroup;
+			children = (
+				745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */,
+				748E0B0722DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift */,
+				741DCF8822D38264005783A3 /* RootScreenViewModel.swift */,
+			);
+			path = RootScreen;
+			sourceTree = "<group>";
+		};
+		748E0B1D22DB725700B061C7 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				745243C022CFE2B400C930C8 /* UIColorExtension.swift */,
+				74697FC722D11F7F00D5B5F4 /* UIViewExtension.swift */,
+				74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		ACC57B6C8ED958466573C88C /* Pods */ = {
@@ -468,7 +481,6 @@
 				74A1AE2322D64BFB00C39525 /* LoginViewModel.swift in Sources */,
 				741EF30422D877FF00133872 /* LoginButton.swift in Sources */,
 				745243C122CFE2B400C930C8 /* UIColorExtension.swift in Sources */,
-				74697FC422D0EB9C00D5B5F4 /* RootScreenRouter.swift in Sources */,
 				7467B6F322D53E5700A1BFE9 /* LoginTextField.swift in Sources */,
 				741DCF9022D3AA81005783A3 /* Category.swift in Sources */,
 				7467B6ED22D510AA00A1BFE9 /* LoginViewController.swift in Sources */,
