@@ -21,7 +21,6 @@ class RootScreenViewModel {
         geocodeDisposable = geocodeObserver.subscribe(
             onNext: { [weak self] geocode in
                 DispatchQueue.main.async {
-                    print("coming locaiton", geocode)
                     self?.onChangeLocation(geocode.shortLocationName())
                 }
             },

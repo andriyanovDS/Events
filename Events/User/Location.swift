@@ -38,6 +38,5 @@ func onChangeUserLocation(coordinate: CLLocationCoordinate2D) {
 }
 
 func onChangeUserLocation(geocode: Geocode) {
-    print("next geocode", geocode)
     geocodeS.on(.next(geocode))
 }
