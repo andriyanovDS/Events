@@ -50,5 +50,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Please, let us know where to find new events</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Please, let us know where to find new events</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Please, let us know where to find new events</string>
 </dict>
 </plist>

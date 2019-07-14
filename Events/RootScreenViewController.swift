@@ -11,29 +11,32 @@ import UIKit
 class RootScreenViewController: UIViewController {
     
     let router = RootScreenRouter()
-    let viewModel = RootScreenViewModel()
+    var viewModel: RootScreenViewModel!
     
     let titleLabel = UILabel()
     let categoriesView = CategoriesView()
-    let datesButton = FilterButton(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
+    let locationButton = FilterButton()
+    let datesButton = FilterButton()
     var searchBar = SearchBarViewController(nibName: nil, bundle: nil)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        viewModel = RootScreenViewModel(onChangeLocation: onChangeLocation)
+
         setupView()
-        
         view.addSubview(searchBar.view)
         view.addSubview(categoriesView.view)
         setupSearchBarViewConstraints()
-        setupDatesButton()
+        setupButtonsContainer()
         setupTitleLabel()
         setupCategoryViewConstraints()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
+        initializeUserLocation()
         hideNavigationBar()
     }
     
@@ -47,10 +50,14 @@ class RootScreenViewController: UIViewController {
             onComplete: onDatesChanged
         )
     }
+
+    func onChangeLocation(locationName: String) {
+        locationButton.setTitle(locationName, for: .normal)
+    }
     
     func onDatesChanged(dates: SelectedDates) {
         viewModel.setSelectedDates(dates: dates)
-        let buttonTitle = viewModel.selectedDatesToString()
+        let buttonTitle = viewModel?.selectedDatesToString()
         
         if buttonTitle == datesButton.title(for: .normal) {
             return
@@ -95,12 +102,26 @@ extension RootScreenViewController {
             saerchBarView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8)
         ])
     }
+
+    func setupButtonsContainer() {
+        let container = UIView()
+        view.addSubview(container)
+        setupButtonsContainerConstraints(containerView: container)
+        setupDatesButton(containerView: container)
+        setupLocationButton(containerView: container)
+
+    }
     
-    func setupDatesButton() {
+    func setupDatesButton(containerView: UIView) {
         datesButton.setTitle("Dates", for: .normal)
         datesButton.addTarget(self, action: #selector(openCalendar), for: .touchUpInside)
-        view.addSubview(datesButton)
-        setupDatesButtonConstraints()
+        containerView.addSubview(datesButton)
+        setupDatesButtonConstraints(containerView: containerView)
+    }
+
+    func setupLocationButton(containerView: UIView) {
+        containerView.addSubview(locationButton)
+        setupLocationButtonConstraints(containerView: containerView)
     }
     
     func setupTitleLabel() {
@@ -112,15 +133,24 @@ extension RootScreenViewController {
         
         setupTitleLabelConstraints()
     }
-    
-    func setupDatesButtonConstraints() {
+
+    func setupButtonsContainerConstraints(containerView: UIView) {
         guard let saerchBarView = searchBar.view else {
             return
         }
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            containerView.topAnchor.constraint(equalTo: saerchBarView.bottomAnchor, constant: 7),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            containerView.heightAnchor.constraint(equalToConstant: 30)
+            ])
+    }
+    
+    func setupDatesButtonConstraints(containerView: UIView) {
         datesButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            datesButton.leadingAnchor.constraint(equalTo: saerchBarView.leadingAnchor, constant: 20),
-            datesButton.topAnchor.constraint(equalTo: saerchBarView.bottomAnchor, constant: 7)
+            datesButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
         ])
     }
     
@@ -131,6 +161,13 @@ extension RootScreenViewController {
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
+    }
+
+    func setupLocationButtonConstraints(containerView: UIView) {
+        locationButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            locationButton.leadingAnchor.constraint(equalTo: datesButton.trailingAnchor, constant: 8)
+            ])
     }
     
     func setupCategoryViewConstraints() {

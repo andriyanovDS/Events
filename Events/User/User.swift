@@ -27,13 +27,6 @@ enum Gender: String {
     case male = "Male", female = "Female", other = "Other"
 }
 
-struct Location {
-    let lng: Float
-    let lat: Float
-    let city: String?
-    let country: String?
-}
-
 let userObserver = Observable<User?>
     .create({ observer in
         var reference = Database.database().reference()
@@ -85,4 +78,4 @@ let userObserver = Observable<User?>
             Auth.auth().removeStateDidChangeListener(userAuthChange)
         }
     })
-    .share()
+    .share(replay: 1, scope: .forever)
