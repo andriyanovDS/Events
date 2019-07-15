@@ -69,7 +69,7 @@ class LocationItem: UIButton {
         label.textColor = UIColor.gray900()
         label.textAlignment = .left
         label.font = UIFont.init(
-            name: "AirbnbCerealApp-Medium",
+            name: "CeraPro-Medium",
             size: 16
         )
         self.addSubview(label)

@@ -17,9 +17,7 @@ class ProfileScreenViewController: UIViewController {
         super.viewDidLoad()
 
         viewModel.coordinator = coordinator
-        view.backgroundColor = .red
-
-        setupLogoutButton()
+        setupView()
     }
 
     @objc func onLogout() {
@@ -30,12 +28,18 @@ class ProfileScreenViewController: UIViewController {
 
 extension ProfileScreenViewController {
 
+    func setupView() {
+        view.backgroundColor = .white
+        setupLogoutButton()
+    }
+
     func setupLogoutButton() {
         let button = LoginButton()
 
-        button.setTitle("Logout", for: .normal)
+        button.setTitle("Выйти", for: .normal)
         button.setTitleColor(UIColor.gray600(), for: .normal)
         button.layer.borderColor = UIColor.gray600().cgColor
+        button.titleLabel?.font = UIFont(name: "CeraPro-Medium", size: 20)
         button.addTarget(self, action: #selector(onLogout), for: .touchUpInside)
 
         view.addSubview(button)

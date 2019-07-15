@@ -10,7 +10,7 @@ import UIKit
 
 class LocationSearchStackView: UIStackView {
 
-    var delegate: LocationSearchStackViewDelegate?
+    weak var delegate: LocationSearchStackViewDelegate?
 
     var currentLocation: Geocode? {
         didSet {

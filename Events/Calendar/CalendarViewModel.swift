@@ -48,8 +48,9 @@ func splitDaysByWeeks(days: [Day]) -> [[Day?]] {
 
 func generateMonths(monthsToDisplay: Int) -> [Month] {
     let dateFormatter = DateFormatter()
+    dateFormatter.locale = Locale(identifier: "ru_RU")
     let startOfCurrentMonth = Date().startOfMonth()
-    dateFormatter.dateFormat = "MMMM"
+    dateFormatter.dateFormat = "LLLL"
     return Array
         .init(repeating: 0, count: monthsToDisplay)
         .enumerated()
@@ -163,6 +164,7 @@ class CalendarViewModel {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMM"
+        dateFormatter.locale = Locale(identifier: "ru_RU")
         
         let dateFromFormatted = dateFormatter.string(from: dateFrom)
         

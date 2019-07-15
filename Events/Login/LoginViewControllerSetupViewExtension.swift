@@ -21,7 +21,8 @@ extension LoginViewController {
     func setupLoginButton() {
         loginButton.layer.borderColor = UIColor.red.cgColor
         loginButton.setTitleColor(.red, for: .normal)
-        loginButton.setTitle("Login", for: .normal)
+        loginButton.setTitle("Войти", for: .normal)
+        loginButton.titleLabel?.font = UIFont(name: "CeraPro-Medium", size: 20)
         loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
 
         view.addSubview(loginButton)
@@ -32,7 +33,8 @@ extension LoginViewController {
     func setupSignInBuntton() {
         signInButton.setTitleColor(.gray800(), for: .normal)
         signInButton.layer.borderColor = UIColor.gray800().cgColor
-        signInButton.setTitle("Sign up", for: .normal)
+        signInButton.setTitle("Зарегистрироваться", for: .normal)
+        signInButton.titleLabel?.font = UIFont(name: "CeraPro-Medium", size: 20)
         signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
 
         view.addSubview(signInButton)
@@ -52,11 +54,11 @@ extension LoginViewController {
 
     func setupEmailTextField() {
         emailTextField.attributedPlaceholder = NSAttributedString(
-            string: "Email",
+            string: "E-mail",
             attributes: [
                 NSAttributedString.Key.foregroundColor: UIColor.gray,
                 NSAttributedString.Key.font: UIFont.init(
-                    name: "AirbnbCerealApp-Medium",
+                    name: "CeraPro-Medium",
                     size: 18
                     ) ?? UIFont.systemFont(ofSize: 14)
             ]
@@ -69,11 +71,11 @@ extension LoginViewController {
 
     func setupPasswordTextField() {
         passwordTextField.attributedPlaceholder = NSAttributedString(
-            string: "Password",
+            string: "Пароль",
             attributes: [
                 NSAttributedString.Key.foregroundColor: UIColor.gray,
                 NSAttributedString.Key.font: UIFont.init(
-                    name: "AirbnbCerealApp-Medium",
+                    name: "CeraPro-Medium",
                     size: 18
                     ) ?? UIFont.systemFont(ofSize: 14)
             ]
@@ -194,7 +196,7 @@ extension LoginViewController {
         label.text = text
         label.textColor = UIColor.gray900()
         label.font = UIFont(
-            name: "AirbnbCerealApp-Medium",
+            name: "CeraPro-Medium",
             size: 14
         )
         label.numberOfLines = 2

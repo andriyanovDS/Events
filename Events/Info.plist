@@ -24,12 +24,11 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>AirbnbCereal-Black.ttf</string>
-		<string>AirbnbCereal-Bold.ttf</string>
-		<string>AirbnbCereal-Book.ttf</string>
-		<string>AirbnbCereal-ExtraBold.ttf</string>
-		<string>AirbnbCereal-Light.ttf</string>
-		<string>AirbnbCereal-Medium.ttf</string>
+		<string>CeraPro-Black.ttf</string>
+		<string>CeraPro-Light.ttf</string>
+		<string>CeraPro-Medium.ttf</string>
+		<string>CeraPro-Regular.ttf</string>
+		<string>CeraPro-Bold.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

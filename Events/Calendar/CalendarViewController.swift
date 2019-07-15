@@ -24,9 +24,9 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate {
     var onResult: ((SelectedDates) -> Void)?
     var tapOutsideGestureRecognizer: UIGestureRecognizer?
     
-    private let titleLabelText = "Select dates"
+    private let titleLabelText = "Веберите даты"
     
-    let weekDays: [String] = ["M", "T", "W", "T", "F", "S", "S"]
+    let weekDays: [String] = ["П", "В", "С", "Ч", "П", "С", "В"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -163,18 +163,18 @@ extension CalendarViewController {
         
         titleLabel.text = viewModel?.selectedDatesToTitle() ?? titleLabelText
         titleLabel.textAlignment = .center
-        titleLabel.font = UIFont.init(name: "AirbnbCerealApp-Medium", size: 16)
+        titleLabel.font = UIFont.init(name: "CeraPro-Medium", size: 16)
         
         setupTitleLabelConstraints()
     }
     
     func setupClearButton() {
-        clearButton.setTitle("Clear", for: .normal)
+        clearButton.setTitle("Закрыть", for: .normal)
         clearButton.setTitleColor(UIColor.lightBlue(), for: .normal)
         clearButton.setTitleColor(UIColor.lightBlue(alpha: 0.5), for: .disabled)
         clearButton.contentHorizontalAlignment = .center
         clearButton.contentEdgeInsets = UIEdgeInsets(top: 13, left: 0, bottom: 0, right: 0)
-        clearButton.titleLabel?.font = UIFont.init(name: "AirbnbCerealApp-Medium", size: 14)
+        clearButton.titleLabel?.font = UIFont.init(name: "CeraPro-Medium", size: 14)
         clearButton.isEnabled = !(viewModel?.isDatesNotSeleted ?? false)
         
         clearButton.addTarget(self, action: #selector(clearDates), for: .touchUpInside)
@@ -189,7 +189,7 @@ extension CalendarViewController {
             weekDayLabel.text = weekday
             weekDayLabel.textColor = .black
             weekDayLabel.textAlignment = .center
-            weekDayLabel.font = UIFont.init(name: "AirbnbCerealApp-Bold", size: 11)
+            weekDayLabel.font = UIFont.init(name: "CeraPro-Bold", size: 11)
             weekDaysView.addArrangedSubview(weekDayLabel)
             weekDayLabel.translatesAutoresizingMaskIntoConstraints = false
         })
@@ -254,7 +254,7 @@ extension CalendarViewController {
         let titleLabel = UILabel()
         titleLabel.text = monthLabel
         titleLabel.textColor = UIColor.gray900()
-        titleLabel.font = UIFont.init(name: "AirbnbCerealApp-Medium", size: 16)
+        titleLabel.font = UIFont.init(name: "CeraPro-Medium", size: 16)
         monthView.addArrangedSubview(titleLabel)
         setupMonthLabelConstraints(monthView: monthView, label: titleLabel)
     }
@@ -292,7 +292,7 @@ extension CalendarViewController {
         if let dayOfMonth = day?.dayOfMonth {
              dayButton.setTitle(String(dayOfMonth), for: .normal)
              dayButton.setTitleColor(UIColor.gray600(), for: .normal)
-             dayButton.titleLabel?.font = UIFont.init(name: "AirbnbCerealApp-Medium", size: 14)
+             dayButton.titleLabel?.font = UIFont.init(name: "CeraPro-Medium", size: 14)
         }
         
         if let selectedDate = day?.date {

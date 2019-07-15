@@ -54,6 +54,7 @@ class RootScreenViewModel {
         }
         
         let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ru_RU")
         dateFormatter.dateFormat = "dd MMM"
         
         let dateFromFormatted = dateFormatter.string(from: dateFrom)

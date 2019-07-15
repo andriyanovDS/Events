@@ -12,12 +12,6 @@
 		741DCF8C22D3A878005783A3 /* CategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8B22D3A878005783A3 /* CategoriesView.swift */; };
 		741DCF8E22D3A888005783A3 /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */; };
 		741DCF9022D3AA81005783A3 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8F22D3AA81005783A3 /* Category.swift */; };
-		741DCF9822D3DE7D005783A3 /* AirbnbCereal-Book.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 741DCF9222D3DE7D005783A3 /* AirbnbCereal-Book.ttf */; };
-		741DCF9922D3DE7D005783A3 /* AirbnbCereal-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 741DCF9322D3DE7D005783A3 /* AirbnbCereal-ExtraBold.ttf */; };
-		741DCF9A22D3DE7D005783A3 /* AirbnbCereal-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 741DCF9422D3DE7D005783A3 /* AirbnbCereal-Medium.ttf */; };
-		741DCF9B22D3DE7D005783A3 /* AirbnbCereal-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 741DCF9522D3DE7D005783A3 /* AirbnbCereal-Black.ttf */; };
-		741DCF9C22D3DE7D005783A3 /* AirbnbCereal-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 741DCF9622D3DE7D005783A3 /* AirbnbCereal-Light.ttf */; };
-		741DCF9D22D3DE7D005783A3 /* AirbnbCereal-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 741DCF9722D3DE7D005783A3 /* AirbnbCereal-Bold.ttf */; };
 		741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF9F22D3E3E1005783A3 /* ProfileScreenViewController.swift */; };
 		741EF30422D877FF00133872 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741EF30322D877FF00133872 /* LoginButton.swift */; };
 		745243AA22CE85BA00C930C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243A922CE85BA00C930C8 /* AppDelegate.swift */; };
@@ -60,6 +54,11 @@
 		74A1AE1F22D5D18800C39525 /* KeyboardAttachViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1AE1E22D5D18800C39525 /* KeyboardAttachViewController.swift */; };
 		74A1AE2122D5DF0300C39525 /* OptionalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */; };
 		74A1AE2322D64BFB00C39525 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1AE2222D64BFB00C39525 /* LoginViewModel.swift */; };
+		74FAEF0D22DD1A4600ED470E /* CeraPro-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74FAEF0B22DD1A3300ED470E /* CeraPro-Black.ttf */; };
+		74FAEF0E22DD1A4900ED470E /* CeraPro-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74FAEF0C22DD1A3300ED470E /* CeraPro-Light.ttf */; };
+		74FAEF0F22DD1A4C00ED470E /* CeraPro-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74FAEF0A22DD1A3300ED470E /* CeraPro-Medium.ttf */; };
+		74FAEF1022DD1A4E00ED470E /* CeraPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74FAEF0922DD1A3300ED470E /* CeraPro-Regular.ttf */; };
+		74FAEF1222DD1C4800ED470E /* CeraPro-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74FAEF1122DD1C4500ED470E /* CeraPro-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,12 +67,6 @@
 		741DCF8B22D3A878005783A3 /* CategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesView.swift; sourceTree = "<group>"; };
 		741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
 		741DCF8F22D3AA81005783A3 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
-		741DCF9222D3DE7D005783A3 /* AirbnbCereal-Book.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AirbnbCereal-Book.ttf"; sourceTree = "<group>"; };
-		741DCF9322D3DE7D005783A3 /* AirbnbCereal-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AirbnbCereal-ExtraBold.ttf"; sourceTree = "<group>"; };
-		741DCF9422D3DE7D005783A3 /* AirbnbCereal-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AirbnbCereal-Medium.ttf"; sourceTree = "<group>"; };
-		741DCF9522D3DE7D005783A3 /* AirbnbCereal-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AirbnbCereal-Black.ttf"; sourceTree = "<group>"; };
-		741DCF9622D3DE7D005783A3 /* AirbnbCereal-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AirbnbCereal-Light.ttf"; sourceTree = "<group>"; };
-		741DCF9722D3DE7D005783A3 /* AirbnbCereal-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AirbnbCereal-Bold.ttf"; sourceTree = "<group>"; };
 		741DCF9F22D3E3E1005783A3 /* ProfileScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenViewController.swift; sourceTree = "<group>"; };
 		741EF30322D877FF00133872 /* LoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
 		745243A622CE85BA00C930C8 /* Events.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Events.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,6 +111,11 @@
 		74A1AE1E22D5D18800C39525 /* KeyboardAttachViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAttachViewController.swift; sourceTree = "<group>"; };
 		74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalExtension.swift; sourceTree = "<group>"; };
 		74A1AE2222D64BFB00C39525 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		74FAEF0922DD1A3300ED470E /* CeraPro-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-Regular.ttf"; path = "../../../../../Downloads/CeraPro-Regular.ttf"; sourceTree = "<group>"; };
+		74FAEF0A22DD1A3300ED470E /* CeraPro-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-Medium.ttf"; path = "../../../../../Downloads/CeraPro-Medium.ttf"; sourceTree = "<group>"; };
+		74FAEF0B22DD1A3300ED470E /* CeraPro-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-Black.ttf"; path = "../../../../../Downloads/CeraPro-Black.ttf"; sourceTree = "<group>"; };
+		74FAEF0C22DD1A3300ED470E /* CeraPro-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-Light.ttf"; path = "../../../../../Downloads/CeraPro-Light.ttf"; sourceTree = "<group>"; };
+		74FAEF1122DD1C4500ED470E /* CeraPro-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-Bold.ttf"; path = "../../../../../Downloads/CeraPro-Bold.ttf"; sourceTree = "<group>"; };
 		BB7CB0EF704E01EF74586F6F /* Pods-Events.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Events.release.xcconfig"; path = "Target Support Files/Pods-Events/Pods-Events.release.xcconfig"; sourceTree = "<group>"; };
 		F90EB0D8C0AEB4BE50B8CA2F /* Pods-Events.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Events.debug.xcconfig"; path = "Target Support Files/Pods-Events/Pods-Events.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -155,12 +153,11 @@
 		741DCF9122D3DCAF005783A3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				741DCF9522D3DE7D005783A3 /* AirbnbCereal-Black.ttf */,
-				741DCF9722D3DE7D005783A3 /* AirbnbCereal-Bold.ttf */,
-				741DCF9222D3DE7D005783A3 /* AirbnbCereal-Book.ttf */,
-				741DCF9322D3DE7D005783A3 /* AirbnbCereal-ExtraBold.ttf */,
-				741DCF9622D3DE7D005783A3 /* AirbnbCereal-Light.ttf */,
-				741DCF9422D3DE7D005783A3 /* AirbnbCereal-Medium.ttf */,
+				74FAEF1122DD1C4500ED470E /* CeraPro-Bold.ttf */,
+				74FAEF0B22DD1A3300ED470E /* CeraPro-Black.ttf */,
+				74FAEF0C22DD1A3300ED470E /* CeraPro-Light.ttf */,
+				74FAEF0A22DD1A3300ED470E /* CeraPro-Medium.ttf */,
+				74FAEF0922DD1A3300ED470E /* CeraPro-Regular.ttf */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -403,15 +400,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				7481190A22D7E6BA004FBE48 /* .swiftlint.yml in Resources */,
+				74FAEF0D22DD1A4600ED470E /* CeraPro-Black.ttf in Resources */,
+				74FAEF1022DD1A4E00ED470E /* CeraPro-Regular.ttf in Resources */,
+				74FAEF0E22DD1A4900ED470E /* CeraPro-Light.ttf in Resources */,
 				745243B422CE85BC00C930C8 /* LaunchScreen.storyboard in Resources */,
-				741DCF9D22D3DE7D005783A3 /* AirbnbCereal-Bold.ttf in Resources */,
 				7467B6EF22D514F500A1BFE9 /* GoogleService-Info.plist in Resources */,
-				741DCF9C22D3DE7D005783A3 /* AirbnbCereal-Light.ttf in Resources */,
+				74FAEF0F22DD1A4C00ED470E /* CeraPro-Medium.ttf in Resources */,
+				74FAEF1222DD1C4800ED470E /* CeraPro-Bold.ttf in Resources */,
 				745243B122CE85BC00C930C8 /* Assets.xcassets in Resources */,
-				741DCF9B22D3DE7D005783A3 /* AirbnbCereal-Black.ttf in Resources */,
-				741DCF9A22D3DE7D005783A3 /* AirbnbCereal-Medium.ttf in Resources */,
-				741DCF9922D3DE7D005783A3 /* AirbnbCereal-ExtraBold.ttf in Resources */,
-				741DCF9822D3DE7D005783A3 /* AirbnbCereal-Book.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

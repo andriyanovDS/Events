@@ -11,7 +11,7 @@ import SwiftIconFont
 
 class SearchBarViewController: UIViewController, UITextFieldDelegate {
 
-    var delegate: SearchBarDelegate?
+    weak var delegate: SearchBarDelegate?
 
     let textField = UITextField()
     private let contentHeight: CGFloat = 40.0
@@ -33,7 +33,7 @@ class SearchBarViewController: UIViewController, UITextFieldDelegate {
         UIView.animate(
             withDuration: 0.5,
             delay: 0,
-            usingSpringWithDamping: 1,
+            usingSpringWithDamping: 0.8,
             initialSpringVelocity: 0.75,
             options: .curveEaseIn,
             animations: { self.view.layoutIfNeeded() },
@@ -44,7 +44,7 @@ class SearchBarViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         textField.leftView = textFieldLeftViewStub
         animateTextFieldTrailingConstraint(
-            value: -75,
+            value: -90,
             onClomplete: { [weak self] finished in
                 if finished {
                     self?.cancelButton.isHidden = false
@@ -79,11 +79,11 @@ extension SearchBarViewController {
         textField.isUserInteractionEnabled = true
         
         textField.attributedPlaceholder = NSAttributedString(
-            string: "Search",
+            string: "Поиск",
             attributes: [
                 NSAttributedString.Key.foregroundColor: UIColor.gray,
                 NSAttributedString.Key.font: UIFont.init(
-                    name: "AirbnbCerealApp-Medium",
+                    name: "CeraPro-Medium",
                     size: 18
                 ) ?? UIFont.systemFont(ofSize: 18)
             ]
@@ -117,9 +117,9 @@ extension SearchBarViewController {
     }
     
     private func setupCancelButton() {
-        cancelButton.setTitle("Cancel", for: .normal)
+        cancelButton.setTitle("Закрыть", for: .normal)
         cancelButton.setTitleColor(.gray, for: .normal)
-        cancelButton.titleLabel?.font = UIFont.init(name: "AirbnbCerealApp-Medium", size: 14)
+        cancelButton.titleLabel?.font = UIFont.init(name: "CeraPro-Medium", size: 14)
         
         cancelButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 12, right: 0)
         view.addSubview(cancelButton)

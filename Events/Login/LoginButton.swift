@@ -45,7 +45,7 @@ class LoginButton: UIButton {
         layer.borderWidth = 1
         contentHorizontalAlignment = .center
         contentVerticalAlignment = .center
-        titleLabel?.font = UIFont.init(name: "AirbnbCerealApp-Medium", size: 18)
+        titleLabel?.font = UIFont.init(name: "CeraPro-Medium", size: 18)
     }
 
     required init?(coder aDecoder: NSCoder) {

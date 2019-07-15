@@ -109,7 +109,7 @@ extension RootScreenViewController {
     }
     
     func setupDatesButton(containerView: UIView) {
-        datesButton.setTitle("Dates", for: .normal)
+        datesButton.setTitle("Дата", for: .normal)
         datesButton.addTarget(self, action: #selector(openCalendar), for: .touchUpInside)
         containerView.addSubview(datesButton)
         setupDatesButtonConstraints(containerView: containerView)
@@ -122,8 +122,9 @@ extension RootScreenViewController {
     }
     
     func setupTitleLabel() {
-        titleLabel.text = "Choose your next experience"
-        titleLabel.font = UIFont.init(name: "AirbnbCerealApp-Bold", size: 22)
+        titleLabel.text = "Выбери следующее приключение"
+        titleLabel.numberOfLines = 2
+        titleLabel.font = UIFont.init(name: "CeraPro-Bold", size: 22)
         titleLabel.textAlignment = .left
         titleLabel.textColor = UIColor.gray900()
         view.addSubview(titleLabel)
@@ -190,7 +191,7 @@ class FilterButton: UIButton {
         self.layer.borderColor = UIColor.gray400().cgColor
         self.contentEdgeInsets = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
         self.setTitleColor(UIColor.gray600(), for: .normal)
-        self.titleLabel?.font = UIFont.init(name: "AirbnbCerealApp-Medium", size: 12)
+        self.titleLabel?.font = UIFont.init(name: "CeraPro-Medium", size: 12)
     }
     
     required init?(coder aDecoder: NSCoder) {
