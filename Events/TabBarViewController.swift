@@ -20,7 +20,7 @@ class TabBarViewController: UITabBarController {
     
     func setupViewControllers() {
         let rootScreenViewController = RootScreenViewController()
-        let profileScreenViewController = ProfileScreenViewController()
+        let userDetailsViewController = UserDetailsViewController()
         let savedViewController = SavedViewController()
         let eventsViewController = EventsViewController()
         
@@ -32,16 +32,16 @@ class TabBarViewController: UITabBarController {
         rootScreenViewController.tabBarItem = rootScreenTabBarItem
         savedViewController.tabBarItem = savedScreenTabBarItem
         eventsViewController.tabBarItem = eventsScreenTabBarItem
-        profileScreenViewController.tabBarItem = profileScreenTabBarItem
+        userDetailsViewController.tabBarItem = profileScreenTabBarItem
 
         rootScreenViewController.coordinator = coordinator
-        profileScreenViewController.coordinator = coordinator
+        userDetailsViewController.coordinator = coordinator
         
         viewControllers = [
             rootScreenViewController,
             savedViewController,
             eventsViewController,
-            profileScreenViewController
+            userDetailsViewController
         ]
     }
     

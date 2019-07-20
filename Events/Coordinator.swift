@@ -20,8 +20,12 @@ protocol CoordinatedViewController {
     var coordinator: Coordinator? { get set }
 }
 
-class MainCoordinator: Coordinator {
-    
+class MainCoordinator: Coordinator,
+    LoginScreenCoordinator,
+    RootScreenCoordinator,
+    ProfileScreenCoordinator,
+    UserDetailsScreenCoordinator {
+
     var userDisposable: Disposable?
     let navigationController: UINavigationController
     
@@ -40,6 +44,12 @@ class MainCoordinator: Coordinator {
         controller.coordinator = self
         controller.setupViewControllers()
         navigationController.pushViewController(controller, animated: false)
+    }
+
+    func openProfileScreen() {
+        let viewController = ProfileScreenViewController()
+        viewController.coordinator = self
+        navigationController.pushViewController(viewController, animated: false)
     }
 
     func openCalendarScreen(selectedDates: SelectedDates, onComplete: @escaping (SelectedDates) -> Void) {

@@ -10,7 +10,7 @@ import Foundation
 import FirebaseAuth
 
 class LoginViewModel {
-    var coordinator: MainCoordinator?
+    var coordinator: LoginScreenCoordinator?
     let showActivityIndicator: (UIView?) -> Void
     let removeActivityIndicator: () -> Void
     private let emailPattern = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"
@@ -69,4 +69,8 @@ class LoginViewModel {
             self?.coordinator?.openRootScreen()
         }
     }
+}
+
+protocol LoginScreenCoordinator {
+    func openRootScreen()
 }

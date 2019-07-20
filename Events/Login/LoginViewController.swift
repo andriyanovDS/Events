@@ -10,7 +10,7 @@ import UIKit
 import SwiftIconFont
 
 class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate {
-    var coordinator: MainCoordinator?
+    var coordinator: LoginScreenCoordinator?
     var viewModel: LoginViewModel!
 
     var messageView: UIView?
@@ -18,8 +18,8 @@ class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate {
     let signInButton = LoginButton()
     let backButton = UIButton()
     let textFieldWrapperView = UIView()
-    let emailTextField = LoginTextField()
-    let passwordTextField = LoginTextField()
+    let emailTextField = TextFieldWithShadow()
+    let passwordTextField = TextFieldWithShadow()
     
     let loginButtonBottomPadding: CGFloat = 200.0
     var bottomConstraintForKeyboard: NSLayoutConstraint?
@@ -171,7 +171,7 @@ extension LoginViewController {
         return true
     }
     
-    @objc func emailDidChange(_ textField: LoginTextField) {
+    @objc func emailDidChange(_ textField: TextFieldWithShadow) {
         guard let text = textField.text else {
             return
         }
@@ -179,7 +179,7 @@ extension LoginViewController {
         checkButtonState(for: authState)
     }
 
-    @objc func passwordDidChange(_ textField: LoginTextField) {
+    @objc func passwordDidChange(_ textField: TextFieldWithShadow) {
         guard let text = textField.text else {
             return
         }
@@ -197,7 +197,7 @@ extension LoginViewController {
             ? viewModel.validateEmail(text: text)
             : viewModel.validatePassword(text: text)
         
-        guard let loginTextField = textField as? LoginTextField else {
+        guard let loginTextField = textField as? TextFieldWithShadow else {
             return true
         }
 

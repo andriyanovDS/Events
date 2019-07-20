@@ -12,6 +12,7 @@ import FirebaseAuth
 import FirebaseDatabase
 
 struct User {
+    let id: String
     let firstName: String
     let lastName: String?
     let description: String?
@@ -61,6 +62,7 @@ let userObserver = Observable<User?>
                     )
 
                     let user = User(
+                        id: fbUser.uid,
                         firstName: firstName,
                         lastName: lastName,
                         description: description,

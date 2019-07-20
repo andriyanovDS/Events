@@ -10,7 +10,7 @@ import UIKit
 
 class ProfileScreenViewController: UIViewController {
 
-    var coordinator: MainCoordinator?
+    var coordinator: ProfileScreenCoordinator?
     let viewModel = ProfileScreenViewModel()
 
     override func viewDidLoad() {

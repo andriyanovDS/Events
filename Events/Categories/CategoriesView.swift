@@ -41,7 +41,7 @@ class CategoriesView {
     
     func setupCategoryView(stackView: UIStackView, category: Category) {
         let wrapperView = UIView()
-        let categoryButton = ButtonWithScaleAnimation()
+        let categoryButton = UIButtonScaleOnPress()
         categoryButton.backgroundColor = .white
         categoryButton.setTitle(category.name, for: .normal)
         categoryButton.setTitleColor(UIColor.gray600(), for: .normal)
@@ -88,33 +88,5 @@ class CategoriesView {
             button.topAnchor.constraint(equalTo: wrapperView.topAnchor),
             button.bottomAnchor.constraint(equalTo: wrapperView.bottomAnchor)
         ])
-    }
-}
-
-class ButtonWithScaleAnimation: UIButton {
-    
-    override var isHighlighted: Bool {
-        willSet (nextValue) {
-            
-            if nextValue == isHighlighted {
-                return
-            }
-            
-            UIView.animate(
-                withDuration: 0.6,
-                delay: 0,
-                usingSpringWithDamping: 1,
-                initialSpringVelocity: 0.75,
-                options: .allowUserInteraction,
-                animations: {
-                    if nextValue {
-                        self.transform = CGAffineTransform(scaleX: 0.93, y: 0.93)
-                    } else {
-                        self.transform = CGAffineTransform(scaleX: 1, y: 1)
-                    }
-                },
-                completion: nil
-            )
-        }
     }
 }

@@ -20,7 +20,7 @@ extension RootScreenViewController: CLLocationManagerDelegate {
             locationManager.delegate = self
             locationManager.startUpdatingLocation()
 
-            onChangeUserLocation(coordinate: CLLocationCoordinate2D(latitude: 55.755786, longitude: 37.617633))
+//            onChangeUserLocation(coordinate: CLLocationCoordinate2D(latitude: 55.755786, longitude: 37.617633))
         }
     }
 

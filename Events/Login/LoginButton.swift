@@ -8,28 +8,7 @@
 
 import UIKit
 
-class LoginButton: UIButton {
-
-    override var isHighlighted: Bool {
-        didSet {
-            alpha = isHighlighted ? 0.5 : 1
-            UIView.animate(
-                withDuration: 0.6,
-                delay: 0,
-                usingSpringWithDamping: 1,
-                initialSpringVelocity: 0.75,
-                options: .allowUserInteraction,
-                animations: {
-                    if self.isHighlighted {
-                        self.transform = CGAffineTransform(scaleX: 0.97, y: 0.97)
-                    } else {
-                        self.transform = CGAffineTransform(scaleX: 1, y: 1)
-                    }
-                },
-                completion: nil
-            )
-        }
-    }
+class LoginButton: UIButtonScaleOnPress {
 
     override var isEnabled: Bool {
         didSet {

@@ -55,5 +55,9 @@
 	<string>Please, let us know where to find new events</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Please, let us know where to find new events</string>
+	<key>NSCameraUsageDescription</key>
+	<string>${PRODUCT_NAME} would like to aceess your camera</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>${PRODUCT_NAME} would like to aceess your library</string>
 </dict>
 </plist>

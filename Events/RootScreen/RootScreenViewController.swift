@@ -10,8 +10,8 @@ import UIKit
 
 class RootScreenViewController: UIViewController {
     var viewModel: RootScreenViewModel!
-    var coordinator: MainCoordinator?
-    
+    var coordinator: RootScreenCoordinator?
+
     let titleLabel = UILabel()
     let categoriesView = CategoriesView()
     let locationButton = FilterButton()
@@ -178,6 +178,15 @@ extension RootScreenViewController {
             categoryView.heightAnchor.constraint(equalToConstant: 70)
         ])
     }
+}
+
+protocol RootScreenCoordinator {
+    func openLocationSearch()
+
+    func openCalendarScreen(
+       selectedDates: SelectedDates,
+       onComplete: @escaping (SelectedDates) -> Void
+    )
 }
 
 class FilterButton: UIButton {

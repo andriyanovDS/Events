@@ -14,6 +14,11 @@
 		741DCF9022D3AA81005783A3 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8F22D3AA81005783A3 /* Category.swift */; };
 		741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF9F22D3E3E1005783A3 /* ProfileScreenViewController.swift */; };
 		741EF30422D877FF00133872 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741EF30322D877FF00133872 /* LoginButton.swift */; };
+		744B7C8C22E39DB700A839A6 /* CeraPro-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8722E39DB700A839A6 /* CeraPro-Medium.ttf */; };
+		744B7C8D22E39DB700A839A6 /* CeraPro-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8822E39DB700A839A6 /* CeraPro-Light.ttf */; };
+		744B7C8E22E39DB700A839A6 /* CeraPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8922E39DB700A839A6 /* CeraPro-Regular.ttf */; };
+		744B7C8F22E39DB700A839A6 /* CeraPro-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8A22E39DB700A839A6 /* CeraPro-Black.ttf */; };
+		744B7C9022E39DB700A839A6 /* CeraPro-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8B22E39DB700A839A6 /* CeraPro-Bold.ttf */; };
 		745243AA22CE85BA00C930C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243A922CE85BA00C930C8 /* AppDelegate.swift */; };
 		745243AC22CE85BA00C930C8 /* RootScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */; };
 		745243B122CE85BC00C930C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 745243B022CE85BC00C930C8 /* Assets.xcassets */; };
@@ -21,6 +26,10 @@
 		745243BD22CF7B5A00C930C8 /* SearchBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243BC22CF7B5A00C930C8 /* SearchBarViewController.swift */; };
 		745243BF22CF965500C930C8 /* SearchBarUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243BE22CF965500C930C8 /* SearchBarUITextField.swift */; };
 		745243C122CFE2B400C930C8 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243C022CFE2B400C930C8 /* UIColorExtension.swift */; };
+		7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */; };
+		7463A49E22DE6EED009171E1 /* TextFieldWithShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49D22DE6EED009171E1 /* TextFieldWithShadow.swift */; };
+		7463A4A022DE7760009171E1 /* TextFieldWithBottomLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49F22DE7760009171E1 /* TextFieldWithBottomLine.swift */; };
+		7463A4A222DE88AC009171E1 /* UIButtonScaleOnPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A4A122DE88AC009171E1 /* UIButtonScaleOnPress.swift */; };
 		7467B6DF22D4E2E300A1BFE9 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6DE22D4E2E300A1BFE9 /* TabBarViewController.swift */; };
 		7467B6E222D50AEE00A1BFE9 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6E122D50AEE00A1BFE9 /* EventsViewController.swift */; };
 		7467B6E522D50B2100A1BFE9 /* SavedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6E422D50B2100A1BFE9 /* SavedViewController.swift */; };
@@ -54,11 +63,9 @@
 		74A1AE1F22D5D18800C39525 /* KeyboardAttachViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1AE1E22D5D18800C39525 /* KeyboardAttachViewController.swift */; };
 		74A1AE2122D5DF0300C39525 /* OptionalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */; };
 		74A1AE2322D64BFB00C39525 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1AE2222D64BFB00C39525 /* LoginViewModel.swift */; };
-		74FAEF0D22DD1A4600ED470E /* CeraPro-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74FAEF0B22DD1A3300ED470E /* CeraPro-Black.ttf */; };
-		74FAEF0E22DD1A4900ED470E /* CeraPro-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74FAEF0C22DD1A3300ED470E /* CeraPro-Light.ttf */; };
-		74FAEF0F22DD1A4C00ED470E /* CeraPro-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74FAEF0A22DD1A3300ED470E /* CeraPro-Medium.ttf */; };
-		74FAEF1022DD1A4E00ED470E /* CeraPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74FAEF0922DD1A3300ED470E /* CeraPro-Regular.ttf */; };
-		74FAEF1222DD1C4800ED470E /* CeraPro-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74FAEF1122DD1C4500ED470E /* CeraPro-Bold.ttf */; };
+		74D8DB2E22DD265500E70CB4 /* UserDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D8DB2D22DD265500E70CB4 /* UserDetailsViewController.swift */; };
+		74D8DB3022DD27D900E70CB4 /* UserDetailsViewControllerSetupViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D8DB2F22DD27D900E70CB4 /* UserDetailsViewControllerSetupViewExtension.swift */; };
+		74D8DB3422DD37F800E70CB4 /* UserDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D8DB3322DD37F800E70CB4 /* UserDetailsViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +76,11 @@
 		741DCF8F22D3AA81005783A3 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		741DCF9F22D3E3E1005783A3 /* ProfileScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenViewController.swift; sourceTree = "<group>"; };
 		741EF30322D877FF00133872 /* LoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
+		744B7C8722E39DB700A839A6 /* CeraPro-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Medium.ttf"; sourceTree = "<group>"; };
+		744B7C8822E39DB700A839A6 /* CeraPro-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Light.ttf"; sourceTree = "<group>"; };
+		744B7C8922E39DB700A839A6 /* CeraPro-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Regular.ttf"; sourceTree = "<group>"; };
+		744B7C8A22E39DB700A839A6 /* CeraPro-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Black.ttf"; sourceTree = "<group>"; };
+		744B7C8B22E39DB700A839A6 /* CeraPro-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Bold.ttf"; sourceTree = "<group>"; };
 		745243A622CE85BA00C930C8 /* Events.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Events.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		745243A922CE85BA00C930C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +90,10 @@
 		745243BC22CF7B5A00C930C8 /* SearchBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarViewController.swift; sourceTree = "<group>"; };
 		745243BE22CF965500C930C8 /* SearchBarUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarUITextField.swift; sourceTree = "<group>"; };
 		745243C022CFE2B400C930C8 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsSection.swift; sourceTree = "<group>"; };
+		7463A49D22DE6EED009171E1 /* TextFieldWithShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithShadow.swift; sourceTree = "<group>"; };
+		7463A49F22DE7760009171E1 /* TextFieldWithBottomLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithBottomLine.swift; sourceTree = "<group>"; };
+		7463A4A122DE88AC009171E1 /* UIButtonScaleOnPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonScaleOnPress.swift; sourceTree = "<group>"; };
 		7467B6DE22D4E2E300A1BFE9 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		7467B6E122D50AEE00A1BFE9 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		7467B6E422D50B2100A1BFE9 /* SavedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
@@ -111,11 +127,9 @@
 		74A1AE1E22D5D18800C39525 /* KeyboardAttachViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAttachViewController.swift; sourceTree = "<group>"; };
 		74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalExtension.swift; sourceTree = "<group>"; };
 		74A1AE2222D64BFB00C39525 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
-		74FAEF0922DD1A3300ED470E /* CeraPro-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-Regular.ttf"; path = "../../../../../Downloads/CeraPro-Regular.ttf"; sourceTree = "<group>"; };
-		74FAEF0A22DD1A3300ED470E /* CeraPro-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-Medium.ttf"; path = "../../../../../Downloads/CeraPro-Medium.ttf"; sourceTree = "<group>"; };
-		74FAEF0B22DD1A3300ED470E /* CeraPro-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-Black.ttf"; path = "../../../../../Downloads/CeraPro-Black.ttf"; sourceTree = "<group>"; };
-		74FAEF0C22DD1A3300ED470E /* CeraPro-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-Light.ttf"; path = "../../../../../Downloads/CeraPro-Light.ttf"; sourceTree = "<group>"; };
-		74FAEF1122DD1C4500ED470E /* CeraPro-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-Bold.ttf"; path = "../../../../../Downloads/CeraPro-Bold.ttf"; sourceTree = "<group>"; };
+		74D8DB2D22DD265500E70CB4 /* UserDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewController.swift; sourceTree = "<group>"; };
+		74D8DB2F22DD27D900E70CB4 /* UserDetailsViewControllerSetupViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewControllerSetupViewExtension.swift; sourceTree = "<group>"; };
+		74D8DB3322DD37F800E70CB4 /* UserDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewModel.swift; sourceTree = "<group>"; };
 		BB7CB0EF704E01EF74586F6F /* Pods-Events.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Events.release.xcconfig"; path = "Target Support Files/Pods-Events/Pods-Events.release.xcconfig"; sourceTree = "<group>"; };
 		F90EB0D8C0AEB4BE50B8CA2F /* Pods-Events.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Events.debug.xcconfig"; path = "Target Support Files/Pods-Events/Pods-Events.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -153,11 +167,11 @@
 		741DCF9122D3DCAF005783A3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				74FAEF1122DD1C4500ED470E /* CeraPro-Bold.ttf */,
-				74FAEF0B22DD1A3300ED470E /* CeraPro-Black.ttf */,
-				74FAEF0C22DD1A3300ED470E /* CeraPro-Light.ttf */,
-				74FAEF0A22DD1A3300ED470E /* CeraPro-Medium.ttf */,
-				74FAEF0922DD1A3300ED470E /* CeraPro-Regular.ttf */,
+				744B7C8A22E39DB700A839A6 /* CeraPro-Black.ttf */,
+				744B7C8B22E39DB700A839A6 /* CeraPro-Bold.ttf */,
+				744B7C8822E39DB700A839A6 /* CeraPro-Light.ttf */,
+				744B7C8722E39DB700A839A6 /* CeraPro-Medium.ttf */,
+				744B7C8922E39DB700A839A6 /* CeraPro-Regular.ttf */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -165,6 +179,7 @@
 		741DCF9E22D3E3C8005783A3 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				74D8DB2C22DD264600E70CB4 /* UserDetails */,
 				741DCF9F22D3E3E1005783A3 /* ProfileScreenViewController.swift */,
 				748E0AFD22D8E2D000B061C7 /* ProfileScreenViewModel.swift */,
 			);
@@ -193,6 +208,7 @@
 		745243A822CE85BA00C930C8 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				7463A49C22DE6EB9009171E1 /* CommonUIComponetns */,
 				745243BB22CF7B3000C930C8 /* SearchBar */,
 				748E0B1D22DB725700B061C7 /* Extensions */,
 				748E0B1C22DB721E00B061C7 /* RootScreen */,
@@ -227,6 +243,16 @@
 				748E0B1E22DB7E2C00B061C7 /* SearchBarDelegate.swift */,
 			);
 			path = SearchBar;
+			sourceTree = "<group>";
+		};
+		7463A49C22DE6EB9009171E1 /* CommonUIComponetns */ = {
+			isa = PBXGroup;
+			children = (
+				7463A49D22DE6EED009171E1 /* TextFieldWithShadow.swift */,
+				7463A49F22DE7760009171E1 /* TextFieldWithBottomLine.swift */,
+				7463A4A122DE88AC009171E1 /* UIButtonScaleOnPress.swift */,
+			);
+			path = CommonUIComponetns;
 			sourceTree = "<group>";
 		};
 		7467B6E022D50AD100A1BFE9 /* Events */ = {
@@ -329,6 +355,17 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		74D8DB2C22DD264600E70CB4 /* UserDetails */ = {
+			isa = PBXGroup;
+			children = (
+				74D8DB2D22DD265500E70CB4 /* UserDetailsViewController.swift */,
+				74D8DB2F22DD27D900E70CB4 /* UserDetailsViewControllerSetupViewExtension.swift */,
+				74D8DB3322DD37F800E70CB4 /* UserDetailsViewModel.swift */,
+				7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */,
+			);
+			path = UserDetails;
+			sourceTree = "<group>";
+		};
 		ACC57B6C8ED958466573C88C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -400,13 +437,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				7481190A22D7E6BA004FBE48 /* .swiftlint.yml in Resources */,
-				74FAEF0D22DD1A4600ED470E /* CeraPro-Black.ttf in Resources */,
-				74FAEF1022DD1A4E00ED470E /* CeraPro-Regular.ttf in Resources */,
-				74FAEF0E22DD1A4900ED470E /* CeraPro-Light.ttf in Resources */,
 				745243B422CE85BC00C930C8 /* LaunchScreen.storyboard in Resources */,
+				744B7C8D22E39DB700A839A6 /* CeraPro-Light.ttf in Resources */,
+				744B7C8F22E39DB700A839A6 /* CeraPro-Black.ttf in Resources */,
+				744B7C8E22E39DB700A839A6 /* CeraPro-Regular.ttf in Resources */,
 				7467B6EF22D514F500A1BFE9 /* GoogleService-Info.plist in Resources */,
-				74FAEF0F22DD1A4C00ED470E /* CeraPro-Medium.ttf in Resources */,
-				74FAEF1222DD1C4800ED470E /* CeraPro-Bold.ttf in Resources */,
+				744B7C8C22E39DB700A839A6 /* CeraPro-Medium.ttf in Resources */,
+				744B7C9022E39DB700A839A6 /* CeraPro-Bold.ttf in Resources */,
 				745243B122CE85BC00C930C8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -498,13 +535,18 @@
 				741DCF9022D3AA81005783A3 /* Category.swift in Sources */,
 				7467B6ED22D510AA00A1BFE9 /* LoginViewController.swift in Sources */,
 				7467B6EA22D5107400A1BFE9 /* User.swift in Sources */,
+				7463A49E22DE6EED009171E1 /* TextFieldWithShadow.swift in Sources */,
 				741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */,
+				74D8DB3022DD27D900E70CB4 /* UserDetailsViewControllerSetupViewExtension.swift in Sources */,
 				741DCF8E22D3A888005783A3 /* CategoriesViewModel.swift in Sources */,
 				748E0B2322DB87AA00B061C7 /* LocationItem.swift in Sources */,
 				74697FC822D11F7F00D5B5F4 /* UIViewExtension.swift in Sources */,
 				74A1AE1F22D5D18800C39525 /* KeyboardAttachViewController.swift in Sources */,
+				74D8DB2E22DD265500E70CB4 /* UserDetailsViewController.swift in Sources */,
+				7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */,
 				748E0B0222D8FD0000B061C7 /* LoginViewControllerSetupViewExtension.swift in Sources */,
 				748E0B2722DBBB2900B061C7 /* LocationSearchStackView.swift in Sources */,
+				74D8DB3422DD37F800E70CB4 /* UserDetailsViewModel.swift in Sources */,
 				741DCF8C22D3A878005783A3 /* CategoriesView.swift in Sources */,
 				745243BD22CF7B5A00C930C8 /* SearchBarViewController.swift in Sources */,
 				748E0B1222DA24DD00B061C7 /* APIClient.swift in Sources */,
@@ -515,6 +557,8 @@
 				748E0B1422DA26BC00B061C7 /* GeolocationAPI.swift in Sources */,
 				741DCF8922D38264005783A3 /* RootScreenViewModel.swift in Sources */,
 				748E0B2122DB82A200B061C7 /* LocationSearchViewModel.swift in Sources */,
+				7463A4A222DE88AC009171E1 /* UIButtonScaleOnPress.swift in Sources */,
+				7463A4A022DE7760009171E1 /* TextFieldWithBottomLine.swift in Sources */,
 				7467B6E522D50B2100A1BFE9 /* SavedViewController.swift in Sources */,
 				748E0B1722DA289800B061C7 /* Geocode.swift in Sources */,
 				748E0B0822DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift in Sources */,

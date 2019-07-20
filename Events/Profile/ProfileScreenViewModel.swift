@@ -11,7 +11,7 @@ import FirebaseAuth
 
 class ProfileScreenViewModel {
 
-    var coordinator: MainCoordinator?
+    var coordinator: ProfileScreenCoordinator?
 
     func logout() {
         do {
@@ -22,4 +22,8 @@ class ProfileScreenViewModel {
         }
 
     }
+}
+
+protocol ProfileScreenCoordinator: Coordinator {
+    func openLoginScreen()
 }
