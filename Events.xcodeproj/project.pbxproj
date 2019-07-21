@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2253EA1A9BAA8FCE4F24E2D0 /* Pods_Events.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BDA60DD79D902BE3849FF4A /* Pods_Events.framework */; };
+		60EC85A922E4D2740035C43C /* PopUpWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EC85A822E4D2740035C43C /* PopUpWindow.swift */; };
 		741DCF8922D38264005783A3 /* RootScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8822D38264005783A3 /* RootScreenViewModel.swift */; };
 		741DCF8C22D3A878005783A3 /* CategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8B22D3A878005783A3 /* CategoriesView.swift */; };
 		741DCF8E22D3A888005783A3 /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */; };
@@ -70,6 +71,7 @@
 
 /* Begin PBXFileReference section */
 		3BDA60DD79D902BE3849FF4A /* Pods_Events.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Events.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60EC85A822E4D2740035C43C /* PopUpWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpWindow.swift; sourceTree = "<group>"; };
 		741DCF8822D38264005783A3 /* RootScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenViewModel.swift; sourceTree = "<group>"; };
 		741DCF8B22D3A878005783A3 /* CategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesView.swift; sourceTree = "<group>"; };
 		741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
@@ -146,6 +148,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		60EC85A722E4D2330035C43C /* PopUpWindow */ = {
+			isa = PBXGroup;
+			children = (
+				60EC85A822E4D2740035C43C /* PopUpWindow.swift */,
+			);
+			path = PopUpWindow;
+			sourceTree = "<group>";
+		};
 		712922C640C39731F4770AB1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +218,7 @@
 		745243A822CE85BA00C930C8 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				60EC85A722E4D2330035C43C /* PopUpWindow */,
 				7463A49C22DE6EB9009171E1 /* CommonUIComponetns */,
 				745243BB22CF7B3000C930C8 /* SearchBar */,
 				748E0B1D22DB725700B061C7 /* Extensions */,
@@ -559,6 +570,7 @@
 				748E0B2122DB82A200B061C7 /* LocationSearchViewModel.swift in Sources */,
 				7463A4A222DE88AC009171E1 /* UIButtonScaleOnPress.swift in Sources */,
 				7463A4A022DE7760009171E1 /* TextFieldWithBottomLine.swift in Sources */,
+				60EC85A922E4D2740035C43C /* PopUpWindow.swift in Sources */,
 				7467B6E522D50B2100A1BFE9 /* SavedViewController.swift in Sources */,
 				748E0B1722DA289800B061C7 /* Geocode.swift in Sources */,
 				748E0B0822DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift in Sources */,

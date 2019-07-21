@@ -21,6 +21,8 @@ extension UserDetailsViewController {
         setupAvatarView()
         setupDatePicker()
         setupGenderSectionView()
+        setupVisualEffectView()
+        setupPopupWindowView()
     }
 
     func setupTitle() {
@@ -63,7 +65,35 @@ extension UserDetailsViewController {
         let surnameTextField = TextFieldWithBottomLine()
         surnameSectionView.setupView(with: "Фамилия", childView: surnameTextField)
     }
+    
+    func setupPopupWindowView() {
+        view.addSubview(popUpWindow)
+        popUpWindow.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40).isActive = true
+        popUpWindow.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        popUpWindow.heightAnchor.constraint(equalToConstant: view.frame.width - 64).isActive = true
+        popUpWindow.widthAnchor.constraint(equalToConstant: view.frame.width - 64).isActive = true
+        
+        popUpWindow.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
+        popUpWindow.alpha = 0
+        
+        UIView.animate(withDuration: 0.5) {
+            self.visualEffectView.alpha = 1
+            self.popUpWindow.alpha = 1
+            
+            self.popUpWindow.transform = CGAffineTransform.identity
 
+        }
+    }
+    
+    func setupVisualEffectView() {
+        view.addSubview(visualEffectView)
+        visualEffectView.backgroundColor = .gray200()
+        visualEffectView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        visualEffectView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        visualEffectView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        visualEffectView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+    }
+    
     func setupAvatarView() {
         avatarView.layer.cornerRadius = 60
         avatarView.backgroundColor = .blue100()

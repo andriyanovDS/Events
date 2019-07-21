@@ -68,6 +68,10 @@ class UserDetailsViewModel {
                 }
                 self.openCamera()
             })
+        case .denied:
+            print("1")
+        case .restricted:
+            print("1")
         default: return
         }
     }
