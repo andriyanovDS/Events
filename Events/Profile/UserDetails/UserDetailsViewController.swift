@@ -34,6 +34,7 @@ class UserDetailsViewController: UIViewControllerWithActivityIndicator, UserDeta
     }()
     lazy var popUpWindow: PopUpWindow = {
         let view = PopUpWindow()
+        view.setupView(with: "Разрешите доступ к камере в настройках")
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 5
         view.delegate = self

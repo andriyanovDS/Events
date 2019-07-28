@@ -22,15 +22,20 @@ class PopUpWindow: UIView {
     }
     */
     var delegate: PopUpDelegate?
+    var coordinator: MainCoordinator?
+   
     lazy var notificationLabel: UILabel = {
         let lable = UILabel()
-        lable.text = "Разрешите доступ к камере в настройках"
         lable.translatesAutoresizingMaskIntoConstraints = false
         lable.font = UIFont(name: "CeraPro-Medium", size: 16)
         lable.textColor = UIColor.gray900()
         lable.textAlignment = .left
         return lable
     }()
+    
+    func setupView(with labelText: String) {
+        notificationLabel.text = labelText
+    }
     lazy var button: UIButtonScaleOnPress = {
         let button = UIButtonScaleOnPress()
         button.backgroundColor = .blue
