@@ -29,8 +29,6 @@ class ProfileScreenCoordinator: MainCoordinator, UserDetailsScreenCoordinator {
     }
 
     override func start() {
-        let profileScreenViewController = ProfileScreenViewController()
-        profileScreenViewController.coordinator = self
-        navigationController.pushViewController(profileScreenViewController, animated: false)
+
     }
 }

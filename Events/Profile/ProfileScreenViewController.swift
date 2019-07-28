@@ -16,6 +16,7 @@ class ProfileScreenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        coordinator = ProfileScreenCoordinator(navigationController: navigationController!)
         viewModel.coordinator = coordinator
         viewModel.attemptToOpenUserDetails()
         setupView()
