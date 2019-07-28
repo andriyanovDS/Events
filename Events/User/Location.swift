@@ -25,7 +25,6 @@ func onChangeUserLocation(coordinate: CLLocationCoordinate2D) {
         completion: {result in
             switch result {
             case .success(let geocodes):
-
                 guard let geocode = geocodes.mainGeocode() else {
                     return
                 }

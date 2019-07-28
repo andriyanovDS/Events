@@ -11,4 +11,5 @@ use_frameworks!
     pod 'Firebase/Core', '~> 6'
     pod 'Firebase/Auth', '~> 6'
     pod 'Firebase/Database', '~> 6'
+    pod 'Firebase/Storage', '~> 6'
   end

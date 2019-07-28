@@ -17,6 +17,7 @@ class ProfileScreenViewController: UIViewController {
         super.viewDidLoad()
 
         viewModel.coordinator = coordinator
+        viewModel.attemptToOpenUserDetails()
         setupView()
     }
 
@@ -34,7 +35,7 @@ extension ProfileScreenViewController {
     }
 
     func setupLogoutButton() {
-        let button = LoginButton()
+        let button = ButtonWithBorder()
 
         button.setTitle("Выйти", for: .normal)
         button.setTitleColor(UIColor.gray600(), for: .normal)

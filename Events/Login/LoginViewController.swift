@@ -10,12 +10,12 @@ import UIKit
 import SwiftIconFont
 
 class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate {
-    var coordinator: LoginScreenCoordinator?
+    var coordinator: LoginCoordinator?
     var viewModel: LoginViewModel!
 
     var messageView: UIView?
-    let loginButton = LoginButton()
-    let signInButton = LoginButton()
+    let loginButton = ButtonWithBorder()
+    let signInButton = ButtonWithBorder()
     let backButton = UIButton()
     let textFieldWrapperView = UIView()
     let emailTextField = TextFieldWithShadow()
@@ -80,12 +80,19 @@ class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate {
         emailTextField.delegate = self
         passwordTextField.delegate = self
         
-        navigationController?.setNavigationBarHidden(true, animated: false)
-        
         setupView()
         
         emailTextField.addTarget(self, action: #selector(emailDidChange(_:)), for: .editingChanged)
         passwordTextField.addTarget(self, action: #selector(passwordDidChange(_:)), for: .editingChanged)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        hideNavigationBar()
+    }
+
+    func hideNavigationBar() {
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     @objc func login() {

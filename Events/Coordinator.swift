@@ -20,11 +20,7 @@ protocol CoordinatedViewController {
     var coordinator: Coordinator? { get set }
 }
 
-class MainCoordinator: Coordinator,
-    LoginScreenCoordinator,
-    RootScreenCoordinator,
-    ProfileScreenCoordinator,
-    UserDetailsScreenCoordinator {
+class MainCoordinator: Coordinator, LoginCoordinatorDelegate {
 
     var userDisposable: Disposable?
     let navigationController: UINavigationController
@@ -34,9 +30,9 @@ class MainCoordinator: Coordinator,
     }
     
     func openLoginScreen() {
-        let viewController = LoginViewController()
-        viewController.coordinator = self
-        navigationController.pushViewController(viewController, animated: false)
+        let loginCoordinator = LoginCoordinator(navigationController: navigationController)
+        loginCoordinator.delegate = self
+        loginCoordinator.start()
     }
     
     func openRootScreen() {
@@ -44,29 +40,6 @@ class MainCoordinator: Coordinator,
         controller.coordinator = self
         controller.setupViewControllers()
         navigationController.pushViewController(controller, animated: false)
-    }
-
-    func openProfileScreen() {
-        let viewController = ProfileScreenViewController()
-        viewController.coordinator = self
-        navigationController.pushViewController(viewController, animated: false)
-    }
-
-    func openCalendarScreen(selectedDates: SelectedDates, onComplete: @escaping (SelectedDates) -> Void) {
-        let calendarViewController = CalendarViewController()
-        calendarViewController.modalPresentationStyle = .overCurrentContext
-        calendarViewController.isModalInPopover = true
-        calendarViewController.onResult = onComplete
-        calendarViewController.initialSelectedDateFrom = selectedDates.from
-        calendarViewController.initialSelectedDateTo = selectedDates.to
-        navigationController.present(calendarViewController, animated: false, completion: nil)
-    }
-
-    func openLocationSearch() {
-        let viewController = LocationSearchViewController()
-        viewController.modalPresentationStyle = .overFullScreen
-        viewController.modalTransitionStyle = .coverVertical
-        navigationController.show(viewController, sender: self)
     }
     
     func start() {

@@ -42,6 +42,9 @@ class TextFieldWithBottomLine: UITextField {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
+
+        autocorrectionType = .no
+        autocapitalizationType = .none
     }
 
     private func setupLeftView() {

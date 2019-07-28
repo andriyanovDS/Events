@@ -9,32 +9,84 @@
 import Foundation
 import AVFoundation
 import Photos
-import RxSwift
 import UIKit
+import FirebaseDatabase
+import FirebaseStorage
 
 class UserDetailsViewModel {
 
-    var disposable: Disposable?
     weak var coordinator: UserDetailsScreenCoordinator?
-    weak var delegate: UserDetailsViewModelDelegate!
+    let delegate: UserDetailsViewModelDelegate
+    lazy var storage = Storage.storage()
 
     init(delegate: UserDetailsViewModelDelegate) {
         self.delegate = delegate
-        delegate.showActivityIndicator(for: nil)
-        disposable = userObserver
-            .take(1)
-            .subscribe(onNext: {[weak self] optionalUser in
-                self?.disposable = nil
-                let user = optionalUser!
-                self?.delegate.removeActivityIndicator()
-                if user.firstName.isEmpty {
-                    self?.delegate.userId = user.id
-                    return
-                }
-                self?.closeScreen()
-            })
     }
 
+    func closeScreen() {
+        coordinator?.userDetailsDidSubmit()
+    }
+}
+
+extension UserDetailsViewModel {
+    private func updateUserProfile(
+        user: User,
+        firstName: String,
+        avatar: String?,
+        userInfo: [String: Any?]
+        ) {
+        let updatedUser = User(
+            id: user.id,
+            firstName: firstName,
+            lastName: userInfo["lastName"] as? String,
+            description: userInfo["description"] as? String,
+            gender: userInfo["gender"] as? Gender,
+            dateOfBirth: userInfo["dateOfBirth"] as? Date,
+            email: user.email,
+            location: nil,
+            work: userInfo["work"] as? String,
+            avatar: avatar
+        )
+        Events.updateUserProfile(user: updatedUser, onComplete: { [weak self] result in
+            switch result {
+            case .success(_):
+                self?.delegate.removeActivityIndicator()
+                self?.closeScreen()
+                return
+            case .failure(let error):
+                print("Error", error)
+                self?.delegate.removeActivityIndicator()
+            }
+        })
+    }
+
+    func submitProfile(userInfo: [String: Any?]) {
+        guard let user = delegate.user else {
+            return
+        }
+
+        guard let firstName = userInfo["firstName"] as? String else {
+            return
+        }
+
+        delegate.showActivityIndicator(for: nil)
+
+        if let avatarUrl = userInfo["avatar"] as? URL {
+            uploadAvatar(url: avatarUrl, userId: user.id, onComplete: { [weak self] result in
+                switch result {
+                case .success(let url):
+                    self?.updateUserProfile(user: user, firstName: firstName, avatar: url, userInfo: userInfo)
+                case .failure:
+                    self?.updateUserProfile(user: user, firstName: firstName, avatar: nil, userInfo: userInfo)
+                }
+            })
+        } else {
+            updateUserProfile(user: user, firstName: firstName, avatar: nil, userInfo: userInfo)
+        }
+    }
+}
+
+extension UserDetailsViewModel {
     private func openCamera() {
         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
             return
@@ -72,7 +124,7 @@ class UserDetailsViewModel {
         }
     }
 
-    private func openLibraryUsagePermission() {
+    private func requestLibraryUsagePermission() {
         let status = PHPhotoLibrary.authorizationStatus()
         switch status {
         case .authorized:
@@ -90,7 +142,7 @@ class UserDetailsViewModel {
         }
     }
 
-    @objc func showSelectImageActionSheet() {
+    func showSelectImageActionSheet() {
         let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         actionSheetController.addAction(.init(
             title: "Камера",
@@ -98,14 +150,14 @@ class UserDetailsViewModel {
             handler: {[weak self] _ in
                 self?.requestCameraUsagePermission()
             }
-        ))
+            ))
         actionSheetController.addAction(.init(
             title: "Галерея",
             style: .default,
             handler: {[weak self] _ in
-                self?.openLibraryUsagePermission()
+                self?.requestLibraryUsagePermission()
             }
-        ))
+            ))
         actionSheetController.addAction(.init(
             title: "Закрыть",
             style: .cancel,
@@ -114,20 +166,31 @@ class UserDetailsViewModel {
         self.delegate.present(actionSheetController, animated: true, completion: nil)
     }
 
-    deinit {
-        disposable?.dispose()
-        disposable = nil
-    }
-
-    func closeScreen() {
-        coordinator?.openProfileScreen()
+    private func uploadAvatar(url: URL, userId: String, onComplete: @escaping (Result<String, Error>) -> Void) {
+        let reference = storage.reference()
+        let avatarRef = reference.child("users/\(userId)/images")
+        avatarRef.putFile(from: url, metadata: nil, completion: { _, error in
+            if let uploadError = error {
+                onComplete(.failure(uploadError))
+                return
+            }
+            avatarRef.downloadURL(completion: { url, error in
+                if let error = error {
+                    onComplete(.failure(error))
+                    return
+                }
+                onComplete(.success(url!.absoluteString))
+            })
+        })
     }
 }
 
-protocol UserDetailsViewModelDelegate: class, UIViewControllerWithActivityIndicator, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    var userId: String? { get set }
+protocol UserDetailsViewModelDelegate: UIViewControllerWithActivityIndicator,
+    UIImagePickerControllerDelegate,
+    UINavigationControllerDelegate {
+    var user: User? { get set }
 }
 
 protocol UserDetailsScreenCoordinator: class {
-    func openProfileScreen()
+    func userDetailsDidSubmit()
 }

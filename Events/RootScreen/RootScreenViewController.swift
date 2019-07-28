@@ -79,7 +79,7 @@ class RootScreenViewController: UIViewController {
 extension RootScreenViewController {
     
     func hideNavigationBar() {
-        tabBarController?.navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     func setupView() {
@@ -178,15 +178,6 @@ extension RootScreenViewController {
             categoryView.heightAnchor.constraint(equalToConstant: 70)
         ])
     }
-}
-
-protocol RootScreenCoordinator {
-    func openLocationSearch()
-
-    func openCalendarScreen(
-       selectedDates: SelectedDates,
-       onComplete: @escaping (SelectedDates) -> Void
-    )
 }
 
 class FilterButton: UIButton {
