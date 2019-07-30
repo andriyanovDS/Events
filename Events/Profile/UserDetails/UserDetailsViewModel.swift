@@ -69,7 +69,7 @@ class UserDetailsViewModel {
                 self.openCamera()
             })
         case .denied:
-            print("1")
+            coordinator?.openPopUpWindow()
         case .restricted:
             print("1")
         default: return
@@ -134,4 +134,5 @@ protocol UserDetailsViewModelDelegate: class, UIViewControllerWithActivityIndica
 
 protocol UserDetailsScreenCoordinator: class {
     func openProfileScreen()
+    func openPopUpWindow()
 }

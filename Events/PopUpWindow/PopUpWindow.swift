@@ -7,9 +7,7 @@
 //
 
 import UIKit
-protocol PopUpDelegate {
-    func hadleDismissal()
-}
+
 
 
 class PopUpWindow: UIView {

@@ -32,14 +32,6 @@ class UserDetailsViewController: UIViewControllerWithActivityIndicator, UserDeta
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    lazy var popUpWindow: PopUpWindow = {
-        let view = PopUpWindow()
-        view.setupView(with: "Разрешите доступ к камере в настройках")
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 5
-        view.delegate = self
-        return view
-    }()
     lazy var avatarView: UIButtonScaleOnPress = {
         return UIButtonScaleOnPress()
     }()
@@ -102,20 +94,6 @@ extension UserDetailsViewController: UIImagePickerControllerDelegate, UINavigati
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.dismiss(animated: false, completion: nil)
-    }
-}
-
-extension UserDetailsViewController: PopUpDelegate {
-    func hadleDismissal() {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.visualEffectView.alpha = 0
-            self.popUpWindow.alpha = 0
-            
-            self.popUpWindow.transform = CGAffineTransform.identity
-        }) { (_) in
-            self.popUpWindow.removeFromSuperview()
-            
-        }
     }
 }
 

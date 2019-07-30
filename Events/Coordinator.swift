@@ -24,6 +24,7 @@ class MainCoordinator: Coordinator,
     LoginScreenCoordinator,
     RootScreenCoordinator,
     ProfileScreenCoordinator,
+    PopUpWindowCoordinator,
     UserDetailsScreenCoordinator {
 
     var userDisposable: Disposable?
@@ -37,6 +38,18 @@ class MainCoordinator: Coordinator,
         let viewController = LoginViewController()
         viewController.coordinator = self
         navigationController.pushViewController(viewController, animated: false)
+    }
+    
+    func openPopUpWindow() {
+        let controller = PopUpWindowViewController()
+        controller.coordinator = self
+        navigationController.pushViewController(controller, animated: false)
+    }
+    
+    func openUserDetails(){
+        let controller = UserDetailsViewController()
+        controller.coordinator = self
+        navigationController.pushViewController(controller, animated: false)
     }
     
     func openRootScreen() {
