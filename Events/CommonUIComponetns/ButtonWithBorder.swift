@@ -1,14 +1,14 @@
 //
-//  LoginButton.swift
+//  ButtonWithBorder.swift
 //  Events
 //
-//  Created by Дмитрий Андриянов on 12/07/2019.
+//  Created by Дмитрий Андриянов on 21/07/2019.
 //  Copyright © 2019 Дмитрий Андриянов. All rights reserved.
 //
 
 import UIKit
 
-class LoginButton: UIButtonScaleOnPress {
+class ButtonWithBorder: UIButtonScaleOnPress {
 
     override var isEnabled: Bool {
         didSet {

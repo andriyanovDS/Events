@@ -14,28 +14,46 @@ extension UserDetailsViewController {
     func setupInitialView() {
         view.backgroundColor = .white
 
+        setupScrollView()
+        setupContentView()
         setupCloseButton()
         setupTitle()
         setupFirstNameSectionView()
-        setupSurnameSectionView()
+        setupLastNameSectionView()
         setupAvatarView()
         setupDatePicker()
         setupGenderSectionView()
+        setupWorkSectionView()
+        setupDescriptionSectionView()
+        setupSubmitButton()
+    }
+
+    func setupScrollView() {
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.isScrollEnabled = true
+        scrollView.delegate = self
+        view.addSubview(scrollView)
+        setupScrollViewConstraints()
+    }
+
+    func setupContentView() {
+        scrollView.addSubview(contentView)
+        setupContentViewConstraints()
     }
 
     func setupTitle() {
-        titlelabel.text = "Расскажи нам немного о себе!"
+        titlelabel.text = "Расскажи другим пользователям о себе!"
         titlelabel.textColor = UIColor.gray900()
-        titlelabel.font = UIFont(name: "CeraPro-Medium", size: 32)
+        titlelabel.font = UIFont(name: "CeraPro-Medium", size: 26)
         titlelabel.numberOfLines = 2
         titlelabel.textAlignment = .left
 
-        view.addSubview(titlelabel)
+        contentView.addSubview(titlelabel)
         setupTitleConstraints()
     }
 
     func setupCloseButton() {
-        let button = UIButton()
         let image = UIImage(
             from: .materialIcon,
             code: "cancel",
@@ -43,25 +61,24 @@ extension UserDetailsViewController {
             backgroundColor: .clear,
             size: CGSize(width: 35, height: 35)
         )
-        button.setImage(image, for: .normal)
-        button.addTarget(self, action: #selector(closeScreen), for: .touchUpInside)
-        view.addSubview(button)
+        closeButton.setImage(image, for: .normal)
+        closeButton.addTarget(self, action: #selector(closeScreen), for: .touchUpInside)
+        contentView.addSubview(closeButton)
 
-        setupCloseButtonConstraints(button)
+        setupCloseButtonConstraints()
     }
 
     func setupFirstNameSectionView() {
-        view.addSubview(firstNameSectionView)
+        contentView.addSubview(firstNameSectionView)
         setupFirstNameSectionViewConstraints()
-        let firstNameTextField = TextFieldWithBottomLine()
-        firstNameSectionView.setupView(with: "Имя", childView: firstNameTextField)
+
+        firstNameSectionView.setupView(with: "Имя", childView: TextFieldWithBottomLine())
     }
 
-    func setupSurnameSectionView() {
-        view.addSubview(surnameSectionView)
-        setupSurnameNameSectionViewConstraints()
-        let surnameTextField = TextFieldWithBottomLine()
-        surnameSectionView.setupView(with: "Фамилия", childView: surnameTextField)
+    func setupLastNameSectionView() {
+        contentView.addSubview(lastNameSectionView)
+        setupLastNameSectionViewConstraints()
+        lastNameSectionView.setupView(with: "Фамилия", childView: TextFieldWithBottomLine())
     }
     
     func setupAvatarView() {
@@ -81,12 +98,11 @@ extension UserDetailsViewController {
             action: #selector(showSelectImageActionSheet),
             for: .touchUpInside
         )
-        view.addSubview(avatarView)
+        contentView.addSubview(avatarView)
         setupAvatarViewConstraints(avatarView)
     }
 
     func setupDatePicker() {
-        datePicker = UIDatePicker()
         let toolBar = UIToolbar()
         let tabBarCloseButton = UIBarButtonItem(
             title: "Закрыть",
@@ -105,70 +121,131 @@ extension UserDetailsViewController {
             target: self,
             action: #selector(selectDate)
         )
-        datePicker!.datePickerMode = .date
+        datePicker.datePickerMode = .date
         toolBar.sizeToFit()
         toolBar.setItems([tabBarCloseButton, spaceButton, tabBarDoneButton], animated: false)
         dateTextField.inputAccessoryView = toolBar
         dateTextField.inputView = datePicker
 
-        view.addSubview(dateSectionView)
+        contentView.addSubview(dateSectionView)
         setupDatePickerConstraints()
         dateSectionView.setupView(with: "Дата рождения", childView: dateTextField)
     }
 
     func setupGenderSectionView() {
-        view.addSubview(genderSectionView)
+        contentView.addSubview(genderSectionView)
         setupGenderSectionViewConstraints()
-        let genderTextField = TextFieldWithBottomLine()
         let picker = UIPickerView()
         picker.delegate = self
         genderTextField.inputView = picker
         genderSectionView.setupView(with: "Пол", childView: genderTextField)
     }
 
-    func setupTitleConstraints() {
-        titlelabel.translatesAutoresizingMaskIntoConstraints = false
+    func setupWorkSectionView() {
+        contentView.addSubview(workSectionView)
+        setupWorkSectionViewConstraints()
+        let textField = TextFieldWithBottomLine()
+        workSectionView.setupView(with: "Место работы", childView: textField)
+    }
+
+    func setupDescriptionSectionView() {
+        descriptionTextView.isEditable = true
+        descriptionTextView.textContainerInset = UIEdgeInsets(
+            top: 0,
+            left: 7,
+            bottom: 0,
+            right: 0
+        )
+        descriptionTextView.font = UIFont(name: "CeraPro-Medium", size: 16)
+        descriptionTextView.textColor = UIColor.gray900()
+
+        scrollView.addSubview(descriptionSetionView)
+        setupDescriptionViewConstraints()
+        descriptionSetionView.setupView(with: "Дополнительная информация", childView: descriptionTextView)
+    }
+
+    func setupSubmitButton() {
+        let button = ButtonWithBorder()
+        button.setTitle("Сохранить", for: .normal)
+        button.layer.borderColor = UIColor.blue().cgColor
+        button.setTitleColor(UIColor.blue(), for: .normal)
+        button.contentEdgeInsets = UIEdgeInsets(
+            top: 10,
+            left: 0,
+            bottom: 10,
+            right: 0
+        )
+        button.titleLabel?.font = UIFont(name: "CeraPro-Medium", size: 20)
+        button.addTarget(self, action: #selector(submitProfile), for: .touchUpInside)
+
+        contentView.addSubview(button)
+        setupSubmitButtonConstraints(button)
+    }
+
+    func setupScrollViewConstraints() {
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            titlelabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            titlelabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            titlelabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70)
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
             ])
     }
 
-    func setupCloseButtonConstraints(_ button: UIView) {
-        button.translatesAutoresizingMaskIntoConstraints = false
+    func setupContentViewConstraints() {
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            button.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            button.widthAnchor.constraint(equalToConstant: 35),
-            button.heightAnchor.constraint(equalToConstant: 35)
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
+            ])
+    }
+
+    func setupCloseButtonConstraints() {
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            closeButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            closeButton.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 20),
+            closeButton.widthAnchor.constraint(equalToConstant: 35),
+            closeButton.heightAnchor.constraint(equalToConstant: 35)
+            ])
+    }
+
+    func setupTitleConstraints() {
+        titlelabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            titlelabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width - 60),
+            titlelabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            titlelabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: 10),
+            titlelabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 20)
             ])
     }
 
     func setupFirstNameSectionViewConstraints() {
         firstNameSectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            firstNameSectionView.topAnchor.constraint(equalTo: titlelabel.bottomAnchor, constant: 30),
-            firstNameSectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            firstNameSectionView.topAnchor.constraint(equalTo: titlelabel.bottomAnchor, constant: 50),
+            firstNameSectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             firstNameSectionView.heightAnchor.constraint(equalToConstant: 60),
             firstNameSectionView.widthAnchor.constraint(equalToConstant: 180)
             ])
     }
 
-    func setupSurnameNameSectionViewConstraints() {
-        surnameSectionView.translatesAutoresizingMaskIntoConstraints = false
+    func setupLastNameSectionViewConstraints() {
+        lastNameSectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            surnameSectionView.topAnchor.constraint(equalTo: firstNameSectionView.bottomAnchor, constant: 15),
-            surnameSectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            surnameSectionView.heightAnchor.constraint(equalToConstant: 60),
-            surnameSectionView.widthAnchor.constraint(equalToConstant: 180)
+            lastNameSectionView.topAnchor.constraint(equalTo: firstNameSectionView.bottomAnchor, constant: 15),
+            lastNameSectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            lastNameSectionView.heightAnchor.constraint(equalToConstant: 60),
+            lastNameSectionView.widthAnchor.constraint(equalToConstant: 180)
             ])
     }
 
     func setupAvatarViewConstraints(_ avatarView: UIView) {
         avatarView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            avatarView.centerYAnchor.constraint(equalTo: surnameSectionView.topAnchor),
+            avatarView.centerYAnchor.constraint(equalTo: lastNameSectionView.topAnchor),
             avatarView.leadingAnchor.constraint(equalTo: firstNameSectionView.trailingAnchor, constant: 30),
             avatarView.heightAnchor.constraint(equalToConstant: 120),
             avatarView.widthAnchor.constraint(equalToConstant: 120)
@@ -178,9 +255,9 @@ extension UserDetailsViewController {
     func setupDatePickerConstraints() {
         dateSectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            dateSectionView.topAnchor.constraint(equalTo: surnameSectionView.bottomAnchor, constant: 15),
-            dateSectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            dateSectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            dateSectionView.topAnchor.constraint(equalTo: lastNameSectionView.bottomAnchor, constant: 15),
+            dateSectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            dateSectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             dateSectionView.heightAnchor.constraint(equalToConstant: 60)
             ])
     }
@@ -188,10 +265,40 @@ extension UserDetailsViewController {
     func setupGenderSectionViewConstraints() {
         genderSectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            genderSectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            genderSectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            genderSectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            genderSectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             genderSectionView.topAnchor.constraint(equalTo: dateSectionView.bottomAnchor, constant: 15),
             genderSectionView.heightAnchor.constraint(equalToConstant: 60)
+            ])
+    }
+
+    func setupWorkSectionViewConstraints() {
+        workSectionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            workSectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            workSectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            workSectionView.topAnchor.constraint(equalTo: genderSectionView.bottomAnchor, constant: 15),
+            workSectionView.heightAnchor.constraint(equalToConstant: 60)
+            ])
+    }
+
+    func setupDescriptionViewConstraints() {
+        descriptionSetionView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            descriptionSetionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            descriptionSetionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            descriptionSetionView.topAnchor.constraint(equalTo: workSectionView.bottomAnchor, constant: 15),
+            descriptionSetionView.heightAnchor.constraint(equalToConstant: 120)
+            ])
+    }
+
+    func setupSubmitButtonConstraints(_ button: UIView) {
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            button.widthAnchor.constraint(equalToConstant: 200),
+            button.topAnchor.constraint(equalTo: descriptionSetionView.bottomAnchor, constant: 30),
+            button.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
             ])
     }
 

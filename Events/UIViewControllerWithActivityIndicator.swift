@@ -13,7 +13,7 @@ class UIViewControllerWithActivityIndicator: UIViewController {
     lazy var activityIndicatorView: UIView = {
         let activityIndicatorView = UIView(frame: self.view.bounds)
         activityIndicatorView.backgroundColor = UIColor.gray200(alpha: 0.5)
-        let activityIndicator = UIActivityIndicatorView.init(style: .whiteLarge)
+        let activityIndicator = UIActivityIndicatorView.init(style: .gray)
         activityIndicator.center = activityIndicatorView.center
         activityIndicator.startAnimating()
         activityIndicatorView.addSubview(activityIndicator)

@@ -10,6 +10,7 @@ import UIKit
 
 class UserDetailsSectionView: UIView {
     private let label = UILabel()
+    private var childView: UIView?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,8 +21,34 @@ class UserDetailsSectionView: UIView {
     }
 
     func setupView(with labelText: String, childView: UIView) {
+        self.childView = childView
         sutupLabel(with: labelText)
         setupChildView(childView)
+    }
+
+    func isChildFirstResponder() -> Bool {
+        return childView?.isFirstResponder ?? false
+    }
+
+    func getChildText() -> String? {
+        if let textField = childView as? UITextField {
+            guard let text = textField.text else {
+                return nil
+            }
+            return validateChildText(text)
+        }
+
+        guard let textView = childView as? UITextView else {
+            return nil
+        }
+        return validateChildText(textView.text)
+    }
+
+    private func validateChildText(_ text: String) -> String? {
+        if text.isEmpty {
+            return nil
+        }
+        return text
     }
 
     private func sutupLabel(with text: String) {

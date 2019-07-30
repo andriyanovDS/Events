@@ -11,4 +11,6 @@ use_frameworks!
     pod 'Firebase/Core', '~> 6'
     pod 'Firebase/Auth', '~> 6'
     pod 'Firebase/Database', '~> 6'
+    pod 'Firebase/Storage', '~> 6'
+    pod 'SteviaLayout', '~> 4.5.0'
   end

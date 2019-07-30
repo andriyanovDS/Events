@@ -11,6 +11,8 @@ import RxSwift
 import FirebaseAuth
 import FirebaseDatabase
 
+private let fbDateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+
 struct User {
     let id: String
     let firstName: String
@@ -21,7 +23,29 @@ struct User {
     let email: String
     let location: Location?
     let work: String?
-    let photo: URL?
+    let avatar: String?
+
+    func getUserDetails() -> [String: Any] {
+        var details: [String: Any?] = [
+            "firstName": firstName,
+            "lastName": lastName,
+            "description": description,
+            "gender": gender?.rawValue,
+            "work": work,
+            "avatar": avatar
+        ]
+
+        if let dateOfBirth = self.dateOfBirth {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = fbDateFormat
+
+            details["dateOfBirth"] = dateFormatter.string(from: dateOfBirth)
+        }
+
+        return details
+            .filter {(_, value) in value != nil }
+            .mapValues { $0! }
+    }
 }
 
 enum Gender: String {
@@ -50,9 +74,9 @@ let userObserver = Observable<User?>
                     let dateOfBirth = value?["dateOfBirth"] as? String
                     let gender = value?["gender"] as? Gender
                     let work = value?["work"] as? String
-                    let photo = value?["photo"] as? URL
+                    let avatar = value?["avatar"] as? String
                     let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                    dateFormatter.dateFormat = fbDateFormat
 
                     let date = dateOfBirth.foldL(
                         none: { nil },
@@ -71,7 +95,7 @@ let userObserver = Observable<User?>
                         email: fbUser.email ?? "",
                         location: nil,
                         work: work,
-                        photo: photo
+                        avatar: avatar
                     )
                     observer.on(.next(user))
                 })
@@ -81,3 +105,20 @@ let userObserver = Observable<User?>
         }
     })
     .share(replay: 1, scope: .forever)
+
+func updateUserProfile(user: User, onComplete: @escaping (Result<Void, Error>) -> Void) {
+    let reference = Database.database().reference()
+
+    reference
+        .child("users")
+        .child("details")
+        .child(user.id)
+        .setValue(user.getUserDetails()) { error, _  in
+            if let error = error {
+                onComplete(.failure(error))
+                return
+            }
+            let result: Result<Void, Error> = .success
+            onComplete(result)
+        }
+}

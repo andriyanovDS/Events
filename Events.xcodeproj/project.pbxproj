@@ -15,12 +15,19 @@
 		741DCF8E22D3A888005783A3 /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */; };
 		741DCF9022D3AA81005783A3 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8F22D3AA81005783A3 /* Category.swift */; };
 		741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF9F22D3E3E1005783A3 /* ProfileScreenViewController.swift */; };
-		741EF30422D877FF00133872 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741EF30322D877FF00133872 /* LoginButton.swift */; };
+		742A99C322EDC77500A3A703 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742A99C222EDC77500A3A703 /* Result.swift */; };
+		743816A422E8F74400AA4960 /* DayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743816A322E8F74400AA4960 /* DayButton.swift */; };
 		744B7C8C22E39DB700A839A6 /* CeraPro-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8722E39DB700A839A6 /* CeraPro-Medium.ttf */; };
 		744B7C8D22E39DB700A839A6 /* CeraPro-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8822E39DB700A839A6 /* CeraPro-Light.ttf */; };
 		744B7C8E22E39DB700A839A6 /* CeraPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8922E39DB700A839A6 /* CeraPro-Regular.ttf */; };
 		744B7C8F22E39DB700A839A6 /* CeraPro-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8A22E39DB700A839A6 /* CeraPro-Black.ttf */; };
 		744B7C9022E39DB700A839A6 /* CeraPro-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8B22E39DB700A839A6 /* CeraPro-Bold.ttf */; };
+		744B7C9222E3C6DF00A839A6 /* ButtonWithBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B7C9122E3C6DF00A839A6 /* ButtonWithBorder.swift */; };
+		744B7C9422E4F1A000A839A6 /* ProfileScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B7C9322E4F1A000A839A6 /* ProfileScreenCoordinator.swift */; };
+		744B7C9622E4FA2D00A839A6 /* RootScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B7C9522E4FA2D00A839A6 /* RootScreenCoordinator.swift */; };
+		744B7C9822E4FC5900A839A6 /* RootScreenNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B7C9722E4FC5900A839A6 /* RootScreenNavigationController.swift */; };
+		744B7C9A22E4FEF100A839A6 /* ProfileScreenNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B7C9922E4FEF100A839A6 /* ProfileScreenNavigationController.swift */; };
+		744B7D9B22E6535C00A839A6 /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744B7D9A22E6535C00A839A6 /* LoginCoordinator.swift */; };
 		745243AA22CE85BA00C930C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243A922CE85BA00C930C8 /* AppDelegate.swift */; };
 		745243AC22CE85BA00C930C8 /* RootScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */; };
 		745243B122CE85BC00C930C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 745243B022CE85BC00C930C8 /* Assets.xcassets */; };
@@ -28,10 +35,12 @@
 		745243BD22CF7B5A00C930C8 /* SearchBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243BC22CF7B5A00C930C8 /* SearchBarViewController.swift */; };
 		745243BF22CF965500C930C8 /* SearchBarUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243BE22CF965500C930C8 /* SearchBarUITextField.swift */; };
 		745243C122CFE2B400C930C8 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243C022CFE2B400C930C8 /* UIColorExtension.swift */; };
+		7453637C22EE4940004C9717 /* ProfileActionSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7453637B22EE4940004C9717 /* ProfileActionSection.swift */; };
 		7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */; };
 		7463A49E22DE6EED009171E1 /* TextFieldWithShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49D22DE6EED009171E1 /* TextFieldWithShadow.swift */; };
 		7463A4A022DE7760009171E1 /* TextFieldWithBottomLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49F22DE7760009171E1 /* TextFieldWithBottomLine.swift */; };
 		7463A4A222DE88AC009171E1 /* UIButtonScaleOnPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A4A122DE88AC009171E1 /* UIButtonScaleOnPress.swift */; };
+		7465235822EFA0320027FB22 /* ProfileScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7465235722EFA0320027FB22 /* ProfileScreenView.swift */; };
 		7467B6DF22D4E2E300A1BFE9 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6DE22D4E2E300A1BFE9 /* TabBarViewController.swift */; };
 		7467B6E222D50AEE00A1BFE9 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6E122D50AEE00A1BFE9 /* EventsViewController.swift */; };
 		7467B6E522D50B2100A1BFE9 /* SavedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6E422D50B2100A1BFE9 /* SavedViewController.swift */; };
@@ -39,7 +48,6 @@
 		7467B6ED22D510AA00A1BFE9 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6EC22D510AA00A1BFE9 /* LoginViewController.swift */; };
 		7467B6EF22D514F500A1BFE9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7467B6EE22D514F500A1BFE9 /* GoogleService-Info.plist */; };
 		7467B6F122D52C5D00A1BFE9 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6F022D52C5D00A1BFE9 /* Coordinator.swift */; };
-		7467B6F322D53E5700A1BFE9 /* LoginTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6F222D53E5700A1BFE9 /* LoginTextField.swift */; };
 		74697FC022D0E69B00D5B5F4 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FBF22D0E69B00D5B5F4 /* CalendarViewController.swift */; };
 		74697FC622D0F67000D5B5F4 /* commonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FC522D0F67000D5B5F4 /* commonStyles.swift */; };
 		74697FC822D11F7F00D5B5F4 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FC722D11F7F00D5B5F4 /* UIViewExtension.swift */; };
@@ -79,12 +87,19 @@
 		741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
 		741DCF8F22D3AA81005783A3 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		741DCF9F22D3E3E1005783A3 /* ProfileScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenViewController.swift; sourceTree = "<group>"; };
-		741EF30322D877FF00133872 /* LoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
+		742A99C222EDC77500A3A703 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		743816A322E8F74400AA4960 /* DayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayButton.swift; sourceTree = "<group>"; };
 		744B7C8722E39DB700A839A6 /* CeraPro-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Medium.ttf"; sourceTree = "<group>"; };
 		744B7C8822E39DB700A839A6 /* CeraPro-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Light.ttf"; sourceTree = "<group>"; };
 		744B7C8922E39DB700A839A6 /* CeraPro-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Regular.ttf"; sourceTree = "<group>"; };
 		744B7C8A22E39DB700A839A6 /* CeraPro-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Black.ttf"; sourceTree = "<group>"; };
 		744B7C8B22E39DB700A839A6 /* CeraPro-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Bold.ttf"; sourceTree = "<group>"; };
+		744B7C9122E3C6DF00A839A6 /* ButtonWithBorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithBorder.swift; sourceTree = "<group>"; };
+		744B7C9322E4F1A000A839A6 /* ProfileScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenCoordinator.swift; sourceTree = "<group>"; };
+		744B7C9522E4FA2D00A839A6 /* RootScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenCoordinator.swift; sourceTree = "<group>"; };
+		744B7C9722E4FC5900A839A6 /* RootScreenNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenNavigationController.swift; sourceTree = "<group>"; };
+		744B7C9922E4FEF100A839A6 /* ProfileScreenNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenNavigationController.swift; sourceTree = "<group>"; };
+		744B7D9A22E6535C00A839A6 /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
 		745243A622CE85BA00C930C8 /* Events.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Events.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		745243A922CE85BA00C930C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenViewController.swift; sourceTree = "<group>"; };
@@ -94,10 +109,12 @@
 		745243BC22CF7B5A00C930C8 /* SearchBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarViewController.swift; sourceTree = "<group>"; };
 		745243BE22CF965500C930C8 /* SearchBarUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarUITextField.swift; sourceTree = "<group>"; };
 		745243C022CFE2B400C930C8 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		7453637B22EE4940004C9717 /* ProfileActionSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionSection.swift; sourceTree = "<group>"; };
 		7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsSection.swift; sourceTree = "<group>"; };
 		7463A49D22DE6EED009171E1 /* TextFieldWithShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithShadow.swift; sourceTree = "<group>"; };
 		7463A49F22DE7760009171E1 /* TextFieldWithBottomLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithBottomLine.swift; sourceTree = "<group>"; };
 		7463A4A122DE88AC009171E1 /* UIButtonScaleOnPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonScaleOnPress.swift; sourceTree = "<group>"; };
+		7465235722EFA0320027FB22 /* ProfileScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenView.swift; sourceTree = "<group>"; };
 		7467B6DE22D4E2E300A1BFE9 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		7467B6E122D50AEE00A1BFE9 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		7467B6E422D50B2100A1BFE9 /* SavedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
@@ -105,7 +122,6 @@
 		7467B6EC22D510AA00A1BFE9 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		7467B6EE22D514F500A1BFE9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7467B6F022D52C5D00A1BFE9 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
-		7467B6F222D53E5700A1BFE9 /* LoginTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextField.swift; sourceTree = "<group>"; };
 		74697FBF22D0E69B00D5B5F4 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
 		74697FC522D0F67000D5B5F4 /* commonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = commonStyles.swift; sourceTree = "<group>"; };
 		74697FC722D11F7F00D5B5F4 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
@@ -195,6 +211,10 @@
 				74D8DB2C22DD264600E70CB4 /* UserDetails */,
 				741DCF9F22D3E3E1005783A3 /* ProfileScreenViewController.swift */,
 				748E0AFD22D8E2D000B061C7 /* ProfileScreenViewModel.swift */,
+				744B7C9322E4F1A000A839A6 /* ProfileScreenCoordinator.swift */,
+				744B7C9922E4FEF100A839A6 /* ProfileScreenNavigationController.swift */,
+				7453637B22EE4940004C9717 /* ProfileActionSection.swift */,
+				7465235722EFA0320027FB22 /* ProfileScreenView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -265,6 +285,7 @@
 				7463A49D22DE6EED009171E1 /* TextFieldWithShadow.swift */,
 				7463A49F22DE7760009171E1 /* TextFieldWithBottomLine.swift */,
 				7463A4A122DE88AC009171E1 /* UIButtonScaleOnPress.swift */,
+				744B7C9122E3C6DF00A839A6 /* ButtonWithBorder.swift */,
 			);
 			path = CommonUIComponetns;
 			sourceTree = "<group>";
@@ -300,9 +321,8 @@
 				7467B6EC22D510AA00A1BFE9 /* LoginViewController.swift */,
 				748E0B0122D8FD0000B061C7 /* LoginViewControllerSetupViewExtension.swift */,
 				74A1AE2222D64BFB00C39525 /* LoginViewModel.swift */,
-				7467B6F222D53E5700A1BFE9 /* LoginTextField.swift */,
-				741EF30322D877FF00133872 /* LoginButton.swift */,
 				74A1AE1E22D5D18800C39525 /* KeyboardAttachViewController.swift */,
+				744B7D9A22E6535C00A839A6 /* LoginCoordinator.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -314,6 +334,7 @@
 				74697FCD22D2022700D5B5F4 /* CalendarViewModel.swift */,
 				74697FC922D200A900D5B5F4 /* Month.swift */,
 				74697FCB22D200DF00D5B5F4 /* Day.swift */,
+				743816A322E8F74400AA4960 /* DayButton.swift */,
 			);
 			path = Calendar;
 			sourceTree = "<group>";
@@ -355,6 +376,8 @@
 				745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */,
 				748E0B0722DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift */,
 				741DCF8822D38264005783A3 /* RootScreenViewModel.swift */,
+				744B7C9522E4FA2D00A839A6 /* RootScreenCoordinator.swift */,
+				744B7C9722E4FC5900A839A6 /* RootScreenNavigationController.swift */,
 			);
 			path = RootScreen;
 			sourceTree = "<group>";
@@ -365,6 +388,7 @@
 				745243C022CFE2B400C930C8 /* UIColorExtension.swift */,
 				74697FC722D11F7F00D5B5F4 /* UIViewExtension.swift */,
 				74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */,
+				742A99C222EDC77500A3A703 /* Result.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -540,20 +564,24 @@
 				748E0B1F22DB7E2C00B061C7 /* SearchBarDelegate.swift in Sources */,
 				6065B6CE22EE1E7D00EBDCD4 /* PopUpWindowViewModel.swift in Sources */,
 				74697FC622D0F67000D5B5F4 /* commonStyles.swift in Sources */,
+				743816A422E8F74400AA4960 /* DayButton.swift in Sources */,
 				7467B6DF22D4E2E300A1BFE9 /* TabBarViewController.swift in Sources */,
 				745243AA22CE85BA00C930C8 /* AppDelegate.swift in Sources */,
+				744B7D9B22E6535C00A839A6 /* LoginCoordinator.swift in Sources */,
+				7465235822EFA0320027FB22 /* ProfileScreenView.swift in Sources */,
 				74A1AE2322D64BFB00C39525 /* LoginViewModel.swift in Sources */,
 				748E0B2522DBAAD200B061C7 /* Prediction.swift in Sources */,
-				741EF30422D877FF00133872 /* LoginButton.swift in Sources */,
 				745243C122CFE2B400C930C8 /* UIColorExtension.swift in Sources */,
-				7467B6F322D53E5700A1BFE9 /* LoginTextField.swift in Sources */,
 				741DCF9022D3AA81005783A3 /* Category.swift in Sources */,
 				7467B6ED22D510AA00A1BFE9 /* LoginViewController.swift in Sources */,
 				7467B6EA22D5107400A1BFE9 /* User.swift in Sources */,
 				7463A49E22DE6EED009171E1 /* TextFieldWithShadow.swift in Sources */,
+				742A99C322EDC77500A3A703 /* Result.swift in Sources */,
 				741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */,
 				74D8DB3022DD27D900E70CB4 /* UserDetailsViewControllerSetupViewExtension.swift in Sources */,
+				744B7C9222E3C6DF00A839A6 /* ButtonWithBorder.swift in Sources */,
 				741DCF8E22D3A888005783A3 /* CategoriesViewModel.swift in Sources */,
+				744B7C9A22E4FEF100A839A6 /* ProfileScreenNavigationController.swift in Sources */,
 				748E0B2322DB87AA00B061C7 /* LocationItem.swift in Sources */,
 				74697FC822D11F7F00D5B5F4 /* UIViewExtension.swift in Sources */,
 				74A1AE1F22D5D18800C39525 /* KeyboardAttachViewController.swift in Sources */,
@@ -561,12 +589,14 @@
 				7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */,
 				748E0B0222D8FD0000B061C7 /* LoginViewControllerSetupViewExtension.swift in Sources */,
 				748E0B2722DBBB2900B061C7 /* LocationSearchStackView.swift in Sources */,
+				744B7C9622E4FA2D00A839A6 /* RootScreenCoordinator.swift in Sources */,
 				74D8DB3422DD37F800E70CB4 /* UserDetailsViewModel.swift in Sources */,
 				741DCF8C22D3A878005783A3 /* CategoriesView.swift in Sources */,
 				745243BD22CF7B5A00C930C8 /* SearchBarViewController.swift in Sources */,
 				748E0B1222DA24DD00B061C7 /* APIClient.swift in Sources */,
 				748E0B1A22DB6B9200B061C7 /* LocationSearchViewController.swift in Sources */,
 				7467B6F122D52C5D00A1BFE9 /* Coordinator.swift in Sources */,
+				744B7C9422E4F1A000A839A6 /* ProfileScreenCoordinator.swift in Sources */,
 				74697FCA22D200A900D5B5F4 /* Month.swift in Sources */,
 				745243BF22CF965500C930C8 /* SearchBarUITextField.swift in Sources */,
 				748E0B1422DA26BC00B061C7 /* GeolocationAPI.swift in Sources */,
@@ -578,6 +608,8 @@
 				748E0B1722DA289800B061C7 /* Geocode.swift in Sources */,
 				748E0B0822DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift in Sources */,
 				74697FCC22D200DF00D5B5F4 /* Day.swift in Sources */,
+				7453637C22EE4940004C9717 /* ProfileActionSection.swift in Sources */,
+				744B7C9822E4FC5900A839A6 /* RootScreenNavigationController.swift in Sources */,
 				748E0AFE22D8E2D000B061C7 /* ProfileScreenViewModel.swift in Sources */,
 				6065B6CC22EE1E6700EBDCD4 /* PopUpWindowViewController.swift in Sources */,
 			);
