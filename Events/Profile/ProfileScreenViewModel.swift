@@ -16,6 +16,7 @@ class ProfileScreenViewModel {
     var user: User?
     var userDisposable: Disposable?
     var coordinator: ProfileScreenCoordinator?
+    weak var delegate: ProfileScreenViewModelDelegate?
 
     func attemptToOpenUserDetails() {
         userDisposable = userObserver
@@ -26,6 +27,7 @@ class ProfileScreenViewModel {
                 guard let user = optionUser else {
                     return
                 }
+                self?.delegate?.onUserDidChange(user: user)
                 if user.firstName.isEmpty {
                     self?.openUserDetails(user: user)
                 }
@@ -51,4 +53,8 @@ class ProfileScreenViewModel {
         }
 
     }
+}
+
+protocol ProfileScreenViewModelDelegate: class {
+    func onUserDidChange(user: User)
 }

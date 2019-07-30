@@ -18,6 +18,8 @@ extension UIView {
         let border = CALayer()
         border.backgroundColor = color
 
+        print("add border", frame.width)
+
         switch side {
         case .left: border.frame = CGRect(
             x: 0 - thickness,

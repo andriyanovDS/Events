@@ -8,54 +8,72 @@
 
 import UIKit
 
-class ProfileScreenViewController: UIViewController {
+class ProfileScreenViewController: UIViewController, ProfileScreenViewModelDelegate {
 
     var coordinator: ProfileScreenCoordinator?
     let viewModel = ProfileScreenViewModel()
+
+    let contentView = UIView()
+    let userInfoView = UIView()
+    let userNameLabel = UILabel()
+    var avatarViewButton = UIButton()
+    var avatarImageView = UIImageView()
+
+    var profileScreenView: ProfileScreenView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         coordinator = ProfileScreenCoordinator(navigationController: navigationController!)
         viewModel.coordinator = coordinator
+        viewModel.delegate = self
         viewModel.attemptToOpenUserDetails()
-        setupView()
+        loadView()
+    }
+
+    override func loadView() {
+        profileScreenView = ProfileScreenView()
+        view = profileScreenView
+        profileScreenView.editButton.addTarget(self, action: #selector(editProfile), for: .touchUpInside)
+        profileScreenView.avatarViewButton.addTarget(self, action: #selector(editProfile), for: .touchUpInside)
+        profileScreenView.logoutButton.addTarget(self, action: #selector(onLogout), for: .touchUpInside)
     }
 
     @objc func onLogout() {
         viewModel.logout()
     }
 
+    @objc func editProfile() {
+        
+    }
+
+    func onUserDidChange(user: User) {
+        userNameLabel.text = user.firstName
+        if let avatarUrl = user.avatar {
+            loadAvatarImage(avatarUrl)
+        }
+    }
+
+    private func loadAvatarImage(_ avatarExternalUrl: String) {
+        let url = URL(string: avatarExternalUrl, relativeTo: nil)
+        guard let imageUrl = url else {
+            return
+        }
+        DispatchQueue.global(qos: .background).async {
+            let data = try? Data(contentsOf: imageUrl)
+            guard let imageData = data else {
+                return
+            }
+            DispatchQueue.main.async {
+                self.avatarImageView.image = UIImage(data: imageData)
+            }
+        }
+    }
 }
 
-extension ProfileScreenViewController {
+extension ProfileScreenViewController: UIScrollViewDelegate {
 
-    func setupView() {
-        view.backgroundColor = .white
-        setupLogoutButton()
-    }
-
-    func setupLogoutButton() {
-        let button = ButtonWithBorder()
-
-        button.setTitle("Выйти", for: .normal)
-        button.setTitleColor(UIColor.gray600(), for: .normal)
-        button.layer.borderColor = UIColor.gray600().cgColor
-        button.titleLabel?.font = UIFont(name: "CeraPro-Medium", size: 20)
-        button.addTarget(self, action: #selector(onLogout), for: .touchUpInside)
-
-        view.addSubview(button)
-        setupLogoutButtonConstraints(button)
-    }
-
-    func setupLogoutButtonConstraints(_ button: UIView) {
-        button.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
-            button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
-            button.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -120),
-            button.heightAnchor.constraint(equalToConstant: 45)
-        ])
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        scrollView.contentOffset.x = 0
     }
 }

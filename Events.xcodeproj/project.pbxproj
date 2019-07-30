@@ -33,10 +33,12 @@
 		745243BD22CF7B5A00C930C8 /* SearchBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243BC22CF7B5A00C930C8 /* SearchBarViewController.swift */; };
 		745243BF22CF965500C930C8 /* SearchBarUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243BE22CF965500C930C8 /* SearchBarUITextField.swift */; };
 		745243C122CFE2B400C930C8 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243C022CFE2B400C930C8 /* UIColorExtension.swift */; };
+		7453637C22EE4940004C9717 /* ProfileActionSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7453637B22EE4940004C9717 /* ProfileActionSection.swift */; };
 		7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */; };
 		7463A49E22DE6EED009171E1 /* TextFieldWithShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49D22DE6EED009171E1 /* TextFieldWithShadow.swift */; };
 		7463A4A022DE7760009171E1 /* TextFieldWithBottomLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49F22DE7760009171E1 /* TextFieldWithBottomLine.swift */; };
 		7463A4A222DE88AC009171E1 /* UIButtonScaleOnPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A4A122DE88AC009171E1 /* UIButtonScaleOnPress.swift */; };
+		7465235822EFA0320027FB22 /* ProfileScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7465235722EFA0320027FB22 /* ProfileScreenView.swift */; };
 		7467B6DF22D4E2E300A1BFE9 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6DE22D4E2E300A1BFE9 /* TabBarViewController.swift */; };
 		7467B6E222D50AEE00A1BFE9 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6E122D50AEE00A1BFE9 /* EventsViewController.swift */; };
 		7467B6E522D50B2100A1BFE9 /* SavedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6E422D50B2100A1BFE9 /* SavedViewController.swift */; };
@@ -103,10 +105,12 @@
 		745243BC22CF7B5A00C930C8 /* SearchBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarViewController.swift; sourceTree = "<group>"; };
 		745243BE22CF965500C930C8 /* SearchBarUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarUITextField.swift; sourceTree = "<group>"; };
 		745243C022CFE2B400C930C8 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		7453637B22EE4940004C9717 /* ProfileActionSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionSection.swift; sourceTree = "<group>"; };
 		7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsSection.swift; sourceTree = "<group>"; };
 		7463A49D22DE6EED009171E1 /* TextFieldWithShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithShadow.swift; sourceTree = "<group>"; };
 		7463A49F22DE7760009171E1 /* TextFieldWithBottomLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithBottomLine.swift; sourceTree = "<group>"; };
 		7463A4A122DE88AC009171E1 /* UIButtonScaleOnPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonScaleOnPress.swift; sourceTree = "<group>"; };
+		7465235722EFA0320027FB22 /* ProfileScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenView.swift; sourceTree = "<group>"; };
 		7467B6DE22D4E2E300A1BFE9 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		7467B6E122D50AEE00A1BFE9 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		7467B6E422D50B2100A1BFE9 /* SavedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
@@ -196,6 +200,8 @@
 				748E0AFD22D8E2D000B061C7 /* ProfileScreenViewModel.swift */,
 				744B7C9322E4F1A000A839A6 /* ProfileScreenCoordinator.swift */,
 				744B7C9922E4FEF100A839A6 /* ProfileScreenNavigationController.swift */,
+				7453637B22EE4940004C9717 /* ProfileActionSection.swift */,
+				7465235722EFA0320027FB22 /* ProfileScreenView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -547,6 +553,7 @@
 				7467B6DF22D4E2E300A1BFE9 /* TabBarViewController.swift in Sources */,
 				745243AA22CE85BA00C930C8 /* AppDelegate.swift in Sources */,
 				744B7D9B22E6535C00A839A6 /* LoginCoordinator.swift in Sources */,
+				7465235822EFA0320027FB22 /* ProfileScreenView.swift in Sources */,
 				74A1AE2322D64BFB00C39525 /* LoginViewModel.swift in Sources */,
 				748E0B2522DBAAD200B061C7 /* Prediction.swift in Sources */,
 				745243C122CFE2B400C930C8 /* UIColorExtension.swift in Sources */,
@@ -586,6 +593,7 @@
 				748E0B1722DA289800B061C7 /* Geocode.swift in Sources */,
 				748E0B0822DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift in Sources */,
 				74697FCC22D200DF00D5B5F4 /* Day.swift in Sources */,
+				7453637C22EE4940004C9717 /* ProfileActionSection.swift in Sources */,
 				744B7C9822E4FC5900A839A6 /* RootScreenNavigationController.swift in Sources */,
 				748E0AFE22D8E2D000B061C7 /* ProfileScreenViewModel.swift in Sources */,
 			);
