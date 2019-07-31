@@ -29,7 +29,7 @@ class ProfileScreenViewModel {
                 }
                 self?.delegate?.onUserDidChange(user: user)
                 if user.firstName.isEmpty {
-                    self?.openUserDetails(user: user)
+                    self?.openUserDetails()
                 }
             })
     }
@@ -40,8 +40,11 @@ class ProfileScreenViewModel {
         }
     }
 
-    func openUserDetails(user: User) {
-       coordinator?.openUserDetails(user: user)
+    func openUserDetails() {
+        guard let user = self.user else {
+            return
+        }
+        coordinator?.openUserDetails(user: user)
     }
 
     func logout() {

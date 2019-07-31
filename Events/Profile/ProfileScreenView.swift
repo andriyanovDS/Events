@@ -31,6 +31,24 @@ class ProfileScreenView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func setupButtons(_ buttons: [ProfileActionButton]) {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fillProportionally
+        stackView.alignment = .fill
+
+        sv(stackView)
+        stackView
+            .left(25)
+            .right(25)
+
+        stackView.Top == userInfoView.Bottom + 40
+
+        buttons.forEach({ v in
+            stackView.addArrangedSubview(v)
+        })
+    }
+
     private func setupView() {
         backgroundColor = .white
         
@@ -53,15 +71,15 @@ class ProfileScreenView: UIView {
         })
 
         scrollView
-            .top(0)
-            .bottom(0)
             .left(25)
             .right(25)
+
+        scrollView.Bottom == safeAreaLayoutGuide.Bottom
+        scrollView.Top == safeAreaLayoutGuide.Top
     }
 
     private func setupUserInfoView() {
         userNameLabel.style({ v in
-            v.text = "Dima"
             v.textColor = UIColor.gray800()
             v.font = UIFont.init(name: "CeraPro-Medium", size: 32)
         })
@@ -96,7 +114,8 @@ class ProfileScreenView: UIView {
         })
 
         userInfoView.sv([
-            userNameLabel.sv(editButton),
+            userNameLabel,
+            editButton,
             avatarViewButton.sv([avatarImageView])
             ])
         setupUserInfoViewConstraints()
@@ -113,9 +132,8 @@ class ProfileScreenView: UIView {
             .left(0)
             .centerVertically()
 
-        editButton
-            .right(-35)
-            .centerVertically()
+        editButton.centerVertically()
+        editButton.Left == userNameLabel.Right + 10
 
         avatarViewButton
             .right(0)
@@ -140,7 +158,7 @@ class ProfileScreenView: UIView {
         contentView.sv(logoutButton)
 
         logoutButton
-            .bottom(140)
+            .bottom(50)
             .left(50)
             .right(50)
             .height(45)

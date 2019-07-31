@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
 
         // Use for live reload http://johnholdsworth.com/injection.html
-        Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/iOSInjection10.bundle")?.load()
+        Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/iOSInjection.bundle")?.load()
         FirebaseApp.configure()
         
         let navigationController = UINavigationController()
