@@ -120,6 +120,9 @@ extension UserDetailsViewModel {
                 }
                 self.openCamera()
             })
+        case .denied:
+            coordinator?.userDetailsDidSubmit()
+            coordinator?.openPopUpWindow(title: "Аллаху", buttonText: "Акбар")
         default: return
         }
     }
@@ -193,4 +196,5 @@ protocol UserDetailsViewModelDelegate: UIViewControllerWithActivityIndicator,
 
 protocol UserDetailsScreenCoordinator: class {
     func userDetailsDidSubmit()
+    func openPopUpWindow(title: String?, buttonText: String?)
 }

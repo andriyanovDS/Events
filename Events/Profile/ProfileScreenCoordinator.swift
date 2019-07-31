@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class ProfileScreenCoordinator: MainCoordinator, UserDetailsScreenCoordinator {
+class ProfileScreenCoordinator: MainCoordinator, UserDetailsScreenCoordinator, PopUpWindowCoordinator {
 
     func openUserDetails(user: User) {
         let userDetailsViewController = UserDetailsViewController()
@@ -22,6 +22,20 @@ class ProfileScreenCoordinator: MainCoordinator, UserDetailsScreenCoordinator {
             animated: true,
             completion: nil
         )
+    }
+    
+    func openPopUpWindow(title: String?, buttonText: String?) {
+        let popUpWindow = PopUpWindowViewController()
+        popUpWindow.coordinator = self
+        popUpWindow.initialButtonLabelText = buttonText
+        popUpWindow.initialDescription = title
+        popUpWindow.modalPresentationStyle = .overCurrentContext
+        popUpWindow.isModalInPopover = true
+        navigationController.present(popUpWindow, animated: false, completion: nil)
+    }
+    
+    func dismissPopUp() {
+        navigationController.dismiss(animated: false, completion: nil)
     }
 
     func userDetailsDidSubmit() {

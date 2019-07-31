@@ -12,10 +12,10 @@ class PopUpWindowViewModel {
     weak var coordinator: PopUpWindowCoordinator?
 
     func closeModal() {
-        coordinator?.openUserDetails()
+        print(1)
     }
 }
 
 protocol PopUpWindowCoordinator: class {
-    func openUserDetails()
+    func dismissPopUp()
 }

@@ -15,9 +15,16 @@ protocol PopUpDelegate {
 
 
 class PopUpWindowViewController: UIViewController {
-    var coordinator: MainCoordinator?
     var delegate: PopUpDelegate?
     var viewModel: PopUpWindowViewModel?
+    var initialTitle: String?
+    var initialDescription: String?
+    var initialButtonLabelText: String?
+    weak var coordinator: PopUpWindowCoordinator? {
+        didSet {
+            viewModel?.coordinator = coordinator
+        }
+    }
     lazy var notificationLabel: UILabel = {
         let lable = UILabel()
         lable.translatesAutoresizingMaskIntoConstraints = false
@@ -32,22 +39,25 @@ class PopUpWindowViewController: UIViewController {
     lazy var button: UIButtonScaleOnPress = {
         let button = UIButtonScaleOnPress()
         button.backgroundColor = .blue
-        button.setTitle("Понятно", for: .normal)
+        button.setTitle(self.initialButtonLabelText, for: .normal)
         button.addTarget(self, action: #selector(closeModal), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 5
         return button
     }()
+    
+    
     override func viewDidLoad() {
         setupNotification()
         setupButton()
     }
     @objc func closeModal(){
-        coordinator?.openUserDetails()
+        coordinator?.dismissPopUp()
     }
     func setupNotification(){
         self.view.backgroundColor = .white
         self.view.addSubview(notificationLabel)
+        notificationLabel.text = self.initialDescription
         notificationLabel.numberOfLines = 2
         NSLayoutConstraint.activate([
             notificationLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -28),
