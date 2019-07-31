@@ -198,8 +198,8 @@
 				74D8DB2C22DD264600E70CB4 /* UserDetails */,
 				741DCF9F22D3E3E1005783A3 /* ProfileScreenViewController.swift */,
 				748E0AFD22D8E2D000B061C7 /* ProfileScreenViewModel.swift */,
-				744B7C9322E4F1A000A839A6 /* ProfileScreenCoordinator.swift */,
 				744B7C9922E4FEF100A839A6 /* ProfileScreenNavigationController.swift */,
+				744B7C9322E4F1A000A839A6 /* ProfileScreenCoordinator.swift */,
 				7453637B22EE4940004C9717 /* ProfileActionSection.swift */,
 				7465235722EFA0320027FB22 /* ProfileScreenView.swift */,
 			);
