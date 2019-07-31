@@ -7,21 +7,24 @@
 //
 
 import UIKit
+import Stevia
 import SwiftIconFont
 
-class ProfileActionSection: UIView {
+class ProfileActionButton: UIButton {
 
     let labelText: String
     let subtitleText: String?
     let iconName: String
 
-    var label = UILabel()
+    let label = UILabel()
+    let iconImageView = UIImageView()
+    lazy var subtitleLabel = UILabel()
 
     override var bounds: CGRect {
         didSet {
             addBorder(
                 toSide: .bottom,
-                withColor: UIColor.gray400().cgColor,
+                withColor: UIColor.gray200().cgColor,
                 andThickness: 1.0
             )
         }
@@ -40,12 +43,9 @@ class ProfileActionSection: UIView {
     }
 
     private func setupView() {
-        layoutMargins = UIEdgeInsets(
-            top: 10,
-            left: 0,
-            bottom: 10,
-            right: 0
-        )
+        height(70)
+
+        sv(label, iconImageView)
         setupLabel()
         setupIcon()
 
@@ -55,22 +55,24 @@ class ProfileActionSection: UIView {
     }
 
     private func setupLabel() {
-        label.text = labelText
-        label.textColor = UIColor.gray800()
-        label.font = UIFont.init(name: "CeraPro-Medium", size: 18)
-        addSubview(label)
-        
-        setupLabelConstraints()
+        label.style({ v in
+            v.text = labelText
+            v.textColor = UIColor.gray800()
+            v.font = UIFont.init(name: "CeraPro-Medium", size: 18)
+        })
+        label.left(0).centerVertically(0)
     }
 
     private func setupSubtitle(text: String) {
-        let label = UILabel()
-        label.text = text
-        label.textColor = UIColor.gray600()
-        label.font = UIFont.init(name: "CeraPro-Medium", size: 15)
-        addSubview(label)
-
-        setupSubtitleConstraints(label)
+        subtitleLabel.style({ v in
+            v.text = text
+            v.textColor = UIColor.gray600()
+            v.font = UIFont.init(name: "CeraPro-Medium", size: 18)
+        })
+        label.sv(subtitleLabel)
+        subtitleLabel
+            .top(7)
+            .left(0)
     }
 
     private func setupIcon() {
@@ -81,33 +83,9 @@ class ProfileActionSection: UIView {
             backgroundColor: .clear,
             size: CGSize(width: 35, height: 35)
         )
-        let imageView = UIImageView(image: image)
-        addSubview(imageView)
-
-        setupIconConstraints(imageView)
-    }
-
-    private func setupLabelConstraints() {
-        label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: leadingAnchor),
-            label.topAnchor.constraint(equalTo: topAnchor)
-            ])
-    }
-
-    private func setupSubtitleConstraints(_ subtitle: UIView) {
-        subtitle.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            subtitle.leadingAnchor.constraint(equalTo: leadingAnchor),
-            subtitle.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 5)
-            ])
-    }
-
-    private func setupIconConstraints(_ icon: UIView) {
-        icon.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            icon.trailingAnchor.constraint(equalTo: trailingAnchor),
-            icon.topAnchor.constraint(equalTo: topAnchor, constant: 0)
-            ])
+        iconImageView.image = image
+        iconImageView
+            .right(0)
+            .centerVertically(0)
     }
 }

@@ -7,17 +7,12 @@
 //
 
 import UIKit
+import Stevia
 
 class ProfileScreenViewController: UIViewController, ProfileScreenViewModelDelegate {
 
     var coordinator: ProfileScreenCoordinator?
     let viewModel = ProfileScreenViewModel()
-
-    let contentView = UIView()
-    let userInfoView = UIView()
-    let userNameLabel = UILabel()
-    var avatarViewButton = UIButton()
-    var avatarImageView = UIImageView()
 
     var profileScreenView: ProfileScreenView!
 
@@ -28,15 +23,20 @@ class ProfileScreenViewController: UIViewController, ProfileScreenViewModelDeleg
         viewModel.coordinator = coordinator
         viewModel.delegate = self
         viewModel.attemptToOpenUserDetails()
-        loadView()
+
+        on("INJECTION_BUNDLE_NOTIFICATION") {
+             self.loadView()
+        }
     }
 
     override func loadView() {
         profileScreenView = ProfileScreenView()
         view = profileScreenView
+        setupButtons()
         profileScreenView.editButton.addTarget(self, action: #selector(editProfile), for: .touchUpInside)
         profileScreenView.avatarViewButton.addTarget(self, action: #selector(editProfile), for: .touchUpInside)
         profileScreenView.logoutButton.addTarget(self, action: #selector(onLogout), for: .touchUpInside)
+
     }
 
     @objc func onLogout() {
@@ -44,11 +44,19 @@ class ProfileScreenViewController: UIViewController, ProfileScreenViewModelDeleg
     }
 
     @objc func editProfile() {
-        
+        viewModel.openUserDetails()
+    }
+
+    @objc func createEvent() {
+
+    }
+
+    @objc func openSettings() {
+
     }
 
     func onUserDidChange(user: User) {
-        userNameLabel.text = user.firstName
+        profileScreenView.userNameLabel.text = user.firstName
         if let avatarUrl = user.avatar {
             loadAvatarImage(avatarUrl)
         }
@@ -65,9 +73,28 @@ class ProfileScreenViewController: UIViewController, ProfileScreenViewModelDeleg
                 return
             }
             DispatchQueue.main.async {
-                self.avatarImageView.image = UIImage(data: imageData)
+                self.profileScreenView.avatarImageView.image = UIImage(data: imageData)
             }
         }
+    }
+
+    private func setupButtons() {
+        let createTaskButton = ProfileActionButton(
+            labelText: "Создать событие",
+            subtitleText: nil,
+            iconName: "event"
+        )
+        createTaskButton.addTarget(self, action: #selector(createEvent), for: .touchUpInside)
+        let settingsButton = ProfileActionButton(
+            labelText: "Настройки",
+            subtitleText: nil,
+            iconName: "settings"
+        )
+        settingsButton.addTarget(self, action: #selector(openSettings), for: .touchUpInside)
+        profileScreenView.setupButtons([
+            createTaskButton,
+            settingsButton
+            ])
     }
 }
 
