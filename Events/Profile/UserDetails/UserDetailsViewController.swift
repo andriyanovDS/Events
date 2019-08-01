@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewModelDelegate {
+class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewModelDelegate, UserDetailsView.Delegate {
     var viewModel: UserDetailsViewModel?
     weak var coordinator: UserDetailsScreenCoordinator? {
         didSet {
@@ -17,29 +17,14 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
         }
     }
 
-    let titlelabel = UILabel()
-    let scrollView = UIScrollView()
-    let contentView = UIView()
-    let closeButton = UIButton()
-    let firstNameSectionView = UserDetailsSectionView()
-    let lastNameSectionView = UserDetailsSectionView()
-    let dateSectionView = UserDetailsSectionView()
-    let genderSectionView = UserDetailsSectionView()
-    let workSectionView = UserDetailsSectionView()
-    let descriptionSetionView = UserDetailsSectionView()
-    let avatarView = UIButtonScaleOnPress()
-
-    let dateTextField = TextFieldWithBottomLine()
-    let genderTextField = TextFieldWithBottomLine()
-    let descriptionTextView = UITextView()
-    var datePicker = UIDatePicker()
-
     var selectedGender: Gender?
     var selectedAvatarUrl: URL?
 
+    var userDetailsView: UserDetailsView!
+
     var user: User? {
         didSet {
-            setupInitialView()
+//            loadCustomView()
         }
     }
 
@@ -49,10 +34,23 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
         }
     }
 
+    func loadCustomView() {
+        userDetailsView = UserDetailsView()
+        userDetailsView.delegate = self
+        view = userDetailsView
+
+        userDetailsView.closeButton.addTarget(self, action: #selector(closeScreen), for: .touchUpInside)
+        userDetailsView.avatarButton.addTarget(self, action: #selector(showSelectImageActionSheet), for: .touchUpInside)
+        userDetailsView.submitButton.addTarget(self, action: #selector(submitProfile), for: .touchUpInside)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
         viewModel = UserDetailsViewModel(delegate: self)
+        if coordinator != nil {
+            viewModel?.coordinator = coordinator
+        }
+        loadCustomView()
     }
 
     @objc func showSelectImageActionSheet() {
@@ -67,7 +65,9 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd LLLL YYYY"
         dateFormatter.locale = Locale(identifier: "ru_RU")
-        dateTextField.text = dateFormatter.string(from: datePicker.date)
+        userDetailsView.dateTextField.text = dateFormatter.string(from:
+            userDetailsView.datePicker.date
+        )
         self.view.endEditing(true)
     }
 
@@ -76,30 +76,36 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
     }
 
     @objc func submitProfile() {
-        let date = Calendar.current.isDateInToday(datePicker.date)
+        guard let view = userDetailsView else {
+            return
+        }
+        let date = Calendar.current.isDateInToday(view.datePicker.date)
             ? nil
-            : datePicker.date
+            : view.datePicker.date
 
         let userInfo: [String: Any?] = [
-            "firstName": firstNameSectionView.getChildText(),
-            "lastName": lastNameSectionView.getChildText(),
-            "description": descriptionSetionView.getChildText(),
+            "firstName": view.firstNameSection.getChildText(),
+            "lastName": view.lastNameSection.getChildText(),
+            "description": view.descriptionSection.getChildText(),
             "gender": selectedGender,
             "dateOfBirth": date,
-            "work": workSectionView.getChildText(),
+            "work": view.workSection.getChildText(),
             "avatar": selectedAvatarUrl
         ]
         self.viewModel?.submitProfile(userInfo: userInfo)
     }
 
     private func scrollToActiveTextField(keyboardHeight: CGFloat) {
+        guard let view = userDetailsView else {
+            return
+        }
         let activeField = [
-            firstNameSectionView,
-            lastNameSectionView,
-            dateSectionView,
-            genderSectionView,
-            descriptionSetionView,
-            workSectionView
+            view.firstNameSection,
+            view.lastNameSection,
+            view.dateSection,
+            view.genderSection,
+            view.descriptionSection,
+            view.workSection
         ].first { $0.isChildFirstResponder() }
 
         if let activeField = activeField {
@@ -109,7 +115,7 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
             if viewFrame.contains(activeField.frame.origin) {
                 let scrollPointY = activeField.frame.origin.y - keyboardHeight
                 let scrollPoint = CGPoint(x: 0, y: scrollPointY >= 0 ? scrollPointY : 0)
-                scrollView.setContentOffset(scrollPoint, animated: true)
+                userDetailsView.scrollView.setContentOffset(scrollPoint, animated: true)
             }
         }
     }
@@ -124,8 +130,8 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
                 right: 0
             )}
         )
-        scrollView.contentInset = inset
-        scrollView.scrollIndicatorInsets = inset
+        userDetailsView.scrollView.contentInset = inset
+        userDetailsView.scrollView.scrollIndicatorInsets = inset
 
         if inset.bottom > 0 {
             scrollToActiveTextField(keyboardHeight: inset.bottom)
@@ -144,8 +150,8 @@ extension UserDetailsViewController: UIImagePickerControllerDelegate, UINavigati
         guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
             return
         }
-        avatarView.setImage(image, for: .normal)
-        avatarView.imageView?.layer.cornerRadius = 60
+        userDetailsView.avatarButton.setImage(image, for: .normal)
+        userDetailsView.avatarButton.imageView?.layer.cornerRadius = 60
         guard let imageUrl = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
             return
         }
@@ -157,7 +163,7 @@ extension UserDetailsViewController: UIImagePickerControllerDelegate, UINavigati
     }
 }
 
-extension UserDetailsViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension UserDetailsViewController: UIPickerViewDataSource {
 
     private func pickerRowValueToGender(_ row: Int) -> Gender? {
         switch row {
@@ -186,7 +192,7 @@ extension UserDetailsViewController: UIPickerViewDelegate, UIPickerViewDataSourc
     }
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        genderTextField.text = pickerRowValueToGenderLabel(row)
+        userDetailsView.genderTextField.text = pickerRowValueToGenderLabel(row)
         selectedGender = pickerRowValueToGender(row)
         view.endEditing(true)
     }

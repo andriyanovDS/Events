@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Stevia
 
 class UserDetailsSectionView: UIView {
     private let label = UILabel()
@@ -52,36 +53,20 @@ class UserDetailsSectionView: UIView {
     }
 
     private func sutupLabel(with text: String) {
-        label.text = text
-        label.textColor = UIColor.gray800()
-        label.font = UIFont(name: "CeraPro-Medium", size: 16)
-        label.numberOfLines = 1
+        label.style({ v in
+            v.text = text
+            v.textColor = UIColor.gray800()
+            v.font = UIFont(name: "CeraPro-Medium", size: 16)
+            v.numberOfLines = 1
+        })
 
-        self.addSubview(label)
-        sutupLabelConstraints()
+        sv(label)
+        label.top(0).left(10).right(0).height(15)
     }
 
     private func setupChildView(_ childView: UIView) {
-        self.addSubview(childView)
-        setupChildViewConstraints(childView)
-    }
-
-    private func sutupLabelConstraints() {
-        label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: self.topAnchor),
-            label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10),
-            label.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-            ])
-    }
-
-    private func setupChildViewConstraints(_ childView: UIView) {
-        childView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            childView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 7),
-            childView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            childView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            childView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-            ])
+        sv(childView)
+        childView.Top == label.Bottom + 7
+        childView.bottom(0).left(0).right(0)
     }
 }

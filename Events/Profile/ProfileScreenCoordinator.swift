@@ -15,6 +15,7 @@ class ProfileScreenCoordinator: MainCoordinator, UserDetailsScreenCoordinator {
         let userDetailsViewController = UserDetailsViewController()
         userDetailsViewController.user = user
         userDetailsViewController.coordinator = self
+        print("set coordinator")
         userDetailsViewController.modalTransitionStyle = .coverVertical
         userDetailsViewController.modalPresentationStyle = .overCurrentContext
         navigationController.present(
