@@ -19,14 +19,9 @@ class ProfileScreenViewModel {
     weak var delegate: ProfileScreenViewModelDelegate?
 
     func attemptToOpenUserDetails() {
-        userDisposable = userObserver
-            .filter({ user in user != nil })
-            .take(1)
-            .subscribe(onNext: {[weak self] optionUser in
-                self?.user = optionUser
-                guard let user = optionUser else {
-                    return
-                }
+        userDisposable = currentUserObserver
+            .subscribe(onNext: {[weak self] user in
+                self?.user = user
                 self?.delegate?.onUserDidChange(user: user)
                 if user.firstName.isEmpty {
                     self?.openUserDetails()

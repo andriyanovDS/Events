@@ -55,6 +55,7 @@
 		74697FCA22D200A900D5B5F4 /* Month.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FC922D200A900D5B5F4 /* Month.swift */; };
 		74697FCC22D200DF00D5B5F4 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FCB22D200DF00D5B5F4 /* Day.swift */; };
 		74697FCE22D2022700D5B5F4 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FCD22D2022700D5B5F4 /* CalendarViewModel.swift */; };
+		7478F4F222F5FAB300A43F52 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 7478F4F122F5FAB300A43F52 /* .gitignore */; };
 		7481190A22D7E6BA004FBE48 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 7481190922D7E6BA004FBE48 /* .swiftlint.yml */; };
 		748E0AFE22D8E2D000B061C7 /* ProfileScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0AFD22D8E2D000B061C7 /* ProfileScreenViewModel.swift */; };
 		748E0B0022D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0AFF22D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift */; };
@@ -75,8 +76,8 @@
 		74A1AE2122D5DF0300C39525 /* OptionalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */; };
 		74A1AE2322D64BFB00C39525 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1AE2222D64BFB00C39525 /* LoginViewModel.swift */; };
 		74D8DB2E22DD265500E70CB4 /* UserDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D8DB2D22DD265500E70CB4 /* UserDetailsViewController.swift */; };
-		74D8DB3022DD27D900E70CB4 /* UserDetailsViewControllerSetupViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D8DB2F22DD27D900E70CB4 /* UserDetailsViewControllerSetupViewExtension.swift */; };
 		74D8DB3422DD37F800E70CB4 /* UserDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D8DB3322DD37F800E70CB4 /* UserDetailsViewModel.swift */; };
+		74D9655F22F2272D00D828C1 /* UserDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D9655E22F2272D00D828C1 /* UserDetailsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -130,6 +131,7 @@
 		74697FC922D200A900D5B5F4 /* Month.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Month.swift; sourceTree = "<group>"; };
 		74697FCB22D200DF00D5B5F4 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		74697FCD22D2022700D5B5F4 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
+		7478F4F122F5FAB300A43F52 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		7481190922D7E6BA004FBE48 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
 		748E0AFD22D8E2D000B061C7 /* ProfileScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenViewModel.swift; sourceTree = "<group>"; };
 		748E0AFF22D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerWithActivityIndicator.swift; sourceTree = "<group>"; };
@@ -150,8 +152,8 @@
 		74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalExtension.swift; sourceTree = "<group>"; };
 		74A1AE2222D64BFB00C39525 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		74D8DB2D22DD265500E70CB4 /* UserDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewController.swift; sourceTree = "<group>"; };
-		74D8DB2F22DD27D900E70CB4 /* UserDetailsViewControllerSetupViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewControllerSetupViewExtension.swift; sourceTree = "<group>"; };
 		74D8DB3322DD37F800E70CB4 /* UserDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewModel.swift; sourceTree = "<group>"; };
+		74D9655E22F2272D00D828C1 /* UserDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsView.swift; sourceTree = "<group>"; };
 		BB7CB0EF704E01EF74586F6F /* Pods-Events.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Events.release.xcconfig"; path = "Target Support Files/Pods-Events/Pods-Events.release.xcconfig"; sourceTree = "<group>"; };
 		F90EB0D8C0AEB4BE50B8CA2F /* Pods-Events.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Events.debug.xcconfig"; path = "Target Support Files/Pods-Events/Pods-Events.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -225,6 +227,7 @@
 		7452439D22CE85BA00C930C8 = {
 			isa = PBXGroup;
 			children = (
+				7478F4F122F5FAB300A43F52 /* .gitignore */,
 				7481190922D7E6BA004FBE48 /* .swiftlint.yml */,
 				745243A822CE85BA00C930C8 /* Events */,
 				745243A722CE85BA00C930C8 /* Products */,
@@ -400,9 +403,9 @@
 			isa = PBXGroup;
 			children = (
 				74D8DB2D22DD265500E70CB4 /* UserDetailsViewController.swift */,
-				74D8DB2F22DD27D900E70CB4 /* UserDetailsViewControllerSetupViewExtension.swift */,
 				74D8DB3322DD37F800E70CB4 /* UserDetailsViewModel.swift */,
 				7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */,
+				74D9655E22F2272D00D828C1 /* UserDetailsView.swift */,
 			);
 			path = UserDetails;
 			sourceTree = "<group>";
@@ -477,6 +480,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7478F4F222F5FAB300A43F52 /* .gitignore in Resources */,
 				7481190A22D7E6BA004FBE48 /* .swiftlint.yml in Resources */,
 				745243B422CE85BC00C930C8 /* LaunchScreen.storyboard in Resources */,
 				744B7C8D22E39DB700A839A6 /* CeraPro-Light.ttf in Resources */,
@@ -581,7 +585,6 @@
 				7463A49E22DE6EED009171E1 /* TextFieldWithShadow.swift in Sources */,
 				742A99C322EDC77500A3A703 /* Result.swift in Sources */,
 				741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */,
-				74D8DB3022DD27D900E70CB4 /* UserDetailsViewControllerSetupViewExtension.swift in Sources */,
 				744B7C9222E3C6DF00A839A6 /* ButtonWithBorder.swift in Sources */,
 				741DCF8E22D3A888005783A3 /* CategoriesViewModel.swift in Sources */,
 				744B7C9A22E4FEF100A839A6 /* ProfileScreenNavigationController.swift in Sources */,
@@ -600,6 +603,7 @@
 				748E0B1222DA24DD00B061C7 /* APIClient.swift in Sources */,
 				748E0B1A22DB6B9200B061C7 /* LocationSearchViewController.swift in Sources */,
 				7467B6F122D52C5D00A1BFE9 /* Coordinator.swift in Sources */,
+				74D9655F22F2272D00D828C1 /* UserDetailsView.swift in Sources */,
 				744B7C9422E4F1A000A839A6 /* ProfileScreenCoordinator.swift in Sources */,
 				74697FCA22D200A900D5B5F4 /* Month.swift in Sources */,
 				745243BF22CF965500C930C8 /* SearchBarUITextField.swift in Sources */,
