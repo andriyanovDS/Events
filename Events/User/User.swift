@@ -66,6 +66,8 @@ enum Gender: String {
     }
 }
 
+private let changeUserS = PublishSubject<User>()
+
 let userObserver = Observable<User?>
     .create({ observer in
         var reference = Database.database().reference()
@@ -124,6 +126,14 @@ let userObserver = Observable<User?>
     })
     .share(replay: 1, scope: .forever)
 
+let currentUserObserver: Observable<User> = Observable.merge(
+    userObserver
+        .filter({ user in user != nil })
+        .map({ v in v! }),
+    changeUserS
+)
+    .share(replay: 1, scope: .forever)
+
 func updateUserProfile(user: User, onComplete: @escaping (Result<Void, Error>) -> Void) {
     let reference = Database.database().reference()
 
@@ -136,6 +146,7 @@ func updateUserProfile(user: User, onComplete: @escaping (Result<Void, Error>) -
                 onComplete(.failure(error))
                 return
             }
+            changeUserS.onNext(user)
             let result: Result<Void, Error> = .success
             onComplete(result)
         }
