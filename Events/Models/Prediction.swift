@@ -2,7 +2,7 @@
 //  Prediction.swift
 //  Events
 //
-//  Created by Дмитрий Андриянов on 14/07/2019.
+//  Created by Дмитрий Андриянов on 03/08/2019.
 //  Copyright © 2019 Дмитрий Андриянов. All rights reserved.
 //
 
