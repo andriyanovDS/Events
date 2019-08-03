@@ -69,7 +69,6 @@ extension UserDetailsViewModel {
         delegate.showActivityIndicator(for: nil)
 
         if let avatarUrl = userInfo["avatar"] as? URL {
-            print("isStorageUrl(avatarUrl)", isStorageUrl(avatarUrl))
             if isStorageUrl(avatarUrl) {
                 self.updateUserProfile(
                     user: user,
