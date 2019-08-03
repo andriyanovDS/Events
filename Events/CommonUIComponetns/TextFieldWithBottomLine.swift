@@ -20,7 +20,6 @@ class TextFieldWithBottomLine: UITextField {
     override var bounds: CGRect {
         didSet {
             setupLeftView()
-            print("bounds", bounds.height)
             bottomBorder = self.addBorder(
                 toSide: .bottom,
                 withColor: defaultBottomLineColor,

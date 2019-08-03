@@ -52,6 +52,16 @@ class UserDetailsSectionView: UIView {
         return text
     }
 
+    func setChildText(_ text: String) {
+        if let textField = childView as? UITextField {
+            textField.text = text
+        }
+
+        if let textView = childView as? UITextView {
+            textView.text = text
+        }
+    }
+
     private func sutupLabel(with text: String) {
         label.style({ v in
             v.text = text

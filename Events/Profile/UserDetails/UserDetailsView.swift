@@ -214,6 +214,14 @@ class UserDetailsView: UIView {
         avatarButton.CenterY == lastNameSection.Top
         avatarButton.right(0)
         dateSection.Top == lastNameSection.Bottom + 15
+        align(lefts: [
+            firstNameSection,
+            lastNameSection,
+            dateSection,
+            genderSection,
+            workSection,
+            descriptionSection
+            ])
 
         layout(
             |-dateSection-|,

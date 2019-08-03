@@ -61,10 +61,7 @@ extension UserDetailsViewModel {
     }
 
     func submitProfile(userInfo: [String: Any?]) {
-        guard let user = delegate.user else {
-            return
-        }
-
+        let user = delegate.user
         guard let firstName = userInfo["firstName"] as? String else {
             return
         }
@@ -72,6 +69,16 @@ extension UserDetailsViewModel {
         delegate.showActivityIndicator(for: nil)
 
         if let avatarUrl = userInfo["avatar"] as? URL {
+            print("isStorageUrl(avatarUrl)", isStorageUrl(avatarUrl))
+            if isStorageUrl(avatarUrl) {
+                self.updateUserProfile(
+                    user: user,
+                    firstName: firstName,
+                    avatar: avatarUrl.absoluteString,
+                    userInfo: userInfo
+                )
+                return
+            }
             uploadAvatar(url: avatarUrl, userId: user.id, onComplete: { [weak self] result in
                 switch result {
                 case .success(let url):
@@ -188,7 +195,7 @@ extension UserDetailsViewModel {
 protocol UserDetailsViewModelDelegate: UIViewControllerWithActivityIndicator,
     UIImagePickerControllerDelegate,
     UINavigationControllerDelegate {
-    var user: User? { get set }
+    var user: User { get }
 }
 
 protocol UserDetailsScreenCoordinator: class {

@@ -35,21 +35,35 @@ struct User {
             "avatar": avatar
         ]
 
-        if let dateOfBirth = self.dateOfBirth {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = fbDateFormat
-
-            details["dateOfBirth"] = dateFormatter.string(from: dateOfBirth)
+        if let dateOfBirth = dateOfBirthToString() {
+            details["dateOfBirth"] = dateOfBirth
         }
 
         return details
             .filter {(_, value) in value != nil }
             .mapValues { $0! }
     }
+
+    private func dateOfBirthToString() -> String? {
+        guard let date = dateOfBirth else {
+            return nil
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = fbDateFormat
+        return dateFormatter.string(from: date)
+    }
 }
 
 enum Gender: String {
     case male = "Male", female = "Female", other = "Other"
+
+    func translateValue() -> String {
+        switch self {
+        case .male: return "Мужской"
+        case .female: return "Женский"
+        case .other: return "Другое"
+        }
+    }
 }
 
 let userObserver = Observable<User?>
@@ -68,11 +82,15 @@ let userObserver = Observable<User?>
                 .child(fbUser.uid)
                 .observeSingleEvent(of: .value, with: { snapshot in
                     let value = snapshot.value as? NSDictionary
+                    let genderValue =  value?["gender"] as? String
                     let firstName = value?["firstName"] as? String ?? ""
                     let lastName = value?["lastName"] as? String
                     let description = value?["description"] as? String
                     let dateOfBirth = value?["dateOfBirth"] as? String
-                    let gender = value?["gender"] as? Gender
+                    let gender = genderValue.foldL(
+                        none: { nil },
+                        some: { v in Gender(rawValue: v)
+                    })
                     let work = value?["work"] as? String
                     let avatar = value?["avatar"] as? String
                     let dateFormatter = DateFormatter()
@@ -121,4 +139,13 @@ func updateUserProfile(user: User, onComplete: @escaping (Result<Void, Error>) -
             let result: Result<Void, Error> = .success
             onComplete(result)
         }
+}
+
+func isStorageUrl(_ url: URL) -> Bool {
+    return url.absoluteString.range(
+        of: "^https:\\/\\/firebasestorage",
+        options: .regularExpression,
+        range: nil,
+        locale: nil
+        ) != nil
 }

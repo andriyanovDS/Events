@@ -12,10 +12,7 @@ import UIKit
 class ProfileScreenCoordinator: MainCoordinator, UserDetailsScreenCoordinator {
 
     func openUserDetails(user: User) {
-        let userDetailsViewController = UserDetailsViewController()
-        userDetailsViewController.user = user
-        userDetailsViewController.coordinator = self
-        print("set coordinator")
+        let userDetailsViewController = UserDetailsViewController(user: user, coordinator: self)
         userDetailsViewController.modalTransitionStyle = .coverVertical
         userDetailsViewController.modalPresentationStyle = .overCurrentContext
         navigationController.present(

@@ -11,22 +11,11 @@ import Photos
 
 class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewModelDelegate, UserDetailsView.Delegate {
     var viewModel: UserDetailsViewModel?
-    weak var coordinator: UserDetailsScreenCoordinator? {
-        didSet {
-            viewModel?.coordinator = coordinator
-        }
-    }
-
+    let coordinator: UserDetailsScreenCoordinator
+    var userDetailsView: UserDetailsView!
+    let user: User
     var selectedGender: Gender?
     var selectedAvatarUrl: URL?
-
-    var userDetailsView: UserDetailsView!
-
-    var user: User? {
-        didSet {
-//            loadCustomView()
-        }
-    }
 
     override var keyboardAttachInfo: KeyboardAttachInfo? {
         didSet {
@@ -44,13 +33,22 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
         userDetailsView.submitButton.addTarget(self, action: #selector(submitProfile), for: .touchUpInside)
     }
 
+    init(user: User, coordinator: UserDetailsScreenCoordinator) {
+        self.user = user
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel = UserDetailsViewModel(delegate: self)
-        if coordinator != nil {
-            viewModel?.coordinator = coordinator
-        }
+        viewModel?.coordinator = coordinator
         loadCustomView()
+        setUserData()
     }
 
     @objc func showSelectImageActionSheet() {
@@ -62,17 +60,69 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
     }
 
     @objc func selectDate() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd LLLL YYYY"
-        dateFormatter.locale = Locale(identifier: "ru_RU")
-        userDetailsView.dateTextField.text = dateFormatter.string(from:
-            userDetailsView.datePicker.date
-        )
+        userDetailsView.dateTextField.text = formatDate(userDetailsView.datePicker.date)
         self.view.endEditing(true)
     }
 
     @objc func endEditing() {
         self.view.endEditing(true)
+    }
+
+    private func formatDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd LLLL YYYY"
+        dateFormatter.locale = Locale(identifier: "ru_RU")
+        return dateFormatter.string(from: date)
+    }
+
+    private func loadImage(url: String, onLoad: @escaping (Data?) -> Void) {
+        let url = URL(string: url, relativeTo: nil)
+        guard let imageUrl = url else {
+            onLoad(nil)
+            return
+        }
+        DispatchQueue.global(qos: .background).async {
+            let data = try? Data(contentsOf: imageUrl)
+            guard let imageData = data else {
+                return
+            }
+            DispatchQueue.main.async {
+                onLoad(imageData)
+            }
+        }
+    }
+
+    private func setUserData() {
+        userDetailsView.firstNameSection.setChildText(user.firstName)
+        user.lastName.foldL(none: {}, some: { name in
+            userDetailsView.lastNameSection.setChildText(name)
+        })
+        user.dateOfBirth.foldL(none: {}, some: { date in
+            userDetailsView.datePicker.date = date
+        })
+        user.dateOfBirth.foldL(none: {}, some: { date in
+            userDetailsView.dateTextField.text = formatDate(date)
+        })
+        user.gender.foldL(none: {}, some: { gender in
+            selectedGender = gender
+            userDetailsView.genderTextField.text = gender.translateValue()
+        })
+        user.avatar.foldL(none: {}, some: { externalUrl in
+            selectedAvatarUrl = URL(string: externalUrl)
+            loadImage(url: externalUrl, onLoad: {[weak self] imageData in
+                guard let data = imageData else {
+                    return
+                }
+                self?.userDetailsView.avatarButton.setImage(UIImage(data: data), for: .normal)
+                self?.userDetailsView.avatarButton.imageView?.layer.cornerRadius = 60
+            })
+        })
+        user.description.foldL(none: {}, some: { description in
+            userDetailsView.descriptionSection.setChildText(description)
+        })
+        user.work.foldL(none: {}, some: { work in
+            userDetailsView.workSection.setChildText(work)
+        })
     }
 
     @objc func submitProfile() {
