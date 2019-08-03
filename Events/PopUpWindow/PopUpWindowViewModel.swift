@@ -8,14 +8,29 @@
 
 import Foundation
 
-class PopUpWindowViewModel {
-    weak var coordinator: PopUpWindowCoordinator?
+struct Popup {
+    let title: String
+    let imageUrl: String?
+    let description: String?
+    let buttonLabelText: String
+}
 
+enum PopupType {
+    case Commom
+}
+
+class PopupWindowViewModel {
+    weak var coordinator: PopupWindowCoordinator?
+    let popup: Popup
     func closeModal() {
-        print(1)
+        coordinator?.dismissPopup()
+    }
+    
+    init(title: String, image: String?, description: String?, buttonText: String) {
+        popup = Popup(title: title, imageUrl: image, description: description, buttonLabelText: buttonText)
     }
 }
 
-protocol PopUpWindowCoordinator: class {
-    func dismissPopUp()
+protocol PopupWindowCoordinator: class {
+    func dismissPopup()
 }

@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-class ProfileScreenCoordinator: MainCoordinator, UserDetailsScreenCoordinator, PopUpWindowCoordinator {
-
+class ProfileScreenCoordinator: MainCoordinator, UserDetailsScreenCoordinator, PopupWindowCoordinator {
+    
     func openUserDetails(user: User) {
         let userDetailsViewController = UserDetailsViewController()
         userDetailsViewController.user = user
@@ -24,17 +24,16 @@ class ProfileScreenCoordinator: MainCoordinator, UserDetailsScreenCoordinator, P
         )
     }
     
-    func openPopUpWindow(title: String?, buttonText: String?) {
-        let popUpWindow = PopUpWindowViewController()
-        popUpWindow.coordinator = self
-        popUpWindow.initialButtonLabelText = buttonText
-        popUpWindow.initialDescription = title
-        popUpWindow.modalPresentationStyle = .overCurrentContext
-        popUpWindow.isModalInPopover = true
-        navigationController.present(popUpWindow, animated: false, completion: nil)
+    func openPermissionPopup(title: String, buttonText: String) {
+        let popupWindow = PopupWindowViewController()
+        popupWindow.setupView(titleLabel: title, image: nil, desciption: nil, buttonLabelText: buttonText)
+        popupWindow.coordinator = self
+        popupWindow.modalPresentationStyle = .overCurrentContext
+        popupWindow.isModalInPopover = true
+        navigationController.present(popupWindow, animated: false, completion: nil)
     }
     
-    func dismissPopUp() {
+    func dismissPopup() {
         navigationController.dismiss(animated: false, completion: nil)
     }
 

@@ -121,8 +121,7 @@ extension UserDetailsViewModel {
                 self.openCamera()
             })
         case .denied:
-            coordinator?.userDetailsDidSubmit()
-            coordinator?.openPopUpWindow(title: "Аллаху", buttonText: "Акбар")
+            coordinator?.openPermissionPopup(title: "Разрешите доступ к камере в настройках", buttonText: "Понятно")
         default: return
         }
     }
@@ -196,5 +195,5 @@ protocol UserDetailsViewModelDelegate: UIViewControllerWithActivityIndicator,
 
 protocol UserDetailsScreenCoordinator: class {
     func userDetailsDidSubmit()
-    func openPopUpWindow(title: String?, buttonText: String?)
+    func openPermissionPopup(title: String, buttonText: String)
 }

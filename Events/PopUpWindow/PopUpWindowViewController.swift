@@ -9,70 +9,38 @@
 import Foundation
 import UIKit
 
-protocol PopUpDelegate {
-    func hadleDismissal()
-}
-
-
-class PopUpWindowViewController: UIViewController {
-    var delegate: PopUpDelegate?
-    var viewModel: PopUpWindowViewModel?
-    var initialTitle: String?
-    var initialDescription: String?
-    var initialButtonLabelText: String?
-    weak var coordinator: PopUpWindowCoordinator? {
+class PopupWindowViewController: UIViewController {
+    var viewModel: PopupWindowViewModel?
+    
+    weak var coordinator: PopupWindowCoordinator? {
         didSet {
             viewModel?.coordinator = coordinator
         }
     }
-    lazy var notificationLabel: UILabel = {
-        let lable = UILabel()
-        lable.translatesAutoresizingMaskIntoConstraints = false
-        lable.font = UIFont(name: "CeraPro-Medium", size: 16)
-        lable.textColor = UIColor.gray900()
-        lable.textAlignment = .left
-        return lable
-    }()
-    func setupView(with labelText: String) {
-        notificationLabel.text = labelText
-    }
-    lazy var button: UIButtonScaleOnPress = {
-        let button = UIButtonScaleOnPress()
-        button.backgroundColor = .blue
-        button.setTitle(self.initialButtonLabelText, for: .normal)
-        button.addTarget(self, action: #selector(closeModal), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.layer.cornerRadius = 5
-        return button
-    }()
-    
+    var popupScreenView: PopupScreenView!
     
     override func viewDidLoad() {
-        setupNotification()
-        setupButton()
+        super.viewDidLoad()
+        self.loadView()
     }
-    @objc func closeModal(){
-        coordinator?.dismissPopUp()
-    }
-    func setupNotification(){
-        self.view.backgroundColor = .white
-        self.view.addSubview(notificationLabel)
-        notificationLabel.text = self.initialDescription
-        notificationLabel.numberOfLines = 2
-        NSLayoutConstraint.activate([
-            notificationLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -28),
-            notificationLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-            ])
+    func setupView(titleLabel: String, image: String?, desciption: String?, buttonLabelText: String) {
+        viewModel = PopupWindowViewModel(
+            title: titleLabel,
+            image: image ?? nil,
+            description: desciption ?? nil,
+            buttonText: buttonLabelText
+        )
     }
     
-    func setupButton() {
-        self.view.addSubview(button)
-        NSLayoutConstraint.activate([
-            button.heightAnchor.constraint(equalToConstant: 50),
-            button.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 12),
-            button.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12),
-            button.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -12)
-            ])
+    override func loadView() {
+        popupScreenView = PopupScreenView()
+        view = popupScreenView
+        popupScreenView.okButton.addTarget(self, action: #selector(closePopup), for: .touchUpInside)
+        popupScreenView.titleLabel.text = viewModel?.popup.title
+        popupScreenView.okButton.setTitle(viewModel?.popup.buttonLabelText, for: .normal)
     }
     
+    @objc func closePopup() {
+        viewModel?.closeModal()
+    }
 }

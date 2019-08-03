@@ -10,6 +10,7 @@
 		2253EA1A9BAA8FCE4F24E2D0 /* Pods_Events.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BDA60DD79D902BE3849FF4A /* Pods_Events.framework */; };
 		6065B6CC22EE1E6700EBDCD4 /* PopUpWindowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6065B6CB22EE1E6700EBDCD4 /* PopUpWindowViewController.swift */; };
 		6065B6CE22EE1E7D00EBDCD4 /* PopUpWindowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6065B6CD22EE1E7D00EBDCD4 /* PopUpWindowViewModel.swift */; };
+		60A495B722F5FFCB00B9951D /* PopupScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A495B622F5FFCB00B9951D /* PopupScreenView.swift */; };
 		741DCF8922D38264005783A3 /* RootScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8822D38264005783A3 /* RootScreenViewModel.swift */; };
 		741DCF8C22D3A878005783A3 /* CategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8B22D3A878005783A3 /* CategoriesView.swift */; };
 		741DCF8E22D3A888005783A3 /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */; };
@@ -82,6 +83,7 @@
 		3BDA60DD79D902BE3849FF4A /* Pods_Events.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Events.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6065B6CB22EE1E6700EBDCD4 /* PopUpWindowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpWindowViewController.swift; sourceTree = "<group>"; };
 		6065B6CD22EE1E7D00EBDCD4 /* PopUpWindowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpWindowViewModel.swift; sourceTree = "<group>"; };
+		60A495B622F5FFCB00B9951D /* PopupScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupScreenView.swift; sourceTree = "<group>"; };
 		741DCF8822D38264005783A3 /* RootScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenViewModel.swift; sourceTree = "<group>"; };
 		741DCF8B22D3A878005783A3 /* CategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesView.swift; sourceTree = "<group>"; };
 		741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			children = (
 				6065B6CB22EE1E6700EBDCD4 /* PopUpWindowViewController.swift */,
 				6065B6CD22EE1E7D00EBDCD4 /* PopUpWindowViewModel.swift */,
+				60A495B622F5FFCB00B9951D /* PopupScreenView.swift */,
 			);
 			path = PopUpWindow;
 			sourceTree = "<group>";
@@ -584,6 +587,7 @@
 				744B7C9A22E4FEF100A839A6 /* ProfileScreenNavigationController.swift in Sources */,
 				748E0B2322DB87AA00B061C7 /* LocationItem.swift in Sources */,
 				74697FC822D11F7F00D5B5F4 /* UIViewExtension.swift in Sources */,
+				60A495B722F5FFCB00B9951D /* PopupScreenView.swift in Sources */,
 				74A1AE1F22D5D18800C39525 /* KeyboardAttachViewController.swift in Sources */,
 				74D8DB2E22DD265500E70CB4 /* UserDetailsViewController.swift in Sources */,
 				7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */,
