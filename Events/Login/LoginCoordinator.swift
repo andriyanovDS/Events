@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class LoginCoordinator: Coordinator {
-    var delegate: LoginCoordinatorDelegate?
+    weak var delegate: LoginCoordinatorDelegate?
     var navigationController: UINavigationController
 
     init(navigationController: UINavigationController) {
@@ -28,6 +28,6 @@ class LoginCoordinator: Coordinator {
     }
 }
 
-protocol LoginCoordinatorDelegate {
+protocol LoginCoordinatorDelegate: class {
     func openRootScreen()
 }

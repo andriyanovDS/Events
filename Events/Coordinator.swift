@@ -43,6 +43,8 @@ class MainCoordinator: Coordinator, LoginCoordinatorDelegate {
     }
     
     func start() {
+        navigationController.isNavigationBarHidden = true
+        navigationController.view.backgroundColor = .white
         userDisposable = userObserver
             .take(1)
             .subscribe(onNext: { user in

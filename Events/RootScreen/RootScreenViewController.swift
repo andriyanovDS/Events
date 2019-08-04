@@ -46,7 +46,9 @@ class RootScreenViewController: UIViewController {
     }
 
     @objc func openLocationSearch() {
-        coordinator?.openLocationSearch()
+        coordinator?.openLocationSearch(onResult: { geocode in
+            onChangeUserLocation(geocode: geocode)
+        })
     }
 
     func onChangeLocation(locationName: String) {
