@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class RootScreenCoordinator: Coordinator {
+class RootScreenCoordinator: Coordinator, LocationSearchCoordinator {
     var navigationController: UINavigationController
 
     init(navigationController: UINavigationController) {
@@ -26,11 +26,17 @@ class RootScreenCoordinator: Coordinator {
         navigationController.present(calendarViewController, animated: false, completion: nil)
     }
 
-    func openLocationSearch() {
+    func openLocationSearch(onResult: @escaping (Geocode) -> Void) {
         let viewController = LocationSearchViewController()
+        viewController.coordinator = self
+        viewController.onClose = onResult
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .coverVertical
-        navigationController.show(viewController, sender: self)
+        navigationController.present(viewController, animated: true, completion: nil)
+    }
+
+    func onLocationDidSelected() {
+        navigationController.dismiss(animated: false, completion: nil)
     }
 
     func start() {

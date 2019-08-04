@@ -17,6 +17,8 @@ class LocationSearchViewController: UIViewControllerWithActivityIndicator,
     LocationSearchStackViewDelegate {
 
     var viewModel: LocationSearchViewModel!
+    var onClose: ((Geocode) -> Void)?
+    weak var coordinator: LocationSearchCoordinator?
     var searchBar = SearchBarViewController(nibName: nil, bundle: nil)
 
     private let scrollView = UIScrollView()
@@ -27,6 +29,7 @@ class LocationSearchViewController: UIViewControllerWithActivityIndicator,
 
         viewModel = LocationSearchViewModel(textField: searchBar.textField)
         viewModel.delegate = self
+        viewModel.coordinator = coordinator
         searchBar.delegate = self
         locationStackView.delegate = self
         viewModel.initializeUserLocation()
@@ -36,10 +39,6 @@ class LocationSearchViewController: UIViewControllerWithActivityIndicator,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         onFocusTextField()
-    }
-
-    private func onFocusTextField() {
-        searchBar.textField.becomeFirstResponder()
     }
 
     func searchBarDidCancel() {
@@ -66,6 +65,14 @@ class LocationSearchViewController: UIViewControllerWithActivityIndicator,
         let coordinates: CLLocation = locations[0]
         manager.stopUpdatingLocation()
         viewModel?.onReceiveCoordinates(coordinates.coordinate)
+    }
+
+    func onResult(geocode: Geocode) {
+        onClose?(geocode)
+    }
+
+    private func onFocusTextField() {
+        searchBar.textField.becomeFirstResponder()
     }
 }
 

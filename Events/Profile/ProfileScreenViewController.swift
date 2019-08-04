@@ -23,10 +23,11 @@ class ProfileScreenViewController: UIViewController, ProfileScreenViewModelDeleg
         viewModel.coordinator = coordinator
         viewModel.delegate = self
         viewModel.attemptToOpenUserDetails()
+    }
 
-        on("INJECTION_BUNDLE_NOTIFICATION") {
-             self.loadView()
-        }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.isNavigationBarHidden = true
     }
 
     override func loadView() {
@@ -48,7 +49,7 @@ class ProfileScreenViewController: UIViewController, ProfileScreenViewModelDeleg
     }
 
     @objc func createEvent() {
-
+        viewModel.onCreateEvent()
     }
 
     @objc func openSettings() {

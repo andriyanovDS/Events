@@ -54,12 +54,14 @@
 		74697FCE22D2022700D5B5F4 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FCD22D2022700D5B5F4 /* CalendarViewModel.swift */; };
 		7478F4F222F5FAB300A43F52 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 7478F4F122F5FAB300A43F52 /* .gitignore */; };
 		7478F4F522F6022100A43F52 /* CreateEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4F422F6022100A43F52 /* CreateEventVC.swift */; };
-		7478F4F722F6023F00A43F52 /* CreateEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4F622F6023F00A43F52 /* CreateEventView.swift */; };
+		7478F4F722F6023F00A43F52 /* DescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4F622F6023F00A43F52 /* DescriptionView.swift */; };
 		7478F4F922F6033C00A43F52 /* CreateEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4F822F6033C00A43F52 /* CreateEventViewModel.swift */; };
 		7478F4FE22F60CB900A43F52 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4FD22F60CB900A43F52 /* Event.swift */; };
 		7478F50022F60CC900A43F52 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4FF22F60CC900A43F52 /* User.swift */; };
 		7478F50222F60CFD00A43F52 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F50122F60CFD00A43F52 /* Location.swift */; };
 		7478F50422F60D2700A43F52 /* Prediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F50322F60D2700A43F52 /* Prediction.swift */; };
+		7478F50622F6251900A43F52 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F50522F6251900A43F52 /* LocationView.swift */; };
+		7478F50922F6263C00A43F52 /* text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F50822F6263C00A43F52 /* text.swift */; };
 		7481190A22D7E6BA004FBE48 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 7481190922D7E6BA004FBE48 /* .swiftlint.yml */; };
 		748E0AFE22D8E2D000B061C7 /* ProfileScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0AFD22D8E2D000B061C7 /* ProfileScreenViewModel.swift */; };
 		748E0B0022D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0AFF22D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift */; };
@@ -133,12 +135,14 @@
 		74697FCD22D2022700D5B5F4 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		7478F4F122F5FAB300A43F52 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		7478F4F422F6022100A43F52 /* CreateEventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventVC.swift; sourceTree = "<group>"; };
-		7478F4F622F6023F00A43F52 /* CreateEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventView.swift; sourceTree = "<group>"; };
+		7478F4F622F6023F00A43F52 /* DescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionView.swift; sourceTree = "<group>"; };
 		7478F4F822F6033C00A43F52 /* CreateEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewModel.swift; sourceTree = "<group>"; };
 		7478F4FD22F60CB900A43F52 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		7478F4FF22F60CC900A43F52 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7478F50122F60CFD00A43F52 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		7478F50322F60D2700A43F52 /* Prediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prediction.swift; sourceTree = "<group>"; };
+		7478F50522F6251900A43F52 /* LocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
+		7478F50822F6263C00A43F52 /* text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = text.swift; sourceTree = "<group>"; };
 		7481190922D7E6BA004FBE48 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
 		748E0AFD22D8E2D000B061C7 /* ProfileScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenViewModel.swift; sourceTree = "<group>"; };
 		748E0AFF22D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerWithActivityIndicator.swift; sourceTree = "<group>"; };
@@ -243,6 +247,7 @@
 		745243A822CE85BA00C930C8 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				7478F50722F6262400A43F52 /* Styles */,
 				7478F4FC22F60BCF00A43F52 /* Models */,
 				7478F4F322F601FD00A43F52 /* CreateEvent */,
 				7463A49C22DE6EB9009171E1 /* CommonUIComponetns */,
@@ -346,8 +351,9 @@
 			isa = PBXGroup;
 			children = (
 				7478F4F422F6022100A43F52 /* CreateEventVC.swift */,
-				7478F4F622F6023F00A43F52 /* CreateEventView.swift */,
 				7478F4F822F6033C00A43F52 /* CreateEventViewModel.swift */,
+				7478F4F622F6023F00A43F52 /* DescriptionView.swift */,
+				7478F50522F6251900A43F52 /* LocationView.swift */,
 			);
 			path = CreateEvent;
 			sourceTree = "<group>";
@@ -361,6 +367,14 @@
 				7478F50322F60D2700A43F52 /* Prediction.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		7478F50722F6262400A43F52 /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				7478F50822F6263C00A43F52 /* text.swift */,
+			);
+			path = Styles;
 			sourceTree = "<group>";
 		};
 		748E0B0C22DA249600B061C7 /* APIService */ = {
@@ -578,6 +592,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74697FCE22D2022700D5B5F4 /* CalendarViewModel.swift in Sources */,
+				7478F50622F6251900A43F52 /* LocationView.swift in Sources */,
 				748E0B0622DA132F00B061C7 /* GeocodeObserver.swift in Sources */,
 				74A1AE2122D5DF0300C39525 /* OptionalExtension.swift in Sources */,
 				7478F4F522F6022100A43F52 /* CreateEventVC.swift in Sources */,
@@ -591,7 +606,7 @@
 				74697FC622D0F67000D5B5F4 /* commonStyles.swift in Sources */,
 				743816A422E8F74400AA4960 /* DayButton.swift in Sources */,
 				7478F50222F60CFD00A43F52 /* Location.swift in Sources */,
-				7478F4F722F6023F00A43F52 /* CreateEventView.swift in Sources */,
+				7478F4F722F6023F00A43F52 /* DescriptionView.swift in Sources */,
 				7467B6DF22D4E2E300A1BFE9 /* TabBarViewController.swift in Sources */,
 				745243AA22CE85BA00C930C8 /* AppDelegate.swift in Sources */,
 				744B7D9B22E6535C00A839A6 /* LoginCoordinator.swift in Sources */,
@@ -635,6 +650,7 @@
 				7467B6E522D50B2100A1BFE9 /* SavedViewController.swift in Sources */,
 				748E0B1722DA289800B061C7 /* Geocode.swift in Sources */,
 				748E0B0822DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift in Sources */,
+				7478F50922F6263C00A43F52 /* text.swift in Sources */,
 				74697FCC22D200DF00D5B5F4 /* Day.swift in Sources */,
 				7478F50422F60D2700A43F52 /* Prediction.swift in Sources */,
 				7453637C22EE4940004C9717 /* ProfileActionSection.swift in Sources */,

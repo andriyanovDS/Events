@@ -42,6 +42,10 @@ class ProfileScreenViewModel {
         coordinator?.openUserDetails(user: user)
     }
 
+    func onCreateEvent() {
+        coordinator?.openCreateEventScreen()
+    }
+
     func logout() {
         do {
             try Auth.auth().signOut()

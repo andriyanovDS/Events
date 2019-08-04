@@ -14,6 +14,7 @@ import CoreLocation
 class LocationSearchViewModel {
     let apiService = GeolocationAPI()
     var disposable: Disposable?
+    weak var coordinator: LocationSearchCoordinator?
     weak var delegate: LocationSearchViewModelDelegate?
 
     init(textField: UITextField) {
@@ -88,7 +89,7 @@ class LocationSearchViewModel {
     }
 
     func onSelectLocation(geocode: Geocode) {
-        onChangeUserLocation(geocode: geocode)
+        self.delegate?.onResult(geocode: geocode)
         cancelScreen()
     }
 
@@ -104,7 +105,7 @@ class LocationSearchViewModel {
                     }
                     DispatchQueue.main.async {
                         self?.delegate?.removeActivityIndicator()
-                        onChangeUserLocation(geocode: geocode)
+                        self?.delegate?.onResult(geocode: geocode)
                         self?.cancelScreen()
                     }
                 case .failure:
@@ -115,8 +116,7 @@ class LocationSearchViewModel {
     }
 
     func cancelScreen() {
-        self.delegate?.navigationController?.popViewController(animated: false)
-        self.delegate?.dismiss(animated: false, completion: nil)
+        self.coordinator?.onLocationDidSelected()
     }
 }
 
@@ -125,7 +125,11 @@ enum PredictionsError: Error {
 }
 
 protocol LocationSearchViewModelDelegate: UIViewControllerWithActivityIndicator, CLLocationManagerDelegate {
-
+    func onResult(geocode: Geocode)
     func showCurrentLocation(geocode: Geocode)
     func showPredictions(_ predictions: [Prediction])
+}
+
+protocol LocationSearchCoordinator: class {
+    func onLocationDidSelected()
 }

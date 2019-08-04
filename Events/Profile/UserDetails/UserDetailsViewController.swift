@@ -51,6 +51,11 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
         setUserData()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.isNavigationBarHidden = true
+    }
+
     @objc func showSelectImageActionSheet() {
         viewModel?.showSelectImageActionSheet()
     }

@@ -9,7 +9,11 @@
 import Foundation
 import UIKit
 
-class ProfileScreenCoordinator: MainCoordinator, UserDetailsScreenCoordinator {
+class ProfileScreenCoordinator:
+    MainCoordinator,
+    UserDetailsScreenCoordinator,
+    CreateEventCoordinator,
+    LocationSearchCoordinator {
 
     func openUserDetails(user: User) {
         let userDetailsViewController = UserDetailsViewController(user: user, coordinator: self)
@@ -24,6 +28,25 @@ class ProfileScreenCoordinator: MainCoordinator, UserDetailsScreenCoordinator {
 
     func userDetailsDidSubmit() {
         navigationController.dismiss(animated: true, completion: nil)
+    }
+
+    func openCreateEventScreen() {
+        let createEventViewController = CreateEventViewController()
+        createEventViewController.coordinator = self
+        navigationController.pushViewController(createEventViewController, animated: true)
+    }
+
+    func openLocationSearchBar(onResult: @escaping (Geocode) -> Void) {
+        let viewController = LocationSearchViewController()
+        viewController.coordinator = self
+        viewController.onClose = onResult
+        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalTransitionStyle = .coverVertical
+        navigationController.present(viewController, animated: false, completion: nil)
+    }
+
+    func onLocationDidSelected() {
+        self.navigationController.dismiss(animated: true, completion: nil)
     }
 
     override func start() {
