@@ -13,7 +13,7 @@ class ProfileScreenCoordinator:
     MainCoordinator,
     UserDetailsScreenCoordinator,
     CreateEventCoordinator,
-    LocationSearchCoordinator {
+    LocationSearchCoordinator, ModalScreenViewCoordinator {
 
     func openUserDetails(user: User) {
         let userDetailsViewController = UserDetailsViewController(user: user, coordinator: self)
@@ -35,7 +35,14 @@ class ProfileScreenCoordinator:
         createEventViewController.coordinator = self
         navigationController.pushViewController(createEventViewController, animated: true)
     }
-
+    func openPermissionModal(type: ModalType) {
+        let permissionModal = ModalScreenViewController(modalType: .permissionModal)
+        permissionModal.coordinator = self
+        navigationController.present(permissionModal, animated: false, completion: nil)
+    }
+    func closeModal() {
+        navigationController.dismiss(animated: true, completion: nil)
+    }
     func openLocationSearchBar(onResult: @escaping (Geocode) -> Void) {
         let viewController = LocationSearchViewController()
         viewController.coordinator = self

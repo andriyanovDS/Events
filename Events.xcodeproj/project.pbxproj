@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		2253EA1A9BAA8FCE4F24E2D0 /* Pods_Events.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BDA60DD79D902BE3849FF4A /* Pods_Events.framework */; };
+		605D6EC922F775BB001DAC04 /* ModalScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605D6EC822F775BB001DAC04 /* ModalScreenView.swift */; };
+		605D6ECB22F775CF001DAC04 /* ModalScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605D6ECA22F775CF001DAC04 /* ModalScreenViewModel.swift */; };
+		605D6ECD22F775EB001DAC04 /* ModalScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605D6ECC22F775EB001DAC04 /* ModalScreenViewController.swift */; };
 		741DCF8922D38264005783A3 /* RootScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8822D38264005783A3 /* RootScreenViewModel.swift */; };
 		741DCF8C22D3A878005783A3 /* CategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8B22D3A878005783A3 /* CategoriesView.swift */; };
 		741DCF8E22D3A888005783A3 /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */; };
@@ -87,6 +90,9 @@
 
 /* Begin PBXFileReference section */
 		3BDA60DD79D902BE3849FF4A /* Pods_Events.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Events.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		605D6EC822F775BB001DAC04 /* ModalScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalScreenView.swift; sourceTree = "<group>"; };
+		605D6ECA22F775CF001DAC04 /* ModalScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalScreenViewModel.swift; sourceTree = "<group>"; };
+		605D6ECC22F775EB001DAC04 /* ModalScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalScreenViewController.swift; sourceTree = "<group>"; };
 		741DCF8822D38264005783A3 /* RootScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenViewModel.swift; sourceTree = "<group>"; };
 		741DCF8B22D3A878005783A3 /* CategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesView.swift; sourceTree = "<group>"; };
 		741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
@@ -180,6 +186,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		605D6EC622F7739E001DAC04 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		605D6EC722F7759C001DAC04 /* ModalScreen */ = {
+			isa = PBXGroup;
+			children = (
+				605D6EC822F775BB001DAC04 /* ModalScreenView.swift */,
+				605D6ECA22F775CF001DAC04 /* ModalScreenViewModel.swift */,
+				605D6ECC22F775EB001DAC04 /* ModalScreenViewController.swift */,
+			);
+			path = ModalScreen;
+			sourceTree = "<group>";
+		};
 		712922C640C39731F4770AB1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -247,6 +270,8 @@
 		745243A822CE85BA00C930C8 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				605D6EC722F7759C001DAC04 /* ModalScreen */,
+				605D6EC622F7739E001DAC04 /* New Group */,
 				7478F50722F6262400A43F52 /* Styles */,
 				7478F4FC22F60BCF00A43F52 /* Models */,
 				7478F4F322F601FD00A43F52 /* CreateEvent */,
@@ -607,6 +632,7 @@
 				743816A422E8F74400AA4960 /* DayButton.swift in Sources */,
 				7478F50222F60CFD00A43F52 /* Location.swift in Sources */,
 				7478F4F722F6023F00A43F52 /* DescriptionView.swift in Sources */,
+				605D6EC922F775BB001DAC04 /* ModalScreenView.swift in Sources */,
 				7467B6DF22D4E2E300A1BFE9 /* TabBarViewController.swift in Sources */,
 				745243AA22CE85BA00C930C8 /* AppDelegate.swift in Sources */,
 				744B7D9B22E6535C00A839A6 /* LoginCoordinator.swift in Sources */,
@@ -620,6 +646,7 @@
 				742A99C322EDC77500A3A703 /* Result.swift in Sources */,
 				741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */,
 				744B7C9222E3C6DF00A839A6 /* ButtonWithBorder.swift in Sources */,
+				605D6ECD22F775EB001DAC04 /* ModalScreenViewController.swift in Sources */,
 				741DCF8E22D3A888005783A3 /* CategoriesViewModel.swift in Sources */,
 				744B7C9A22E4FEF100A839A6 /* ProfileScreenNavigationController.swift in Sources */,
 				748E0B2322DB87AA00B061C7 /* LocationItem.swift in Sources */,
@@ -652,6 +679,7 @@
 				748E0B0822DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift in Sources */,
 				7478F50922F6263C00A43F52 /* text.swift in Sources */,
 				74697FCC22D200DF00D5B5F4 /* Day.swift in Sources */,
+				605D6ECB22F775CF001DAC04 /* ModalScreenViewModel.swift in Sources */,
 				7478F50422F60D2700A43F52 /* Prediction.swift in Sources */,
 				7453637C22EE4940004C9717 /* ProfileActionSection.swift in Sources */,
 				744B7C9822E4FC5900A839A6 /* RootScreenNavigationController.swift in Sources */,
