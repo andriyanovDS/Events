@@ -126,10 +126,12 @@ extension UserDetailsViewModel {
                 }
                 self.openCamera()
             })
+        case .denied:
+            coordinator?.openCameraAccessModal(type: .photo, delegate: self.delegate)
         default: return
         }
     }
-
+    
     private func requestLibraryUsagePermission() {
         let status = PHPhotoLibrary.authorizationStatus()
         switch status {
@@ -199,4 +201,5 @@ protocol UserDetailsViewModelDelegate: UIViewControllerWithActivityIndicator,
 
 protocol UserDetailsScreenCoordinator: class {
     func userDetailsDidSubmit()
+    func openCameraAccessModal(type: PermissionModalType, delegate: UserDetailsViewModelDelegate)
 }

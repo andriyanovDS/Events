@@ -14,7 +14,7 @@ class ProfileScreenCoordinator:
     UserDetailsScreenCoordinator,
     CreateEventCoordinator,
     LocationSearchCoordinator {
-
+    
     func openUserDetails(user: User) {
         let userDetailsViewController = UserDetailsViewController(user: user, coordinator: self)
         userDetailsViewController.modalTransitionStyle = .coverVertical
@@ -30,6 +30,11 @@ class ProfileScreenCoordinator:
         navigationController.dismiss(animated: true, completion: nil)
     }
 
+    func openCameraAccessModal(type: PermissionModalType, delegate: UserDetailsViewModelDelegate) {
+      let permissionModal = PermissionModalScreenViewController(modalType: .photo)
+      delegate.present(permissionModal, animated: true, completion: nil)
+    }
+  
     func openCreateEventScreen() {
         let createEventViewController = CreateEventViewController()
         createEventViewController.coordinator = self
