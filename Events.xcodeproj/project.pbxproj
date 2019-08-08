@@ -11,6 +11,7 @@
 		605D6EC922F775BB001DAC04 /* ModalScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605D6EC822F775BB001DAC04 /* ModalScreenView.swift */; };
 		605D6ECB22F775CF001DAC04 /* ModalScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605D6ECA22F775CF001DAC04 /* ModalScreenViewModel.swift */; };
 		605D6ECD22F775EB001DAC04 /* ModalScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605D6ECC22F775EB001DAC04 /* ModalScreenViewController.swift */; };
+		60D7FC8F22FCB82000C72E3F /* Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D7FC8E22FCB82000C72E3F /* Modal.swift */; };
 		741DCF8922D38264005783A3 /* RootScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8822D38264005783A3 /* RootScreenViewModel.swift */; };
 		741DCF8C22D3A878005783A3 /* CategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8B22D3A878005783A3 /* CategoriesView.swift */; };
 		741DCF8E22D3A888005783A3 /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */; };
@@ -93,6 +94,7 @@
 		605D6EC822F775BB001DAC04 /* ModalScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalScreenView.swift; sourceTree = "<group>"; };
 		605D6ECA22F775CF001DAC04 /* ModalScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalScreenViewModel.swift; sourceTree = "<group>"; };
 		605D6ECC22F775EB001DAC04 /* ModalScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalScreenViewController.swift; sourceTree = "<group>"; };
+		60D7FC8E22FCB82000C72E3F /* Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modal.swift; sourceTree = "<group>"; };
 		741DCF8822D38264005783A3 /* RootScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenViewModel.swift; sourceTree = "<group>"; };
 		741DCF8B22D3A878005783A3 /* CategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesView.swift; sourceTree = "<group>"; };
 		741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 				605D6EC822F775BB001DAC04 /* ModalScreenView.swift */,
 				605D6ECA22F775CF001DAC04 /* ModalScreenViewModel.swift */,
 				605D6ECC22F775EB001DAC04 /* ModalScreenViewController.swift */,
+				60D7FC8E22FCB82000C72E3F /* Modal.swift */,
 			);
 			path = ModalScreen;
 			sourceTree = "<group>";
@@ -644,6 +647,7 @@
 				7467B6EA22D5107400A1BFE9 /* UserObservers.swift in Sources */,
 				7463A49E22DE6EED009171E1 /* TextFieldWithShadow.swift in Sources */,
 				742A99C322EDC77500A3A703 /* Result.swift in Sources */,
+				60D7FC8F22FCB82000C72E3F /* Modal.swift in Sources */,
 				741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */,
 				744B7C9222E3C6DF00A839A6 /* ButtonWithBorder.swift in Sources */,
 				605D6ECD22F775EB001DAC04 /* ModalScreenViewController.swift in Sources */,

@@ -127,6 +127,7 @@ extension UserDetailsViewModel {
                 self.openCamera()
             })
         case .denied:
+            coordinator?.userDetailsDidSubmit()
             coordinator?.openPermissionModal(type: .permissionModal)
         default: return
         }

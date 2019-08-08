@@ -38,7 +38,7 @@ class ProfileScreenCoordinator:
     func openPermissionModal(type: ModalType) {
         let permissionModal = ModalScreenViewController(modalType: .permissionModal)
         permissionModal.coordinator = self
-        navigationController.present(permissionModal, animated: false, completion: nil)
+        navigationController.present(permissionModal, animated: true, completion: nil)
     }
     func closeModal() {
         navigationController.dismiss(animated: true, completion: nil)

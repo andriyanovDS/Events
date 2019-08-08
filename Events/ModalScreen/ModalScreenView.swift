@@ -13,10 +13,11 @@ class ModalScreenView: UIView {
     let submitButton = ButtonWithBorder()
     let titleLabel = UILabel()
     let descriptionLabel = UILabel()
-    let image = UILabel()
-    let contentView = UIView()
+    let image = UIImageView()
+    let viewData: Modal
     
-    init() {
+    init(dataView: Modal) {
+        viewData = dataView
         super.init(frame: CGRect.zero)
         setupView()
     }
@@ -27,13 +28,14 @@ class ModalScreenView: UIView {
     
     private func setupView() {
         backgroundColor = .white
+        setupPopupView()
         sv(
             titleLabel,
             image,
             descriptionLabel,
             submitButton
         )
-        setupPopupView()
+    
         layout(
             150,
             |-titleLabel-|,
@@ -42,6 +44,7 @@ class ModalScreenView: UIView {
             50,
             |-image-|
         )
+        
         submitButton
             .bottom(50)
             .left(50)
@@ -50,35 +53,50 @@ class ModalScreenView: UIView {
     }
     
     private func setupPopupView(){
-        titleLabel.style({ v in
-            v.textColor = UIColor.gray800()
+        styleText(
+            label: titleLabel,
+            text: viewData.title,
+            size: 26,
+            color: .gray900(),
+            style: .bold
+        )
+        titleLabel.style({v in
             v.textAlignment = .center
-            v.numberOfLines = 3
-            v.font = UIFont.init(name: "CeraPro-Medium", size: 22)
         })
         
-        descriptionLabel.style({ v in
-            v.textColor = UIColor.black
-            v.numberOfLines = 2
+        styleText(
+            label: descriptionLabel,
+            text: viewData.description,
+            size: 26,
+            color: .gray900(),
+            style: .regular
+        )
+        descriptionLabel.style({v in
             v.textAlignment = .center
-            v.font = UIFont.init(name: "CeraPro-Medium", size: 20)
+            v.numberOfLines = 2
         })
         
         image.style({v in
-            v.textAlignment = .center
-            v.font = UIFont.init(name: "CeraPro-Medium", size: 100)
+            v.backgroundColor = UIColor.gray200()
+            v.layer.cornerRadius = 50/2
         })
+        
+        styleText(
+            button: submitButton,
+            text: viewData.buttonLabelText,
+            size: 20,
+            color: .blue(),
+            style: .medium
+        )
         
         submitButton.style({ v in
             v.layer.borderColor = UIColor.blue().cgColor
-            v.setTitleColor(UIColor.blue(), for: .normal)
             v.contentEdgeInsets = UIEdgeInsets(
                 top: 10,
                 left: 0,
                 bottom: 10,
                 right: 0
             )
-            v.titleLabel?.font = UIFont(name: "CeraPro-Medium", size: 20)
         })
     }
 }
