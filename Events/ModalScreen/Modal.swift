@@ -8,25 +8,40 @@
 
 import Foundation
 
-struct Modal {
+struct PermissionModal {
     let title: String
     let imageUrl: String
     let description: String
     let buttonLabelText: String
 }
 
-enum ModalType {
-    case permissionModal
+enum PermissionModalType {
+    case photo, geolocation, notifications
     
-    func model() -> Modal {
+    func model() -> PermissionModal {
         switch self {
-        case .permissionModal:
-            return Modal(
+        case .photo:
+            return PermissionModal(
                 title: "Внимание",
-                imageUrl: "📷",
+                imageUrl: "",
                 description: "Разрешите доступ к камере в настройках",
+                buttonLabelText: "Понятно"
+            )
+        case .geolocation:
+            return PermissionModal(
+                title: "Внимание",
+                imageUrl: "",
+                description: "Разрешите доступ к геолокации",
+                buttonLabelText: "Понятно"
+            )
+        case .notifications:
+            return PermissionModal(
+                title: "Внимание",
+                imageUrl: "",
+                description: "Разрешите доступ к геолокации",
                 buttonLabelText: "Понятно"
             )
         }
     }
 }
+
