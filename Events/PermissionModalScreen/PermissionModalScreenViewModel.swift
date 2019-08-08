@@ -8,13 +8,13 @@
 
 import Foundation
 
-class ModalScreenViewModel {
-    var coordinator: ModalScreenViewCoordinator?
+class PermissionModalScreenViewModel {
+    var coordinator: PermissionModalScreenViewCoordinator?
     func closeModal() {
         coordinator?.closeModal()
     }
 }
 
-protocol ModalScreenViewCoordinator {
+protocol PermissionModalScreenViewCoordinator {
     func closeModal()
 }

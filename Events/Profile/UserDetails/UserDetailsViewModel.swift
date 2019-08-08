@@ -127,7 +127,7 @@ extension UserDetailsViewModel {
                 self.openCamera()
             })
         case .denied:
-            coordinator?.openPermissionModal(type: .permissionModal)
+            coordinator?.openPermissionModal(type: .photo)
         default: return
         }
     }
@@ -201,5 +201,5 @@ protocol UserDetailsViewModelDelegate: UIViewControllerWithActivityIndicator,
 
 protocol UserDetailsScreenCoordinator: class {
     func userDetailsDidSubmit()
-    func openPermissionModal(type: ModalType)
+    func openPermissionModal(type: PermissionModalType)
 }

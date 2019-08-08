@@ -9,14 +9,14 @@
 import UIKit
 import Stevia
 
-class ModalScreenView: UIView {
+class PermissionModalScreenView: UIView {
     let submitButton = ButtonWithBorder()
     let titleLabel = UILabel()
     let descriptionLabel = UILabel()
     let image = UIImageView()
-    let viewData: Modal
+    let viewData: PermissionModal
     
-    init(dataView: Modal) {
+    init(dataView: PermissionModal) {
         viewData = dataView
         super.init(frame: CGRect.zero)
         setupView()

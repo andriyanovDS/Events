@@ -35,8 +35,8 @@ class ProfileScreenCoordinator:
         createEventViewController.coordinator = self
         navigationController.pushViewController(createEventViewController, animated: true)
     }
-    func openPermissionModal(type: ModalType) {
-        let permissionModal = ModalScreenViewController(modalType: .permissionModal)
+    func openPermissionModal(type: PermissionModalType) {
+        let permissionModal = ModalScreenViewController(modalType: type)
         permissionModal.coordinator = self
         navigationController.present(permissionModal, animated: true, completion: nil)
     }

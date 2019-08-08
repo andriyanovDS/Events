@@ -9,12 +9,12 @@
 import Foundation
 import UIKit
 
-class ModalScreenViewController: UIViewController {
-    var viewModel: ModalScreenViewModel?
-    var modalScreenView: ModalScreenView!
-    var coordinator: ModalScreenViewCoordinator?
-    let permissionModal: Modal
-    init(modalType: ModalType) {
+class PermissionModalScreenViewController: UIViewController {
+    var viewModel: PermissionModalScreenViewModel?
+    var modalScreenView: PermissionModalScreenView!
+    var coordinator: PermissionModalScreenViewCoordinator?
+    let permissionModal: PermissionModal
+    init(modalType: PermissionModalType) {
         self.permissionModal = modalType.model()
         super.init(nibName: nil, bundle: nil)
     }
@@ -26,12 +26,12 @@ class ModalScreenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.loadView()
-        viewModel = ModalScreenViewModel()
+        viewModel = PermissionModalScreenViewModel()
         viewModel?.coordinator = coordinator
     }
     
     override func loadView() {
-        modalScreenView = ModalScreenView(dataView: permissionModal)
+        modalScreenView = PermissionModalScreenView(dataView: permissionModal)
         view = modalScreenView
         modalScreenView.submitButton.addTarget(self, action: #selector(closeModal), for: .touchUpInside)
     }
