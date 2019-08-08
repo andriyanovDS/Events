@@ -9,12 +9,12 @@
 import UIKit
 
 extension UITextField {
-    
-    func addShadow(radius: CGFloat, color: UIColor) {
-        self.layer.shadowRadius = radius
-        self.layer.shadowOpacity = 0.3
-        self.layer.shadowColor = color.cgColor
-        self.layer.shadowOffset = .zero
-        self.layer.masksToBounds = false
-    }
+  
+  func addShadow(radius: CGFloat, color: UIColor) {
+    self.layer.shadowRadius = radius
+    self.layer.shadowOpacity = 0.3
+    self.layer.shadowColor = color.cgColor
+    self.layer.shadowOffset = .zero
+    self.layer.masksToBounds = false
+  }
 }

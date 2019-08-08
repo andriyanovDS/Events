@@ -9,7 +9,7 @@
 import Foundation
 
 extension Result where Success == Void {
-    static var success: Result {
-        return .success(())
-    }
+  static var success: Result {
+    return .success(())
+  }
 }

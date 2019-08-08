@@ -9,15 +9,15 @@
 import Foundation
 
 struct Prediction: Decodable, Equatable {
-    let description: String
-    let place_id: String
+  let description: String
+  let place_id: String
 
-    static func == (lhs: Prediction, rhs: Prediction) -> Bool {
-        return lhs.place_id == rhs.place_id
-    }
+  static func == (lhs: Prediction, rhs: Prediction) -> Bool {
+    return lhs.place_id == rhs.place_id
+  }
 }
 
 struct PredictionsResponse: Decodable {
-    let status: String
-    let predictions: [Prediction]
+  let status: String
+  let predictions: [Prediction]
 }

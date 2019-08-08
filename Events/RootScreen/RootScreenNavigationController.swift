@@ -11,21 +11,21 @@ import UIKit
 
 class RootScreenNavigationController: UINavigationController {
 
-    var coordinator: RootScreenCoordinator?
+  var coordinator: RootScreenCoordinator?
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+  override func viewDidLoad() {
+    super.viewDidLoad()
 
-        coordinator = RootScreenCoordinator(navigationController: self)
-        coordinator?.start()
-    }
+    coordinator = RootScreenCoordinator(navigationController: self)
+    coordinator?.start()
+  }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        hideNavigationBar()
-    }
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    hideNavigationBar()
+  }
 
-    func hideNavigationBar() {
-        tabBarController?.navigationController?.setNavigationBarHidden(true, animated: false)
-    }
+  func hideNavigationBar() {
+    tabBarController?.navigationController?.setNavigationBarHidden(true, animated: false)
+  }
 }

@@ -9,9 +9,9 @@
 import UIKit
 
 func shadowStyle(view: UIView, radius: CGFloat, color: UIColor) {
-    view.layer.shadowRadius = radius
-    view.layer.shadowOpacity = 0.3
-    view.layer.shadowColor = color.cgColor
-    view.layer.shadowOffset = .zero
-    view.layer.masksToBounds = false
+  view.layer.shadowRadius = radius
+  view.layer.shadowOpacity = 0.3
+  view.layer.shadowColor = color.cgColor
+  view.layer.shadowOffset = .zero
+  view.layer.masksToBounds = false
 }

@@ -9,11 +9,11 @@
 import UIKit
 
 class SavedViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.backgroundColor = .gray200()
-    }
-
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    view.backgroundColor = .gray200()
+  }
+  
 }

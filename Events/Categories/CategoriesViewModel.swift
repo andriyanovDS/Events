@@ -9,16 +9,16 @@
 import Foundation
 
 class CategoriesViewModel {
-    
-    let categories: [Category]
-    
-    init() {
-        categories = [
-            Category(id: CategoryId.art, name: "Arts and Entertainment"),
-            Category(id: .workshop, name: "Classes and workshops"),
-            Category(id: .food, name: "Food and drink"),
-            Category(id: .health, name: "Health and welness"),
-            Category(id: .sport, name: "Sport and outdoors")
-        ]
-    }
+  
+  let categories: [Category]
+  
+  init() {
+    categories = [
+      Category(id: CategoryId.art, name: "Arts and Entertainment"),
+      Category(id: .workshop, name: "Classes and workshops"),
+      Category(id: .food, name: "Food and drink"),
+      Category(id: .health, name: "Health and welness"),
+      Category(id: .sport, name: "Sport and outdoors")
+    ]
+  }
 }

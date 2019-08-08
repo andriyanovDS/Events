@@ -52,9 +52,10 @@
 		74697FCA22D200A900D5B5F4 /* Month.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FC922D200A900D5B5F4 /* Month.swift */; };
 		74697FCC22D200DF00D5B5F4 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FCB22D200DF00D5B5F4 /* Day.swift */; };
 		74697FCE22D2022700D5B5F4 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FCD22D2022700D5B5F4 /* CalendarViewModel.swift */; };
+		746F0B6022FCDB0800F7301D /* EventDurationRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746F0B5F22FCDB0800F7301D /* EventDurationRange.swift */; };
 		7478F4F222F5FAB300A43F52 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 7478F4F122F5FAB300A43F52 /* .gitignore */; };
 		7478F4F522F6022100A43F52 /* CreateEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4F422F6022100A43F52 /* CreateEventVC.swift */; };
-		7478F4F722F6023F00A43F52 /* DescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4F622F6023F00A43F52 /* DescriptionView.swift */; };
+		7478F4F722F6023F00A43F52 /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4F622F6023F00A43F52 /* DateView.swift */; };
 		7478F4F922F6033C00A43F52 /* CreateEventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4F822F6033C00A43F52 /* CreateEventViewModel.swift */; };
 		7478F4FE22F60CB900A43F52 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4FD22F60CB900A43F52 /* Event.swift */; };
 		7478F50022F60CC900A43F52 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4FF22F60CC900A43F52 /* User.swift */; };
@@ -62,6 +63,7 @@
 		7478F50422F60D2700A43F52 /* Prediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F50322F60D2700A43F52 /* Prediction.swift */; };
 		7478F50622F6251900A43F52 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F50522F6251900A43F52 /* LocationView.swift */; };
 		7478F50922F6263C00A43F52 /* text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F50822F6263C00A43F52 /* text.swift */; };
+		7478F50B22F7760E00A43F52 /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F50A22F7760E00A43F52 /* UITextFieldExtension.swift */; };
 		7481190A22D7E6BA004FBE48 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 7481190922D7E6BA004FBE48 /* .swiftlint.yml */; };
 		748E0AFE22D8E2D000B061C7 /* ProfileScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0AFD22D8E2D000B061C7 /* ProfileScreenViewModel.swift */; };
 		748E0B0022D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0AFF22D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift */; };
@@ -133,16 +135,18 @@
 		74697FC922D200A900D5B5F4 /* Month.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Month.swift; sourceTree = "<group>"; };
 		74697FCB22D200DF00D5B5F4 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
 		74697FCD22D2022700D5B5F4 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
+		746F0B5F22FCDB0800F7301D /* EventDurationRange.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = EventDurationRange.swift; sourceTree = "<group>"; tabWidth = 2; usesTabs = 0; };
 		7478F4F122F5FAB300A43F52 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		7478F4F422F6022100A43F52 /* CreateEventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventVC.swift; sourceTree = "<group>"; };
-		7478F4F622F6023F00A43F52 /* DescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionView.swift; sourceTree = "<group>"; };
-		7478F4F822F6033C00A43F52 /* CreateEventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewModel.swift; sourceTree = "<group>"; };
+		7478F4F622F6023F00A43F52 /* DateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
+		7478F4F822F6033C00A43F52 /* CreateEventViewModel.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = CreateEventViewModel.swift; sourceTree = "<group>"; tabWidth = 2; };
 		7478F4FD22F60CB900A43F52 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		7478F4FF22F60CC900A43F52 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7478F50122F60CFD00A43F52 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		7478F50322F60D2700A43F52 /* Prediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prediction.swift; sourceTree = "<group>"; };
 		7478F50522F6251900A43F52 /* LocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
 		7478F50822F6263C00A43F52 /* text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = text.swift; sourceTree = "<group>"; };
+		7478F50A22F7760E00A43F52 /* UITextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldExtension.swift; sourceTree = "<group>"; };
 		7481190922D7E6BA004FBE48 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
 		748E0AFD22D8E2D000B061C7 /* ProfileScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenViewModel.swift; sourceTree = "<group>"; };
 		748E0AFF22D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerWithActivityIndicator.swift; sourceTree = "<group>"; };
@@ -159,7 +163,7 @@
 		748E0B2222DB87AA00B061C7 /* LocationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationItem.swift; sourceTree = "<group>"; };
 		748E0B2622DBBB2900B061C7 /* LocationSearchStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchStackView.swift; sourceTree = "<group>"; };
 		74A1AE1E22D5D18800C39525 /* KeyboardAttachViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAttachViewController.swift; sourceTree = "<group>"; };
-		74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalExtension.swift; sourceTree = "<group>"; };
+		74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = OptionalExtension.swift; sourceTree = "<group>"; tabWidth = 2; };
 		74A1AE2222D64BFB00C39525 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		74D8DB2D22DD265500E70CB4 /* UserDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewController.swift; sourceTree = "<group>"; };
 		74D8DB3322DD37F800E70CB4 /* UserDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewModel.swift; sourceTree = "<group>"; };
@@ -247,8 +251,8 @@
 		745243A822CE85BA00C930C8 /* Events */ = {
 			isa = PBXGroup;
 			children = (
-				7478F50722F6262400A43F52 /* Styles */,
 				7478F4FC22F60BCF00A43F52 /* Models */,
+				7478F50722F6262400A43F52 /* Styles */,
 				7478F4F322F601FD00A43F52 /* CreateEvent */,
 				7463A49C22DE6EB9009171E1 /* CommonUIComponetns */,
 				745243BB22CF7B3000C930C8 /* SearchBar */,
@@ -352,7 +356,7 @@
 			children = (
 				7478F4F422F6022100A43F52 /* CreateEventVC.swift */,
 				7478F4F822F6033C00A43F52 /* CreateEventViewModel.swift */,
-				7478F4F622F6023F00A43F52 /* DescriptionView.swift */,
+				7478F4F622F6023F00A43F52 /* DateView.swift */,
 				7478F50522F6251900A43F52 /* LocationView.swift */,
 			);
 			path = CreateEvent;
@@ -365,6 +369,7 @@
 				7478F4FF22F60CC900A43F52 /* User.swift */,
 				7478F50122F60CFD00A43F52 /* Location.swift */,
 				7478F50322F60D2700A43F52 /* Prediction.swift */,
+				746F0B5F22FCDB0800F7301D /* EventDurationRange.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -426,6 +431,7 @@
 				74697FC722D11F7F00D5B5F4 /* UIViewExtension.swift */,
 				74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */,
 				742A99C222EDC77500A3A703 /* Result.swift */,
+				7478F50A22F7760E00A43F52 /* UITextFieldExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -606,7 +612,7 @@
 				74697FC622D0F67000D5B5F4 /* commonStyles.swift in Sources */,
 				743816A422E8F74400AA4960 /* DayButton.swift in Sources */,
 				7478F50222F60CFD00A43F52 /* Location.swift in Sources */,
-				7478F4F722F6023F00A43F52 /* DescriptionView.swift in Sources */,
+				7478F4F722F6023F00A43F52 /* DateView.swift in Sources */,
 				7467B6DF22D4E2E300A1BFE9 /* TabBarViewController.swift in Sources */,
 				745243AA22CE85BA00C930C8 /* AppDelegate.swift in Sources */,
 				744B7D9B22E6535C00A839A6 /* LoginCoordinator.swift in Sources */,
@@ -629,6 +635,7 @@
 				7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */,
 				748E0B0222D8FD0000B061C7 /* LoginViewControllerSetupViewExtension.swift in Sources */,
 				7478F4F922F6033C00A43F52 /* CreateEventViewModel.swift in Sources */,
+				746F0B6022FCDB0800F7301D /* EventDurationRange.swift in Sources */,
 				748E0B2722DBBB2900B061C7 /* LocationSearchStackView.swift in Sources */,
 				744B7C9622E4FA2D00A839A6 /* RootScreenCoordinator.swift in Sources */,
 				74D8DB3422DD37F800E70CB4 /* UserDetailsViewModel.swift in Sources */,
@@ -640,6 +647,7 @@
 				7478F4FE22F60CB900A43F52 /* Event.swift in Sources */,
 				74D9655F22F2272D00D828C1 /* UserDetailsView.swift in Sources */,
 				744B7C9422E4F1A000A839A6 /* ProfileScreenCoordinator.swift in Sources */,
+				7478F50B22F7760E00A43F52 /* UITextFieldExtension.swift in Sources */,
 				74697FCA22D200A900D5B5F4 /* Month.swift in Sources */,
 				745243BF22CF965500C930C8 /* SearchBarUITextField.swift in Sources */,
 				748E0B1422DA26BC00B061C7 /* GeolocationAPI.swift in Sources */,

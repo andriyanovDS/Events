@@ -14,189 +14,189 @@ import FirebaseDatabase
 import FirebaseStorage
 
 class UserDetailsViewModel {
-
-    weak var coordinator: UserDetailsScreenCoordinator?
-    let delegate: UserDetailsViewModelDelegate
-    lazy var storage = Storage.storage()
-
-    init(delegate: UserDetailsViewModelDelegate) {
-        self.delegate = delegate
-    }
-
-    func closeScreen() {
-        coordinator?.userDetailsDidSubmit()
-    }
+  
+  weak var coordinator: UserDetailsScreenCoordinator?
+  let delegate: UserDetailsViewModelDelegate
+  lazy var storage = Storage.storage()
+  
+  init(delegate: UserDetailsViewModelDelegate) {
+    self.delegate = delegate
+  }
+  
+  func closeScreen() {
+    coordinator?.userDetailsDidSubmit()
+  }
 }
 
 extension UserDetailsViewModel {
-    private func updateUserProfile(
-        user: User,
-        firstName: String,
-        avatar: String?,
-        userInfo: [String: Any?]
-        ) {
-        let updatedUser = User(
-            id: user.id,
-            firstName: firstName,
-            lastName: userInfo["lastName"] as? String,
-            description: userInfo["description"] as? String,
-            gender: userInfo["gender"] as? Gender,
-            dateOfBirth: userInfo["dateOfBirth"] as? Date,
-            email: user.email,
-            location: nil,
-            work: userInfo["work"] as? String,
-            avatar: avatar
+  private func updateUserProfile(
+    user: User,
+    firstName: String,
+    avatar: String?,
+    userInfo: [String: Any?]
+    ) {
+    let updatedUser = User(
+      id: user.id,
+      firstName: firstName,
+      lastName: userInfo["lastName"] as? String,
+      description: userInfo["description"] as? String,
+      gender: userInfo["gender"] as? Gender,
+      dateOfBirth: userInfo["dateOfBirth"] as? Date,
+      email: user.email,
+      location: nil,
+      work: userInfo["work"] as? String,
+      avatar: avatar
+    )
+    Events.updateUserProfile(user: updatedUser, onComplete: { [weak self] result in
+      switch result {
+      case .success(_):
+        self?.delegate.removeActivityIndicator()
+        self?.closeScreen()
+        return
+      case .failure(let error):
+        print("Error", error)
+        self?.delegate.removeActivityIndicator()
+      }
+    })
+  }
+  
+  func submitProfile(userInfo: [String: Any?]) {
+    let user = delegate.user
+    guard let firstName = userInfo["firstName"] as? String else {
+      return
+    }
+    
+    delegate.showActivityIndicator(for: nil)
+    
+    if let avatarUrl = userInfo["avatar"] as? URL {
+      if isStorageUrl(avatarUrl) {
+        self.updateUserProfile(
+          user: user,
+          firstName: firstName,
+          avatar: avatarUrl.absoluteString,
+          userInfo: userInfo
         )
-        Events.updateUserProfile(user: updatedUser, onComplete: { [weak self] result in
-            switch result {
-            case .success(_):
-                self?.delegate.removeActivityIndicator()
-                self?.closeScreen()
-                return
-            case .failure(let error):
-                print("Error", error)
-                self?.delegate.removeActivityIndicator()
-            }
-        })
-    }
-
-    func submitProfile(userInfo: [String: Any?]) {
-        let user = delegate.user
-        guard let firstName = userInfo["firstName"] as? String else {
-            return
+        return
+      }
+      uploadAvatar(url: avatarUrl, userId: user.id, onComplete: { [weak self] result in
+        switch result {
+        case .success(let url):
+          self?.updateUserProfile(user: user, firstName: firstName, avatar: url, userInfo: userInfo)
+        case .failure:
+          self?.updateUserProfile(user: user, firstName: firstName, avatar: nil, userInfo: userInfo)
         }
-
-        delegate.showActivityIndicator(for: nil)
-
-        if let avatarUrl = userInfo["avatar"] as? URL {
-            if isStorageUrl(avatarUrl) {
-                self.updateUserProfile(
-                    user: user,
-                    firstName: firstName,
-                    avatar: avatarUrl.absoluteString,
-                    userInfo: userInfo
-                )
-                return
-            }
-            uploadAvatar(url: avatarUrl, userId: user.id, onComplete: { [weak self] result in
-                switch result {
-                case .success(let url):
-                    self?.updateUserProfile(user: user, firstName: firstName, avatar: url, userInfo: userInfo)
-                case .failure:
-                    self?.updateUserProfile(user: user, firstName: firstName, avatar: nil, userInfo: userInfo)
-                }
-            })
-        } else {
-            updateUserProfile(user: user, firstName: firstName, avatar: nil, userInfo: userInfo)
-        }
+      })
+    } else {
+      updateUserProfile(user: user, firstName: firstName, avatar: nil, userInfo: userInfo)
     }
+  }
 }
 
 extension UserDetailsViewModel {
-    private func openCamera() {
-        if !UIImagePickerController.isSourceTypeAvailable(.camera) {
-            return
+  private func openCamera() {
+    if !UIImagePickerController.isSourceTypeAvailable(.camera) {
+      return
+    }
+    let controller = UIImagePickerController()
+    controller.delegate = delegate
+    controller.sourceType = .camera
+    self.delegate.present(controller, animated: true, completion: nil)
+  }
+  
+  private func openLibrary() {
+    if !UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+      return
+    }
+    let controller = UIImagePickerController()
+    controller.delegate = delegate
+    controller.sourceType = .photoLibrary
+    self.delegate.present(controller, animated: true, completion: nil)
+  }
+  
+  private func requestCameraUsagePermission() {
+    let status = AVCaptureDevice.authorizationStatus(for: .video)
+    switch status {
+    case .authorized:
+      openCamera()
+      return
+    case .notDetermined:
+      AVCaptureDevice.requestAccess(for: .video, completionHandler: {isAuthorized in
+        if !isAuthorized {
+          return
         }
-        let controller = UIImagePickerController()
-        controller.delegate = delegate
-        controller.sourceType = .camera
-        self.delegate.present(controller, animated: true, completion: nil)
+        self.openCamera()
+      })
+    default: return
     }
-
-    private func openLibrary() {
-        if !UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-            return
+  }
+  
+  private func requestLibraryUsagePermission() {
+    let status = PHPhotoLibrary.authorizationStatus()
+    switch status {
+    case .authorized:
+      openLibrary()
+      return
+    case .notDetermined:
+      PHPhotoLibrary.requestAuthorization({ authStatus in
+        if authStatus != .authorized {
+          return
         }
-        let controller = UIImagePickerController()
-        controller.delegate = delegate
-        controller.sourceType = .photoLibrary
-        self.delegate.present(controller, animated: true, completion: nil)
+        self.openLibrary()
+        
+      })
+    default: return
     }
-
-    private func requestCameraUsagePermission() {
-        let status = AVCaptureDevice.authorizationStatus(for: .video)
-        switch status {
-        case .authorized:
-            openCamera()
-            return
-        case .notDetermined:
-            AVCaptureDevice.requestAccess(for: .video, completionHandler: {isAuthorized in
-                if !isAuthorized {
-                    return
-                }
-                self.openCamera()
-            })
-        default: return
+  }
+  
+  func showSelectImageActionSheet() {
+    let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+    actionSheetController.addAction(.init(
+      title: "Камера",
+      style: .default,
+      handler: {[weak self] _ in
+        self?.requestCameraUsagePermission()
+      }
+      ))
+    actionSheetController.addAction(.init(
+      title: "Галерея",
+      style: .default,
+      handler: {[weak self] _ in
+        self?.requestLibraryUsagePermission()
+      }
+      ))
+    actionSheetController.addAction(.init(
+      title: "Закрыть",
+      style: .cancel,
+      handler: nil)
+    )
+    self.delegate.present(actionSheetController, animated: true, completion: nil)
+  }
+  
+  private func uploadAvatar(url: URL, userId: String, onComplete: @escaping (Result<String, Error>) -> Void) {
+    let reference = storage.reference()
+    let avatarRef = reference.child("users/\(userId)/images")
+    avatarRef.putFile(from: url, metadata: nil, completion: { _, error in
+      if let uploadError = error {
+        onComplete(.failure(uploadError))
+        return
+      }
+      avatarRef.downloadURL(completion: { url, error in
+        if let error = error {
+          onComplete(.failure(error))
+          return
         }
-    }
-
-    private func requestLibraryUsagePermission() {
-        let status = PHPhotoLibrary.authorizationStatus()
-        switch status {
-        case .authorized:
-            openLibrary()
-            return
-        case .notDetermined:
-            PHPhotoLibrary.requestAuthorization({ authStatus in
-                if authStatus != .authorized {
-                    return
-                }
-                self.openLibrary()
-
-            })
-        default: return
-        }
-    }
-
-    func showSelectImageActionSheet() {
-        let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        actionSheetController.addAction(.init(
-            title: "Камера",
-            style: .default,
-            handler: {[weak self] _ in
-                self?.requestCameraUsagePermission()
-            }
-            ))
-        actionSheetController.addAction(.init(
-            title: "Галерея",
-            style: .default,
-            handler: {[weak self] _ in
-                self?.requestLibraryUsagePermission()
-            }
-            ))
-        actionSheetController.addAction(.init(
-            title: "Закрыть",
-            style: .cancel,
-            handler: nil)
-        )
-        self.delegate.present(actionSheetController, animated: true, completion: nil)
-    }
-
-    private func uploadAvatar(url: URL, userId: String, onComplete: @escaping (Result<String, Error>) -> Void) {
-        let reference = storage.reference()
-        let avatarRef = reference.child("users/\(userId)/images")
-        avatarRef.putFile(from: url, metadata: nil, completion: { _, error in
-            if let uploadError = error {
-                onComplete(.failure(uploadError))
-                return
-            }
-            avatarRef.downloadURL(completion: { url, error in
-                if let error = error {
-                    onComplete(.failure(error))
-                    return
-                }
-                onComplete(.success(url!.absoluteString))
-            })
-        })
-    }
+        onComplete(.success(url!.absoluteString))
+      })
+    })
+  }
 }
 
 protocol UserDetailsViewModelDelegate: UIViewControllerWithActivityIndicator,
-    UIImagePickerControllerDelegate,
-    UINavigationControllerDelegate {
-    var user: User { get }
+  UIImagePickerControllerDelegate,
+UINavigationControllerDelegate {
+  var user: User { get }
 }
 
 protocol UserDetailsScreenCoordinator: class {
-    func userDetailsDidSubmit()
+  func userDetailsDidSubmit()
 }

@@ -9,10 +9,10 @@
 import Foundation
 
 struct Category {
-    let id: CategoryId
-    let name: String
+  let id: CategoryId
+  let name: String
 }
 
 enum CategoryId {
-    case art, workshop, food, health, sport
+  case art, workshop, food, health, sport
 }
