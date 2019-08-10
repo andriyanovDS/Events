@@ -39,14 +39,14 @@ class PermissionModalScreenView: UIView {
         layout(
             150,
             |-titleLabel-|,
-            50,
+            100,
             |-image-|,
             50,
             |-descriptionLabel-|
         )
         
         submitButton
-            .bottom(100)
+            .bottom(150)
             .left(50)
             .right(50)
             .height(45)
