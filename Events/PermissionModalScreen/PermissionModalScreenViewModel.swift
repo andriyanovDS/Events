@@ -26,5 +26,4 @@ class PermissionModalScreenViewModel {
 
 protocol PermissionModalScreenViewCoordinator {
     func closeModal()
-    func openAppSettings()
 }

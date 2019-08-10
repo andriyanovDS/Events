@@ -13,8 +13,8 @@ class ProfileScreenCoordinator:
     MainCoordinator,
     UserDetailsScreenCoordinator,
     CreateEventCoordinator,
-    LocationSearchCoordinator, PermissionModalScreenViewCoordinator {
-
+LocationSearchCoordinator, PermissionModalScreenViewCoordinator {
+    
     func openUserDetails(user: User) {
         let userDetailsViewController = UserDetailsViewController(user: user, coordinator: self)
         userDetailsViewController.modalTransitionStyle = .coverVertical

@@ -10,7 +10,7 @@ import Foundation
 
 struct PermissionModal {
     let title: String
-    let imageUrl: String
+    let image: String
     let description: String
     let buttonLabelText: String
 }
@@ -22,26 +22,25 @@ enum PermissionModalType {
         switch self {
         case .photo:
             return PermissionModal(
-                title: "Внимание",
-                imageUrl: "",
-                description: "Разрешите доступ к камере в настройках",
-                buttonLabelText: "Понятно"
+                title: "Нужен доступ",
+                image: "camera",
+                description: "Разрешите доступ к камере, чтобы сделать фотографию",
+                buttonLabelText: "Разрешить доступ"
             )
         case .geolocation:
             return PermissionModal(
                 title: "Внимание",
-                imageUrl: "",
+                image: "gallery",
                 description: "Разрешите доступ к геолокации",
                 buttonLabelText: "Понятно"
             )
         case .notifications:
             return PermissionModal(
                 title: "Внимание",
-                imageUrl: "",
+                image: "location",
                 description: "Разрешите доступ к геолокации",
                 buttonLabelText: "Понятно"
             )
         }
     }
 }
-

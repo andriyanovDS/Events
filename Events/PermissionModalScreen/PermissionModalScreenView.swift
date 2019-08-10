@@ -31,22 +31,22 @@ class PermissionModalScreenView: UIView {
         setupPopupView()
         sv(
             titleLabel,
-            image,
             descriptionLabel,
+            image,
             submitButton
         )
-    
+        
         layout(
             150,
             |-titleLabel-|,
             50,
-            |-descriptionLabel-|,
+            |-image-|,
             50,
-            |-image-|
+            |-descriptionLabel-|
         )
         
         submitButton
-            .bottom(50)
+            .bottom(100)
             .left(50)
             .right(50)
             .height(45)
@@ -77,8 +77,12 @@ class PermissionModalScreenView: UIView {
         })
         
         image.style({v in
-            v.backgroundColor = UIColor.gray200()
             v.layer.cornerRadius = 50/2
+            v.translatesAutoresizingMaskIntoConstraints = false
+            v.contentMode = .scaleAspectFit
+            v.width(150)
+            v.height(150)
+            v.image = UIImage(named: viewData.image)
         })
         
         styleText(
