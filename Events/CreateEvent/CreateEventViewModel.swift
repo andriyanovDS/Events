@@ -143,7 +143,7 @@ private func selectedDatesToString(_ selectedDates: SelectedDates) -> String? {
   return "\(dateFromFormatted) - \(dateFormatter.string(from: dateTo))"
 }
 
-protocol CreateEventViewModelDelegate: UIViewControllerWithActivityIndicator {
+protocol CreateEventViewModelDelegate: class, UIViewControllerWithActivityIndicator {
   func onChangeLocationName(_: String)
   func setupLocationView(locationName: String)
   func onDatesDidSelected(formattedDate: String, daysCount: Int)

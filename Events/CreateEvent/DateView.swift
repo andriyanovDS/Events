@@ -10,7 +10,6 @@ import UIKit
 import Stevia
 
 class DateView: UIView {
-
   weak var delegate: DateViewDelegate!
   let dateButton = ButtonWithBorder()
   var submitButton = ButtonWithBorder()
@@ -24,8 +23,12 @@ class DateView: UIView {
   private lazy var startTimeDescriptionLabel = UILabel()
   private lazy var durationDescriptionLabel = UILabel()
 
-  init() {
+  init(startTime: String, duration: String) {
     super.init(frame: CGRect.zero)
+
+    startTimeTextField.text = startTime
+    durationTextField.text = duration
+
     setupView()
   }
 
@@ -114,8 +117,7 @@ class DateView: UIView {
   private func setupSection(
     label: UILabel,
     labelText: String,
-    textField: UITextField,
-    textFieldPlaceholder: String
+    textField: UITextField
     ) {
     styleText(
       label: label,
@@ -129,7 +131,7 @@ class DateView: UIView {
       v.layer.borderColor = UIColor.gray200().cgColor
       v.setupLeftView(width: 15)
       v.layer.cornerRadius = 4
-      styleText(textField: v, text: "10:00", size: 18, color: .gray600(), style: .medium)
+      styleText(textField: v, text: "", size: 18, color: .gray600(), style: .medium)
     })
   }
 
@@ -163,8 +165,7 @@ class DateView: UIView {
     setupSection(
       label: startTimeDescriptionLabel,
       labelText: "Во сколько оно начнется?",
-      textField: startTimeTextField,
-      textFieldPlaceholder: "10:00"
+      textField: startTimeTextField
     )
   }
 
@@ -175,8 +176,7 @@ class DateView: UIView {
     setupSection(
       label: durationDescriptionLabel,
       labelText: "Сколько оно будет длиться?",
-      textField: durationTextField,
-      textFieldPlaceholder: "1 час"
+      textField: durationTextField
     )
   }
 

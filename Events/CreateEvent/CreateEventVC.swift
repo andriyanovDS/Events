@@ -10,8 +10,7 @@ import UIKit
 import Stevia
 import SwiftIconFont
 
-@objcMembers class CreateEventViewController:
-  KeyboardAttachViewController,
+@objcMembers class CreateEventViewController: KeyboardAttachViewController,
   CreateEventViewModelDelegate,
   DateViewDelegate {
   var locationView: LocationView?
@@ -48,9 +47,14 @@ import SwiftIconFont
   }
   
   func setupDateView() {
-    dateView = DateView()
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm"
+    dateView = DateView(
+      startTime: dateFormatter.string(from: viewModel.dates[0]),
+      duration: toLabel(duration: viewModel.duration!)
+    )
     dateView?.delegate = self
-    dateView?.datePicker.date = Calendar.current.date(bySettingHour: 10, minute: 0, second: 0, of: .init())!
+    dateView?.datePicker.date = viewModel.dates[0]
     dateView?.dateButton.addTarget(self, action: #selector(selectDate), for: .touchUpInside)
     view = dateView
     locationView = nil
@@ -62,6 +66,16 @@ import SwiftIconFont
   
   func onDatesDidSelected(formattedDate: String, daysCount: Int) {
     dateView?.setFormattedDate(formattedDate, daysCount: daysCount)
+  }
+
+  private func toLabel(duration: EventDurationRange) -> String {
+    return duration.min
+      .chain({ min in duration.max.foldL(
+        none: { "Более \(min) часов" },
+        some: { max in "\(min) - \(max) часов" }
+      )})
+      .alt({ duration.max.map { max in "\(max) \(max > 1 ? "часов" : "час")" } })
+      .getOrElse(result: "")
   }
   
   private func setupNavigationBar() {
@@ -161,14 +175,8 @@ extension CreateEventViewController: UIPickerViewDataSource {
   }
   
   private func pickerRowValueToDurationLabel(_ row: Int) -> String? {
-    switch row {
-    case 0: return "1 час"
-    case 1: return "2 часа"
-    case 2: return "3-5 часов"
-    case 3: return "6-8 часов"
-    case 4: return "Более 8 часов"
-    default: return nil
-    }
+    let duration = viewModel.durations[row]
+    return duration.map { v in toLabel(duration: v) }
   }
   
   func numberOfComponents(in pickerView: UIPickerView) -> Int {
