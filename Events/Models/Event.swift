@@ -18,7 +18,8 @@ struct Event {
   let name: String
   let author: String
   let location: Location
-  let durationInMinutes: Int
+  let dates: [Date]
+  let duration: EventDurationRange
   let createDate: Date
   let categories: [Category]
   let description: [Description]
