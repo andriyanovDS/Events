@@ -13,7 +13,7 @@ class ProfileScreenCoordinator:
     MainCoordinator,
     UserDetailsScreenCoordinator,
     CreateEventCoordinator,
-    LocationSearchCoordinator, ModalScreenViewCoordinator {
+    LocationSearchCoordinator, PermissionModalScreenViewCoordinator {
 
     func openUserDetails(user: User) {
         let userDetailsViewController = UserDetailsViewController(user: user, coordinator: self)
@@ -36,7 +36,7 @@ class ProfileScreenCoordinator:
         navigationController.pushViewController(createEventViewController, animated: true)
     }
     func openPermissionModal(type: PermissionModalType) {
-        let permissionModal = ModalScreenViewController(modalType: type)
+        let permissionModal = PermissionModalScreenViewController(modalType: type)
         permissionModal.coordinator = self
         navigationController.present(permissionModal, animated: true, completion: nil)
     }
