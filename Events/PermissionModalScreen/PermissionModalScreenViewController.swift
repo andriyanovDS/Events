@@ -33,7 +33,11 @@ class PermissionModalScreenViewController: UIViewController {
     override func loadView() {
         modalScreenView = PermissionModalScreenView(dataView: permissionModal)
         view = modalScreenView
-        modalScreenView.submitButton.addTarget(self, action: #selector(closeModal), for: .touchUpInside)
+        modalScreenView.submitButton.addTarget(self, action: #selector(openAppSettings), for: .touchUpInside)
+    }
+    
+    @objc func openAppSettings() {
+        viewModel?.openAppSettings()
     }
     
     @objc func closeModal() {

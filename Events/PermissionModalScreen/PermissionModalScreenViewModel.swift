@@ -7,9 +7,18 @@
 //
 
 import Foundation
+import UIKit
 
 class PermissionModalScreenViewModel {
     var coordinator: PermissionModalScreenViewCoordinator?
+    let url = URL(string: UIApplication.openSettingsURLString)
+    
+    func openAppSettings() {
+        UIApplication.shared.open(url!, completionHandler: { (success) in
+            print("Settings opened: \(success)")
+        })
+    }
+    
     func closeModal() {
         coordinator?.closeModal()
     }
@@ -17,4 +26,5 @@ class PermissionModalScreenViewModel {
 
 protocol PermissionModalScreenViewCoordinator {
     func closeModal()
+    func openAppSettings()
 }
