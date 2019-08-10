@@ -8,50 +8,6 @@
 
 import UIKit
 
-func setMediumFont(label: UILabel, size: CGFloat) {
-    label.font = UIFont.init(name: "CeraPro-Medium", size: size)
-}
-
-func setMediumFont(button: UIButton, size: CGFloat) {
-    guard let label = button.titleLabel else {
-        return
-    }
-    setMediumFont(label: label, size: size)
-}
-
-func setBoldFont(label: UILabel, size: CGFloat) {
-    label.font = UIFont.init(name: "CeraPro-Bold", size: size)
-}
-
-func setBoldFont(button: UIButton, size: CGFloat) {
-    guard let label = button.titleLabel else {
-        return
-    }
-    setBoldFont(label: label, size: size)
-}
-
-func setLightFont(label: UILabel, size: CGFloat) {
-    label.font = UIFont.init(name: "CeraPro-Light", size: size)
-}
-
-func setLightFont(button: UIButton, size: CGFloat) {
-    guard let label = button.titleLabel else {
-        return
-    }
-    setLightFont(label: label, size: size)
-}
-
-func setRegularFont(label: UILabel, size: CGFloat) {
-    label.font = UIFont.init(name: "CeraPro-Regular", size: size)
-}
-
-func setRegularFont(button: UIButton, size: CGFloat) {
-    guard let label = button.titleLabel else {
-        return
-    }
-    setRegularFont(label: label, size: size)
-}
-
 func styleText(
     label: UILabel,
     text: String,
@@ -62,17 +18,7 @@ func styleText(
 
     label.text = text
     label.textColor = color
-
-    switch style {
-    case .medium:
-        setMediumFont(label: label, size: size)
-    case .light:
-        setLightFont(label: label, size: size)
-    case .bold:
-        setBoldFont(label: label, size: size)
-    case .regular:
-        setRegularFont(label: label, size: size)
-    }
+    label.font = style.font(size: size)
 }
 
 func styleText(
@@ -92,6 +38,37 @@ func styleText(
     styleText(label: label, text: text, size: size, color: color, style: style)
 }
 
+func styleText(
+    textField: UITextField,
+    text: String,
+    size: CGFloat,
+    color: UIColor,
+    style: FontStyle
+    ) {
+    textField.textColor = color
+    textField.font = style.font(size: size)
+    textField.attributedPlaceholder = NSAttributedString(
+        string: text,
+        attributes: [
+            NSAttributedString.Key.foregroundColor: color,
+            NSAttributedString.Key.font: style.font(size: size)
+        ]
+    )
+}
+
 enum FontStyle {
     case medium, bold, light, regular
+
+    func font(size: CGFloat) -> UIFont {
+        switch self {
+        case .medium:
+            return UIFont.init(name: "CeraPro-Medium", size: size)!
+        case .regular:
+            return UIFont.init(name: "CeraPro", size: size)!
+        case .bold:
+            return UIFont.init(name: "CeraPro-Bold", size: size)!
+        case .light:
+            return UIFont.init(name: "CeraPro-Light", size: size)!
+        }
+    }
 }
