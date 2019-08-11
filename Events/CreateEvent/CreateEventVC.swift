@@ -41,11 +41,12 @@ import SwiftIconFont
   }
   
   func setupLocationView(locationName: String) {
-    removeActivityIndicator()
-    locationView = LocationView(locationName: locationName)
-    locationView?.locationButton.addTarget(self, action: #selector(onChangeLocation), for: .touchUpInside)
-    locationView?.submitButton.addTarget(self, action: #selector(setupDateView), for: .touchUpInside)
-    view = locationView
+    setupDescriptionView()
+//    removeActivityIndicator()
+//    locationView = LocationView(locationName: locationName)
+//    locationView?.locationButton.addTarget(self, action: #selector(onChangeLocation), for: .touchUpInside)
+//    locationView?.submitButton.addTarget(self, action: #selector(setupDateView), for: .touchUpInside)
+//    view = locationView
   }
   
   func setupDateView() {

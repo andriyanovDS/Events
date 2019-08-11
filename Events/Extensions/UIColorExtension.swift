@@ -51,6 +51,6 @@ extension UIColor {
   }
 
   static func lightYellow(alpha: CGFloat = 1) -> UIColor {
-    return UIColor(red: 248/255, green: 92/252, blue: 80/187, alpha: alpha)
+    return UIColor(red: 255/255, green: 252/255, blue: 187/255, alpha: alpha)
   }
 }

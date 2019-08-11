@@ -47,7 +47,6 @@
 		7467B6EF22D514F500A1BFE9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7467B6EE22D514F500A1BFE9 /* GoogleService-Info.plist */; };
 		7467B6F122D52C5D00A1BFE9 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6F022D52C5D00A1BFE9 /* Coordinator.swift */; };
 		74697FC022D0E69B00D5B5F4 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FBF22D0E69B00D5B5F4 /* CalendarViewController.swift */; };
-		74697FC622D0F67000D5B5F4 /* commonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FC522D0F67000D5B5F4 /* commonStyles.swift */; };
 		74697FC822D11F7F00D5B5F4 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FC722D11F7F00D5B5F4 /* UIViewExtension.swift */; };
 		74697FCA22D200A900D5B5F4 /* Month.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FC922D200A900D5B5F4 /* Month.swift */; };
 		74697FCC22D200DF00D5B5F4 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FCB22D200DF00D5B5F4 /* Day.swift */; };
@@ -90,6 +89,9 @@
 		74F0F5632300168900170C6C /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F5622300168900170C6C /* Array.swift */; };
 		74F0F5652300438C00170C6C /* DescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F5642300438C00170C6C /* DescriptionView.swift */; };
 		74F0F56723008BAC00170C6C /* HintView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F56623008BAC00170C6C /* HintView.swift */; };
+		74F0F5692300A3C800170C6C /* shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F5682300A3C800170C6C /* shadow.swift */; };
+		74F0F56C2300A79000170C6C /* TextFormattingTipsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F56B2300A79000170C6C /* TextFormattingTipsVC.swift */; };
+		74F0F56E2300A79E00170C6C /* TextFormattingTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F56D2300A79E00170C6C /* TextFormattingTipsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -135,7 +137,6 @@
 		7467B6EE22D514F500A1BFE9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7467B6F022D52C5D00A1BFE9 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		74697FBF22D0E69B00D5B5F4 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
-		74697FC522D0F67000D5B5F4 /* commonStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = commonStyles.swift; sourceTree = "<group>"; };
 		74697FC722D11F7F00D5B5F4 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		74697FC922D200A900D5B5F4 /* Month.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Month.swift; sourceTree = "<group>"; };
 		74697FCB22D200DF00D5B5F4 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
@@ -178,6 +179,9 @@
 		74F0F5622300168900170C6C /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		74F0F5642300438C00170C6C /* DescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionView.swift; sourceTree = "<group>"; };
 		74F0F56623008BAC00170C6C /* HintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintView.swift; sourceTree = "<group>"; };
+		74F0F5682300A3C800170C6C /* shadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shadow.swift; sourceTree = "<group>"; };
+		74F0F56B2300A79000170C6C /* TextFormattingTipsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormattingTipsVC.swift; sourceTree = "<group>"; };
+		74F0F56D2300A79E00170C6C /* TextFormattingTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormattingTipsView.swift; sourceTree = "<group>"; };
 		BB7CB0EF704E01EF74586F6F /* Pods-Events.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Events.release.xcconfig"; path = "Target Support Files/Pods-Events/Pods-Events.release.xcconfig"; sourceTree = "<group>"; };
 		F90EB0D8C0AEB4BE50B8CA2F /* Pods-Events.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Events.debug.xcconfig"; path = "Target Support Files/Pods-Events/Pods-Events.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -280,7 +284,6 @@
 				74697FBE22D0E68400D5B5F4 /* Calendar */,
 				745243A922CE85BA00C930C8 /* AppDelegate.swift */,
 				7467B6F022D52C5D00A1BFE9 /* Coordinator.swift */,
-				74697FC522D0F67000D5B5F4 /* commonStyles.swift */,
 				7467B6DE22D4E2E300A1BFE9 /* TabBarViewController.swift */,
 				748E0AFF22D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift */,
 				745243B022CE85BC00C930C8 /* Assets.xcassets */,
@@ -364,6 +367,7 @@
 		7478F4F322F601FD00A43F52 /* CreateEvent */ = {
 			isa = PBXGroup;
 			children = (
+				74F0F56A2300A76800170C6C /* TextFormattingTips */,
 				7478F4F422F6022100A43F52 /* CreateEventVC.swift */,
 				7478F4F822F6033C00A43F52 /* CreateEventViewModel.swift */,
 				7478F50522F6251900A43F52 /* LocationView.swift */,
@@ -392,6 +396,7 @@
 			isa = PBXGroup;
 			children = (
 				7478F50822F6263C00A43F52 /* text.swift */,
+				74F0F5682300A3C800170C6C /* shadow.swift */,
 			);
 			path = Styles;
 			sourceTree = "<group>";
@@ -460,6 +465,15 @@
 				74D9655E22F2272D00D828C1 /* UserDetailsView.swift */,
 			);
 			path = UserDetails;
+			sourceTree = "<group>";
+		};
+		74F0F56A2300A76800170C6C /* TextFormattingTips */ = {
+			isa = PBXGroup;
+			children = (
+				74F0F56B2300A79000170C6C /* TextFormattingTipsVC.swift */,
+				74F0F56D2300A79E00170C6C /* TextFormattingTipsView.swift */,
+			);
+			path = TextFormattingTips;
 			sourceTree = "<group>";
 		};
 		ACC57B6C8ED958466573C88C /* Pods */ = {
@@ -622,14 +636,15 @@
 				74697FC022D0E69B00D5B5F4 /* CalendarViewController.swift in Sources */,
 				745243AC22CE85BA00C930C8 /* RootScreenViewController.swift in Sources */,
 				748E0B0022D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift in Sources */,
+				74F0F5692300A3C800170C6C /* shadow.swift in Sources */,
 				748E0B0E22DA24C000B061C7 /* APIRequest.swift in Sources */,
 				748E0B1F22DB7E2C00B061C7 /* SearchBarDelegate.swift in Sources */,
-				74697FC622D0F67000D5B5F4 /* commonStyles.swift in Sources */,
 				743816A422E8F74400AA4960 /* DayButton.swift in Sources */,
 				7478F50222F60CFD00A43F52 /* Location.swift in Sources */,
 				7478F4F722F6023F00A43F52 /* DateView.swift in Sources */,
 				7467B6DF22D4E2E300A1BFE9 /* TabBarViewController.swift in Sources */,
 				745243AA22CE85BA00C930C8 /* AppDelegate.swift in Sources */,
+				74F0F56E2300A79E00170C6C /* TextFormattingTipsView.swift in Sources */,
 				744B7D9B22E6535C00A839A6 /* LoginCoordinator.swift in Sources */,
 				7465235822EFA0320027FB22 /* ProfileScreenView.swift in Sources */,
 				74A1AE2322D64BFB00C39525 /* LoginViewModel.swift in Sources */,
@@ -652,6 +667,7 @@
 				7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */,
 				748E0B0222D8FD0000B061C7 /* LoginViewControllerSetupViewExtension.swift in Sources */,
 				7478F4F922F6033C00A43F52 /* CreateEventViewModel.swift in Sources */,
+				74F0F56C2300A79000170C6C /* TextFormattingTipsVC.swift in Sources */,
 				746F0B6022FCDB0800F7301D /* EventDurationRange.swift in Sources */,
 				748E0B2722DBBB2900B061C7 /* LocationSearchStackView.swift in Sources */,
 				744B7C9622E4FA2D00A839A6 /* RootScreenCoordinator.swift in Sources */,

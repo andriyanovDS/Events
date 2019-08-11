@@ -190,7 +190,7 @@ extension LoginViewController {
     let messageView = UIView()
     messageView.layer.cornerRadius = 7
     messageView.backgroundColor = UIColor.lightRed()
-    shadowStyle(view: messageView, radius: 7, color: .black)
+    addShadow(view: messageView, radius: 7, color: .black)
     
     let label = UILabel()
     label.text = text

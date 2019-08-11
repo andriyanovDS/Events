@@ -58,7 +58,7 @@ class CategoriesViewController {
     setupCateroryWrapperViewConstraints(view: wrapperView)
     setupCateroryButtonConstraints(wrapperView: wrapperView, button: categoryButton)
     
-    shadowStyle(view: categoryButton, radius: 3, color: .black)
+    addShadow(view: categoryButton, radius: 3, color: .black)
   }
   
   func setupCategoriesStackViewConstraints(stackView: UIView) {

@@ -140,7 +140,7 @@ extension CalendarViewController {
   func setupContentView() {
     contentView.backgroundColor = .white
     contentView.layer.cornerRadius = 5
-    shadowStyle(view: contentView, radius: 7, color: .black)
+    addShadow(view: contentView, radius: 7, color: .black)
     
     view.addSubview(contentView)
     
