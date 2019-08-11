@@ -13,7 +13,7 @@ class RootScreenViewController: UIViewController {
   var coordinator: RootScreenCoordinator?
   
   let titleLabel = UILabel()
-  let categoriesView = CategoriesView()
+  let categoriesView = CategoriesViewController()
   let locationButton = FilterButton()
   let datesButton = FilterButton()
   let searchBar = SearchBarViewController(nibName: nil, bundle: nil)

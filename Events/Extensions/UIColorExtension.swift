@@ -9,6 +9,10 @@
 import UIKit
 
 extension UIColor {
+
+  static func gray100(alpha: CGFloat = 1) -> UIColor {
+    return UIColor(red: 238/242, green: 238/248, blue: 238/253, alpha: alpha)
+  }
   
   static func gray200(alpha: CGFloat = 1) -> UIColor {
     return UIColor(red: 238/255, green: 238/255, blue: 238/255, alpha: alpha)
@@ -44,5 +48,9 @@ extension UIColor {
   
   static func lightRed(alpha: CGFloat = 1) -> UIColor {
     return UIColor(red: 248/255, green: 92/255, blue: 80/255, alpha: alpha)
+  }
+
+  static func lightYellow(alpha: CGFloat = 1) -> UIColor {
+    return UIColor(red: 248/255, green: 92/252, blue: 80/187, alpha: alpha)
   }
 }

@@ -17,6 +17,7 @@ class CreateEventViewModel {
   var geocode: Geocode?
   var dates: [Date]
   var duration: EventDurationRange?
+  var category: CategoryId?
 
   lazy var durations = [
     EventDurationRange(min: nil, max: 1),
@@ -92,6 +93,10 @@ class CreateEventViewModel {
         self.duration = v
       }
     )
+  }
+
+  func onSelectCategory(id: CategoryId) {
+    category = id
   }
 }
 

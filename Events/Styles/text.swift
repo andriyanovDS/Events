@@ -56,6 +56,18 @@ func styleText(
   )
 }
 
+func styleText(
+  textView: UITextView,
+  text: String,
+  size: CGFloat,
+  color: UIColor,
+  style: FontStyle
+  ) {
+  textView.textColor = color
+  textView.font = style.font(size: size)
+  textView.text = text
+}
+
 enum FontStyle {
   case medium, bold, light, regular
 

@@ -14,11 +14,11 @@ class CategoriesViewModel {
   
   init() {
     categories = [
-      Category(id: CategoryId.art, name: "Arts and Entertainment"),
-      Category(id: .workshop, name: "Classes and workshops"),
-      Category(id: .food, name: "Food and drink"),
-      Category(id: .health, name: "Health and welness"),
-      Category(id: .sport, name: "Sport and outdoors")
+      Category(id: .art),
+      Category(id: .workshop),
+      Category(id: .food),
+      Category(id: .health),
+      Category(id: .sport)
     ]
   }
 }

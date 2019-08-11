@@ -15,6 +15,8 @@ import SwiftIconFont
   DateViewDelegate {
   var locationView: LocationView?
   var dateView: DateView?
+  var categoriesView: CategoriesView?
+  var descriptionView: DescriptionView?
   var coordinator: CreateEventCoordinator?
   var viewModel: CreateEventViewModel!
   
@@ -56,8 +58,26 @@ import SwiftIconFont
     dateView?.delegate = self
     dateView?.datePicker.date = viewModel.dates[0]
     dateView?.dateButton.addTarget(self, action: #selector(selectDate), for: .touchUpInside)
+    dateView?.submitButton.addTarget(self, action: #selector(setupCategoriesView), for: .touchUpInside)
     view = dateView
     locationView = nil
+  }
+
+  func setupCategoriesView() {
+    categoriesView = CategoriesView()
+    categoriesView?.categoryButtons.forEach { $0.addTarget(
+      self,
+      action: #selector(onPressCategoryButton(_:)),
+      for: .touchUpInside
+    )}
+    view = categoriesView
+    dateView = nil
+  }
+
+  func setupDescriptionView() {
+    descriptionView = DescriptionView()
+    view = descriptionView
+    categoriesView = nil
   }
   
   func onChangeLocationName(_ name: String) {
@@ -68,14 +88,9 @@ import SwiftIconFont
     dateView?.setFormattedDate(formattedDate, daysCount: daysCount)
   }
 
-  private func toLabel(duration: EventDurationRange) -> String {
-    return duration.min
-      .chain({ min in duration.max.foldL(
-        none: { "Более \(min) часов" },
-        some: { max in "\(min) - \(max) часов" }
-      )})
-      .alt({ duration.max.map { max in "\(max) \(max > 1 ? "часов" : "час")" } })
-      .getOrElse(result: "")
+  @objc private func onPressCategoryButton(_ button: CategoryButton) {
+    viewModel.onSelectCategory(id: button.category)
+    setupDescriptionView()
   }
   
   private func setupNavigationBar() {
@@ -100,6 +115,16 @@ import SwiftIconFont
     if dateView != nil, let geocode = viewModel.geocode {
       setupLocationView(locationName: geocode.fullLocationName())
       dateView = nil
+      return
+    }
+    if categoriesView != nil {
+      setupDateView()
+      categoriesView = nil
+      return
+    }
+    if descriptionView != nil {
+      setupCategoriesView()
+      descriptionView = nil
       return
     }
     viewModel.closeScreen()
@@ -166,6 +191,16 @@ import SwiftIconFont
       scrollToActiveTextField(keyboardHeight: inset.bottom)
     }
   }
+}
+
+private func toLabel(duration: EventDurationRange) -> String {
+  return duration.min
+    .chain({ min in duration.max.foldL(
+      none: { "Более \(min) часов" },
+      some: { max in "\(min) - \(max) часов" }
+      )})
+    .alt({ duration.max.map { max in "\(max) \(max > 1 ? "часов" : "час")" } })
+    .getOrElse(result: "")
 }
 
 extension CreateEventViewController: UIPickerViewDataSource {

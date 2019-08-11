@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CategoriesView {
+class CategoriesViewController {
   let view = UIScrollView()
   private let viewModel = CategoriesViewModel()
   
