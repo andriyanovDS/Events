@@ -24,28 +24,6 @@ class DescriptionView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func showHint() {
-    let hintView = setupHintView()
-    UIView.animate(
-      withDuration: 0.3,
-      animations: {
-        hintView.alpha = 1
-      },
-      completion: nil
-    )
-    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-      UIView.animate(
-        withDuration: 0.3,
-        animations: {
-          hintView.alpha = 0
-        },
-        completion: { _ in
-          hintView.removeFromSuperview()
-        }
-      )
-    }
-  }
-
   private func setupView() {
     backgroundColor = .white
 
@@ -87,23 +65,6 @@ class DescriptionView: UIView {
     sv(contentView.sv([label, textView, submitButton]))
 
     setupConstraints()
-
-    showHint()
-  }
-
-  private func setupHintView() -> UIView {
-    let hintView = HintView(
-      titleText: "Оформите свой текст",
-      descriptionText: "Форматируйте текст, используя специальные символы, чтобы сделать текст более подробным и ясным",
-      linkText: "Нажмите, чтобы узнать больше"
-    )
-    hintView.alpha = 0
-    contentView.sv(hintView)
-
-    hintView.width(220)
-    hintView.Top == textView.Top + 20
-    hintView.Right == textView.Right - 10
-    return hintView
   }
 
   private func setupConstraints() {

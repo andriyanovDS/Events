@@ -41,27 +41,27 @@ import SwiftIconFont
   }
   
   func setupLocationView(locationName: String) {
-    setupDescriptionView()
-//    removeActivityIndicator()
-//    locationView = LocationView(locationName: locationName)
-//    locationView?.locationButton.addTarget(self, action: #selector(onChangeLocation), for: .touchUpInside)
-//    locationView?.submitButton.addTarget(self, action: #selector(setupDateView), for: .touchUpInside)
-//    view = locationView
+    removeActivityIndicator()
+    locationView = LocationView(locationName: locationName)
+    locationView?.locationButton.addTarget(self, action: #selector(onChangeLocation), for: .touchUpInside)
+    locationView?.submitButton.addTarget(self, action: #selector(setupDateView), for: .touchUpInside)
+    view = locationView
   }
   
   func setupDateView() {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "HH:mm"
-    dateView = DateView(
-      startTime: dateFormatter.string(from: viewModel.dates[0]),
-      duration: toLabel(duration: viewModel.duration!)
-    )
-    dateView?.delegate = self
-    dateView?.datePicker.date = viewModel.dates[0]
-    dateView?.dateButton.addTarget(self, action: #selector(selectDate), for: .touchUpInside)
-    dateView?.submitButton.addTarget(self, action: #selector(setupCategoriesView), for: .touchUpInside)
-    view = dateView
-    locationView = nil
+    setupDescriptionView()
+//    let dateFormatter = DateFormatter()
+//    dateFormatter.dateFormat = "HH:mm"
+//    dateView = DateView(
+//      startTime: dateFormatter.string(from: viewModel.dates[0]),
+//      duration: toLabel(duration: viewModel.duration!)
+//    )
+//    dateView?.delegate = self
+//    dateView?.datePicker.date = viewModel.dates[0]
+//    dateView?.dateButton.addTarget(self, action: #selector(selectDate), for: .touchUpInside)
+//    dateView?.submitButton.addTarget(self, action: #selector(setupCategoriesView), for: .touchUpInside)
+//    view = dateView
+//    locationView = nil
   }
 
   func setupCategoriesView() {
@@ -79,6 +79,14 @@ import SwiftIconFont
     descriptionView = DescriptionView()
     view = descriptionView
     categoriesView = nil
+
+    let popup = HintPopup(
+      title: "Оформите свой текст",
+      description: "Форматируйте свой текст, используя специальные символы, чтобы сделать его более подробным и ясным.",
+      link: "Нажмите, чтобы узнать больше",
+      image: UIImage(named: "textFormatting")!
+    )
+    viewModel.openHintPopup(popup: popup)
   }
   
   func onChangeLocationName(_ name: String) {
@@ -194,16 +202,6 @@ import SwiftIconFont
   }
 }
 
-private func toLabel(duration: EventDurationRange) -> String {
-  return duration.min
-    .chain({ min in duration.max.foldL(
-      none: { "Более \(min) часов" },
-      some: { max in "\(min) - \(max) часов" }
-      )})
-    .alt({ duration.max.map { max in "\(max) \(max > 1 ? "часов" : "час")" } })
-    .getOrElse(result: "")
-}
-
 extension CreateEventViewController: UIPickerViewDataSource {
   
   private func pickerRowValueToDurationRange(_ row: Int) -> EventDurationRange? {
@@ -232,4 +230,14 @@ extension CreateEventViewController: UIPickerViewDataSource {
   func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
     return pickerRowValueToDurationLabel(row)
   }
+}
+
+private func toLabel(duration: EventDurationRange) -> String {
+  return duration.min
+    .chain({ min in duration.max.foldL(
+      none: { "Более \(min) часов" },
+      some: { max in "\(min) - \(max) часов" }
+      )})
+    .alt({ duration.max.map { max in "\(max) \(max > 1 ? "часов" : "час")" } })
+    .getOrElse(result: "")
 }

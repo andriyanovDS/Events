@@ -92,6 +92,11 @@
 		74F0F5692300A3C800170C6C /* shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F5682300A3C800170C6C /* shadow.swift */; };
 		74F0F56C2300A79000170C6C /* TextFormattingTipsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F56B2300A79000170C6C /* TextFormattingTipsVC.swift */; };
 		74F0F56E2300A79E00170C6C /* TextFormattingTipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F56D2300A79E00170C6C /* TextFormattingTipsView.swift */; };
+		74F0F5702300A80F00170C6C /* TextFormattingTipsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F56F2300A80F00170C6C /* TextFormattingTipsViewModel.swift */; };
+		74F0F5732300B55A00170C6C /* HintPopupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F5722300B55A00170C6C /* HintPopupVC.swift */; };
+		74F0F5752300B5BF00170C6C /* HintPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F5742300B5BF00170C6C /* HintPopupView.swift */; };
+		74F0F5772300B7EC00170C6C /* HintPopupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F5762300B7EC00170C6C /* HintPopupViewModel.swift */; };
+		74F0F5792300C5B700170C6C /* HintPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F5782300C5B700170C6C /* HintPopup.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -182,6 +187,11 @@
 		74F0F5682300A3C800170C6C /* shadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shadow.swift; sourceTree = "<group>"; };
 		74F0F56B2300A79000170C6C /* TextFormattingTipsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormattingTipsVC.swift; sourceTree = "<group>"; };
 		74F0F56D2300A79E00170C6C /* TextFormattingTipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormattingTipsView.swift; sourceTree = "<group>"; };
+		74F0F56F2300A80F00170C6C /* TextFormattingTipsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormattingTipsViewModel.swift; sourceTree = "<group>"; };
+		74F0F5722300B55A00170C6C /* HintPopupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintPopupVC.swift; sourceTree = "<group>"; };
+		74F0F5742300B5BF00170C6C /* HintPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintPopupView.swift; sourceTree = "<group>"; };
+		74F0F5762300B7EC00170C6C /* HintPopupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintPopupViewModel.swift; sourceTree = "<group>"; };
+		74F0F5782300C5B700170C6C /* HintPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintPopup.swift; sourceTree = "<group>"; };
 		BB7CB0EF704E01EF74586F6F /* Pods-Events.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Events.release.xcconfig"; path = "Target Support Files/Pods-Events/Pods-Events.release.xcconfig"; sourceTree = "<group>"; };
 		F90EB0D8C0AEB4BE50B8CA2F /* Pods-Events.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Events.debug.xcconfig"; path = "Target Support Files/Pods-Events/Pods-Events.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -367,6 +377,7 @@
 		7478F4F322F601FD00A43F52 /* CreateEvent */ = {
 			isa = PBXGroup;
 			children = (
+				74F0F5712300B54600170C6C /* HintPopup */,
 				74F0F56A2300A76800170C6C /* TextFormattingTips */,
 				7478F4F422F6022100A43F52 /* CreateEventVC.swift */,
 				7478F4F822F6033C00A43F52 /* CreateEventViewModel.swift */,
@@ -375,7 +386,6 @@
 				74F0F55E22FF6F5500170C6C /* CategoriesView.swift */,
 				74F0F5642300438C00170C6C /* DescriptionView.swift */,
 				74F0F56022FF7E8800170C6C /* CategoryButton.swift */,
-				74F0F56623008BAC00170C6C /* HintView.swift */,
 			);
 			path = CreateEvent;
 			sourceTree = "<group>";
@@ -471,9 +481,22 @@
 			isa = PBXGroup;
 			children = (
 				74F0F56B2300A79000170C6C /* TextFormattingTipsVC.swift */,
+				74F0F56F2300A80F00170C6C /* TextFormattingTipsViewModel.swift */,
 				74F0F56D2300A79E00170C6C /* TextFormattingTipsView.swift */,
 			);
 			path = TextFormattingTips;
+			sourceTree = "<group>";
+		};
+		74F0F5712300B54600170C6C /* HintPopup */ = {
+			isa = PBXGroup;
+			children = (
+				74F0F5722300B55A00170C6C /* HintPopupVC.swift */,
+				74F0F5762300B7EC00170C6C /* HintPopupViewModel.swift */,
+				74F0F5742300B5BF00170C6C /* HintPopupView.swift */,
+				74F0F56623008BAC00170C6C /* HintView.swift */,
+				74F0F5782300C5B700170C6C /* HintPopup.swift */,
+			);
+			path = HintPopup;
 			sourceTree = "<group>";
 		};
 		ACC57B6C8ED958466573C88C /* Pods */ = {
@@ -626,7 +649,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74F0F5732300B55A00170C6C /* HintPopupVC.swift in Sources */,
 				74697FCE22D2022700D5B5F4 /* CalendarViewModel.swift in Sources */,
+				74F0F5772300B7EC00170C6C /* HintPopupViewModel.swift in Sources */,
 				7478F50622F6251900A43F52 /* LocationView.swift in Sources */,
 				748E0B0622DA132F00B061C7 /* GeocodeObserver.swift in Sources */,
 				74A1AE2122D5DF0300C39525 /* OptionalExtension.swift in Sources */,
@@ -667,6 +692,7 @@
 				7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */,
 				748E0B0222D8FD0000B061C7 /* LoginViewControllerSetupViewExtension.swift in Sources */,
 				7478F4F922F6033C00A43F52 /* CreateEventViewModel.swift in Sources */,
+				74F0F5792300C5B700170C6C /* HintPopup.swift in Sources */,
 				74F0F56C2300A79000170C6C /* TextFormattingTipsVC.swift in Sources */,
 				746F0B6022FCDB0800F7301D /* EventDurationRange.swift in Sources */,
 				748E0B2722DBBB2900B061C7 /* LocationSearchStackView.swift in Sources */,
@@ -678,6 +704,7 @@
 				748E0B1222DA24DD00B061C7 /* APIClient.swift in Sources */,
 				748E0B1A22DB6B9200B061C7 /* LocationSearchViewController.swift in Sources */,
 				7467B6F122D52C5D00A1BFE9 /* Coordinator.swift in Sources */,
+				74F0F5752300B5BF00170C6C /* HintPopupView.swift in Sources */,
 				7478F4FE22F60CB900A43F52 /* Event.swift in Sources */,
 				74D9655F22F2272D00D828C1 /* UserDetailsView.swift in Sources */,
 				74F0F5632300168900170C6C /* Array.swift in Sources */,
@@ -688,6 +715,7 @@
 				745243BF22CF965500C930C8 /* SearchBarUITextField.swift in Sources */,
 				748E0B1422DA26BC00B061C7 /* GeolocationAPI.swift in Sources */,
 				741DCF8922D38264005783A3 /* RootScreenViewModel.swift in Sources */,
+				74F0F5702300A80F00170C6C /* TextFormattingTipsViewModel.swift in Sources */,
 				748E0B2122DB82A200B061C7 /* LocationSearchViewModel.swift in Sources */,
 				7463A4A222DE88AC009171E1 /* UIButtonScaleOnPress.swift in Sources */,
 				7463A4A022DE7760009171E1 /* TextFieldWithBottomLine.swift in Sources */,

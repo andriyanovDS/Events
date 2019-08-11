@@ -9,11 +9,9 @@
 import Foundation
 import UIKit
 
-class ProfileScreenCoordinator:
-  MainCoordinator,
+class ProfileScreenCoordinator: MainCoordinator,
   UserDetailsScreenCoordinator,
-  CreateEventCoordinator,
-LocationSearchCoordinator {
+  LocationSearchCoordinator {
   
   func openUserDetails(user: User) {
     let userDetailsViewController = UserDetailsViewController(user: user, coordinator: self)
@@ -36,6 +34,12 @@ LocationSearchCoordinator {
     navigationController.pushViewController(createEventViewController, animated: true)
   }
   
+  override func start() {
+    
+  }
+}
+
+extension ProfileScreenCoordinator: CreateEventCoordinator {
   func openLocationSearchBar(onResult: @escaping (Geocode) -> Void) {
     let viewController = LocationSearchViewController()
     viewController.coordinator = self
@@ -44,11 +48,11 @@ LocationSearchCoordinator {
     viewController.modalTransitionStyle = .coverVertical
     navigationController.present(viewController, animated: true, completion: nil)
   }
-  
+
   func onLocationDidSelected() {
     self.navigationController.dismiss(animated: true, completion: nil)
   }
-  
+
   func openCalendar(onResult: @escaping (SelectedDates) -> Void) {
     let calendarViewController = CalendarViewController()
     calendarViewController.modalPresentationStyle = .overCurrentContext
@@ -56,12 +60,35 @@ LocationSearchCoordinator {
     calendarViewController.onResult = onResult
     navigationController.present(calendarViewController, animated: false, completion: nil)
   }
-  
+
   func onDateDidSelected() {
     self.navigationController.dismiss(animated: true, completion: nil)
   }
-  
-  override func start() {
-    
+
+  func openHintPopup(hintPopup: HintPopup) {
+    let viewController = HintPopupVC(hintPopup: hintPopup)
+    viewController.coordinator = self
+    viewController.modalPresentationStyle = .overCurrentContext
+    viewController.isModalInPopover = true
+    navigationController.present(viewController, animated: false, completion: nil)
+  }
+}
+
+extension ProfileScreenCoordinator: HintPopupViewCoordinator {
+
+  func openTextFormattingTips() {
+    let viewController = TextFormattingTipsVC()
+    viewController.coordinator = self
+    navigationController.present(viewController, animated: true, completion: nil)
+  }
+
+  func closePopup(onComplete: (() -> Void)?) {
+     self.navigationController.dismiss(animated: false, completion: onComplete)
+  }
+}
+
+extension ProfileScreenCoordinator: TextFormattingTipsCoordinator {
+  func closeTextFormattingTips() {
+    self.navigationController.dismiss(animated: true, completion: nil)
   }
 }

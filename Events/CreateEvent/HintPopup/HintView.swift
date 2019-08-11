@@ -10,22 +10,14 @@ import UIKit
 import Stevia
 
 class HintView: UIView {
-  let titleText: String
-  let descriptionText: String
-  let linkText: String
+  private let popup: HintPopup
   private let contentView = UIView()
   private let label = UILabel()
   private let descriptionLabel = UILabel()
   private let linkLabel = UILabel()
 
-  init(
-    titleText: String,
-    descriptionText: String,
-    linkText: String
-    ) {
-    self.titleText = titleText
-    self.descriptionText = descriptionText
-    self.linkText = linkText
+  init(popup: HintPopup) {
+    self.popup = popup
     super.init(frame: CGRect.zero)
     setupView()
   }
@@ -41,21 +33,21 @@ class HintView: UIView {
 
     styleText(
       label: label,
-      text: titleText,
-      size: 14,
+      text: popup.title,
+      size: 18,
       color: UIColor.gray900(),
       style: .bold
     )
     styleText(
       label: descriptionLabel,
-      text: descriptionText,
-      size: 14,
+      text: popup.description,
+      size: 16,
       color: .gray600(),
       style: .medium
     )
     styleText(
       label: linkLabel,
-      text: linkText,
+      text: popup.link,
       size: 14,
       color: .lightBlue(),
       style: .medium
@@ -66,22 +58,21 @@ class HintView: UIView {
     })
     sv(contentView.sv([label, descriptionLabel, linkLabel]))
     setupConstraints()
+    [label, descriptionLabel, linkLabel].forEach { $0.textAlignment = .center }
   }
 
   private func setupConstraints() {
     contentView
       .centerInContainer()
       .fillContainer()
-      .left(15)
-      .right(15)
 
-    label.top(10).left(0).right(0)
+    label.top(10).left(15).right(15)
     align(vertically: [label, descriptionLabel, linkLabel])
     layout(
       |-label-|,
-      5,
-      |-descriptionLabel.left(15).right(15)-|,
-      5,
+      10,
+      |-15-descriptionLabel-15-|,
+      10,
       |-linkLabel.bottom(10)-|
     )
   }

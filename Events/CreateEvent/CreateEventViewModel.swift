@@ -98,6 +98,10 @@ class CreateEventViewModel {
   func onSelectCategory(id: CategoryId) {
     category = id
   }
+
+  func openHintPopup(popup: HintPopup) {
+    self.coordinator?.openHintPopup(hintPopup: popup)
+  }
 }
 
 private func generateInitialDates() -> [Date] {
@@ -157,4 +161,5 @@ protocol CreateEventViewModelDelegate: class, UIViewControllerWithActivityIndica
 protocol CreateEventCoordinator: class {
   func openCalendar(onResult: @escaping (SelectedDates) -> Void)
   func openLocationSearchBar(onResult: @escaping (Geocode) -> Void)
+  func openHintPopup(hintPopup: HintPopup)
 }
