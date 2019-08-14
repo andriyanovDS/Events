@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 class PermissionModalScreenViewModel {
-    var coordinator: PermissionModalScreenViewCoordinator?
     let url = URL(string: UIApplication.openSettingsURLString)
     
     func openAppSettings() {
@@ -18,12 +17,4 @@ class PermissionModalScreenViewModel {
             print("Settings opened: \(success)")
         })
     }
-    
-    func closeModal() {
-        coordinator?.closeModal()
-    }
-}
-
-protocol PermissionModalScreenViewCoordinator {
-    func closeModal()
 }
