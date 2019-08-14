@@ -34,6 +34,7 @@ class PermissionModalScreenViewController: UIViewController {
         modalScreenView = PermissionModalScreenView(dataView: permissionModal)
         view = modalScreenView
         modalScreenView.submitButton.addTarget(self, action: #selector(openAppSettings), for: .touchUpInside)
+        modalScreenView.closeButton.addTarget(self, action: #selector(closeModal), for: .touchUpInside)
     }
     
     @objc func openAppSettings() {
@@ -41,6 +42,6 @@ class PermissionModalScreenViewController: UIViewController {
     }
     
     @objc func closeModal() {
-        viewModel?.closeModal()
+        dismiss(animated: true, completion: nil)
     }
 }

@@ -15,6 +15,7 @@ class PermissionModalScreenView: UIView {
     let descriptionLabel = UILabel()
     let image = UIImageView()
     let viewData: PermissionModal
+    let closeButton = UIButton()
     
     init(dataView: PermissionModal) {
         viewData = dataView
@@ -31,12 +32,16 @@ class PermissionModalScreenView: UIView {
         setupPopupView()
         sv(
             titleLabel,
+            closeButton,
             descriptionLabel,
             image,
             submitButton
         )
         
+        
         layout(
+            70,
+            closeButton-25-|,
             150,
             |-titleLabel-|,
             100,
@@ -62,6 +67,17 @@ class PermissionModalScreenView: UIView {
         )
         titleLabel.style({v in
             v.textAlignment = .center
+        })
+        
+        closeButton.style({ v in
+            let image = UIImage(
+                from: .materialIcon,
+                code: "cancel",
+                textColor: UIColor.gray900(),
+                backgroundColor: .clear,
+                size: CGSize(width: 35, height: 35)
+            )
+            v.setImage(image, for: .normal)
         })
         
         styleText(
