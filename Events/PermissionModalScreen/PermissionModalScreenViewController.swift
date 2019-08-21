@@ -12,7 +12,6 @@ import UIKit
 class PermissionModalScreenViewController: UIViewController {
     var viewModel: PermissionModalScreenViewModel?
     var modalScreenView: PermissionModalScreenView!
-    var coordinator: PermissionModalScreenViewCoordinator?
     let permissionModal: PermissionModal
     init(modalType: PermissionModalType) {
         self.permissionModal = modalType.model()
@@ -27,7 +26,6 @@ class PermissionModalScreenViewController: UIViewController {
         super.viewDidLoad()
         self.loadView()
         viewModel = PermissionModalScreenViewModel()
-        viewModel?.coordinator = coordinator
     }
     
     override func loadView() {
