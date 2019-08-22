@@ -9,5 +9,5 @@
 import Foundation
 
 protocol APIRequest: Encodable {
-    associatedtype Response: Decodable
+  associatedtype Response: Decodable
 }

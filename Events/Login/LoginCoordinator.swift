@@ -10,24 +10,24 @@ import Foundation
 import UIKit
 
 class LoginCoordinator: Coordinator {
-    weak var delegate: LoginCoordinatorDelegate?
-    var navigationController: UINavigationController
-
-    init(navigationController: UINavigationController) {
-        self.navigationController = navigationController
-    }
-
-    func openRootScreen() {
-        delegate?.openRootScreen()
-    }
-
-    func start() {
-        let loginScreenViewController = LoginViewController()
-        loginScreenViewController.coordinator = self
-        navigationController.pushViewController(loginScreenViewController, animated: false)
-    }
+  weak var delegate: LoginCoordinatorDelegate?
+  var navigationController: UINavigationController
+  
+  init(navigationController: UINavigationController) {
+    self.navigationController = navigationController
+  }
+  
+  func openRootScreen() {
+    delegate?.openRootScreen()
+  }
+  
+  func start() {
+    let loginScreenViewController = LoginViewController()
+    loginScreenViewController.coordinator = self
+    navigationController.pushViewController(loginScreenViewController, animated: false)
+  }
 }
 
 protocol LoginCoordinatorDelegate: class {
-    func openRootScreen()
+  func openRootScreen()
 }

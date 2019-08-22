@@ -9,19 +9,19 @@
 import Foundation
 
 protocol SearchBarDelegate: NSObject {
-
-    func searchBarDidActivate()
-
-    func searchBarDidCancel()
+  
+  func searchBarDidActivate()
+  
+  func searchBarDidCancel()
 }
 
 extension SearchBarDelegate {
-
-    func searchBarDidActivate() {
-        print("SearchBar did activate")
-    }
-
-    func searchBarDidCancel() {
-        print("SearchBar did cancel")
-    }
+  
+  func searchBarDidActivate() {
+    print("SearchBar did activate")
+  }
+  
+  func searchBarDidCancel() {
+    print("SearchBar did cancel")
+  }
 }

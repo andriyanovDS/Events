@@ -10,13 +10,13 @@ import Foundation
 import UIKit
 
 class ProfileScreenNavigationController: UIViewController {
-
-    var coordinator: ProfileScreenCoordinator?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        coordinator = ProfileScreenCoordinator(navigationController: self.navigationController!)
-        coordinator?.start()
-    }
+  
+  var coordinator: ProfileScreenCoordinator?
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    coordinator = ProfileScreenCoordinator(navigationController: self.navigationController!)
+    coordinator?.start()
+  }
 }

@@ -9,32 +9,53 @@
 import Foundation
 
 extension Optional {
-    
-    func fold<Result>(none: Result, some: (Wrapped) -> Result) -> Result {
-        guard let nonOptional = self else {
-            return none
-        }
-        return some(nonOptional)
+  
+  func fold<Result>(none: Result, some: (Wrapped) -> Result) -> Result {
+    guard let nonOptional = self else {
+      return none
     }
-    
-    func foldL<Result>(none: () -> Result, some: (Wrapped) -> Result) -> Result {
-        guard let nonOptional = self else {
-            return none()
-        }
-        return some(nonOptional)
+    return some(nonOptional)
+  }
+  
+  func foldL<Result>(none: () -> Result, some: (Wrapped) -> Result) -> Result {
+    guard let nonOptional = self else {
+      return none()
     }
-    
-    func getOrElse(result: Wrapped) -> Wrapped {
-        guard let nonOptional = self else {
-            return result
-        }
-        return nonOptional
+    return some(nonOptional)
+  }
+  
+  func getOrElse(result: Wrapped) -> Wrapped {
+    guard let nonOptional = self else {
+      return result
     }
-    
-    func getOrElseL(_ none: () -> Wrapped) -> Wrapped {
-        guard let nonOptional = self else {
-            return none()
-        }
-        return nonOptional
+    return nonOptional
+  }
+  
+  func getOrElseL(_ none: () -> Wrapped) -> Wrapped {
+    guard let nonOptional = self else {
+      return none()
     }
+    return nonOptional
+  }
+  
+  func map<T>(_ callback: (Wrapped) -> T) -> T? {
+    guard let nonOptional = self else {
+      return nil
+    }
+    return callback(nonOptional)
+  }
+  
+  func chain<T>(_ callback: (Wrapped) -> T?) -> T? {
+    guard let nonOptional = self else {
+      return nil
+    }
+    return callback(nonOptional)
+  }
+
+  func alt(_ callback: () -> Wrapped?) -> Wrapped? {
+    guard let nonOptional = self else {
+      return callback()
+    }
+    return nonOptional
+  }
 }

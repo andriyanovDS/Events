@@ -9,8 +9,8 @@
 import Foundation
 
 struct Day {
-    let dayOfMonth: Int
-    let dayOfWeek: Int
-    let isToday: Bool
-    let date: Date
+  let dayOfMonth: Int
+  let dayOfWeek: Int
+  let isToday: Bool
+  let date: Date
 }
