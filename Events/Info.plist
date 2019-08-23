@@ -29,6 +29,9 @@
 		<string>CeraPro-Medium.ttf</string>
 		<string>CeraPro-Regular.ttf</string>
 		<string>CeraPro-Bold.ttf</string>
+		<string>CeraPro-BoldItalic.ttf</string>
+		<string>CeraPro-MediumItalic.ttf</string>
+		<string>CeraPro-Italic.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

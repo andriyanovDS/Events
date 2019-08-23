@@ -10,19 +10,28 @@ import UIKit
 
 class TextFormattingTipsVC: UIViewController {
   weak var coordinator: TextFormattingTipsCoordinator?
-  var viewModel: TextFormattingTipsViewModel?
+  var viewModel: TextFormattingTipsViewModel!
   var textFormattingTipsView: TextFormattingTipsView?
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
     viewModel = TextFormattingTipsViewModel()
-    viewModel?.coordinator = self.coordinator
+    viewModel.coordinator = self.coordinator
     setupView()
   }
 
   private func setupView() {
-    textFormattingTipsView = TextFormattingTipsView()
+    textFormattingTipsView = TextFormattingTipsView(tips: viewModel.tips)
+    textFormattingTipsView?.closeButton.addTarget(
+      self,
+      action: #selector(onPressCloseButton),
+      for: .touchUpInside
+    )
     view = textFormattingTipsView
+  }
+
+  @objc private func onPressCloseButton() {
+    viewModel.closeScreen()
   }
 }

@@ -8,6 +8,14 @@
 
 import UIKit
 
+let fontFamilyMedium = "CeraPro-Medium"
+let fontFamilyMediumItalic = "CeraPro-MediumItalic"
+let fontFamilyRegular = "CeraPro"
+let fontFamilyItalic = "CeraPro-Italic"
+let fontFamilyBold = "CeraPro-Bold"
+let fontFamilyBoldItalic = "CeraPro-BoldItalic"
+let fontFamilyLight = "CeraPro-Light"
+
 func styleText(
   label: UILabel,
   text: String,
@@ -69,18 +77,24 @@ func styleText(
 }
 
 enum FontStyle {
-  case medium, bold, light, regular
+  case medium, mediumItalic, bold, boldItalic, light, regular, italic
 
   func font(size: CGFloat) -> UIFont {
     switch self {
     case .medium:
-      return UIFont.init(name: "CeraPro-Medium", size: size)!
+      return UIFont.init(name: fontFamilyMedium, size: size)!
+    case .mediumItalic:
+      return UIFont.init(name: fontFamilyMediumItalic, size: size)!
     case .regular:
-      return UIFont.init(name: "CeraPro", size: size)!
+      return UIFont.init(name: fontFamilyRegular, size: size)!
+    case .italic:
+      return UIFont.init(name: fontFamilyItalic, size: size)!
     case .bold:
-      return UIFont.init(name: "CeraPro-Bold", size: size)!
+      return UIFont.init(name: fontFamilyBold, size: size)!
+    case .boldItalic:
+      return UIFont.init(name: fontFamilyBoldItalic, size: size)!
     case .light:
-      return UIFont.init(name: "CeraPro-Light", size: size)!
+      return UIFont.init(name: fontFamilyLight, size: size)!
     }
   }
 }
