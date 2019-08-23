@@ -28,8 +28,8 @@ class TipSectionView: UIView {
 
   private func setupView() {
     setupTitleView()
+    setupDescriptionTextLabel()
     setupExampleView()
-    setupDescriptionLabel()
   }
 
   private func setupTitleView() {
@@ -49,44 +49,42 @@ class TipSectionView: UIView {
     titleLabel.bottom(10).left(0).top(0)
   }
 
-  private func setupExampleLabel() -> UITextView {
+  private func setupExampleTextView() -> UITextView {
     let attributes = [NSAttributedString.Key.font: UIFont.init(name: "CeraPro", size: 16)]
-    let attrString = NSAttributedString(string: tip.example, attributes: attributes)
+    let attrString = NSAttributedString(
+      string: tip.example,
+      attributes: attributes as [NSAttributedString.Key: Any]
+    )
     let textStorage = TextFormattingsTextStorage(fontSize: 16)
     textStorage.append(attrString)
     let layoutManager = NSLayoutManager()
-    let containerSize = CGSize(
-      width: 150,
-      height: CGFloat.greatestFiniteMagnitude
-    )
+    let containerSize = CGSize.zero
     let container = NSTextContainer(size: containerSize)
     container.widthTracksTextView = true
     layoutManager.addTextContainer(container)
     textStorage.addLayoutManager(layoutManager)
-    let textViewFrame = CGRect(
-      x: 0,
-      y: 0,
-      width: containerSize.width,
-      height: containerSize.height
-    )
+    let textViewFrame = CGRect.zero
     return UITextView(frame: textViewFrame, textContainer: container)
   }
 
   private func setupExampleView() {
-    let exampleLabel = setupExampleLabel()
-    exampleLabel.style({ v in
+    let exampleTextView = setupExampleTextView()
+    exampleTextView.style({ v in
       v.sizeToFit()
+      v.textAlignment = .center
+      v.layer.cornerRadius = 5
     })
     addShadow(view: exampleView, radius: 3)
-    exampleView.backgroundColor = .white
-    exampleView.layer.cornerRadius = 7
-    exampleView.sv(exampleLabel)
+    exampleView.sv(exampleTextView)
     sv(exampleView)
-    exampleView.Top == titleView.Bottom + 20
-    exampleView.left(0).width(150)
+    exampleView.left(0)
+    exampleView.Top == descriptionLabel.Top
+    exampleView.Bottom == descriptionLabel.Bottom
+    exampleView.Right == self.CenterX
+    exampleTextView.top(0).right(5).left(5).bottom(0)
   }
 
-  private func setupDescriptionLabel() {
+  private func setupDescriptionTextLabel() {
     styleText(
       label: descriptionLabel,
       text: tip.description,
@@ -99,8 +97,8 @@ class TipSectionView: UIView {
       v.lineBreakMode = .byWordWrapping
     })
     sv(descriptionLabel)
-    descriptionLabel.Left == exampleView.Right + 20
-    descriptionLabel.Top == exampleView.Top + 10
+    descriptionLabel.Top == titleView.Bottom + 20
     descriptionLabel.right(0)
+    descriptionLabel.Left == self.CenterX + 15
   }
 }
