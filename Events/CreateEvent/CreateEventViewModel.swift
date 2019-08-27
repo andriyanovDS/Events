@@ -102,6 +102,14 @@ class CreateEventViewModel {
   func openHintPopup(popup: HintPopup) {
     self.coordinator?.openHintPopup(hintPopup: popup)
   }
+
+  func onSelectImages() {
+    // TODO: move to coordinator
+    let imagePickerVC = ImagePickerVC()
+    imagePickerVC.modalTransitionStyle = .coverVertical
+    imagePickerVC.modalPresentationStyle = .overCurrentContext
+    self.delegate.present(imagePickerVC, animated: false, completion: nil)
+  }
 }
 
 private func generateInitialDates() -> [Date] {

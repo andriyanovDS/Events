@@ -113,57 +113,22 @@ extension UserDetailsViewModel {
     self.delegate.present(controller, animated: true, completion: nil)
   }
   
-  private func requestCameraUsagePermission() {
-    let status = AVCaptureDevice.authorizationStatus(for: .video)
-    switch status {
-    case .authorized:
-      openCamera()
-      return
-    case .notDetermined:
-      AVCaptureDevice.requestAccess(for: .video, completionHandler: {isAuthorized in
-        if !isAuthorized {
-          return
-        }
-        self.openCamera()
-      })
-    default: return
-    }
-  }
-  
-  private func requestLibraryUsagePermission() {
-    let status = PHPhotoLibrary.authorizationStatus()
-    switch status {
-    case .authorized:
-      openLibrary()
-      return
-    case .notDetermined:
-      PHPhotoLibrary.requestAuthorization({ authStatus in
-        if authStatus != .authorized {
-          return
-        }
-        self.openLibrary()
-        
-      })
-    default: return
-    }
-  }
-  
   func showSelectImageActionSheet() {
     let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
     actionSheetController.addAction(.init(
       title: "Камера",
       style: .default,
-      handler: {[weak self] _ in
-        self?.requestCameraUsagePermission()
+      handler: {_ in
+        requestCameraUsagePermission(onOpenCamera: self.openCamera)
       }
-      ))
+    ))
     actionSheetController.addAction(.init(
       title: "Галерея",
       style: .default,
-      handler: {[weak self] _ in
-        self?.requestLibraryUsagePermission()
+      handler: {_ in
+        requestLibraryUsagePermission(onOpenLibrary: self.openLibrary)
       }
-      ))
+    ))
     actionSheetController.addAction(.init(
       title: "Закрыть",
       style: .cancel,

@@ -76,9 +76,15 @@ import SwiftIconFont
   }
 
   func setupDescriptionView() {
-    descriptionView = DescriptionView()
+    descriptionView = DescriptionView(allowMultipleImages: true)
     view = descriptionView
     categoriesView = nil
+    descriptionView?.textView.delegate = self
+    descriptionView?.selectImageButton.addTarget(
+      self,
+      action: #selector(onSelectImages),
+      for: .touchUpInside
+    )
 
     let popup = HintPopup(
       title: "Оформите свой текст",
@@ -86,7 +92,11 @@ import SwiftIconFont
       link: "Нажмите, чтобы узнать больше",
       image: UIImage(named: "textFormatting")!
     )
-    viewModel.openHintPopup(popup: popup)
+//    viewModel.openHintPopup(popup: popup)
+  }
+
+  private func isDescriptionValid(_ textView: UITextView) -> Bool {
+    return textView.text.count > 0
   }
   
   func onChangeLocationName(_ name: String) {
@@ -100,6 +110,10 @@ import SwiftIconFont
   @objc private func onPressCategoryButton(_ button: CategoryButton) {
     viewModel.onSelectCategory(id: button.category)
     setupDescriptionView()
+  }
+
+  @objc private func onSelectImages() {
+    viewModel.onSelectImages()
   }
   
   private func setupNavigationBar() {
@@ -240,4 +254,14 @@ private func toLabel(duration: EventDurationRange) -> String {
       )})
     .alt({ duration.max.map { max in "\(max) \(max > 1 ? "часов" : "час")" } })
     .getOrElse(result: "")
+}
+
+extension CreateEventViewController: UITextViewDelegate {
+
+  func textViewDidChange(_ textView: UITextView) {
+    guard let descriptionView = descriptionView else {
+      return
+    }
+    descriptionView.submitButton.isEnabled = textView.text.count > 0
+  }
 }
