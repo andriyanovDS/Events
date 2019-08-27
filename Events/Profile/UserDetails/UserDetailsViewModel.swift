@@ -126,6 +126,8 @@ extension UserDetailsViewModel {
         }
         self.openCamera()
       })
+    case .denied:
+      coordinator?.openCameraAccessModal(type: .photo, delegate: self.delegate)
     default: return
     }
   }
@@ -199,4 +201,5 @@ UINavigationControllerDelegate {
 
 protocol UserDetailsScreenCoordinator: class {
   func userDetailsDidSubmit()
+  func openCameraAccessModal(type: PermissionModalType, delegate: UserDetailsViewModelDelegate)
 }

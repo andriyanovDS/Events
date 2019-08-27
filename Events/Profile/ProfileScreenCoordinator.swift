@@ -52,7 +52,12 @@ extension ProfileScreenCoordinator: CreateEventCoordinator {
   func onLocationDidSelected() {
     self.navigationController.dismiss(animated: true, completion: nil)
   }
-
+  
+  func openCameraAccessModal(type: PermissionModalType, delegate: UserDetailsViewModelDelegate) {
+    let permissionModal = PermissionModalScreenViewController(modalType: .photo)
+    delegate.present(permissionModal, animated: true, completion: nil)
+  }
+  
   func openCalendar(onResult: @escaping (SelectedDates) -> Void) {
     let calendarViewController = CalendarViewController()
     calendarViewController.modalPresentationStyle = .overCurrentContext
