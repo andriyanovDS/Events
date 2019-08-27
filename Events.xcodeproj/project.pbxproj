@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		2253EA1A9BAA8FCE4F24E2D0 /* Pods_Events.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BDA60DD79D902BE3849FF4A /* Pods_Events.framework */; };
+		604B76282315C47300B51432 /* PermissionModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604B76272315C47300B51432 /* PermissionModal.swift */; };
+		604B762A2315C49B00B51432 /* PermissionModalScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604B76292315C49B00B51432 /* PermissionModalScreenView.swift */; };
+		604B762C2315C4D300B51432 /* PermissionModalScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604B762B2315C4D300B51432 /* PermissionModalScreenViewController.swift */; };
+		604B762E2315C4FA00B51432 /* PermissionModalScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604B762D2315C4FA00B51432 /* PermissionModalScreenViewModel.swift */; };
 		7408541F2302030900220B23 /* TipSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7408541E2302030900220B23 /* TipSectionView.swift */; };
 		7408542123020C0700220B23 /* Tip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7408542023020C0700220B23 /* Tip.swift */; };
 		741DCF8922D38264005783A3 /* RootScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8822D38264005783A3 /* RootScreenViewModel.swift */; };
@@ -66,9 +70,6 @@
 		7478F50922F6263C00A43F52 /* text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F50822F6263C00A43F52 /* text.swift */; };
 		7478F50B22F7760E00A43F52 /* UITextFieldExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F50A22F7760E00A43F52 /* UITextFieldExtension.swift */; };
 		7481190A22D7E6BA004FBE48 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 7481190922D7E6BA004FBE48 /* .swiftlint.yml */; };
-		74891CE42309E49A00A5A120 /* CeraPro-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74891CE12309E49900A5A120 /* CeraPro-Italic.ttf */; };
-		74891CE52309E49A00A5A120 /* CeraPro-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74891CE22309E49900A5A120 /* CeraPro-MediumItalic.ttf */; };
-		74891CE62309E49A00A5A120 /* CeraPro-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 74891CE32309E49900A5A120 /* CeraPro-BoldItalic.ttf */; };
 		748E0AFE22D8E2D000B061C7 /* ProfileScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0AFD22D8E2D000B061C7 /* ProfileScreenViewModel.swift */; };
 		748E0B0022D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0AFF22D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift */; };
 		748E0B0222D8FD0000B061C7 /* LoginViewControllerSetupViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B0122D8FD0000B061C7 /* LoginViewControllerSetupViewExtension.swift */; };
@@ -107,6 +108,13 @@
 
 /* Begin PBXFileReference section */
 		3BDA60DD79D902BE3849FF4A /* Pods_Events.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Events.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		604B76272315C47300B51432 /* PermissionModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionModal.swift; sourceTree = "<group>"; };
+		604B76292315C49B00B51432 /* PermissionModalScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionModalScreenView.swift; sourceTree = "<group>"; };
+		604B762B2315C4D300B51432 /* PermissionModalScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionModalScreenViewController.swift; sourceTree = "<group>"; };
+		604B762D2315C4FA00B51432 /* PermissionModalScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionModalScreenViewModel.swift; sourceTree = "<group>"; };
+		604B762F2315C61C00B51432 /* CeraPro-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-MediumItalic.ttf"; path = "../../../Downloads/CeraPro-MediumItalic.ttf"; sourceTree = "<group>"; };
+		604B76302315C62500B51432 /* CeraPro-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-BoldItalic.ttf"; path = "../../../Downloads/CeraPro-BoldItalic.ttf"; sourceTree = "<group>"; };
+		604B76312315C62D00B51432 /* CeraPro-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-Italic.ttf"; path = "../../../Downloads/CeraPro-Italic.ttf"; sourceTree = "<group>"; };
 		7408541E2302030900220B23 /* TipSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipSectionView.swift; sourceTree = "<group>"; };
 		7408542023020C0700220B23 /* Tip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tip.swift; sourceTree = "<group>"; };
 		741DCF8822D38264005783A3 /* RootScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenViewModel.swift; sourceTree = "<group>"; };
@@ -167,9 +175,6 @@
 		7478F50822F6263C00A43F52 /* text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = text.swift; sourceTree = "<group>"; };
 		7478F50A22F7760E00A43F52 /* UITextFieldExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldExtension.swift; sourceTree = "<group>"; };
 		7481190922D7E6BA004FBE48 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
-		74891CE12309E49900A5A120 /* CeraPro-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-Italic.ttf"; path = "../../../../../Downloads/CeraPro-Italic.ttf"; sourceTree = "<group>"; };
-		74891CE22309E49900A5A120 /* CeraPro-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-MediumItalic.ttf"; path = "../../../../../Downloads/CeraPro-MediumItalic.ttf"; sourceTree = "<group>"; };
-		74891CE32309E49900A5A120 /* CeraPro-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-BoldItalic.ttf"; path = "../../../../../Downloads/CeraPro-BoldItalic.ttf"; sourceTree = "<group>"; };
 		748E0AFD22D8E2D000B061C7 /* ProfileScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenViewModel.swift; sourceTree = "<group>"; };
 		748E0AFF22D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerWithActivityIndicator.swift; sourceTree = "<group>"; };
 		748E0B0122D8FD0000B061C7 /* LoginViewControllerSetupViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewControllerSetupViewExtension.swift; sourceTree = "<group>"; };
@@ -220,6 +225,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		604B76262315C45600B51432 /* PermissionModal */ = {
+			isa = PBXGroup;
+			children = (
+				604B76272315C47300B51432 /* PermissionModal.swift */,
+				604B76292315C49B00B51432 /* PermissionModalScreenView.swift */,
+				604B762B2315C4D300B51432 /* PermissionModalScreenViewController.swift */,
+				604B762D2315C4FA00B51432 /* PermissionModalScreenViewModel.swift */,
+			);
+			path = PermissionModal;
+			sourceTree = "<group>";
+		};
 		712922C640C39731F4770AB1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -241,9 +257,9 @@
 		741DCF9122D3DCAF005783A3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				74891CE32309E49900A5A120 /* CeraPro-BoldItalic.ttf */,
-				74891CE12309E49900A5A120 /* CeraPro-Italic.ttf */,
-				74891CE22309E49900A5A120 /* CeraPro-MediumItalic.ttf */,
+				604B76312315C62D00B51432 /* CeraPro-Italic.ttf */,
+				604B76302315C62500B51432 /* CeraPro-BoldItalic.ttf */,
+				604B762F2315C61C00B51432 /* CeraPro-MediumItalic.ttf */,
 				744B7C8A22E39DB700A839A6 /* CeraPro-Black.ttf */,
 				744B7C8B22E39DB700A839A6 /* CeraPro-Bold.ttf */,
 				744B7C8822E39DB700A839A6 /* CeraPro-Light.ttf */,
@@ -290,6 +306,7 @@
 		745243A822CE85BA00C930C8 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				604B76262315C45600B51432 /* PermissionModal */,
 				7478F4FC22F60BCF00A43F52 /* Models */,
 				7478F50722F6262400A43F52 /* Styles */,
 				7478F4F322F601FD00A43F52 /* CreateEvent */,
@@ -601,11 +618,8 @@
 				744B7C8D22E39DB700A839A6 /* CeraPro-Light.ttf in Resources */,
 				744B7C8F22E39DB700A839A6 /* CeraPro-Black.ttf in Resources */,
 				744B7C8E22E39DB700A839A6 /* CeraPro-Regular.ttf in Resources */,
-				74891CE62309E49A00A5A120 /* CeraPro-BoldItalic.ttf in Resources */,
 				7467B6EF22D514F500A1BFE9 /* GoogleService-Info.plist in Resources */,
 				744B7C8C22E39DB700A839A6 /* CeraPro-Medium.ttf in Resources */,
-				74891CE52309E49A00A5A120 /* CeraPro-MediumItalic.ttf in Resources */,
-				74891CE42309E49A00A5A120 /* CeraPro-Italic.ttf in Resources */,
 				744B7C9022E39DB700A839A6 /* CeraPro-Bold.ttf in Resources */,
 				745243B122CE85BC00C930C8 /* Assets.xcassets in Resources */,
 			);
@@ -725,10 +739,12 @@
 				74F0F5792300C5B700170C6C /* HintPopup.swift in Sources */,
 				74F0F56C2300A79000170C6C /* TextFormattingTipsVC.swift in Sources */,
 				7408541F2302030900220B23 /* TipSectionView.swift in Sources */,
+				604B762A2315C49B00B51432 /* PermissionModalScreenView.swift in Sources */,
 				746F0B6022FCDB0800F7301D /* EventDurationRange.swift in Sources */,
 				748E0B2722DBBB2900B061C7 /* LocationSearchStackView.swift in Sources */,
 				744B7C9622E4FA2D00A839A6 /* RootScreenCoordinator.swift in Sources */,
 				74D8DB3422DD37F800E70CB4 /* UserDetailsViewModel.swift in Sources */,
+				604B76282315C47300B51432 /* PermissionModal.swift in Sources */,
 				741DCF8C22D3A878005783A3 /* CategoriesVC.swift in Sources */,
 				7408542123020C0700220B23 /* Tip.swift in Sources */,
 				745243BD22CF7B5A00C930C8 /* SearchBarViewController.swift in Sources */,
@@ -751,9 +767,11 @@
 				748E0B2122DB82A200B061C7 /* LocationSearchViewModel.swift in Sources */,
 				7463A4A222DE88AC009171E1 /* UIButtonScaleOnPress.swift in Sources */,
 				7463A4A022DE7760009171E1 /* TextFieldWithBottomLine.swift in Sources */,
+				604B762C2315C4D300B51432 /* PermissionModalScreenViewController.swift in Sources */,
 				7467B6E522D50B2100A1BFE9 /* SavedViewController.swift in Sources */,
 				748E0B1722DA289800B061C7 /* Geocode.swift in Sources */,
 				748E0B0822DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift in Sources */,
+				604B762E2315C4FA00B51432 /* PermissionModalScreenViewModel.swift in Sources */,
 				7478F50922F6263C00A43F52 /* text.swift in Sources */,
 				74697FCC22D200DF00D5B5F4 /* Day.swift in Sources */,
 				7478F50422F60D2700A43F52 /* Prediction.swift in Sources */,

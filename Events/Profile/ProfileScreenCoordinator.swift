@@ -48,6 +48,11 @@ extension ProfileScreenCoordinator: CreateEventCoordinator {
     viewController.modalTransitionStyle = .coverVertical
     navigationController.present(viewController, animated: true, completion: nil)
   }
+  
+  func openCameraAccessModal(type: PermissionModalType, delegate: UserDetailsViewModelDelegate) {
+    let permissionModal = PermissionModalScreenViewController(modalType: .photo)
+    delegate.present(permissionModal, animated: true, completion: nil)
+  }
 
   func onLocationDidSelected() {
     self.navigationController.dismiss(animated: true, completion: nil)
