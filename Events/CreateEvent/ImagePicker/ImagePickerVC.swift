@@ -46,7 +46,6 @@ class ImagePickerVC: UIViewController {
       onSelectImageSource: onSelectImageSource,
       onSelectImage: onSelectImage
     )
-    imagePickerView?.actionsView?.scrollView.delegate = self
     imagePickerView?.closeButton.addTarget(
       self,
       action: #selector(onClose),
@@ -60,12 +59,5 @@ class ImagePickerVC: UIViewController {
     imagePickerView?.animateHideContent(onComplete: {
       self.dismiss(animated: false, completion: nil)
     })
-  }
-}
-
-extension ImagePickerVC: UIScrollViewDelegate {
-
-  func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    scrollView.contentOffset.y = 0
   }
 }

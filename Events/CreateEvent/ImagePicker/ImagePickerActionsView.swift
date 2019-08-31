@@ -9,6 +9,8 @@
 import UIKit
 import Stevia
 
+let IMAGES_STACK_VIEW_SPACING: CGFloat = 6.0
+
 class ImagePickerActionsView: UIView {
   let imageSize: CGSize
   let scrollView = UIScrollView()
@@ -41,7 +43,10 @@ class ImagePickerActionsView: UIView {
   }
 
   func setupImageButton(_ image: UIImage) {
-    let imageView = ImagePreviewView(image: image, onSelectImage: onSelectImage)
+    let imageView = ImagePreviewView(
+      image: image,
+      onSelectImage: onSelectImage
+    )
     imagesStackView.addArrangedSubview(imageView)
     imageView.width(imageSize.width).height(imageSize.height)
     imageViews.append(imageView)
@@ -64,18 +69,23 @@ class ImagePickerActionsView: UIView {
     }
   }
 
-  func scrollToSelectedImageView(imageView: ImagePreviewView, scale: CGFloat) {
+  func scrollToSelectedImageView(imageView: ImagePreviewView, scale: CGFloat) -> CGFloat {
     let rect = imagesStackView.convert(imageView.bounds, to: imageView)
     let imageIndex = imageViews.firstIndex(of: imageView) ?? 0
 
     if scale == 1 {
       if imageIndex == imageViews.count - 1 {
-        scrollToLastImage()
-        return
+        let scrollToPointX = scrollView.contentSize.width - scrollView.bounds.width
+        let scrollToPoint = CGPoint(
+          x: scrollToPointX,
+          y: 0
+        )
+        scrollView.setContentOffset(scrollToPoint, animated: false)
+        return scrollToPointX
       }
       if imageIndex == 0 {
         scrollView.setContentOffset(CGPoint.zero, animated: false)
-        return
+        return 0.0
       }
     }
 
@@ -91,14 +101,7 @@ class ImagePickerActionsView: UIView {
       height: scrollView.contentSize.height
     )
     scrollView.setContentOffset(scrollToPoint, animated: false)
-  }
-
-  private func scrollToLastImage() {
-    let scrollToPoint = CGPoint(
-      x: scrollView.contentSize.width - scrollView.bounds.width,
-      y: 0
-    )
-    scrollView.setContentOffset(scrollToPoint, animated: false)
+    return scrollToPoint.x
   }
 
   @objc func onActionDidSelected(_ item: ImagePickerItem) {
@@ -108,9 +111,23 @@ class ImagePickerActionsView: UIView {
   private func setupView() {
     clipsToBounds = true
     layer.cornerRadius = 10
-    styleImagePickerScrollView(scrollView)
-    styleImagePickerImagesStackView(imagesStackView)
-    styleImagePickerActionsStackView(actionsStackView)
+    scrollView.style({ v in
+      v.canCancelContentTouches = true
+      v.showsVerticalScrollIndicator = false
+      v.showsHorizontalScrollIndicator = false
+      v.backgroundColor = .white
+    })
+    actionsStackView.style({ v in
+      v.axis = .vertical
+      v.alignment = .fill
+      v.distribution = .fillProportionally
+    })
+    imagesStackView.style({ v in
+      v.axis = .horizontal
+      v.alignment = .fill
+      v.spacing = IMAGES_STACK_VIEW_SPACING
+      v.distribution = .fillEqually
+    })
 
     setupActions()
     sv(scrollView.sv(imagesStackView), actionsStackView)
@@ -124,30 +141,4 @@ class ImagePickerActionsView: UIView {
     imagesStackView.left(10).top(10).bottom(10).right(10)
     imagesStackView.Height == scrollView.Height
   }
-}
-
-func styleImagePickerScrollView(_ view: UIScrollView) {
-  view.style({ v in
-    v.canCancelContentTouches = true
-    v.showsVerticalScrollIndicator = false
-    v.showsHorizontalScrollIndicator = false
-    v.backgroundColor = .white
-  })
-}
-
-func styleImagePickerActionsStackView(_ view: UIStackView) {
-  view.style({ v in
-    v.axis = .vertical
-    v.alignment = .fill
-    v.distribution = .fillProportionally
-  })
-}
-
-func styleImagePickerImagesStackView(_ view: UIStackView) {
-  view.style({ v in
-    v.axis = .horizontal
-    v.alignment = .fill
-    v.spacing = 6
-    v.distribution = .fillEqually
-  })
 }

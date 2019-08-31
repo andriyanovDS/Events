@@ -45,9 +45,18 @@ class ImagePickerView: UIView {
 
   func animateShowContent() {
     contentView.bottomConstraint?.constant = -safeAreaInsets.bottom
-    UIView.animate(withDuration: 0.1, animations: {
-      self.layoutIfNeeded()
-    })
+    UIView.animate(
+      withDuration: 0.1,
+      animations: {
+        self.layoutIfNeeded()
+      },
+      completion: { _ in
+        self.adjustImageViewSelectButton(
+          scale: 1.0,
+          contentOffsetX: 0.0
+        )
+      }
+    )
   }
 
   func animateHideContent(onComplete: @escaping () -> Void) {
@@ -101,7 +110,7 @@ class ImagePickerView: UIView {
       setupSelectImageView(imageView: imageView)
       return
     }
-    changeHeadAction()
+    changeFirstAction()
     UIView.animate(withDuration: 0.2, animations: {
       self.actionsView.scrollToSelectedImageView(imageView: imageView, scale: 1.0)
       self.layoutIfNeeded()
@@ -121,6 +130,7 @@ class ImagePickerView: UIView {
       onSelectAction: onSelectAction,
       onSelectImage: onImageDidSelected
     )
+    actionsView.scrollView.delegate = self
     sv(contentView.sv(actionsView, closeButton))
     setupConstraints()
   }
@@ -134,20 +144,21 @@ class ImagePickerView: UIView {
 
   private func setupSelectImageView(imageView: ImagePreviewView) {
     state = .selectImage
-    let scale = 1 + PICKER_ACTION_BUTTON_HEIGHT / PICKER_IMAGE_WIDTH
-    self.changeHeadAction()
+    let scale = state.scale()
+    self.changeFirstAction()
     UIView.animate(withDuration: 0.2, animations: {
       self.actionsView.scrollView.heightConstraint?.constant += PICKER_ACTION_BUTTON_HEIGHT
       self.actionsView.imageViews.forEach { v in
         v.heightConstraint?.constant = PICKER_IMAGE_HEIGHT + PICKER_ACTION_BUTTON_HEIGHT
         v.widthConstraint?.constant = PICKER_IMAGE_WIDTH + PICKER_ACTION_BUTTON_HEIGHT
       }
-      self.actionsView.scrollToSelectedImageView(imageView: imageView, scale: scale)
+      let contentOffsetX = self.actionsView.scrollToSelectedImageView(imageView: imageView, scale: scale)
+      self.adjustImageViewSelectButton(scale: scale, contentOffsetX: contentOffsetX)
       self.layoutIfNeeded()
     })
   }
 
-  private func changeHeadAction() {
+  private func changeFirstAction() {
     let changedAction = actionsView.actions[0]
     if selectedImageCount == 0 {
       changedAction.action = .openCamera
@@ -158,24 +169,94 @@ class ImagePickerView: UIView {
     changedAction.labelText = "Выбрать \(selectedImageCount) \(selectedImageCount > 1 ? "изображения" : "изображение")"
   }
 
+  private func rightmostImageViewIndex(scale: CGFloat, contentOffsetX: CGFloat) -> Int {
+    let maxX = contentOffsetX + actionsView.scrollView.bounds.width
+    let imagesCount = maxX / ((PICKER_IMAGE_WIDTH + IMAGES_STACK_VIEW_SPACING) * scale)
+    let index = Int(imagesCount.rounded(.down))
+
+    if index >= actionsView.imageViews.count {
+      return actionsView.imageViews.count - 1
+    }
+    
+    return index
+  }
+
   private func setupPreviewView(imageView: ImagePreviewView) {
     state = .preview
-    self.changeHeadAction()
+    self.changeFirstAction()
+    let scale = state.scale()
     UIView.animate(withDuration: 0.2, animations: {
       self.actionsView.scrollView.heightConstraint?.constant = 100
       self.actionsView.imageViews.forEach { v in
         v.heightConstraint?.constant = PICKER_IMAGE_HEIGHT
         v.widthConstraint?.constant = PICKER_IMAGE_WIDTH
       }
-      self.actionsView.scrollToSelectedImageView(
+      let contentOffsetX = self.actionsView.scrollToSelectedImageView(
         imageView: imageView,
-        scale: 1 / (1 + (PICKER_ACTION_BUTTON_HEIGHT / PICKER_IMAGE_WIDTH))
+        scale: scale
       )
+      self.adjustImageViewSelectButton(scale: scale, contentOffsetX: contentOffsetX)
       self.layoutIfNeeded()
+    }, completion: { _ in
     })
+  }
+
+  private func setSelectButtonRightPadding(
+    for view: ImagePreviewView,
+    with bounds: CGRect,
+    contentOffsetX: CGFloat
+    ) {
+    let scrollViewMaxX = contentOffsetX + actionsView.scrollView.bounds.width
+    let offset = scrollViewMaxX - bounds.maxX - 10
+    let offsetMinX = offset - view.selectButton.bounds.width
+    var resultOffset: CGFloat = offset
+    if offsetMinX < -(bounds.width - SELECT_BUTTON_PADDING) {
+      resultOffset = -(bounds.width - SELECT_BUTTON_PADDING - view.selectButton.bounds.width)
+    }
+    if offset > -SELECT_BUTTON_PADDING {
+      resultOffset = -SELECT_BUTTON_PADDING
+    }
+    view.selectButton.rightConstraint?.constant = resultOffset
+  }
+
+  private func adjustImageViewSelectButton(scale: CGFloat, contentOffsetX: CGFloat) {
+    let index = rightmostImageViewIndex(scale: scale, contentOffsetX: contentOffsetX)
+    let imageView = actionsView.imageViews[index]
+    let bounds = CGRect(
+      x: (PICKER_IMAGE_WIDTH + IMAGES_STACK_VIEW_SPACING) * CGFloat(index) * scale,
+      y: 0,
+      width: PICKER_IMAGE_WIDTH * scale,
+      height: 0
+    )
+    self.setSelectButtonRightPadding(for: imageView, with: bounds, contentOffsetX: contentOffsetX)
+
+    actionsView.imageViews[0..<index]
+      .filter({ v in
+        return v.selectButton.rightConstraint?.constant != -SELECT_BUTTON_PADDING
+      })
+      .forEach { $0.selectButton.rightConstraint?.constant = -SELECT_BUTTON_PADDING }
+  }
+}
+
+extension ImagePickerView: UIScrollViewDelegate {
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    scrollView.contentOffset.y = 0
+    adjustImageViewSelectButton(
+      scale: state == .preview ? 1 : state.scale(),
+      contentOffsetX: scrollView.contentOffset.x
+    )
   }
 }
 
 enum ImagePickerState {
   case preview, selectImage
+
+  func scale() -> CGFloat {
+    switch self {
+    case .preview:
+      return 1 / (1 + (PICKER_ACTION_BUTTON_HEIGHT / PICKER_IMAGE_WIDTH))
+    case .selectImage:
+      return 1 + PICKER_ACTION_BUTTON_HEIGHT / PICKER_IMAGE_WIDTH
+    }
+  }
 }
