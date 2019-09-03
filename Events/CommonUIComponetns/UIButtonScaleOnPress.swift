@@ -9,6 +9,7 @@
 import UIKit
 
 class UIButtonScaleOnPress: UIButton {
+  var uniqueData: Any?
   private let animationDuration = 0.2
   private var isAnimationInProgress = false
 

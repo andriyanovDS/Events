@@ -72,6 +72,17 @@ extension ProfileScreenCoordinator: CreateEventCoordinator {
     viewController.isModalInPopover = true
     navigationController.present(viewController, animated: false, completion: nil)
   }
+
+  func openImagePicker(imagesDidSelected: @escaping ([UIImage]) -> Void) {
+    let imagePickerVC = ImagePickerVC()
+    imagePickerVC.imagesDidSelected = { images in
+      imagesDidSelected(images)
+      self.navigationController.dismiss(animated: false, completion: nil)
+    }
+    imagePickerVC.modalTransitionStyle = .coverVertical
+    imagePickerVC.modalPresentationStyle = .overCurrentContext
+    navigationController.present(imagePickerVC, animated: false, completion: nil)
+  }
 }
 
 extension ProfileScreenCoordinator: HintPopupViewCoordinator {

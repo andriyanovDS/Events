@@ -76,35 +76,90 @@ import SwiftIconFont
   }
 
   func setupDescriptionView() {
-    descriptionView = DescriptionView(allowMultipleImages: true)
+    descriptionView = DescriptionView()
     view = descriptionView
     categoriesView = nil
     descriptionView?.textView.delegate = self
-    descriptionView?.selectImageButton.addTarget(
-      self,
-      action: #selector(onSelectImages),
-      for: .touchUpInside
-    )
+    setupOpenImagePickerButton()
 
-    let popup = HintPopup(
-      title: "Оформите свой текст",
-      description: "Форматируйте свой текст, используя специальные символы, чтобы сделать его более подробным и ясным.",
-      link: "Нажмите, чтобы узнать больше",
-      image: UIImage(named: "textFormatting")!
-    )
+//    let popup = HintPopup(
+//      title: "Оформите свой текст",
+//      description: "Форматируйте свой текст, используя специальные символы, чтобы сделать его более подробным и ясным.",
+//      link: "Нажмите, чтобы узнать больше",
+//      image: UIImage(named: "textFormatting")!
+//    )
 //    viewModel.openHintPopup(popup: popup)
+  }
+
+  func onChangeLocationName(_ name: String) {
+    locationView?.locationButton.setTitle(name, for: .normal)
+  }
+
+  func onDatesDidSelected(formattedDate: String, daysCount: Int) {
+    dateView?.setFormattedDate(formattedDate, daysCount: daysCount)
+  }
+
+  func onBackAction() {
+    if dateView != nil, let geocode = viewModel.geocode {
+      setupLocationView(locationName: geocode.fullLocationName())
+      dateView = nil
+      return
+    }
+    if categoriesView != nil {
+      setupDateView()
+      categoriesView = nil
+      return
+    }
+    if descriptionView != nil {
+      setupCategoriesView()
+      descriptionView = nil
+      navigationItem.rightBarButtonItem = nil
+      return
+    }
+    viewModel.closeScreen()
+  }
+
+  func onChangeLocation() {
+    viewModel.openLocationSearchBar()
+  }
+
+  func selectDate() {
+    viewModel.openCalendar()
+  }
+
+  func endEditing() {
+    view.endEditing(true)
+  }
+
+  func onSelectTime() {
+    guard let dateView = dateView else {
+      return
+    }
+    viewModel.onSelectStartTime(date: dateView.datePicker.date)
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm"
+    dateView.startTimeTextField.text = dateFormatter.string(from: dateView.datePicker.date)
+    endEditing()
+  }
+
+  private func setupOpenImagePickerButton() {
+    let openImagePickerButton = UIButtonScaleOnPress()
+    openImagePickerButton.setImage(
+      UIImage(named: "AddImage"),
+      for: .normal
+    )
+    openImagePickerButton.imageView?.style { v in
+      v.clipsToBounds = true
+      v.contentMode = .scaleAspectFit
+    }
+
+    navigationItem.rightBarButtonItem = UIBarButtonItem(customView: openImagePickerButton)
+    openImagePickerButton.width(35).height(35)
+    openImagePickerButton.addTarget(self, action: #selector(openImagePicker), for: .touchUpInside)
   }
 
   private func isDescriptionValid(_ textView: UITextView) -> Bool {
     return textView.text.count > 0
-  }
-  
-  func onChangeLocationName(_ name: String) {
-    locationView?.locationButton.setTitle(name, for: .normal)
-  }
-  
-  func onDatesDidSelected(formattedDate: String, daysCount: Int) {
-    dateView?.setFormattedDate(formattedDate, daysCount: daysCount)
   }
 
   @objc private func onPressCategoryButton(_ button: CategoryButton) {
@@ -112,8 +167,10 @@ import SwiftIconFont
     setupDescriptionView()
   }
 
-  @objc private func onSelectImages() {
-    viewModel.onSelectImages()
+  @objc private func openImagePicker() {
+    viewModel.openImagePicker(onResult: { images in
+      self.descriptionView?.selectImagesView.handleImagePickerResult(images: images)
+    })
   }
   
   private func setupNavigationBar() {
@@ -132,48 +189,6 @@ import SwiftIconFont
       action: #selector(onBackAction)
     )
     navigationController?.isNavigationBarHidden = false
-  }
-  
-  func onBackAction() {
-    if dateView != nil, let geocode = viewModel.geocode {
-      setupLocationView(locationName: geocode.fullLocationName())
-      dateView = nil
-      return
-    }
-    if categoriesView != nil {
-      setupDateView()
-      categoriesView = nil
-      return
-    }
-    if descriptionView != nil {
-      setupCategoriesView()
-      descriptionView = nil
-      return
-    }
-    viewModel.closeScreen()
-  }
-  
-  func onChangeLocation() {
-    viewModel.openLocationSearchBar()
-  }
-  
-  func selectDate() {
-    viewModel.openCalendar()
-  }
-  
-  func endEditing() {
-    view.endEditing(true)
-  }
-  
-  func onSelectTime() {
-    guard let dateView = dateView else {
-      return
-    }
-    viewModel.onSelectStartTime(date: dateView.datePicker.date)
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "HH:mm"
-    dateView.startTimeTextField.text = dateFormatter.string(from: dateView.datePicker.date)
-    endEditing()
   }
   
   private func scrollToActiveTextField(keyboardHeight: CGFloat) {

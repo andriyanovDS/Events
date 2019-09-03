@@ -103,12 +103,8 @@ class CreateEventViewModel {
     self.coordinator?.openHintPopup(hintPopup: popup)
   }
 
-  func onSelectImages() {
-    // TODO: move to coordinator
-    let imagePickerVC = ImagePickerVC()
-    imagePickerVC.modalTransitionStyle = .coverVertical
-    imagePickerVC.modalPresentationStyle = .overCurrentContext
-    self.delegate.present(imagePickerVC, animated: false, completion: nil)
+  func openImagePicker(onResult: @escaping ([UIImage]) -> Void) {
+    self.coordinator?.openImagePicker(imagesDidSelected: onResult)
   }
 }
 
@@ -164,10 +160,12 @@ protocol CreateEventViewModelDelegate: class, UIViewControllerWithActivityIndica
   func onChangeLocationName(_: String)
   func setupLocationView(locationName: String)
   func onDatesDidSelected(formattedDate: String, daysCount: Int)
+  
 }
 
 protocol CreateEventCoordinator: class {
   func openCalendar(onResult: @escaping (SelectedDates) -> Void)
   func openLocationSearchBar(onResult: @escaping (Geocode) -> Void)
   func openHintPopup(hintPopup: HintPopup)
+  func openImagePicker(imagesDidSelected: @escaping ([UIImage]) -> Void)
 }

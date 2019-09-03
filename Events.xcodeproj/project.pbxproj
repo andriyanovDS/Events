@@ -60,6 +60,8 @@
 		746E10712313E56A00B5B19D /* ImagePickerActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746E10702313E56A00B5B19D /* ImagePickerActionsView.swift */; };
 		746E107723147A9C00B5B19D /* ImagePreviewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746E107623147A9C00B5B19D /* ImagePreviewButton.swift */; };
 		746F0B6022FCDB0800F7301D /* EventDurationRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746F0B5F22FCDB0800F7301D /* EventDurationRange.swift */; };
+		74784474231BC5AA00426855 /* GalleryCarouselVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74784473231BC5AA00426855 /* GalleryCarouselVC.swift */; };
+		74784476231C47AC00426855 /* SelectedImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74784475231C47AC00426855 /* SelectedImagesView.swift */; };
 		7478F4F222F5FAB300A43F52 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 7478F4F122F5FAB300A43F52 /* .gitignore */; };
 		7478F4F522F6022100A43F52 /* CreateEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4F422F6022100A43F52 /* CreateEventVC.swift */; };
 		7478F4F722F6023F00A43F52 /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4F622F6023F00A43F52 /* DateView.swift */; };
@@ -167,6 +169,8 @@
 		746E10702313E56A00B5B19D /* ImagePickerActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerActionsView.swift; sourceTree = "<group>"; };
 		746E107623147A9C00B5B19D /* ImagePreviewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewButton.swift; sourceTree = "<group>"; };
 		746F0B5F22FCDB0800F7301D /* EventDurationRange.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = EventDurationRange.swift; sourceTree = "<group>"; tabWidth = 2; usesTabs = 0; };
+		74784473231BC5AA00426855 /* GalleryCarouselVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryCarouselVC.swift; sourceTree = "<group>"; };
+		74784475231C47AC00426855 /* SelectedImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedImagesView.swift; sourceTree = "<group>"; };
 		7478F4F122F5FAB300A43F52 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		7478F4F422F6022100A43F52 /* CreateEventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventVC.swift; sourceTree = "<group>"; };
 		7478F4F622F6023F00A43F52 /* DateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
@@ -404,6 +408,7 @@
 		746E106123109FF700B5B19D /* ImagePicker */ = {
 			isa = PBXGroup;
 			children = (
+				74784472231BC4E900426855 /* GalleryCarousel */,
 				746E10622310A01B00B5B19D /* ImagePickerVC.swift */,
 				746E10642310A03B00B5B19D /* ImagePickerViewModel.swift */,
 				746E10662310A1EA00B5B19D /* ImagePickerView.swift */,
@@ -412,6 +417,14 @@
 				746E107623147A9C00B5B19D /* ImagePreviewButton.swift */,
 			);
 			path = ImagePicker;
+			sourceTree = "<group>";
+		};
+		74784472231BC4E900426855 /* GalleryCarousel */ = {
+			isa = PBXGroup;
+			children = (
+				74784473231BC5AA00426855 /* GalleryCarouselVC.swift */,
+			);
+			path = GalleryCarousel;
 			sourceTree = "<group>";
 		};
 		7478F4F322F601FD00A43F52 /* CreateEvent */ = {
@@ -427,6 +440,7 @@
 				74F0F55E22FF6F5500170C6C /* CategoriesView.swift */,
 				74F0F5642300438C00170C6C /* DescriptionView.swift */,
 				74F0F56022FF7E8800170C6C /* CategoryButton.swift */,
+				74784475231C47AC00426855 /* SelectedImagesView.swift */,
 			);
 			path = CreateEvent;
 			sourceTree = "<group>";
@@ -711,6 +725,7 @@
 				748E0B0622DA132F00B061C7 /* GeocodeObserver.swift in Sources */,
 				74A1AE2122D5DF0300C39525 /* OptionalExtension.swift in Sources */,
 				7478F4F522F6022100A43F52 /* CreateEventVC.swift in Sources */,
+				74784474231BC5AA00426855 /* GalleryCarouselVC.swift in Sources */,
 				74D5A2112302AA6500806695 /* TextFormattingsTextStorage.swift in Sources */,
 				7478F50022F60CC900A43F52 /* User.swift in Sources */,
 				7467B6E222D50AEE00A1BFE9 /* EventsViewController.swift in Sources */,
@@ -737,6 +752,7 @@
 				7467B6ED22D510AA00A1BFE9 /* LoginViewController.swift in Sources */,
 				7467B6EA22D5107400A1BFE9 /* UserObservers.swift in Sources */,
 				7463A49E22DE6EED009171E1 /* TextFieldWithShadow.swift in Sources */,
+				74784476231C47AC00426855 /* SelectedImagesView.swift in Sources */,
 				742A99C322EDC77500A3A703 /* Result.swift in Sources */,
 				741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */,
 				744B7C9222E3C6DF00A839A6 /* ButtonWithBorder.swift in Sources */,

@@ -20,15 +20,18 @@ class ImagePickerView: UIView {
   private let contentView = UIView()
   private let onSelectImageSource: (ImageSource) -> Void
   private let onSelectImage: (UIImage) -> Int
+  private let onConfirmSendImages: () -> Void
   private var state: ImagePickerState = .preview
   private var selectedImageCount: Int = 0
 
   init(
     onSelectImageSource: @escaping (ImageSource) -> Void,
-    onSelectImage: @escaping (UIImage) -> Int
+    onSelectImage: @escaping (UIImage) -> Int,
+    onConfirmSendImages: @escaping () -> Void
     ) {
     self.onSelectImageSource = onSelectImageSource
     self.onSelectImage = onSelectImage
+    self.onConfirmSendImages = onConfirmSendImages
     closeButton = ImagePickerItem(
       action: .close,
       labelText: "Закрыть",
@@ -79,7 +82,7 @@ class ImagePickerView: UIView {
     case .openLibrary:
       onSelectImageSource(.library)
     case .selectImages:
-      // TODO: add select image logic
+      onConfirmSendImages()
       return
     default:
       return

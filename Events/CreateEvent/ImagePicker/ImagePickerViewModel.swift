@@ -14,6 +14,7 @@ class ImagePickerViewModel {
   let targetSize: CGSize
   let setupGalleryImage: (UIImage) -> Void
   var selectedImages: [UIImage] = []
+  weak var delegate: ImagePickerViewModelDelegate?
 
   init(
     setupGalleryImage: @escaping (UIImage) -> Void,
@@ -25,7 +26,12 @@ class ImagePickerViewModel {
   }
 
   func onSelectImageSource(source: ImageSource) {
-
+    switch source {
+    case .camera:
+      openCamera()
+    case .library:
+      openLibrary()
+    }
   }
 
   func onSelectImage(_ image: UIImage) -> Int {
@@ -39,8 +45,16 @@ class ImagePickerViewModel {
     return selectedImages.count
   }
 
+  func onConfirmSendImages() {
+    delegate?.closeWithResult(images: selectedImages)
+  }
+
   private func handleCamera() {
 
+  }
+
+  func closeImagePicker() {
+    delegate?.closeWithResult(images: selectedImages)
   }
 
   private func handleLibrary() {
@@ -62,6 +76,26 @@ class ImagePickerViewModel {
         self.setupGalleryImage(image)
       }
     })
+  }
+
+  private func openCamera() {
+    if !UIImagePickerController.isSourceTypeAvailable(.camera) {
+      return
+    }
+    let controller = UIImagePickerController()
+    controller.delegate = delegate
+    controller.sourceType = .camera
+    self.delegate?.present(controller, animated: true, completion: nil)
+  }
+
+  private func openLibrary() {
+    if !UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+      return
+    }
+    let controller = UIImagePickerController()
+    controller.delegate = delegate
+    controller.sourceType = .photoLibrary
+    self.delegate?.present(controller, animated: true, completion: nil)
   }
 }
 
@@ -108,4 +142,10 @@ enum ImageSource: CaseIterable {
     case .library: return "Галерея"
     }
   }
+}
+
+protocol ImagePickerViewModelDelegate: UIImagePickerControllerDelegate,
+  UIViewController,
+  UINavigationControllerDelegate {
+  func closeWithResult(images: [UIImage]) -> Void
 }

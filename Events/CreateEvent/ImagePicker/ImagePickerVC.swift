@@ -11,6 +11,7 @@ import UIKit
 class ImagePickerVC: UIViewController {
   var viewModel: ImagePickerViewModel?
   var imagePickerView: ImagePickerView?
+  var imagesDidSelected: (([UIImage]) -> Void)!
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -20,6 +21,7 @@ class ImagePickerVC: UIViewController {
       setupGalleryImage: setupGalleryImage,
       targetSize: CGSize(width: PICKER_IMAGE_WIDTH + 50, height: PICKER_IMAGE_HEIGHT + 50)
     )
+    viewModel?.delegate = self
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
       self.imagePickerView?.animateShowContent()
@@ -41,10 +43,15 @@ class ImagePickerVC: UIViewController {
     return viewModel.onSelectImage(image)
   }
 
+  private func onConfirmSendImages() {
+    viewModel?.onConfirmSendImages()
+  }
+
   private func setupView() {
     imagePickerView = ImagePickerView(
       onSelectImageSource: onSelectImageSource,
-      onSelectImage: onSelectImage
+      onSelectImage: onSelectImage,
+      onConfirmSendImages: onConfirmSendImages
     )
     imagePickerView?.closeButton.addTarget(
       self,
@@ -55,9 +62,33 @@ class ImagePickerVC: UIViewController {
   }
 
   @objc func onClose() {
-    // TODO: move to coordinator
     imagePickerView?.animateHideContent(onComplete: {
-      self.dismiss(animated: false, completion: nil)
+      self.viewModel?.closeImagePicker()
     })
+  }
+}
+
+extension ImagePickerVC: ImagePickerViewModelDelegate {
+  func closeWithResult(images: [UIImage]) {
+    imagePickerView?.animateHideContent(onComplete: {
+      self.imagesDidSelected(images)
+    })
+  }
+
+  func imagePickerController(
+    _ picker: UIImagePickerController,
+    didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+    ) {
+    defer {
+      self.dismiss(animated: true, completion: nil)
+    }
+    guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+      return
+    }
+    imagesDidSelected?([image])
+  }
+
+  func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+    self.dismiss(animated: false, completion: nil)
   }
 }
