@@ -119,7 +119,7 @@ extension UserDetailsViewModel {
       title: "Камера",
       style: .default,
       handler: {_ in
-        requestCameraUsagePermission(onOpenCamera: self.openCamera)
+        requestCameraUsagePermission(onOpenCamera: self.openCamera, present: self.delegate.present)
       }
     ))
     actionSheetController.addAction(.init(
