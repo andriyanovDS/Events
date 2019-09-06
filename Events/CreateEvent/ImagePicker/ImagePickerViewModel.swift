@@ -99,7 +99,7 @@ class ImagePickerViewModel {
   }
 }
 
-func requestCameraUsagePermission(onOpenCamera: @escaping () -> Void) {
+func requestCameraUsagePermission(onOpenCamera: @escaping () -> Void, present: (UIViewController, Bool, (() -> Void)?) -> Void) {
   let status = AVCaptureDevice.authorizationStatus(for: .video)
   switch status {
   case .authorized:
@@ -112,6 +112,8 @@ func requestCameraUsagePermission(onOpenCamera: @escaping () -> Void) {
       }
       onOpenCamera()
     })
+  case .denied:
+    openCameraAccessModal(type: .photo, present: present)
   default: return
   }
 }
