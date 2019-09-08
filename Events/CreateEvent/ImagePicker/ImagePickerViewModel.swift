@@ -174,3 +174,12 @@ protocol ImagePickerViewModelDelegate: UIImagePickerControllerDelegate,
   func setupGalleryImage(image: UIImage)
   func performCloseAnimation(onComplete: @escaping () -> Void)
 }
+
+//protocol ImagePickerCoordinator {
+//  func openImagesPreview(
+//    images: [UIImage],
+//    startAtIndex: Int,
+//    onResult: ([UIImage]) -> Void,
+//    present: (UIViewController) -> Void
+//  )
+//}

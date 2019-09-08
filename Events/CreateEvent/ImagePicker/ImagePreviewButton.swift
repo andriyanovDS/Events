@@ -11,10 +11,10 @@ import Stevia
 
 let SELECT_BUTTON_PADDING: CGFloat = 4.0
 
-class ImagePreviewView: UIView {
+class ImagePreviewView: UIButton {
   let image: UIImage
   let selectButton = UIButton()
-  private let imageView = UIImageView()
+  private let previewImageView = UIImageView()
   private let onSelectImage: (ImagePreviewView) -> Void
 
   var selectedCount: Int = 0 {
@@ -40,8 +40,8 @@ class ImagePreviewView: UIView {
   private func setupView() {
     layer.cornerRadius = 10
     clipsToBounds = true
-    imageView.contentMode = .scaleAspectFill
-    imageView.image = image
+    previewImageView.contentMode = .scaleAspectFill
+    previewImageView.image = image
 
     selectButton.style({ v in
       v.height(25).width(25)
@@ -58,8 +58,8 @@ class ImagePreviewView: UIView {
          style: .bold
        )
 
-    sv(imageView, selectButton)
-    imageView.fillContainer()
+    sv(previewImageView, selectButton)
+    previewImageView.fillContainer()
 
     selectButton.addTarget(self, action: #selector(onTouchButton), for: .touchUpInside)
     selectButton.top(SELECT_BUTTON_PADDING).right(SELECT_BUTTON_PADDING)

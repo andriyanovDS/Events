@@ -23,15 +23,18 @@ class ImagePickerView: UIView {
   private let onConfirmSendImages: () -> Void
   private var state: ImagePickerState = .preview
   private var selectedImageCount: Int = 0
+  private let openImagesPreview: ([UIImage], Int) -> Void
 
   init(
     onSelectImageSource: @escaping (ImageSource) -> Void,
     onSelectImage: @escaping (UIImage) -> Int,
-    onConfirmSendImages: @escaping () -> Void
+    onConfirmSendImages: @escaping () -> Void,
+    openImagesPreview: @escaping ([UIImage], Int) -> Void
     ) {
     self.onSelectImageSource = onSelectImageSource
     self.onSelectImage = onSelectImage
     self.onConfirmSendImages = onConfirmSendImages
+    self.openImagesPreview = openImagesPreview
     closeButton = ImagePickerItem(
       action: .close,
       labelText: "Закрыть",
@@ -131,7 +134,8 @@ class ImagePickerView: UIView {
     actionsView = ImagePickerActionsView(
       imageSize: CGSize(width: PICKER_IMAGE_WIDTH, height: PICKER_IMAGE_HEIGHT),
       onSelectAction: onSelectAction,
-      onSelectImage: onImageDidSelected
+      onSelectImage: onImageDidSelected,
+      openImagesPreview: openImagesPreview
     )
     actionsView.scrollView.delegate = self
     sv(contentView.sv(actionsView, closeButton))

@@ -20,15 +20,18 @@ class ImagePickerActionsView: UIView {
   let onSelectAction: (ImagePickerAction) -> Void
   var actions: [ImagePickerItem] = []
   var imageViews: [ImagePreviewView] = []
+  private let openImagesPreview: ([UIImage], Int) -> Void
 
   init(
     imageSize: CGSize,
     onSelectAction: @escaping (ImagePickerAction) -> Void,
-    onSelectImage: @escaping (ImagePreviewView) -> Void
+    onSelectImage: @escaping (ImagePreviewView) -> Void,
+    openImagesPreview: @escaping ([UIImage], Int) -> Void
   ) {
     self.imageSize = imageSize
     self.onSelectImage = onSelectImage
     self.onSelectAction = onSelectAction
+    self.openImagesPreview = openImagesPreview
     super.init(frame: CGRect.zero)
     setupView()
   }
@@ -47,6 +50,7 @@ class ImagePickerActionsView: UIView {
       image: image,
       onSelectImage: onSelectImage
     )
+    imageView.addTarget(self, action: #selector(onImagePreviewViewDidPressed), for: .touchUpInside)
     imagesStackView.addArrangedSubview(imageView)
     imageView.width(imageSize.width).height(imageSize.height)
     imageViews.append(imageView)
@@ -102,6 +106,14 @@ class ImagePickerActionsView: UIView {
     )
     scrollView.setContentOffset(scrollToPoint, animated: false)
     return scrollToPoint.x
+  }
+
+  @objc func onImagePreviewViewDidPressed(_ button: ImagePreviewView) {
+    let index = imagesStackView.arrangedSubviews.firstIndex(of: button)
+    guard let imageIndex = index else {
+      return
+    }
+    openImagesPreview(imageViews.map { $0.image }, imageIndex)
   }
 
   @objc func onActionDidSelected(_ item: ImagePickerItem) {
