@@ -40,7 +40,7 @@ class ImagePickerVC: UIViewController {
     present(viewController, animated: true, completion: nil)
   }
 
-  private func setupGalleryImage(image: UIImage) {
+  internal func setupGalleryImage(image: UIImage) {
     imagePickerView?.setupImageView(image: image)
   }
 

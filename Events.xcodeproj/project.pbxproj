@@ -66,7 +66,6 @@
 		746E107723147A9C00B5B19D /* ImagePreviewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746E107623147A9C00B5B19D /* ImagePreviewButton.swift */; };
 		746F0B6022FCDB0800F7301D /* EventDurationRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746F0B5F22FCDB0800F7301D /* EventDurationRange.swift */; };
 		746F22E42332CC0D000713A0 /* PermissionModalFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746F22E32332CC0D000713A0 /* PermissionModalFlow.swift */; };
-		74784474231BC5AA00426855 /* GalleryCarouselVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74784473231BC5AA00426855 /* GalleryCarouselVC.swift */; };
 		74784476231C47AC00426855 /* SelectedImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74784475231C47AC00426855 /* SelectedImagesView.swift */; };
 		7478F4F222F5FAB300A43F52 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 7478F4F122F5FAB300A43F52 /* .gitignore */; };
 		7478F4F522F6022100A43F52 /* CreateEventVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7478F4F422F6022100A43F52 /* CreateEventVC.swift */; };
@@ -186,7 +185,6 @@
 		746E107623147A9C00B5B19D /* ImagePreviewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewButton.swift; sourceTree = "<group>"; };
 		746F0B5F22FCDB0800F7301D /* EventDurationRange.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = EventDurationRange.swift; sourceTree = "<group>"; tabWidth = 2; usesTabs = 0; };
 		746F22E32332CC0D000713A0 /* PermissionModalFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionModalFlow.swift; sourceTree = "<group>"; };
-		74784473231BC5AA00426855 /* GalleryCarouselVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryCarouselVC.swift; sourceTree = "<group>"; };
 		74784475231C47AC00426855 /* SelectedImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedImagesView.swift; sourceTree = "<group>"; };
 		7478F4F122F5FAB300A43F52 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		7478F4F422F6022100A43F52 /* CreateEventVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventVC.swift; sourceTree = "<group>"; };
@@ -346,13 +344,10 @@
 		745243A822CE85BA00C930C8 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				742EF13B231F17EE002092CA /* ImagesPreview */,
 				741DCF9E22D3E3C8005783A3 /* Profile */,
 				74D48E6E2329972000FB3012 /* Protocols */,
 				6079370D23225BB9003AAD2B /* PermissionModal */,
-				742EF13B231F17EE002092CA /* ImagesPreview */,
-        741DCF9E22D3E3C8005783A3 /* Profile */,
-        74D48E6E2329972000FB3012 /* Protocols */,
-        6079370D23225BB9003AAD2B /* PermissionModal */,
 				7478F4FC22F60BCF00A43F52 /* Models */,
 				7478F50722F6262400A43F52 /* Styles */,
 				7478F4F322F601FD00A43F52 /* CreateEvent */,
@@ -771,7 +766,6 @@
 				74A1AE2122D5DF0300C39525 /* OptionalExtension.swift in Sources */,
 				7478F4F522F6022100A43F52 /* CreateEventVC.swift in Sources */,
 				7466974A2326FF4C00406CD8 /* TabBarFlow.swift in Sources */,
-				74784474231BC5AA00426855 /* GalleryCarouselVC.swift in Sources */,
 				74D5A2112302AA6500806695 /* TextFormattingsTextStorage.swift in Sources */,
 				7478F50022F60CC900A43F52 /* User.swift in Sources */,
 				742EF13D231F1822002092CA /* ImagesPreviewVC.swift in Sources */,
