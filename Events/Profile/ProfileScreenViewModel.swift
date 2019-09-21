@@ -9,13 +9,15 @@
 import Foundation
 import RxSwift
 import UIKit
+import RxCocoa
+import RxFlow
 import FirebaseAuth
 
-class ProfileScreenViewModel {
-  
+class ProfileScreenViewModel: Stepper {
+  let steps = PublishRelay<Step>()
+
   var user: User?
   var userDisposable: Disposable?
-  var coordinator: ProfileScreenCoordinator?
   weak var delegate: ProfileScreenViewModelDelegate?
   
   func attemptToOpenUserDetails() {
@@ -39,17 +41,17 @@ class ProfileScreenViewModel {
     guard let user = self.user else {
       return
     }
-    coordinator?.openUserDetails(user: user)
+    steps.accept(EventStep.userDetails(user: user))
   }
   
   func onCreateEvent() {
-    coordinator?.openCreateEventScreen()
+    steps.accept(EventStep.createEvent)
   }
   
   func logout() {
     do {
       try Auth.auth().signOut()
-      coordinator?.openLoginScreen()
+      steps.accept(EventStep.login)
     } catch {
       return
     }

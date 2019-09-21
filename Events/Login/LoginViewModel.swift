@@ -8,17 +8,15 @@
 
 import Foundation
 import FirebaseAuth
+import RxSwift
+import RxCocoa
+import RxFlow
 
-class LoginViewModel {
-  var coordinator: LoginCoordinator?
-  let showActivityIndicator: (UIView?) -> Void
-  let removeActivityIndicator: () -> Void
+class LoginViewModel: Stepper {
+  let steps = PublishRelay<Step>()
+
+  weak var delegate: LoginViewModelDelegate!
   private let emailPattern = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"
-  
-  init(showActivityIndicator: @escaping (UIView?) -> Void, removeActivityIndicator: @escaping () -> Void) {
-    self.showActivityIndicator = showActivityIndicator
-    self.removeActivityIndicator = removeActivityIndicator
-  }
   
   func validateEmail(text: String) -> Bool {
     
@@ -44,14 +42,14 @@ class LoginViewModel {
       return
     }
     
-    showActivityIndicator(nil)
+    delegate.showActivityIndicator(for: nil)
     Auth.auth().signIn(withEmail: email, password: password) { [weak self] (_, error) in
-      self?.removeActivityIndicator()
+      self?.delegate.removeActivityIndicator()
       if error != nil {
         onLoginFailed()
         return
       }
-      self?.coordinator?.openRootScreen()
+      self?.steps.accept(EventStep.home)
     }
   }
   
@@ -59,14 +57,16 @@ class LoginViewModel {
     guard validateEmail(text: email) && validatePassword(text: password) else {
       return
     }
-    showActivityIndicator(nil)
+    delegate.showActivityIndicator(for: nil)
     Auth.auth().createUser(withEmail: email, password: password) { [weak self] (_, error) in
-      self?.removeActivityIndicator()
+      self?.delegate.removeActivityIndicator()
       if let signUpError = error {
         onSignUpFailed(signUpError.localizedDescription)
         return
       }
-      self?.coordinator?.openRootScreen()
+      self?.steps.accept(EventStep.home)
     }
   }
 }
+
+protocol LoginViewModelDelegate: UIViewControllerWithActivityIndicator {}

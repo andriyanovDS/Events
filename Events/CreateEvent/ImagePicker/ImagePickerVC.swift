@@ -9,42 +9,43 @@
 import UIKit
 
 class ImagePickerVC: UIViewController {
-  var viewModel: ImagePickerViewModel?
-  var imagePickerView: ImagePickerView?
-  var imagesDidSelected: (([UIImage]) -> Void)!
+   let viewModel: ImagePickerViewModel
+   var imagePickerView: ImagePickerView?
+
+   init(viewModel: ImagePickerViewModel) {
+     self.viewModel = viewModel
+     super.init(nibName: nil, bundle: nil)
+   }
+
+   required init?(coder: NSCoder) {
+     fatalError("init(coder:) has not been implemented")
+   }
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
     setupView()
-    viewModel = ImagePickerViewModel(
-      setupGalleryImage: setupGalleryImage,
-      targetSize: CGSize(width: PICKER_IMAGE_WIDTH + 50, height: PICKER_IMAGE_HEIGHT + 50)
-    )
-    viewModel?.delegate = self
+    viewModel.delegate = self
+    viewModel.targetSize = CGSize(width: PICKER_IMAGE_WIDTH * 4, height: PICKER_IMAGE_HEIGHT * 4)
 
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
       self.imagePickerView?.animateShowContent()
     }
   }
 
-  private func setupGalleryImage(image: UIImage) {
+  internal func setupGalleryImage(image: UIImage) {
     imagePickerView?.setupImageView(image: image)
   }
 
   private func onSelectImageSource(source: ImageSource) {
-    viewModel?.onSelectImageSource(source: source)
+    viewModel.onSelectImageSource(source: source)
   }
 
   private func onSelectImage(_ image: UIImage) -> Int {
-    guard let viewModel = self.viewModel else {
-      return 0
-    }
     return viewModel.onSelectImage(image)
   }
 
   private func onConfirmSendImages() {
-    viewModel?.onConfirmSendImages()
+    viewModel.onConfirmSendImages()
   }
 
   private func setupView() {
@@ -63,16 +64,14 @@ class ImagePickerVC: UIViewController {
 
   @objc func onClose() {
     imagePickerView?.animateHideContent(onComplete: {
-      self.viewModel?.closeImagePicker()
+      self.viewModel.closeImagePicker(with: [])
     })
   }
 }
 
 extension ImagePickerVC: ImagePickerViewModelDelegate {
-  func closeWithResult(images: [UIImage]) {
-    imagePickerView?.animateHideContent(onComplete: {
-      self.imagesDidSelected(images)
-    })
+  func performCloseAnimation(onComplete: @escaping () -> Void) {
+    imagePickerView?.animateHideContent(onComplete: onComplete)
   }
 
   func imagePickerController(
@@ -85,10 +84,6 @@ extension ImagePickerVC: ImagePickerViewModelDelegate {
     guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
       return
     }
-    imagesDidSelected?([image])
-  }
-
-  func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-    self.dismiss(animated: false, completion: nil)
+    viewModel.closeImagePicker(with: [image])
   }
 }

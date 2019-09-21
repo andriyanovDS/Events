@@ -9,27 +9,16 @@
 import UIKit
 import Stevia
 
-class ProfileScreenViewController: UIViewController, ProfileScreenViewModelDelegate {
-  
-  var coordinator: ProfileScreenCoordinator?
-  let viewModel = ProfileScreenViewModel()
-  
+class ProfileScreenViewController: UIViewController, ViewModelBased {
+  var viewModel: ProfileScreenViewModel!
   var profileScreenView: ProfileScreenView!
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    coordinator = ProfileScreenCoordinator(navigationController: navigationController!)
-    viewModel.coordinator = coordinator
     viewModel.delegate = self
     viewModel.attemptToOpenUserDetails()
   }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    navigationController?.isNavigationBarHidden = true
-  }
-  
+
   override func loadView() {
     profileScreenView = ProfileScreenView()
     view = profileScreenView
@@ -53,13 +42,6 @@ class ProfileScreenViewController: UIViewController, ProfileScreenViewModelDeleg
   
   @objc func openSettings() {
     
-  }
-  
-  func onUserDidChange(user: User) {
-    profileScreenView.userNameLabel.text = user.firstName
-    if let avatarUrl = user.avatar {
-      loadAvatarImage(avatarUrl)
-    }
   }
   
   private func loadAvatarImage(_ avatarExternalUrl: String) {
@@ -98,8 +80,16 @@ class ProfileScreenViewController: UIViewController, ProfileScreenViewModelDeleg
   }
 }
 
+extension ProfileScreenViewController: ProfileScreenViewModelDelegate {
+  func onUserDidChange(user: User) {
+    profileScreenView.userNameLabel.text = user.firstName
+    if let avatarUrl = user.avatar {
+      loadAvatarImage(avatarUrl)
+    }
+  }
+}
+
 extension ProfileScreenViewController: UIScrollViewDelegate {
-  
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     scrollView.contentOffset.x = 0
   }

@@ -9,10 +9,7 @@
 import UIKit
 import SwiftIconFont
 
-class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate {
-  var coordinator: LoginCoordinator?
-  var viewModel: LoginViewModel!
-
+class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate, LoginViewModelDelegate {
   var messageView: UIView?
   let loginButton = ButtonWithBorder()
   let signInButton = ButtonWithBorder()
@@ -28,6 +25,18 @@ class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate {
 
   var isEmailValid: Bool = false
   var isPasswordValid: Bool = false
+  private let viewModel: LoginViewModel
+
+  init(viewModel: LoginViewModel) {
+    self.viewModel = viewModel
+    super.init(nibName: nil, bundle: nil)
+
+    self.viewModel.delegate = self
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
   var authState: AuthState = .notSelected {
     willSet (nextState) {
@@ -72,11 +81,6 @@ class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    viewModel = LoginViewModel(
-      showActivityIndicator: showActivityIndicator(for:),
-      removeActivityIndicator: removeActivityIndicator
-    )
-    viewModel.coordinator = self.coordinator
     emailTextField.delegate = self
     passwordTextField.delegate = self
 

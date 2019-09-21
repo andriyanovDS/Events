@@ -6,6 +6,9 @@
 //  Copyright © 2019 Дмитрий Андриянов. All rights reserved.
 //
 
+import RxFlow
+import RxSwift
+import RxCocoa
 import Foundation
 
 func splitDaysByWeeks(days: [Day]) -> [[Day?]] {
@@ -77,12 +80,15 @@ func generateMonths(monthsToDisplay: Int) -> [Month] {
     })
 }
 
-class CalendarViewModel {
+class CalendarViewModel: Stepper {
+  let steps = PublishRelay<Step>()
+
   var months: [Month]
+  var onChangeSelectedDate: (() -> Void)!
   private var selectedDateFrom: Date?
   private var selectedDateTo: Date?
   private let monthsToDisplay = 6
-  private let onChangeSelectedDate: () -> Void
+
   var isSelectedDateSingle: Bool {
     return selectedDateFrom != nil && selectedDateTo == nil
   }
@@ -91,9 +97,8 @@ class CalendarViewModel {
     return selectedDateFrom == nil && selectedDateTo == nil
   }
   
-  init(onChangeSelectedDate: @escaping () -> Void, selectedDateFrom: Date?, selectedDateTo: Date?) {
+  init(selectedDateFrom: Date?, selectedDateTo: Date?) {
     months = generateMonths(monthsToDisplay: monthsToDisplay)
-    self.onChangeSelectedDate = onChangeSelectedDate
     self.selectedDateTo = selectedDateTo
     self.selectedDateFrom = selectedDateFrom
   }
@@ -131,6 +136,10 @@ class CalendarViewModel {
     selectedDateTo = nil
     selectedDateFrom = nil
     onChangeSelectedDate()
+  }
+
+  func onClose() {
+    self.steps.accept(EventStep.calendarDidComplete)
   }
   
   func isSelectedDateFrom(date: Date) -> Bool {

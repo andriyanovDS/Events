@@ -13,4 +13,5 @@ use_frameworks!
     pod 'Firebase/Database', '~> 6'
     pod 'Firebase/Storage', '~> 6'
     pod 'SteviaLayout', '~> 4.5.0'
+    pod 'RxFlow', '~> 2.4.0'
   end

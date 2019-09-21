@@ -15,16 +15,23 @@ struct PermissionModal {
 }
 
 enum PermissionModalType {
-  case photo, geolocation, notifications
+  case camera, library, geolocation, notifications
   
   func model() -> PermissionModal {
     switch self {
-    case .photo:
+    case .camera:
       return PermissionModal(
         title: "Нужен доступ",
         image: "camera",
         description: "Разрешите доступ к камере, чтобы сделать фотографию",
         buttonLabelText: "Разрешить доступ"
+      )
+    case .library:
+      return PermissionModal(
+        title: "Нет доступа",
+        image: "camera",
+        description: "Разрешите доступ к галерее, чтобы выбрать изображения и видео",
+        buttonLabelText: "Разрешить"
       )
     case .geolocation:
       return PermissionModal(

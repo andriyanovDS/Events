@@ -152,8 +152,8 @@ class ImagePickerView: UIView {
     UIView.animate(withDuration: 0.2, animations: {
       self.actionsView.scrollView.heightConstraint?.constant += PICKER_ACTION_BUTTON_HEIGHT
       self.actionsView.imageViews.forEach { v in
-        v.heightConstraint?.constant = PICKER_IMAGE_HEIGHT + PICKER_ACTION_BUTTON_HEIGHT
-        v.widthConstraint?.constant = PICKER_IMAGE_WIDTH + PICKER_ACTION_BUTTON_HEIGHT
+        v.heightConstraint?.constant += PICKER_ACTION_BUTTON_HEIGHT
+        v.widthConstraint?.constant += PICKER_ACTION_BUTTON_HEIGHT
       }
       let contentOffsetX = self.actionsView.scrollToSelectedImageView(imageView: imageView, scale: scale)
       self.adjustImageViewSelectButton(scale: scale, contentOffsetX: contentOffsetX)

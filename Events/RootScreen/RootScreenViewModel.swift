@@ -8,47 +8,63 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
+import RxFlow
 
-class RootScreenViewModel {
-  
+class RootScreenViewModel: Stepper {
+  let steps = PublishRelay<Step>()
+  weak var delegate: RootScreenViewModelDelegate?
   private var selectedDateFrom: Date?
   private var selectedDateTo: Date?
   private var geocodeDisposable: Disposable?
-  private let onChangeLocation: ((String) -> Void)
-  
-  init(onChangeLocation: @escaping ((String) -> Void)) {
-    self.onChangeLocation = onChangeLocation
-    geocodeDisposable = geocodeObserver.subscribe(
-      onNext: { [weak self] geocode in
-        DispatchQueue.main.async {
-          self?.onChangeLocation(geocode.shortLocationName())
-        }
-      },
-      onError: { [weak self] _ in
-        self?.disposeGeocodeSubscription()
-      },
-      onCompleted: { [weak self] in
-        self?.disposeGeocodeSubscription()
-      },
-      onDisposed: nil
-    )
+  var onChangeLocation: ((String) -> Void)? {
+    didSet {
+      guard let onChangeLocation = onChangeLocation else {
+        return
+      }
+      geocodeDisposable = geocodeObserver.subscribe(
+        onNext: { geocode in
+          DispatchQueue.main.async {
+            onChangeLocation(geocode.shortLocationName())
+          }
+        },
+        onError: { [weak self] _ in
+          self?.disposeGeocodeSubscription()
+        },
+        onCompleted: { [weak self] in
+          self?.disposeGeocodeSubscription()
+        },
+        onDisposed: nil
+      )
+    }
   }
   
   deinit {
     disposeGeocodeSubscription()
   }
-  
+
+  func openCalendar() {
+    steps.accept(EventStep.calendar(
+      withSelectedDates: getSelectedDates(),
+      onComplete: { selectedDates in
+        self.setSelectedDates(dates: selectedDates)
+        self.delegate?.onDatesDidChange(dates: self.selectedDatesToString())
+      }
+    ))
+  }
+
+  func openLocationSearch() {
+    steps.accept(EventStep.locationSearch(onResult: { geocode in
+      onChangeUserLocation(geocode: geocode)
+    }))
+  }
+
   func disposeGeocodeSubscription() {
     geocodeDisposable?.dispose()
     geocodeDisposable = nil
   }
   
-  func setSelectedDates(dates: SelectedDates) {
-    selectedDateFrom = dates.from
-    selectedDateTo = dates.to
-  }
-  
-  func selectedDatesToString() -> String? {
+  private func selectedDatesToString() -> String? {
     guard let dateFrom = selectedDateFrom else {
       return nil
     }
@@ -64,9 +80,18 @@ class RootScreenViewModel {
     }
     return "\(dateFromFormatted) - \(dateFormatter.string(from: dateTo))"
   }
+
+  private func setSelectedDates(dates: SelectedDates) {
+    selectedDateFrom = dates.from
+    selectedDateTo = dates.to
+  }
   
-  func getSelectedDates() -> SelectedDates {
+  private func getSelectedDates() -> SelectedDates {
     return SelectedDates(from: selectedDateFrom, to: selectedDateTo)
   }
   
+}
+
+protocol RootScreenViewModelDelegate: class {
+  func onDatesDidChange(dates: String?)
 }

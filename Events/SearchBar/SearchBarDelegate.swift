@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol SearchBarDelegate: NSObject {
+protocol SearchBarDelegate: class {
   
   func searchBarDidActivate()
   

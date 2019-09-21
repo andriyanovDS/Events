@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CalendarViewController: UIViewController, UIGestureRecognizerDelegate {
+class CalendarViewController: UIViewController, UIGestureRecognizerDelegate, ViewModelBased, ScreenWithResult {
   let backgroundView = UIView()
   let contentView = UIView()
   let titleLabel = UILabel()
@@ -17,11 +17,13 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate {
   let weekDaysView = UIStackView()
   let monthsView = UIStackView()
   var days: [DayButton]?
-  var viewModel: CalendarViewModel?
-  
-  var initialSelectedDateFrom: Date?
-  var initialSelectedDateTo: Date?
-  var onResult: ((SelectedDates) -> Void)?
+  var viewModel: CalendarViewModel! {
+    didSet {
+      viewModel.onChangeSelectedDate = self.onChangeSelectedDate
+    }
+  }
+
+  var onResult: ((SelectedDates) -> Void)!
   var tapOutsideGestureRecognizer: UIGestureRecognizer?
   
   private let titleLabelText = "Веберите даты"
@@ -34,12 +36,7 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate {
     tapOutsideGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(closeModal))
     tapOutsideGestureRecognizer?.cancelsTouchesInView = false
     tapOutsideGestureRecognizer?.delegate = self
-    
-    viewModel = CalendarViewModel(
-      onChangeSelectedDate: onChangeSelectedDate,
-      selectedDateFrom: initialSelectedDateFrom,
-      selectedDateTo: initialSelectedDateTo
-    )
+
     setupView()
   }
   
@@ -56,31 +53,19 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate {
     guard let selectedDate = button.selectedDate else {
       return
     }
-    viewModel?.selectDate(selectedDate: selectedDate)
+    viewModel.selectDate(selectedDate: selectedDate)
   }
   
   @objc func clearDates() {
-    viewModel?.clearDates()
+    viewModel.clearDates()
   }
   
   @objc func closeModal() {
-    guard let viewModel = self.viewModel else {
-      return
-    }
-    
-    if let onClose = onResult {
-      onClose(viewModel.getSelectedDates())
-    }
-    
-    navigationController?.popViewController(animated: false)
-    dismiss(animated: false, completion: nil)
+    onResult(viewModel.getSelectedDates())
+    viewModel.onClose()
   }
   
   func dayDateToButtonHighlightState(date: Date) -> ButtonHiglightState {
-    guard let viewModel = self.viewModel else {
-      return .notSelected
-    }
-    
     if viewModel.isSelectedDateSingle {
       return viewModel.isSelectedDateFrom(date: date)
         ? ButtonHiglightState.single
@@ -101,12 +86,7 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate {
       return 
     }
     
-    guard let viewModel = self.viewModel else {
-      return
-    }
-    
     titleLabel.text = viewModel.selectedDatesToTitle() ?? titleLabelText
-    
     clearButton.isEnabled = !viewModel.isDatesNotSeleted
     
     days.forEach({ day in
@@ -175,7 +155,7 @@ extension CalendarViewController {
     clearButton.contentHorizontalAlignment = .center
     clearButton.contentEdgeInsets = UIEdgeInsets(top: 13, left: 0, bottom: 0, right: 0)
     clearButton.titleLabel?.font = UIFont.init(name: "CeraPro-Medium", size: 14)
-    clearButton.isEnabled = !(viewModel?.isDatesNotSeleted ?? false)
+    clearButton.isEnabled = !viewModel.isDatesNotSeleted
     
     clearButton.addTarget(self, action: #selector(clearDates), for: .touchUpInside)
     

@@ -10,12 +10,11 @@ import UIKit
 import Photos
 
 class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewModelDelegate, UserDetailsView.Delegate {
-  var viewModel: UserDetailsViewModel?
-  let coordinator: UserDetailsScreenCoordinator
   var userDetailsView: UserDetailsView!
   let user: User
   var selectedGender: Gender?
   var selectedAvatarUrl: URL?
+  private let viewModel: UserDetailsViewModel
   
   override var keyboardAttachInfo: KeyboardAttachInfo? {
     didSet {
@@ -33,10 +32,11 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
     userDetailsView.submitButton.addTarget(self, action: #selector(submitProfile), for: .touchUpInside)
   }
   
-  init(user: User, coordinator: UserDetailsScreenCoordinator) {
+  init(user: User, viewModel: UserDetailsViewModel) {
     self.user = user
-    self.coordinator = coordinator
+    self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
+    viewModel.delegate = self
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -45,23 +45,16 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    viewModel = UserDetailsViewModel(delegate: self)
-    viewModel?.coordinator = coordinator
     loadCustomView()
     setUserData()
   }
   
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    navigationController?.isNavigationBarHidden = true
-  }
-  
   @objc func showSelectImageActionSheet() {
-    viewModel?.showSelectImageActionSheet()
+    viewModel.showSelectImageActionSheet()
   }
   
   @objc func closeScreen() {
-    viewModel?.closeScreen()
+    viewModel.closeScreen()
   }
   
   @objc func selectDate() {
@@ -147,7 +140,7 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
       "work": view.workSection.getChildText(),
       "avatar": selectedAvatarUrl
     ]
-    self.viewModel?.submitProfile(userInfo: userInfo)
+    self.viewModel.submitProfile(userInfo: userInfo)
   }
   
   private func scrollToActiveTextField(keyboardHeight: CGFloat) {
@@ -211,10 +204,6 @@ extension UserDetailsViewController: UIImagePickerControllerDelegate, UINavigati
       return
     }
     selectedAvatarUrl = imageUrl
-  }
-  
-  func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-    self.dismiss(animated: false, completion: nil)
   }
 }
 

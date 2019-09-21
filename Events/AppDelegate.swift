@@ -7,12 +7,16 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import RxFlow
 import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-  
+
   var window: UIWindow?
+  let coordinator = FlowCoordinator()
   
   func application(
     _ application: UIApplication,
@@ -22,14 +26,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Use for live reload http://johnholdsworth.com/injection.html
     Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/iOSInjection.bundle")?.load()
     FirebaseApp.configure()
-    
-    let navigationController = UINavigationController()
-    let coordinator = MainCoordinator(navigationController: navigationController)
-    coordinator.start()
-    
-    window = UIWindow(frame: UIScreen.main.bounds)
-    window?.rootViewController = navigationController
-    window?.makeKeyAndVisible()
+
+    let mainFlow = MainFlow()
+
+    Flows.whenReady(flow1: mainFlow, block: { mainVC in
+      self.window = UIWindow(frame: UIScreen.main.bounds)
+      self.window?.rootViewController = mainVC
+      self.window?.makeKeyAndVisible()
+    })
+
+    coordinator.coordinate(flow: mainFlow, with: MainStepper())
     
     return true
   }

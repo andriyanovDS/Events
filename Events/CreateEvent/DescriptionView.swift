@@ -72,14 +72,12 @@ class DescriptionView: UIView {
   }
 
   private func setupConstraints() {
-    contentView.left(20).right(20).centerInContainer()
+    contentView.fillContainer().centerInContainer()
     contentView.Top == safeAreaLayoutGuide.Top
     contentView.Bottom == safeAreaLayoutGuide.Bottom
 
-    label.top(20).left(0).right(0)
-    align(vertically: [label, textView, selectImagesView])
     layout(
-      |-label-|,
+      |-label.top(20).centerHorizontally()-|,
       10,
       |-textView-|,
       10,
