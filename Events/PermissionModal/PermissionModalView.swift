@@ -37,7 +37,6 @@ class PermissionModalView: UIView {
       submitButton
     )
     
-    
     layout(
       70,
       closeButton-25-|,
@@ -88,7 +87,7 @@ class PermissionModalView: UIView {
     )
     descriptionLabel.style({ v in
       v.textAlignment = .center
-      v.numberOfLines = 2
+      v.numberOfLines = 3
     })
     
     imageView.style({ v in

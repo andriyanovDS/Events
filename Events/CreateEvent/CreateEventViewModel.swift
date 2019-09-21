@@ -8,10 +8,22 @@
 
 import Foundation
 import RxSwift
+import RxFlow
+import RxCocoa
 
-class CreateEventViewModel {
-  let delegate: CreateEventViewModelDelegate
-  weak var coordinator: CreateEventCoordinator?
+class CreateEventViewModel: Stepper {
+  let steps = PublishRelay<Step>()
+  weak var delegate: CreateEventViewModelDelegate? {
+    didSet {
+      geocodeObserver
+      .take(1)
+      .subscribe(onNext: { geocode in
+        self.geocode = geocode
+        self.delegate?.setupLocationView(locationName: geocode.fullLocationName())
+      })
+      .disposed(by: disposeBag)
+    }
+  }
   private let disposeBag = DisposeBag()
 
   var geocode: Geocode?
@@ -27,51 +39,45 @@ class CreateEventViewModel {
     EventDurationRange(min: 8, max: nil)
   ]
 
-  init(delegate: CreateEventViewModelDelegate) {
-    self.delegate = delegate
+  init() {
     self.dates = generateInitialDates()
     self.duration = durations[0]
-
-    geocodeObserver
-      .take(1)
-      .subscribe(onNext: { geocode in
-        self.geocode = geocode
-        self.delegate.setupLocationView(locationName: geocode.fullLocationName())
-      })
-      .disposed(by: disposeBag)
   }
 
   func closeScreen() {
-    delegate.navigationController?.popViewController(animated: true)
+    steps.accept(EventStep.createEventDidComplete)
   }
 
   func openLocationSearchBar() {
-    coordinator?.openLocationSearchBar(onResult: { geocode in
+    steps.accept(EventStep.locationSearch(onResult: { geocode in
       self.geocode = geocode
-      self.delegate.onChangeLocationName(geocode.fullLocationName())
-    })
+      self.delegate?.onChangeLocationName(geocode.fullLocationName())
+    }))
   }
 
   func openCalendar() {
-    coordinator?.openCalendar(onResult: { selectedDates in
-      selectedDates.from
-        .map({ start in selectedDates.to.foldL(
-            none: { [start] },
-            some: { end in dateRange(start: start, end: end) }
-          )
+    steps.accept(EventStep.calendar(
+      withSelectedDates: SelectedDates(from: nil, to: nil),
+      onComplete: { selectedDates in
+        selectedDates.from
+          .map({ start in selectedDates.to.foldL(
+              none: { [start] },
+              some: { end in dateRange(start: start, end: end) }
+            )
+          })
+        .foldL(
+          none: {
+            self.dates = generateInitialDates()
+          },
+          some: { dates in
+            self.dates = dates
         })
-      .foldL(
-        none: {
-          self.dates = generateInitialDates()
-        },
-        some: { dates in
-          self.dates = dates
-      })
-      if let foramttedDate = selectedDatesToString(selectedDates) {
-        let daysDiff = daysCount(selectedDates: selectedDates)
-        self.delegate.onDatesDidSelected(formattedDate: foramttedDate, daysCount: daysDiff)
+        if let foramttedDate = selectedDatesToString(selectedDates) {
+          let daysDiff = daysCount(selectedDates: selectedDates)
+          self.delegate?.onDatesDidSelected(formattedDate: foramttedDate, daysCount: daysDiff)
+        }
       }
-    })
+    ))
   }
 
   func onSelectStartTime(date: Date) {
@@ -100,11 +106,11 @@ class CreateEventViewModel {
   }
 
   func openHintPopup(popup: HintPopup) {
-    self.coordinator?.openHintPopup(hintPopup: popup)
+    steps.accept(EventStep.hintPopup(popup: popup))
   }
 
   func openImagePicker(onResult: @escaping ([UIImage]) -> Void) {
-    self.coordinator?.openImagePicker(imagesDidSelected: onResult)
+    steps.accept(EventStep.imagePicker(onComplete: onResult))
   }
 }
 

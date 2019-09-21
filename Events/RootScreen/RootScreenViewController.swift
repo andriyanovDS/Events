@@ -8,9 +8,13 @@
 
 import UIKit
 
-class RootScreenViewController: UIViewController {
-  var viewModel: RootScreenViewModel!
-  var coordinator: RootScreenCoordinator?
+class RootScreenViewController: UIViewController, ViewModelBased, RootScreenViewModelDelegate {
+  var viewModel: RootScreenViewModel! {
+    didSet {
+      viewModel.onChangeLocation = onChangeLocation
+      viewModel.delegate = self
+    }
+  }
   
   let titleLabel = UILabel()
   let categoriesView = CategoriesViewController()
@@ -20,10 +24,8 @@ class RootScreenViewController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    viewModel = RootScreenViewModel(onChangeLocation: onChangeLocation)
+
     initializeUserLocation()
-    
     setupView()
     view.addSubview(searchBar.view)
     view.addSubview(categoriesView.view)
@@ -39,26 +41,19 @@ class RootScreenViewController: UIViewController {
   }
   
   @objc func openCalendar() {
-    coordinator?.openCalendarScreen(
-      selectedDates: viewModel.getSelectedDates(),
-      onComplete: onDatesChanged
-    )
+    viewModel.openCalendar()
   }
   
   @objc func openLocationSearch() {
-    coordinator?.openLocationSearch(onResult: { geocode in
-      onChangeUserLocation(geocode: geocode)
-    })
+    viewModel.openLocationSearch()
   }
   
   func onChangeLocation(locationName: String) {
     locationButton.setTitle(locationName, for: .normal)
   }
   
-  func onDatesChanged(dates: SelectedDates) {
-    viewModel.setSelectedDates(dates: dates)
-    let buttonTitle = viewModel?.selectedDatesToString()
-    
+  func onDatesDidChange(dates: String?) {
+    let buttonTitle = dates
     if buttonTitle == datesButton.title(for: .normal) {
       return
     }

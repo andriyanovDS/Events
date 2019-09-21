@@ -9,14 +9,13 @@
 import UIKit
 
 class HintPopupVC: UIViewController, UIGestureRecognizerDelegate {
-
-  var popupView: HintPopupView?
-  var coordinator: HintPopupViewCoordinator?
-  var viewModel: HintPopupViewModel?
+  private var popupView: HintPopupView?
+  private let viewModel: HintPopupViewModel
   private let popup: HintPopup
 
-  init(hintPopup: HintPopup) {
+  init(hintPopup: HintPopup, viewModel: HintPopupViewModel) {
     self.popup = hintPopup
+    self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
 
   }
@@ -28,8 +27,6 @@ class HintPopupVC: UIViewController, UIGestureRecognizerDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    viewModel = HintPopupViewModel()
-    viewModel?.coordinator = coordinator
     setupView()
   }
 
@@ -45,10 +42,10 @@ class HintPopupVC: UIViewController, UIGestureRecognizerDelegate {
   }
 
   @objc func onPressHint() {
-    viewModel?.openTextFormattingTips()
+    viewModel.openTextFormattingTips()
   }
 
   @objc func onClosePopup() {
-    viewModel?.closePopup()
+    viewModel.closePopup()
   }
 }

@@ -7,19 +7,19 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
+import RxFlow
 
-class HintPopupViewModel {
-
-  weak var coordinator: HintPopupViewCoordinator?
+class HintPopupViewModel: Stepper {
+  let steps = PublishRelay<Step>()
 
   func openTextFormattingTips() {
-    coordinator?.closePopup(onComplete: {
-      self.coordinator?.openTextFormattingTips()
-    })
+    steps.accept(EventStep.hintPopupDidComplete(nextStep: .textFormattingTips))
   }
 
   func closePopup() {
-    coordinator?.closePopup(onComplete: nil)
+    steps.accept(EventStep.hintPopupDidComplete(nextStep: nil))
   }
 }
 

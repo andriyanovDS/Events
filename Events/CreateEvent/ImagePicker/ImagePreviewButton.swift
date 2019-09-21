@@ -49,18 +49,19 @@ class ImagePreviewView: UIView {
       v.layer.borderWidth = 2
       v.layer.borderColor = UIColor.white.cgColor
     })
-    sv(imageView, selectButton)
+
     styleText(
-      button: selectButton,
-      text: "",
-      size: 14,
-      color: .white,
-      style: .bold
-    )
+         button: selectButton,
+         text: "",
+         size: 14,
+         color: .white,
+         style: .bold
+       )
+
+    sv(imageView, selectButton)
+    imageView.fillContainer()
 
     selectButton.addTarget(self, action: #selector(onTouchButton), for: .touchUpInside)
-
-    imageView.fillContainer().centerInContainer()
     selectButton.top(SELECT_BUTTON_PADDING).right(SELECT_BUTTON_PADDING)
   }
 

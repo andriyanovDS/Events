@@ -8,13 +8,14 @@
 
 import UIKit
 import RxSwift
+import RxFlow
 import RxCocoa
 import CoreLocation
 
-class LocationSearchViewModel {
+class LocationSearchViewModel: Stepper {
+  let steps = PublishRelay<Step>()
   let apiService = GeolocationAPI()
   var disposable: Disposable?
-  weak var coordinator: LocationSearchCoordinator?
   weak var delegate: LocationSearchViewModelDelegate?
   
   init(textField: UITextField) {
@@ -116,7 +117,7 @@ class LocationSearchViewModel {
   }
   
   func cancelScreen() {
-    self.coordinator?.onLocationDidSelected()
+    steps.accept(EventStep.locationSearchDidCompete)
   }
 }
 

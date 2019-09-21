@@ -13,24 +13,32 @@ import RxCocoa
 
 class LocationSearchViewController: UIViewControllerWithActivityIndicator,
   SearchBarDelegate,
+  ScreenWithResult,
   LocationSearchViewModelDelegate,
-LocationSearchStackViewDelegate {
-  
-  var viewModel: LocationSearchViewModel!
-  var onClose: ((Geocode) -> Void)?
-  weak var coordinator: LocationSearchCoordinator?
-  var searchBar = SearchBarViewController(nibName: nil, bundle: nil)
-  
+  LocationSearchStackViewDelegate {
+
+  var onResult: ((Geocode) -> Void)!
+  private let searchBar: SearchBarViewController
+  private let viewModel: LocationSearchViewModel
   private let scrollView = UIScrollView()
   private let locationStackView = LocationSearchStackView()
-  
+
+  init(searchBar: SearchBarViewController, viewModel: LocationSearchViewModel) {
+    self.searchBar = searchBar
+    self.viewModel = viewModel
+    super.init(nibName: nil, bundle: nil)
+
+    searchBar.delegate = self
+    viewModel.delegate = self
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    viewModel = LocationSearchViewModel(textField: searchBar.textField)
-    viewModel.delegate = self
-    viewModel.coordinator = coordinator
-    searchBar.delegate = self
     locationStackView.delegate = self
     viewModel.initializeUserLocation()
     setupView()
@@ -64,11 +72,11 @@ LocationSearchStackViewDelegate {
   func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     let coordinates: CLLocation = locations[0]
     manager.stopUpdatingLocation()
-    viewModel?.onReceiveCoordinates(coordinates.coordinate)
+    viewModel.onReceiveCoordinates(coordinates.coordinate)
   }
   
   func onResult(geocode: Geocode) {
-    onClose?(geocode)
+    onResult(geocode)
   }
   
   private func onFocusTextField() {

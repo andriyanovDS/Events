@@ -139,6 +139,6 @@ class ImagePickerActionsView: UIView {
     scrollView.height(100).left(0).right(0).top(0)
     actionsStackView.Top == scrollView.Bottom
     imagesStackView.left(10).top(10).bottom(10).right(10)
-    imagesStackView.Height == scrollView.Height
+    imagesStackView.Height == scrollView.Height - 20
   }
 }

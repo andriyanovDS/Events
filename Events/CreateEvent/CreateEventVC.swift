@@ -10,14 +10,13 @@ import UIKit
 import Stevia
 import SwiftIconFont
 
-@objcMembers class CreateEventViewController: KeyboardAttachViewController,
+@objcMembers class CreateEventViewController: KeyboardAttachViewController, ViewModelBased,
   CreateEventViewModelDelegate,
   DateViewDelegate {
   var locationView: LocationView?
   var dateView: DateView?
   var categoriesView: CategoriesView?
   var descriptionView: DescriptionView?
-  var coordinator: CreateEventCoordinator?
   var viewModel: CreateEventViewModel!
   
   override var keyboardAttachInfo: KeyboardAttachInfo? {
@@ -32,11 +31,10 @@ import SwiftIconFont
     setupNavigationBar()
     setupView()
     showActivityIndicator(for: nil)
-    viewModel = CreateEventViewModel(delegate: self)
-    viewModel.coordinator = coordinator
   }
   
   private func setupView() {
+    viewModel.delegate = self
     view.backgroundColor = .white
   }
   

@@ -6,23 +6,33 @@
 //  Copyright © 2019 Дмитрий Андриянов. All rights reserved.
 //
 
+import UIKit
 import Foundation
 import AVFoundation
 import Photos
+import RxFlow
+import RxCocoa
+import RxSwift
 
-class ImagePickerViewModel {
-  let targetSize: CGSize
-  let setupGalleryImage: (UIImage) -> Void
-  var selectedImages: [UIImage] = []
+class ImagePickerViewModel: Stepper {
+  let steps = PublishRelay<Step>()
+  private let onResult: ([UIImage]) -> Void
+
+  var targetSize: CGSize! {
+    didSet {
+      requestLibraryUsagePermission(
+        onOpenLibrary: handleLibrary,
+        openLibraryAccessModal: {
+          self.steps.accept(EventStep.permissionModal(withType: .library))
+        }
+      )
+    }
+  }
+  private var selectedImages: [UIImage] = []
   weak var delegate: ImagePickerViewModelDelegate?
 
-  init(
-    setupGalleryImage: @escaping (UIImage) -> Void,
-    targetSize: CGSize
-    ) {
-    self.targetSize = targetSize
-    self.setupGalleryImage = setupGalleryImage
-    requestLibraryUsagePermission(onOpenLibrary: self.handleLibrary)
+  init(onResult: @escaping (([UIImage]) -> Void)) {
+    self.onResult = onResult
   }
 
   func onSelectImageSource(source: ImageSource) {
@@ -46,15 +56,19 @@ class ImagePickerViewModel {
   }
 
   func onConfirmSendImages() {
-    delegate?.closeWithResult(images: selectedImages)
+    delegate?.performCloseAnimation {
+      self.onResult(self.selectedImages)
+      self.steps.accept(EventStep.imagePickerDidComplete)
+    }
   }
 
   private func handleCamera() {
 
   }
 
-  func closeImagePicker() {
-    delegate?.closeWithResult(images: selectedImages)
+  func closeImagePicker(with result: [UIImage]) {
+    self.onResult(result)
+    self.steps.accept(EventStep.imagePickerDidComplete)
   }
 
   private func handleLibrary() {
@@ -73,7 +87,7 @@ class ImagePickerViewModel {
         guard let image = image else {
           return
         }
-        self.setupGalleryImage(image)
+          self.delegate?.setupGalleryImage(image: image)
       }
     })
   }
@@ -99,7 +113,10 @@ class ImagePickerViewModel {
   }
 }
 
-func requestCameraUsagePermission(onOpenCamera: @escaping () -> Void, present: (UIViewController, Bool, (() -> Void)?) -> Void) {
+func requestCameraUsagePermission(
+  onOpenCamera: @escaping () -> Void,
+  openCameraAccessModal: @escaping () -> Void
+  ) {
   let status = AVCaptureDevice.authorizationStatus(for: .video)
   switch status {
   case .authorized:
@@ -113,12 +130,15 @@ func requestCameraUsagePermission(onOpenCamera: @escaping () -> Void, present: (
       onOpenCamera()
     })
   case .denied:
-    openCameraAccessModal(type: .photo, present: present)
+    openCameraAccessModal()
   default: return
   }
 }
 
-func requestLibraryUsagePermission(onOpenLibrary: @escaping () -> Void) {
+func requestLibraryUsagePermission(
+  onOpenLibrary: @escaping () -> Void,
+  openLibraryAccessModal: @escaping () -> Void
+  ) {
   let status = PHPhotoLibrary.authorizationStatus()
   switch status {
   case .authorized:
@@ -131,6 +151,8 @@ func requestLibraryUsagePermission(onOpenLibrary: @escaping () -> Void) {
       }
       onOpenLibrary()
     })
+  case .denied:
+    openLibraryAccessModal()
   default: return
   }
 }
@@ -149,5 +171,6 @@ enum ImageSource: CaseIterable {
 protocol ImagePickerViewModelDelegate: UIImagePickerControllerDelegate,
   UIViewController,
   UINavigationControllerDelegate {
-  func closeWithResult(images: [UIImage]) -> Void
+  func setupGalleryImage(image: UIImage)
+  func performCloseAnimation(onComplete: @escaping () -> Void)
 }

@@ -10,21 +10,20 @@ import Foundation
 import AVFoundation
 import Photos
 import UIKit
+import RxSwift
+import RxCocoa
+import RxFlow
 import FirebaseDatabase
 import FirebaseStorage
 
-class UserDetailsViewModel {
-  
-  weak var coordinator: UserDetailsScreenCoordinator?
-  let delegate: UserDetailsViewModelDelegate
+class UserDetailsViewModel: Stepper {
+  let steps = PublishRelay<Step>()
+
+  weak var delegate: UserDetailsViewModelDelegate!
   lazy var storage = Storage.storage()
   
-  init(delegate: UserDetailsViewModelDelegate) {
-    self.delegate = delegate
-  }
-  
   func closeScreen() {
-    coordinator?.userDetailsDidSubmit()
+    steps.accept(EventStep.userDetailsDidComplete)
   }
 }
 
@@ -49,7 +48,7 @@ extension UserDetailsViewModel {
     )
     Events.updateUserProfile(user: updatedUser, onComplete: { [weak self] result in
       switch result {
-      case .success(_):
+      case .success:
         self?.delegate.removeActivityIndicator()
         self?.closeScreen()
         return
@@ -119,14 +118,23 @@ extension UserDetailsViewModel {
       title: "Камера",
       style: .default,
       handler: {_ in
-        requestCameraUsagePermission(onOpenCamera: self.openCamera, present: self.delegate.present)
+        requestCameraUsagePermission(
+          onOpenCamera: self.openCamera,
+          openCameraAccessModal: {
+            self.steps.accept(EventStep.permissionModal(withType: .camera))
+          })
       }
     ))
     actionSheetController.addAction(.init(
       title: "Галерея",
       style: .default,
       handler: {_ in
-        requestLibraryUsagePermission(onOpenLibrary: self.openLibrary)
+        requestLibraryUsagePermission(
+          onOpenLibrary: self.openLibrary,
+          openLibraryAccessModal: {
+            self.steps.accept(EventStep.permissionModal(withType: .library))
+          }
+        )
       }
     ))
     actionSheetController.addAction(.init(
@@ -158,10 +166,12 @@ extension UserDetailsViewModel {
 
 protocol UserDetailsViewModelDelegate: UIViewControllerWithActivityIndicator,
   UIImagePickerControllerDelegate,
-UINavigationControllerDelegate {
+  UINavigationControllerDelegate {
   var user: User { get }
 }
 
 protocol UserDetailsScreenCoordinator: class {
   func userDetailsDidSubmit()
+  func openLibraryAccessModal()
+  func openCameraAccessModal(navigationController: UINavigationController)
 }
