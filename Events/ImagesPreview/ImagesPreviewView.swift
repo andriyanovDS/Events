@@ -8,6 +8,7 @@
 
 import UIKit
 import Stevia
+import Hero
 
 class ImagesPreviewView: UIView {
   let closeButton = UIButtonScaleOnPress()
@@ -27,8 +28,9 @@ class ImagesPreviewView: UIView {
   }
 
   private func setupView() {
-      backgroundColor = .black
+    backgroundColor = .black
     let imageView = UIImageView(image: images[startAtIndex])
+    imageView.hero.id = startAtIndex.description
     imageView.contentMode = .scaleToFill
     sv(imageView)
     imageView.left(0).right(0).centerInContainer()

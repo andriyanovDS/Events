@@ -7,14 +7,22 @@
 //
 
 import UIKit
+import Hero
 
 class ImagesPreviewVC: UIViewController {
   var imagesPreviewView: ImagesPreviewView?
   let images: [UIImage]
   let startAtIndex: Int
   let onResult: ([UIImage]) -> Void
+  let viewModel: ImagesPreviewViewModel
 
-  init(images: [UIImage], startAt index: Int, onResult: @escaping ([UIImage]) -> Void) {
+  init(
+    viewModel: ImagesPreviewViewModel,
+    images: [UIImage],
+    startAt index: Int,
+    onResult: @escaping ([UIImage]) -> Void
+  ) {
+    self.viewModel = viewModel
     self.images = images
     startAtIndex = index
     self.onResult = onResult
@@ -31,17 +39,12 @@ class ImagesPreviewVC: UIViewController {
   }
 
   private func sutupView() {
-    view.backgroundColor = .white
     imagesPreviewView = ImagesPreviewView(images: images, startAt: startAtIndex)
     view = imagesPreviewView
     imagesPreviewView?.backButton.addTarget(self, action: #selector(closeModal), for: .touchUpInside)
   }
 
-  private func setupNavigationBar() {
-    navigationController?.isNavigationBarHidden = true
-  }
-
   @objc private func closeModal() {
-    onResult(images)
+    viewModel.onCloseModal()
   }
 }

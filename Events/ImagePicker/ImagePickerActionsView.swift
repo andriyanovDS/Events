@@ -8,6 +8,7 @@
 
 import UIKit
 import Stevia
+import Hero
 
 let IMAGES_STACK_VIEW_SPACING: CGFloat = 6.0
 
@@ -54,6 +55,7 @@ class ImagePickerActionsView: UIView {
     imagesStackView.addArrangedSubview(imageView)
     imageView.width(imageSize.width).height(imageSize.height)
     imageViews.append(imageView)
+    imageView.previewImageView.hero.id = (imageViews.count - 1).description
   }
 
    func setupActions() {

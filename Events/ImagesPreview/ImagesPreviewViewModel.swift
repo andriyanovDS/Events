@@ -7,7 +7,14 @@
 //
 
 import Foundation
+import RxSwift
+import RxFlow
+import RxCocoa
 
-class ImagesPreviewViewModel {
-  
+class ImagesPreviewViewModel: Stepper {
+  let steps = PublishRelay<Step>()
+
+  func onCloseModal() {
+    steps.accept(EventStep.imagesPreviewDidComplete)
+  }
 }

@@ -32,14 +32,6 @@ class ImagePickerVC: UIViewController {
     }
   }
 
-  func openImagesPreview(images: [UIImage], startAt index: Int) {
-    let viewController = ImagesPreviewVC(images: images, startAt: index, onResult: { _ in
-      self.dismiss(animated: true, completion: nil)
-    })
-    viewController.modalPresentationStyle = .overCurrentContext
-    present(viewController, animated: true, completion: nil)
-  }
-
   internal func setupGalleryImage(image: UIImage) {
     imagePickerView?.setupImageView(image: image)
   }
@@ -61,7 +53,7 @@ class ImagePickerVC: UIViewController {
       onSelectImageSource: onSelectImageSource,
       onSelectImage: onSelectImage,
       onConfirmSendImages: onConfirmSendImages,
-      openImagesPreview: openImagesPreview
+      openImagesPreview: viewModel.openImagesPreview
     )
     imagePickerView?.closeButton.addTarget(
       self,

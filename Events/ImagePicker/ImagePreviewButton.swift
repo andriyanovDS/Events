@@ -14,7 +14,7 @@ let SELECT_BUTTON_PADDING: CGFloat = 4.0
 class ImagePreviewView: UIButton {
   let image: UIImage
   let selectButton = UIButton()
-  private let previewImageView = UIImageView()
+  let previewImageView = UIImageView()
   private let onSelectImage: (ImagePreviewView) -> Void
 
   var selectedCount: Int = 0 {

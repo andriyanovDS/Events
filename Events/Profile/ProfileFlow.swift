@@ -24,7 +24,6 @@ class ProfileFlow: Flow {
     guard let step = step as? EventStep else {
       return .none
     }
-    print("event", step)
     switch step {
     case .profile:
       return navigateToProfileScreen()
@@ -36,7 +35,7 @@ class ProfileFlow: Flow {
       return navigateToUserDetails(user: user)
     case .imagePickerDidComplete:
       self.rootNavigationController.tabBarController?.tabBar.isHidden = false
-       rootNavigationController.dismiss(animated: false, completion: nil)
+      rootNavigationController.dismiss(animated: false, completion: nil)
       return .none
     case .userDetailsDidComplete, .locationSearchDidCompete:
       rootNavigationController.dismiss(animated: true, completion: nil)
@@ -45,6 +44,7 @@ class ProfileFlow: Flow {
       rootNavigationController.dismiss(animated: false, completion: nil)
       return .none
     case .imagePicker(let onComplete):
+      self.rootNavigationController.tabBarController?.tabBar.isHidden = true
       return navigateToImagePicker(onComplete: onComplete)
     case .permissionModal(let withType):
       return navigateToPermissionModal(with: withType)
@@ -125,13 +125,15 @@ class ProfileFlow: Flow {
   }
 
   func navigateToImagePicker(onComplete: @escaping ([UIImage]) -> Void) -> FlowContributors {
-    let viewModel = ImagePickerViewModel(onResult: onComplete)
-    let viewController = ImagePickerVC(viewModel: viewModel)
-    viewController.modalTransitionStyle = .coverVertical
-    viewController.modalPresentationStyle = .overCurrentContext
-    self.rootNavigationController.tabBarController?.tabBar.isHidden = true
-    rootNavigationController.present(viewController, animated: false, completion: nil)
-    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
+    let flow = ImagePickerFlow()
+    Flows.whenReady(flow1: flow, block: { rootVC in
+      rootVC.modalPresentationStyle = .overCurrentContext
+      self.rootNavigationController.present(rootVC, animated: false)
+    })
+    return .one(flowContributor: .contribute(
+      withNextPresentable: flow,
+      withNextStepper: OneStepper(withSingleStep: EventStep.imagePicker(onComplete: onComplete))
+      ))
   }
 
   private func navigateToLoginScreen() -> FlowContributors {

@@ -81,6 +81,7 @@ PODS:
   - GoogleUtilities/UserDefaults (6.2.5):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.2.2)
+  - Hero (1.4.0)
   - leveldb-library (1.22)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
@@ -105,6 +106,7 @@ DEPENDENCIES:
   - Firebase/Core (~> 6)
   - Firebase/Database (~> 6)
   - Firebase/Storage (~> 6)
+  - Hero (~> 1.4.0)
   - RxCocoa (~> 5)
   - RxFlow (~> 2.4.0)
   - RxSwift (~> 5)
@@ -129,6 +131,7 @@ SPEC REPOS:
     - GoogleDataTransportCCTSupport
     - GoogleUtilities
     - GTMSessionFetcher
+    - Hero
     - leveldb-library
     - nanopb
     - RxCocoa
@@ -155,6 +158,7 @@ SPEC CHECKSUMS:
   GoogleDataTransportCCTSupport: 51134d81fca795c60cc247d1cb6af63c3d67b8d8
   GoogleUtilities: e7dc37039b19df7fe543479d3e4a02ac8d11bb69
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
+  Hero: bac92350d7201a1a940003e0767c7b52ce7c99a1
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   RxCocoa: fcf32050ac00d801f34a7f71d5e8e7f23026dcd8
@@ -165,6 +169,6 @@ SPEC CHECKSUMS:
   SwiftIconFont: 2ba18554a77c44948dc35b561b344e3c23834a84
   SwiftLint: 5553187048b900c91aa03552807681bb6b027846
 
-PODFILE CHECKSUM: b679926ee77c4351297834b4b247928a39c481ad
+PODFILE CHECKSUM: c343beb0db8531542b19806800800f589f1893db
 
 COCOAPODS: 1.7.3

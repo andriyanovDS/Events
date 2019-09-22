@@ -21,7 +21,6 @@ indirect enum EventStep: Step {
   case createEventDidComplete
   case imagePicker(onComplete: ([UIImage]) -> Void)
   case imagePickerDidComplete
-  case imagesPreview
   case calendar(withSelectedDates: SelectedDates, onComplete: (SelectedDates) -> Void)
   case calendarDidComplete
   case locationSearch (onResult: (Geocode) -> Void)
@@ -32,4 +31,6 @@ indirect enum EventStep: Step {
   case textFormattingTips
   case permissionModal (withType: PermissionModalType)
   case permissionModalDidComplete
+  case imagesPreview(images: [UIImage], startAt: Int, onResult: ([UIImage]) -> Void)
+  case imagesPreviewDidComplete
 }

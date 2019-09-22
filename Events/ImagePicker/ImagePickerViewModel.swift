@@ -71,6 +71,12 @@ class ImagePickerViewModel: Stepper {
     self.steps.accept(EventStep.imagePickerDidComplete)
   }
 
+  func openImagesPreview(images: [UIImage], startAt index: Int) {
+    steps.accept(EventStep.imagesPreview(images: images, startAt: index, onResult: { _ in
+
+    }))
+  }
+
   private func handleLibrary() {
     let fetchOptions = PHFetchOptions()
     let images = PHAsset.fetchAssets(with: .image, options: fetchOptions)
