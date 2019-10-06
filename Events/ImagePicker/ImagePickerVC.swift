@@ -39,7 +39,7 @@ class ImagePickerVC: UIViewController {
     viewModel.onSelectImageSource(source: source)
   }
 
-  private func onSelectImage(_ image: UIImage) -> Int {
+  private func onSelectImage(_ image: UIImage) -> [Int] {
     return viewModel.onSelectImage(image)
   }
 
@@ -85,5 +85,9 @@ extension ImagePickerVC: ImagePickerViewModelDelegate {
       return
     }
     viewModel.closeImagePicker(with: [image])
+  }
+
+  func updateImagePreviews(selectedImageIndices: [Int]) {
+    imagePickerView?.updateImagePreviews(selectedImageIndices: selectedImageIndices)
   }
 }

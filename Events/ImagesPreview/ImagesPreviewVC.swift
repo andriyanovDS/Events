@@ -14,7 +14,8 @@ class ImagesPreviewVC: UIViewController {
   var imagesPreviewView: ImagesPreviewView?
   var activeIndex: Int
   let images: [UIImage]
-  let onResult: ([UIImage]) -> Void
+  var selectedImageIndices: [Int]
+  let onResult: ([Int]) -> Void
   let viewModel: ImagesPreviewViewModel
   let layout = UICollectionViewFlowLayout()
   let collectionView: UICollectionView
@@ -23,10 +24,12 @@ class ImagesPreviewVC: UIViewController {
     viewModel: ImagesPreviewViewModel,
     images: [UIImage],
     startAt index: Int,
-    onResult: @escaping ([UIImage]) -> Void
+    selectedImageIndices: [Int],
+    onResult: @escaping ([Int]) -> Void
   ) {
     self.viewModel = viewModel
     self.images = images
+    self.selectedImageIndices = selectedImageIndices
     activeIndex = index
     self.onResult = onResult
     collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout())
@@ -75,6 +78,7 @@ class ImagesPreviewVC: UIViewController {
   }
 
   @objc private func closeModal() {
+    onResult(selectedImageIndices)
     viewModel.onCloseModal()
   }
 
@@ -120,6 +124,21 @@ class ImagesPreviewVC: UIViewController {
     )
     activeIndex = index
   }
+
+  @objc private func onSelectImage(_ button: UIButton) {
+    let cellIndex = button.tag
+    if let selectedImageIndex = selectedImageIndices.firstIndex(of: cellIndex) {
+      selectedImageIndices.remove(at: selectedImageIndex)
+      if let cell = collectionView.cellForItem(at: IndexPath(item: cellIndex, section: 0)) as? ImagePreviewCell {
+        cell.selectButton.clearCount()
+      }
+    } else {
+      selectedImageIndices.append(cellIndex)
+      if let cell = collectionView.cellForItem(at: IndexPath(item: cellIndex, section: 0)) as? ImagePreviewCell {
+        cell.selectButton.setCount(selectedImageIndices.count)
+      }
+    }
+  }
 }
 
 extension ImagesPreviewVC: UICollectionViewDataSource {
@@ -134,6 +153,11 @@ extension ImagesPreviewVC: UICollectionViewDataSource {
       ) as? ImagePreviewCell ?? ImagePreviewCell()
     let image = images[indexPath.item]
     cell.previewImageView.image = image
+    if let index = selectedImageIndices.firstIndex(of: indexPath.item) {
+      cell.selectButton.setCount(index + 1)
+    }
+    cell.selectButton.tag = indexPath.item
+    cell.selectButton.addTarget(self, action: #selector(onSelectImage(_:)), for: .touchUpInside)
     cell.previewImageView.hero.id = indexPath.item.description
     return cell
   }

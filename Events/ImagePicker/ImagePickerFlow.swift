@@ -31,8 +31,13 @@ class ImagePickerFlow: Flow {
     case .imagePickerDidComplete:
       rootNavigationController.popViewController(animated: false)
       return .end(forwardToParentFlowWithStep: EventStep.imagePickerDidComplete)
-    case .imagesPreview(let images, let startAt, let onResult):
-      return navigateToImagesPreview(images: images, startAt: startAt, onResult: onResult)
+    case .imagesPreview(let images, let startAt, let selectedImageIndices, let onResult):
+      return navigateToImagesPreview(
+        images: images,
+        startAt: startAt,
+        selectedImageIndices: selectedImageIndices,
+        onResult: onResult
+      )
     case .imagesPreviewDidComplete:
       rootNavigationController.dismiss(animated: true, completion: nil)
       return .none
@@ -53,13 +58,15 @@ class ImagePickerFlow: Flow {
   func navigateToImagesPreview(
     images: [UIImage],
     startAt: Int,
-    onResult: @escaping ([UIImage]) -> Void
+    selectedImageIndices: [Int],
+    onResult: @escaping ([Int]) -> Void
   ) -> FlowContributors {
     let viewModel = ImagesPreviewViewModel()
     let viewController = ImagesPreviewVC(
       viewModel: viewModel,
       images: images,
       startAt: startAt,
+      selectedImageIndices: selectedImageIndices,
       onResult: onResult
     )
     viewController.hero.isEnabled = true

@@ -13,7 +13,7 @@ let SELECT_BUTTON_PADDING: CGFloat = 4.0
 
 class ImagePreviewView: UIButton {
   let image: UIImage
-  let selectButton = UIButton()
+  let selectButton = SelectImageButton()
   let previewImageView = UIImageView()
   private let onSelectImage: (ImagePreviewView) -> Void
 
@@ -43,21 +43,6 @@ class ImagePreviewView: UIButton {
     previewImageView.contentMode = .scaleAspectFill
     previewImageView.image = image
 
-    selectButton.style({ v in
-      v.height(25).width(25)
-      v.layer.cornerRadius = 13
-      v.layer.borderWidth = 2
-      v.layer.borderColor = UIColor.white.cgColor
-    })
-
-    styleText(
-         button: selectButton,
-         text: "",
-         size: 14,
-         color: .white,
-         style: .bold
-       )
-
     sv(previewImageView, selectButton)
     previewImageView.fillContainer()
 
@@ -67,12 +52,10 @@ class ImagePreviewView: UIButton {
 
   private func setupCountView() {
     if selectedCount == 0 {
-      selectButton.backgroundColor = .clear
-      selectButton.setTitle("", for: .normal)
+      selectButton.clearCount()
       return
     }
-    selectButton.backgroundColor = .blue()
-    selectButton.setTitle(selectedCount.description, for: .normal)
+    selectButton.setCount(selectedCount)
   }
 
   @objc private func onTouchButton(_: UIButton) {

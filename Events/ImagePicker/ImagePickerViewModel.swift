@@ -28,7 +28,8 @@ class ImagePickerViewModel: Stepper {
       )
     }
   }
-  private var selectedImages: [UIImage] = []
+  private var images: [UIImage] = []
+  private var selectedImageIndices: [Int] = []
   weak var delegate: ImagePickerViewModelDelegate?
 
   init(onResult: @escaping (([UIImage]) -> Void)) {
@@ -44,20 +45,21 @@ class ImagePickerViewModel: Stepper {
     }
   }
 
-  func onSelectImage(_ image: UIImage) -> Int {
-    if selectedImages.contains(image) {
-      selectedImages.removeAll(where: { v in
-        v == image
-      })
-    } else {
-      selectedImages.append(image)
+  func onSelectImage(_ image: UIImage) -> [Int] {
+    guard let imageIndex = images.firstIndex(of: image) else {
+      return selectedImageIndices
     }
-    return selectedImages.count
+    if let selectedImageIndex = selectedImageIndices.firstIndex(of: imageIndex) {
+      selectedImageIndices.remove(at: selectedImageIndex)
+    } else {
+      selectedImageIndices.append(imageIndex)
+    }
+    return selectedImageIndices
   }
 
   func onConfirmSendImages() {
     delegate?.performCloseAnimation {
-      self.onResult(self.selectedImages)
+      self.onResult(self.selectedImageIndices.map { self.images[$0] })
       self.steps.accept(EventStep.imagePickerDidComplete)
     }
   }
@@ -72,9 +74,15 @@ class ImagePickerViewModel: Stepper {
   }
 
   func openImagesPreview(images: [UIImage], startAt index: Int) {
-    steps.accept(EventStep.imagesPreview(images: images, startAt: index, onResult: { _ in
-
-    }))
+    steps.accept(EventStep.imagesPreview(
+      images: images,
+      startAt: index,
+      selectedImageIndices: selectedImageIndices,
+      onResult: { selectedImageIndices in
+        self.selectedImageIndices = selectedImageIndices
+        self.delegate?.updateImagePreviews(selectedImageIndices: selectedImageIndices)
+      }
+    ))
   }
 
   private func handleLibrary() {
@@ -93,6 +101,7 @@ class ImagePickerViewModel: Stepper {
         guard let image = image else {
           return
         }
+          self.images.append(image)
           self.delegate?.setupGalleryImage(image: image)
       }
     })
@@ -178,14 +187,6 @@ protocol ImagePickerViewModelDelegate: UIImagePickerControllerDelegate,
   UIViewController,
   UINavigationControllerDelegate {
   func setupGalleryImage(image: UIImage)
+  func updateImagePreviews(selectedImageIndices: [Int])
   func performCloseAnimation(onComplete: @escaping () -> Void)
 }
-
-//protocol ImagePickerCoordinator {
-//  func openImagesPreview(
-//    images: [UIImage],
-//    startAtIndex: Int,
-//    onResult: ([UIImage]) -> Void,
-//    present: (UIViewController) -> Void
-//  )
-//}

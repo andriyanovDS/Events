@@ -99,6 +99,7 @@
 		74D48E6D232994FB00FB3012 /* SavedFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D48E6C232994FB00FB3012 /* SavedFlow.swift */; };
 		74D5A2112302AA6500806695 /* TextFormattingsTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D5A2102302AA6500806695 /* TextFormattingsTextStorage.swift */; };
 		74D7E9F02348E5A90022BAC1 /* ImagePreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D7E9EF2348E5A90022BAC1 /* ImagePreviewCell.swift */; };
+		74D7E9F2234A6BF00022BAC1 /* SelectImageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D7E9F1234A6BF00022BAC1 /* SelectImageButton.swift */; };
 		74D8DB2E22DD265500E70CB4 /* UserDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D8DB2D22DD265500E70CB4 /* UserDetailsViewController.swift */; };
 		74D8DB3422DD37F800E70CB4 /* UserDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D8DB3322DD37F800E70CB4 /* UserDetailsViewModel.swift */; };
 		74D9655F22F2272D00D828C1 /* UserDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D9655E22F2272D00D828C1 /* UserDetailsView.swift */; };
@@ -222,6 +223,7 @@
 		74D48E6C232994FB00FB3012 /* SavedFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedFlow.swift; sourceTree = "<group>"; };
 		74D5A2102302AA6500806695 /* TextFormattingsTextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormattingsTextStorage.swift; sourceTree = "<group>"; };
 		74D7E9EF2348E5A90022BAC1 /* ImagePreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewCell.swift; sourceTree = "<group>"; };
+		74D7E9F1234A6BF00022BAC1 /* SelectImageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImageButton.swift; sourceTree = "<group>"; };
 		74D8DB2D22DD265500E70CB4 /* UserDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewController.swift; sourceTree = "<group>"; };
 		74D8DB3322DD37F800E70CB4 /* UserDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewModel.swift; sourceTree = "<group>"; };
 		74D9655E22F2272D00D828C1 /* UserDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsView.swift; sourceTree = "<group>"; };
@@ -470,6 +472,7 @@
 				746E106823113E3600B5B19D /* ImagePickerItem.swift */,
 				746E107623147A9C00B5B19D /* ImagePreviewButton.swift */,
 				74E2A2862337774200629C36 /* ImagePickerFlow.swift */,
+				74D7E9F1234A6BF00022BAC1 /* SelectImageButton.swift */,
 			);
 			path = ImagePicker;
 			sourceTree = "<group>";
@@ -823,6 +826,7 @@
 				742A99C322EDC77500A3A703 /* Result.swift in Sources */,
 				741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */,
 				744B7C9222E3C6DF00A839A6 /* ButtonWithBorder.swift in Sources */,
+				74D7E9F2234A6BF00022BAC1 /* SelectImageButton.swift in Sources */,
 				741DCF8E22D3A888005783A3 /* CategoriesViewModel.swift in Sources */,
 				6079371323225D5B003AAD2B /* PermissionModalView.swift in Sources */,
 				74F0F55F22FF6F5500170C6C /* CategoriesView.swift in Sources */,

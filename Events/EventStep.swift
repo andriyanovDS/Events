@@ -31,6 +31,11 @@ indirect enum EventStep: Step {
   case textFormattingTips
   case permissionModal (withType: PermissionModalType)
   case permissionModalDidComplete
-  case imagesPreview(images: [UIImage], startAt: Int, onResult: ([UIImage]) -> Void)
+  case imagesPreview(
+    images: [UIImage],
+    startAt: Int,
+    selectedImageIndices: [Int],
+    onResult: ([Int]) -> Void
+  )
   case imagesPreviewDidComplete
 }

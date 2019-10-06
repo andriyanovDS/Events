@@ -19,15 +19,14 @@ class ImagePickerView: UIView {
   let closeButton: ImagePickerItem
   private let contentView = UIView()
   private let onSelectImageSource: (ImageSource) -> Void
-  private let onSelectImage: (UIImage) -> Int
+  private let onSelectImage: (UIImage) -> [Int]
   private let onConfirmSendImages: () -> Void
   private var state: ImagePickerState = .preview
-  private var selectedImageCount: Int = 0
   private let openImagesPreview: ([UIImage], Int) -> Void
 
   init(
     onSelectImageSource: @escaping (ImageSource) -> Void,
-    onSelectImage: @escaping (UIImage) -> Int,
+    onSelectImage: @escaping (UIImage) -> [Int],
     onConfirmSendImages: @escaping () -> Void,
     openImagesPreview: @escaping ([UIImage], Int) -> Void
     ) {
@@ -92,40 +91,40 @@ class ImagePickerView: UIView {
     }
   }
 
+  func setupImageView(image: UIImage) {
+    actionsView.setupImageButton(image)
+  }
+
+  func updateImagePreviews(selectedImageIndices: [Int]) {
+    actionsView.imageViews
+      .enumerated()
+      .forEach({ index, v in
+        guard let selectedImageIndex = selectedImageIndices.firstIndex(of: index) else {
+          v.selectedCount = 0
+          return
+        }
+        v.selectedCount = selectedImageIndex + 1
+      })
+    changeFirstAction(selectedImageCount: selectedImageIndices.count)
+  }
+
   private func onImageDidSelected(imageView: ImagePreviewView) {
-    let count = onSelectImage(imageView.image)
-    let isCountDecreased = count < selectedImageCount
-    selectedImageCount = count
+    let selectedImageIndices = onSelectImage(imageView.image)
+    updateImagePreviews(selectedImageIndices: selectedImageIndices)
 
-    if isCountDecreased {
-      actionsView.imageViews
-        .filter { $0.selectedCount > imageView.selectedCount }
-        .forEach { v in
-          v.selectedCount -= 1
-      }
-      imageView.selectedCount = 0
-    } else {
-      imageView.selectedCount = count
-    }
-
-    if selectedImageCount == 0 {
+    if selectedImageIndices.count == 0 {
       setupPreviewView(imageView: imageView)
       return
     }
-    if selectedImageCount == 1 && state == .preview {
+    if selectedImageIndices.count == 1 && state == .preview {
       setupSelectImageView(imageView: imageView)
       return
     }
-    changeFirstAction()
     UIView.animate(withDuration: 0.2, animations: {
       self.actionsView.scrollToSelectedImageView(imageView: imageView, scale: 1.0)
       self.layoutIfNeeded()
     })
     return
-  }
-
-  func setupImageView(image: UIImage) {
-    actionsView.setupImageButton(image)
   }
 
   private func setupView() {
@@ -152,7 +151,7 @@ class ImagePickerView: UIView {
   private func setupSelectImageView(imageView: ImagePreviewView) {
     state = .selectImage
     let scale = state.scale()
-    self.changeFirstAction()
+    changeFirstAction(selectedImageCount: 1)
     UIView.animate(withDuration: 0.2, animations: {
       self.actionsView.scrollView.heightConstraint?.constant += PICKER_ACTION_BUTTON_HEIGHT
       self.actionsView.imageViews.forEach { v in
@@ -165,7 +164,7 @@ class ImagePickerView: UIView {
     })
   }
 
-  private func changeFirstAction() {
+  private func changeFirstAction(selectedImageCount: Int) {
     let changedAction = actionsView.actions[0]
     if selectedImageCount == 0 {
       changedAction.action = .openCamera
@@ -190,7 +189,7 @@ class ImagePickerView: UIView {
 
   private func setupPreviewView(imageView: ImagePreviewView) {
     state = .preview
-    self.changeFirstAction()
+    self.changeFirstAction(selectedImageCount: 0)
     let scale = state.scale()
     UIView.animate(withDuration: 0.2, animations: {
       self.actionsView.scrollView.heightConstraint?.constant = 100

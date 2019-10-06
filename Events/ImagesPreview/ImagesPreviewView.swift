@@ -54,7 +54,7 @@ class ImagesPreviewView: UIView {
     sv(footerView.sv(backButton))
     footerView.left(0).right(0).bottom(0)
     backButton.left(20).width(35).height(35).top(10)
-    backButton.Bottom == footerView.safeAreaLayoutGuide.Bottom
+    backButton.Bottom == footerView.safeAreaLayoutGuide.Bottom + 10
   }
 }
 
