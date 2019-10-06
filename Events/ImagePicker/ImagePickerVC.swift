@@ -25,11 +25,10 @@ class ImagePickerVC: UIViewController {
     super.viewDidLoad()
     setupView()
     viewModel.delegate = self
-    viewModel.targetSize = CGSize(width: PICKER_IMAGE_WIDTH * 4, height: PICKER_IMAGE_HEIGHT * 4)
-
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
       self.imagePickerView?.animateShowContent()
     }
+    viewModel.targetSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
   }
 
   internal func setupGalleryImage(image: UIImage) {

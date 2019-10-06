@@ -13,12 +13,10 @@ import Hero
 class ImagesPreviewView: UIView {
   let closeButton = UIButtonScaleOnPress()
   let backButton = UIButtonScaleOnPress()
-  private let images: [UIImage]
-  private let startAtIndex: Int
+  private let collectionView: UICollectionView
 
-  init(images: [UIImage], startAt index: Int) {
-    self.images = images
-    startAtIndex = index
+  init(collectionView: UICollectionView) {
+    self.collectionView = collectionView
     super.init(frame: CGRect.zero)
     setupView()
   }
@@ -29,12 +27,12 @@ class ImagesPreviewView: UIView {
 
   private func setupView() {
     backgroundColor = .black
-    let imageView = UIImageView(image: images[startAtIndex])
-    imageView.hero.id = startAtIndex.description
-    imageView.contentMode = .scaleToFill
-    sv(imageView)
-    imageView.left(0).right(0).centerInContainer()
-
+    collectionView.style { v in
+      v.showsVerticalScrollIndicator = false
+      v.showsHorizontalScrollIndicator = false
+    }
+    sv(collectionView)
+    collectionView.fillContainer().centerInContainer()
     setupFooter()
   }
 
@@ -59,3 +57,11 @@ class ImagesPreviewView: UIView {
     backButton.Bottom == footerView.safeAreaLayoutGuide.Bottom
   }
 }
+
+private func getBoundsAreaSize() -> CGSize {
+   return CGSize(width: UIScreen.main.bounds.width / 3, height: 0)
+ }
+
+ private func getAnimationAreaSize() -> CGSize {
+   return CGSize(width: UIScreen.main.bounds.width, height: 0)
+ }
