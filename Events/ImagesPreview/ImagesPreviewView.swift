@@ -13,6 +13,7 @@ import Hero
 class ImagesPreviewView: UIView {
   let closeButton = UIButtonScaleOnPress()
   let backButton = UIButtonScaleOnPress()
+  let selectButton = SelectImageButton()
   private let collectionView: UICollectionView
 
   init(collectionView: UICollectionView) {
@@ -31,8 +32,10 @@ class ImagesPreviewView: UIView {
       v.showsVerticalScrollIndicator = false
       v.showsHorizontalScrollIndicator = false
     }
-    sv(collectionView)
+    sv(collectionView, selectButton)
     collectionView.fillContainer().centerInContainer()
+    selectButton.right(20)
+    selectButton.Top == safeAreaLayoutGuide.Top + 20
     setupFooter()
   }
 

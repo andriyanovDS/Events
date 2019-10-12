@@ -10,6 +10,7 @@ import UIKit
 import Stevia
 
 class SelectImageButton: UIButton {
+  private var count: Int?
 
   init() {
     super.init(frame: CGRect.zero)
@@ -21,11 +22,19 @@ class SelectImageButton: UIButton {
   }
 
   func clearCount() {
+    if count == nil {
+      return
+    }
+    count = nil
     backgroundColor = .clear
     setTitle("", for: .normal)
   }
 
   func setCount(_ count: Int) {
+    if self.count == count {
+      return
+    }
+    self.count = count
     backgroundColor = .blue()
     setTitle(count.description, for: .normal)
   }

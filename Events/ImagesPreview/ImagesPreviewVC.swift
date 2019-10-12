@@ -14,6 +14,7 @@ class ImagesPreviewVC: UIViewController {
   var imagesPreviewView: ImagesPreviewView?
   var activeIndex: Int
   let images: [UIImage]
+  var scrollOnIndex: Int
   var selectedImageIndices: [Int]
   let onResult: ([Int]) -> Void
   let viewModel: ImagesPreviewViewModel
@@ -31,6 +32,7 @@ class ImagesPreviewVC: UIViewController {
     self.images = images
     self.selectedImageIndices = selectedImageIndices
     activeIndex = index
+    scrollOnIndex = index
     self.onResult = onResult
     collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout())
     super.init(nibName: nil, bundle: nil)
@@ -49,6 +51,7 @@ class ImagesPreviewVC: UIViewController {
     )
     layout.scrollDirection = .horizontal
     collectionView.dataSource = self
+    collectionView.delegate = self
     collectionView.collectionViewLayout = layout
     collectionView.register(ImagePreviewCell.self, forCellWithReuseIdentifier: "ImagePreviewCell")
 
@@ -74,6 +77,10 @@ class ImagesPreviewVC: UIViewController {
   private func sutupView() {
     imagesPreviewView = ImagesPreviewView(collectionView: collectionView)
     view = imagesPreviewView
+    if let selectedImageIndex = selectedImageIndices.firstIndex(of: activeIndex) {
+      imagesPreviewView?.selectButton.setCount(selectedImageIndex + 1)
+    }
+    imagesPreviewView?.selectButton.addTarget(self, action: #selector(onSelectImage), for: .touchUpInside)
     imagesPreviewView?.backButton.addTarget(self, action: #selector(closeModal), for: .touchUpInside)
   }
 
@@ -84,19 +91,8 @@ class ImagesPreviewVC: UIViewController {
 
   @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
     if recognizer.state == .ended || recognizer.state == .cancelled {
-      let itemWidth = UIScreen.main.bounds.width
-      let itemsInScrollOffset = collectionView.contentOffset.x / itemWidth
-      let scrollOnIndex = itemsInScrollOffset.rounded(.towardZero)
-      let scrollDistance = (itemsInScrollOffset - scrollOnIndex) * itemWidth
-      let minScrollDistance = itemWidth / 4
-      let scrollToIndex = Int(scrollOnIndex) + 1 > activeIndex
-        ? scrollDistance > minScrollDistance
-          ? activeIndex + 1
-          : activeIndex
-        : itemWidth - scrollDistance > minScrollDistance
-          ? activeIndex - 1
-          : activeIndex
-      scrollTo(index: scrollToIndex)
+      scrollOnIndex = calculateImageIndex(on: collectionView.contentOffset.x)
+      scrollTo(index: scrollOnIndex)
     }
   }
 
@@ -125,19 +121,35 @@ class ImagesPreviewVC: UIViewController {
     activeIndex = index
   }
 
-  @objc private func onSelectImage(_ button: UIButton) {
-    let cellIndex = button.tag
-    if let selectedImageIndex = selectedImageIndices.firstIndex(of: cellIndex) {
+  @objc private func onSelectImage() {
+    if let selectedImageIndex = selectedImageIndices.firstIndex(of: scrollOnIndex) {
       selectedImageIndices.remove(at: selectedImageIndex)
-      if let cell = collectionView.cellForItem(at: IndexPath(item: cellIndex, section: 0)) as? ImagePreviewCell {
-        cell.selectButton.clearCount()
+      if let cell = collectionView.cellForItem(at: IndexPath(item: scrollOnIndex, section: 0)) as? ImagePreviewCell {
+        cell.selectedCount = nil
+        imagesPreviewView?.selectButton.clearCount()
       }
     } else {
-      selectedImageIndices.append(cellIndex)
-      if let cell = collectionView.cellForItem(at: IndexPath(item: cellIndex, section: 0)) as? ImagePreviewCell {
-        cell.selectButton.setCount(selectedImageIndices.count)
+      selectedImageIndices.append(scrollOnIndex)
+      if let cell = collectionView.cellForItem(at: IndexPath(item: scrollOnIndex, section: 0)) as? ImagePreviewCell {
+        cell.selectedCount = selectedImageIndices.count
+        imagesPreviewView?.selectButton.setCount(selectedImageIndices.count)
       }
     }
+  }
+
+  private func calculateImageIndex(on scrollOffset: CGFloat) -> Int {
+    let itemWidth = UIScreen.main.bounds.width
+    let itemsInScrollOffset = collectionView.contentOffset.x / itemWidth
+    let scrollOnIndex = itemsInScrollOffset.rounded(.towardZero)
+    let scrollDistance = (itemsInScrollOffset - scrollOnIndex) * itemWidth
+    let minScrollDistance = itemWidth / 2
+    return Int(scrollOnIndex) + 1 > activeIndex
+      ? scrollDistance > minScrollDistance
+        ? activeIndex + 1
+        : activeIndex
+      : itemWidth - scrollDistance > minScrollDistance
+        ? activeIndex - 1
+        : activeIndex
   }
 }
 
@@ -152,13 +164,28 @@ extension ImagesPreviewVC: UICollectionViewDataSource {
       for: indexPath
       ) as? ImagePreviewCell ?? ImagePreviewCell()
     let image = images[indexPath.item]
-    cell.previewImageView.image = image
+    cell.setImage(image: image)
     if let index = selectedImageIndices.firstIndex(of: indexPath.item) {
-      cell.selectButton.setCount(index + 1)
+      cell.selectedCount = index + 1
     }
-    cell.selectButton.tag = indexPath.item
-    cell.selectButton.addTarget(self, action: #selector(onSelectImage(_:)), for: .touchUpInside)
     cell.previewImageView.hero.id = indexPath.item.description
     return cell
+  }
+}
+
+extension ImagesPreviewVC: UICollectionViewDelegate {
+
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    activeIndex = calculateImageIndex(on: scrollView.contentOffset.x)
+    let indexPath = IndexPath(item: activeIndex, section: 0)
+    guard let cell = collectionView.cellForItem(at: indexPath) as? ImagePreviewCell else {
+      return
+    }
+    cell.selectedCount.foldL(
+      none: { imagesPreviewView?.selectButton.clearCount() },
+      some: { v in
+        imagesPreviewView?.selectButton.setCount(v)
+      }
+    )
   }
 }

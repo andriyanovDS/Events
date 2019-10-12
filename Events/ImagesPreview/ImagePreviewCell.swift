@@ -9,10 +9,11 @@
 import Foundation
 import UIKit
 import Stevia
+import AVFoundation
 
 class ImagePreviewCell: UICollectionViewCell {
+  var selectedCount: Int?
   let previewImageView = UIImageView()
-  let selectButton = SelectImageButton()
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -26,15 +27,18 @@ class ImagePreviewCell: UICollectionViewCell {
 
   func setupView() {
     previewImageView.contentMode = .scaleAspectFill
-    previewImageView.width(UIScreen.main.bounds.width)
 
-    sv(previewImageView, selectButton)
+    sv(previewImageView)
     previewImageView.centerInContainer()
-    selectButton.right(20)
-    selectButton.Top == safeAreaLayoutGuide.Top + 20
+  }
+
+  func setImage(image: UIImage) {
+    let size = AVMakeRect(aspectRatio: image.size, insideRect: UIScreen.main.bounds)
+    previewImageView.image = image
+    previewImageView.width(size.width).height(size.height)
   }
 
   override func prepareForReuse() {
-    selectButton.clearCount()
+    selectedCount = nil
   }
 }
