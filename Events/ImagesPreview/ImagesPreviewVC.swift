@@ -53,7 +53,7 @@ class ImagesPreviewVC: UIViewController {
     collectionView.dataSource = self
     collectionView.delegate = self
     collectionView.collectionViewLayout = layout
-    collectionView.register(ImagePreviewCell.self, forCellWithReuseIdentifier: "ImagePreviewCell")
+    collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: "ImageViewCell")
 
     let swipeRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeRecognizer))
     collectionView.panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
@@ -124,7 +124,7 @@ class ImagesPreviewVC: UIViewController {
   @objc private func onSelectImage() {
     if let selectedImageIndex = selectedImageIndices.firstIndex(of: scrollOnIndex) {
       selectedImageIndices.remove(at: selectedImageIndex)
-      if let cell = collectionView.cellForItem(at: IndexPath(item: scrollOnIndex, section: 0)) as? ImagePreviewCell {
+      if let cell = collectionView.cellForItem(at: IndexPath(item: scrollOnIndex, section: 0)) as? ImageViewCell {
         cell.selectedCount = nil
         imagesPreviewView?.selectButton.clearCount()
       }
@@ -160,9 +160,9 @@ extension ImagesPreviewVC: UICollectionViewDataSource {
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: "ImagePreviewCell",
+      withReuseIdentifier: "ImageViewCell",
       for: indexPath
-      ) as? ImagePreviewCell ?? ImagePreviewCell()
+      ) as? ImageViewCell ?? ImageViewCell()
     let image = images[indexPath.item]
     cell.setImage(image: image)
     if let index = selectedImageIndices.firstIndex(of: indexPath.item) {
@@ -178,7 +178,7 @@ extension ImagesPreviewVC: UICollectionViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     activeIndex = calculateImageIndex(on: scrollView.contentOffset.x)
     let indexPath = IndexPath(item: activeIndex, section: 0)
-    guard let cell = collectionView.cellForItem(at: indexPath) as? ImagePreviewCell else {
+    guard let cell = collectionView.cellForItem(at: indexPath) as? ImageViewCell else {
       return
     }
     cell.selectedCount.foldL(

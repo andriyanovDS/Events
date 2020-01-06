@@ -13,26 +13,14 @@ import Hero
 let IMAGES_STACK_VIEW_SPACING: CGFloat = 6.0
 
 class ImagePickerActionsView: UIView {
-  let imageSize: CGSize
-  let scrollView = UIScrollView()
-  let imagesStackView = UIStackView()
+  let collectionView: UICollectionView
   let actionsStackView = UIStackView()
-  let onSelectImage: (ImagePreviewView) -> Void
-  let onSelectAction: (ImagePickerAction) -> Void
+  let layout = ImagePickerCollectionViewLayout()
   var actions: [ImagePickerItem] = []
-  var imageViews: [ImagePreviewView] = []
-  private let openImagesPreview: ([UIImage], Int) -> Void
+  weak var delegate: ImagePickerActionsViewDelegate?
 
-  init(
-    imageSize: CGSize,
-    onSelectAction: @escaping (ImagePickerAction) -> Void,
-    onSelectImage: @escaping (ImagePreviewView) -> Void,
-    openImagesPreview: @escaping ([UIImage], Int) -> Void
-  ) {
-    self.imageSize = imageSize
-    self.onSelectImage = onSelectImage
-    self.onSelectAction = onSelectAction
-    self.openImagesPreview = openImagesPreview
+  init() {
+    collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout())
     super.init(frame: CGRect.zero)
     setupView()
   }
@@ -44,18 +32,6 @@ class ImagePickerActionsView: UIView {
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
-
-  func setupImageButton(_ image: UIImage) {
-    let imageView = ImagePreviewView(
-      image: image,
-      onSelectImage: onSelectImage
-    )
-    imageView.addTarget(self, action: #selector(onImagePreviewViewDidPressed), for: .touchUpInside)
-    imagesStackView.addArrangedSubview(imageView)
-    imageView.width(imageSize.width).height(imageSize.height)
-    imageViews.append(imageView)
-    imageView.previewImageView.hero.id = (imageViews.count - 1).description
   }
 
    func setupActions() {
@@ -75,84 +51,150 @@ class ImagePickerActionsView: UIView {
     }
   }
 
-  func scrollToSelectedImageView(imageView: ImagePreviewView, scale: CGFloat) -> CGFloat {
-    let rect = imagesStackView.convert(imageView.bounds, to: imageView)
-    let imageIndex = imageViews.firstIndex(of: imageView) ?? 0
-
-    if scale == 1 {
-      if imageIndex == imageViews.count - 1 {
-        let scrollToPointX = scrollView.contentSize.width - scrollView.bounds.width
-        let scrollToPoint = CGPoint(
-          x: scrollToPointX,
-          y: 0
-        )
-        scrollView.setContentOffset(scrollToPoint, animated: false)
-        return scrollToPointX
-      }
-      if imageIndex == 0 {
-        scrollView.setContentOffset(CGPoint.zero, animated: false)
-        return 0.0
-      }
-    }
-
-    let halfOfScrollViewWidth = scrollView.bounds.width / 2
-    let imageCenterX = abs(rect.minX) + imageView.bounds.width / 2
-    let offsetDifference = imageCenterX * scale - halfOfScrollViewWidth
-    let scrollToPoint = CGPoint(
-      x: offsetDifference + 10,
-      y: 0
-    )
-    scrollView.contentSize = CGSize(
-      width: scrollView.contentSize.width * scale,
-      height: scrollView.contentSize.height
-    )
-    scrollView.setContentOffset(scrollToPoint, animated: false)
-    return scrollToPoint.x
+  func scrollToSelectedImageView(at index: Int, scale: CGFloat) -> CGFloat {
+    let point = contentOffsetPoint(for: index, scale: scale)
+    collectionView.setContentOffset(point, animated: scale == 1.0)
+    return point.x
   }
 
-  @objc func onImagePreviewViewDidPressed(_ button: ImagePreviewView) {
-    let index = imagesStackView.arrangedSubviews.firstIndex(of: button)
-    guard let imageIndex = index else {
+  func selectButtonOffset(forCellAt index: Int, contentOffsetX: CGFloat) -> CGFloat {
+    let cellWidth = layout.cellSize.width
+    let cellTotalWidth = cellWidth + IMAGES_STACK_VIEW_SPACING
+    let scrollViewMaxX = contentOffsetX + collectionView.bounds.width
+    let cellMaxX = (CGFloat(index) * cellTotalWidth) + cellWidth
+    if scrollViewMaxX > cellMaxX {
+      return SELECT_BUTTON_PADDING
+    }
+    let offset = abs(scrollViewMaxX - cellMaxX)
+    var resultOffset: CGFloat = offset
+    if offset + SELECT_BUTTON_SIZE > cellWidth - SELECT_BUTTON_PADDING {
+      resultOffset = cellWidth - SELECT_BUTTON_PADDING - SELECT_BUTTON_SIZE
+    }
+    if offset < SELECT_BUTTON_PADDING {
+      resultOffset = SELECT_BUTTON_PADDING
+    }
+    return resultOffset
+  }
+
+  func adjustImageViewSelectButton(contentOffsetX: CGFloat) {
+    let indexPath = IndexPath(
+      item: rightmostImageViewIndex(contentOffsetX: contentOffsetX),
+      section: 0
+    )
+    guard let cell = collectionView.cellForItem(at: indexPath) as? ImagePreviewCell else {
+      collectionView.visibleCells
+        .compactMap { $0 as? ImagePreviewCell }
+        .filter { $0.selectButton.rightConstraint?.constant != -SELECT_BUTTON_PADDING }
+        .forEach { $0.setSelectButtonPosition(SELECT_BUTTON_PADDING) }
       return
     }
-    openImagesPreview(imageViews.map { $0.image }, imageIndex)
+    cell.setSelectButtonPosition(
+      selectButtonOffset(forCellAt: indexPath.item, contentOffsetX: contentOffsetX)
+    )
+    collectionView.visibleCells
+      .compactMap { $0 as? ImagePreviewCell }
+      .filter { $0 != cell && $0.selectButton.rightConstraint?.constant != -SELECT_BUTTON_PADDING }
+      .forEach { $0.setSelectButtonPosition(SELECT_BUTTON_PADDING) }
+  }
+
+  func adjustImageViewSelectButtonAfterScroll() {
+    adjustImageViewSelectButton(contentOffsetX: collectionView.contentOffset.x)
+  }
+
+  private func contentOffsetPoint(for index: Int, scale: CGFloat) -> CGPoint {
+    let top = -collectionView.adjustedContentInset.top
+    if scale == 1 {
+      if index == 0 {
+        return CGPoint(
+          x: 0,
+          y: top
+        )
+      }
+
+      if index == collectionView.numberOfItems(inSection: 0) - 1 {
+        return CGPoint(
+          x: collectionView.contentSize.width - collectionView.bounds.width,
+          y: top
+        )
+      }
+    }
+
+    let indexPath = IndexPath(
+      item: index,
+      section: 0
+    )
+    guard let attributes = collectionView.layoutAttributesForItem(at: indexPath) else {
+      return CGPoint(
+        x: collectionView.contentSize.width - collectionView.bounds.width,
+        y: top
+      )
+    }
+    let frame = attributes.frame
+    let imageCenterX: CGFloat = abs(frame.minX) + frame.width / 2
+    return CGPoint(
+      x: imageCenterX * scale - collectionView.bounds.width / 2,
+      y: top
+    )
   }
 
   @objc func onActionDidSelected(_ item: ImagePickerItem) {
-    onSelectAction(item.action)
+    delegate?.onSelectAction(item.action)
   }
 
   private func setupView() {
     clipsToBounds = true
     layer.cornerRadius = 10
-    scrollView.style({ v in
-      v.canCancelContentTouches = true
+    layout.scrollDirection = .horizontal
+    layout.cellSize = CGSize(
+      width: PICKER_IMAGE_WIDTH,
+      height: PICKER_IMAGE_HEIGHT
+    )
+    layout.minimumInteritemSpacing = IMAGES_STACK_VIEW_SPACING
+    collectionView.style({ v in
+      v.contentInset = UIEdgeInsets(
+        top: 7,
+        left: 10,
+        bottom: 0,
+        right: 10
+      )
       v.showsVerticalScrollIndicator = false
       v.showsHorizontalScrollIndicator = false
       v.backgroundColor = .white
+      v.collectionViewLayout = layout
+      v.register(ImagePreviewCell.self, forCellWithReuseIdentifier: "ImagePreviewCell")
+      
     })
     actionsStackView.style({ v in
       v.axis = .vertical
       v.alignment = .fill
       v.distribution = .fillProportionally
     })
-    imagesStackView.style({ v in
-      v.axis = .horizontal
-      v.alignment = .fill
-      v.spacing = IMAGES_STACK_VIEW_SPACING
-      v.distribution = .fillEqually
-    })
 
     setupActions()
-    sv(scrollView.sv(imagesStackView), actionsStackView)
+    sv(collectionView, actionsStackView)
     setupConstraints()
   }
 
   private func setupConstraints() {
     actionsStackView.left(0).right(0)
-    scrollView.height(100).left(0).right(0).top(0)
-    actionsStackView.Top == scrollView.Bottom
-    imagesStackView.left(10).top(10).bottom(10).right(10)
-    imagesStackView.Height == scrollView.Height - 20
+    collectionView.height(100).left(0).right(0).top(0)
+    actionsStackView.Top == collectionView.Bottom
   }
+
+  private func rightmostImageViewIndex(contentOffsetX: CGFloat) -> Int {
+    let maxX = contentOffsetX + collectionView.bounds.width
+    let imagesCount = maxX / (layout.cellSize.width + IMAGES_STACK_VIEW_SPACING)
+    let index = Int(imagesCount.rounded(.down))
+
+    let itemsInCollectionView = collectionView.numberOfItems(inSection: 0)
+    if index >= itemsInCollectionView {
+      return itemsInCollectionView - 1
+    }
+    return index
+  }
+}
+
+protocol ImagePickerActionsViewDelegate: class {
+  var state: ImagePickerState { get }
+  func onSelectAction(_: ImagePickerAction) -> Void
 }

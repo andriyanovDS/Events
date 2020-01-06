@@ -60,7 +60,6 @@ class Slider {
 
   @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
     let translation = recognizer.translation(in: translateView)
-    print(recognizer.state)
     switch recognizer.state {
     case .began, .changed:
       translateView?.transform = CGAffineTransform(translationX: translation.x, y: 0)
@@ -76,7 +75,6 @@ class Slider {
       return
     }
     let size = getBoundsAreaSize()
-    print(abs(translation.x), size.width)
     if abs(translation.x) >= size.width {
       let animationSize = getAnimationAreaSize()
       let direction = horizontalDirection(for: translation.x)
@@ -88,7 +86,6 @@ class Slider {
             translationX: direction.horizontalFold(left: animationSize.width, right: -animationSize.width),
             y: 0
           )
-          print("set translate", direction.horizontalFold(left: animationSize.width, right: -animationSize.width))
         },
         completion: { _ in
           self.isAnimationInProgress = false

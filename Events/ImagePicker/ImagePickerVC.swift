@@ -31,16 +31,8 @@ class ImagePickerVC: UIViewController {
     viewModel.targetSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
   }
 
-  internal func setupGalleryImage(image: UIImage) {
-    imagePickerView?.setupImageView(image: image)
-  }
-
   private func onSelectImageSource(source: ImageSource) {
     viewModel.onSelectImageSource(source: source)
-  }
-
-  private func onSelectImage(_ image: UIImage) -> [Int] {
-    return viewModel.onSelectImage(image)
   }
 
   private func onConfirmSendImages() {
@@ -50,10 +42,10 @@ class ImagePickerVC: UIViewController {
   private func setupView() {
     imagePickerView = ImagePickerView(
       onSelectImageSource: onSelectImageSource,
-      onSelectImage: onSelectImage,
-      onConfirmSendImages: onConfirmSendImages,
-      openImagesPreview: viewModel.openImagesPreview
+      onConfirmSendImages: onConfirmSendImages
     )
+    imagePickerView?.actionsView.collectionView.delegate = self
+    imagePickerView?.actionsView.collectionView.dataSource = self
     imagePickerView?.closeButton.addTarget(
       self,
       action: #selector(onClose),
@@ -66,6 +58,18 @@ class ImagePickerVC: UIViewController {
     imagePickerView?.animateHideContent(onComplete: {
       self.viewModel.closeImagePicker(with: [])
     })
+  }
+
+  @objc private func onImageDidSelected(_ button: SelectImageButton) {
+    let index = button.tag
+    viewModel.onSelectImage(at: index)
+
+    let indexPath = IndexPath(item: index, section: 0)
+    guard let cell = imagePickerView?.actionsView.collectionView.cellForItem(at: indexPath) as? ImagePreviewCell else {
+      return
+    }
+    cell.selectButton.setCount(viewModel.selectedImageIndices.count)
+    imagePickerView?.onImageDidSelected(at: index, selectedImageIndices: viewModel.selectedImageIndices)
   }
 }
 
@@ -89,5 +93,63 @@ extension ImagePickerVC: ImagePickerViewModelDelegate {
 
   func updateImagePreviews(selectedImageIndices: [Int]) {
     imagePickerView?.updateImagePreviews(selectedImageIndices: selectedImageIndices)
+  }
+
+  func prepareImagesUpdate() {
+    guard let collectionView = imagePickerView?.actionsView.collectionView else {
+      return
+    }
+    collectionView.numberOfItems(inSection: 0)
+  }
+
+  func insertImage(at index: Int) {
+    guard let collectionView = imagePickerView?.actionsView.collectionView else {
+      return
+    }
+    collectionView.performBatchUpdates({
+      let indexPath = IndexPath(item: index, section: 0)
+      collectionView.insertItems(at: [indexPath])
+    })
+  }
+}
+
+extension ImagePickerVC: UICollectionViewDataSource {
+  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    return viewModel.images.count
+  }
+
+  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let cell = collectionView.dequeueReusableCell(
+      withReuseIdentifier: "ImagePreviewCell",
+      for: indexPath
+      ) as? ImagePreviewCell ?? ImagePreviewCell()
+    cell.selectButton.tag = indexPath.item
+    cell.selectButton.addTarget(self, action: #selector(onImageDidSelected(_:)), for: .touchUpInside)
+    let image = viewModel.images[indexPath.item]
+    cell.reuseCell(image: image)
+    let selectButtonOffset = imagePickerView!.actionsView.selectButtonOffset(
+      forCellAt: indexPath.item,
+      contentOffsetX: collectionView.contentOffset.x
+    )
+    cell.setSelectButtonPosition(selectButtonOffset)
+    if let index = viewModel.selectedImageIndices.firstIndex(of: indexPath.item) {
+      cell.selectedCount = index + 1
+    }
+    cell.previewImageView.hero.id = indexPath.item.description
+    return cell
+  }
+
+  func numberOfSections(in collectionView: UICollectionView) -> Int {
+    return 1
+  }
+}
+
+extension ImagePickerVC: UICollectionViewDelegate {
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    viewModel.openImagesPreview(startAt: indexPath.item)
+  }
+
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    imagePickerView?.collectionViewDidScroll()
   }
 }

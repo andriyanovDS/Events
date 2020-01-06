@@ -28,8 +28,8 @@ class ImagePickerViewModel: Stepper {
       )
     }
   }
-  private var images: [UIImage] = []
-  private var selectedImageIndices: [Int] = []
+  var images: [UIImage] = []
+  var selectedImageIndices: [Int] = []
   weak var delegate: ImagePickerViewModelDelegate?
 
   init(onResult: @escaping (([UIImage]) -> Void)) {
@@ -45,16 +45,12 @@ class ImagePickerViewModel: Stepper {
     }
   }
 
-  func onSelectImage(_ image: UIImage) -> [Int] {
-    guard let imageIndex = images.firstIndex(of: image) else {
-      return selectedImageIndices
-    }
-    if let selectedImageIndex = selectedImageIndices.firstIndex(of: imageIndex) {
+  func onSelectImage(at index: Int) {
+    if let selectedImageIndex = selectedImageIndices.firstIndex(of: index) {
       selectedImageIndices.remove(at: selectedImageIndex)
     } else {
-      selectedImageIndices.append(imageIndex)
+      selectedImageIndices.append(index)
     }
-    return selectedImageIndices
   }
 
   func onConfirmSendImages() {
@@ -73,7 +69,7 @@ class ImagePickerViewModel: Stepper {
     self.steps.accept(EventStep.imagePickerDidComplete)
   }
 
-  func openImagesPreview(images: [UIImage], startAt index: Int) {
+  func openImagesPreview(startAt index: Int) {
     steps.accept(EventStep.imagesPreview(
       images: images,
       startAt: index,
@@ -98,11 +94,12 @@ class ImagePickerViewModel: Stepper {
         contentMode: .aspectFit,
         options: options
         ) { image, _ in
-        guard let image = image else {
-          return
-        }
+          guard let image = image else {
+            return
+          }
+          self.delegate?.prepareImagesUpdate()
           self.images.append(image)
-          self.delegate?.setupGalleryImage(image: image)
+          self.delegate?.insertImage(at: self.images.count - 1)
       }
     })
   }
@@ -186,7 +183,8 @@ enum ImageSource: CaseIterable {
 protocol ImagePickerViewModelDelegate: UIImagePickerControllerDelegate,
   UIViewController,
   UINavigationControllerDelegate {
-  func setupGalleryImage(image: UIImage)
+  func prepareImagesUpdate()
+  func insertImage(at index: Int)
   func updateImagePreviews(selectedImageIndices: [Int])
   func performCloseAnimation(onComplete: @escaping () -> Void)
 }

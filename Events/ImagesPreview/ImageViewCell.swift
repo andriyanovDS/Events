@@ -1,5 +1,5 @@
 //
-//  ImagePreviewCell.swift
+//  ImageViewCell.swift
 //  Events
 //
 //  Created by Дмитрий Андриянов on 05/10/2019.
@@ -11,7 +11,7 @@ import UIKit
 import Stevia
 import AVFoundation
 
-class ImagePreviewCell: UICollectionViewCell {
+class ImageViewCell: UICollectionViewCell {
   var selectedCount: Int?
   let previewImageView = UIImageView()
 

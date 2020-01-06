@@ -9,6 +9,8 @@
 import UIKit
 import Stevia
 
+let SELECT_BUTTON_SIZE: CGFloat = 25.0
+
 class SelectImageButton: UIButton {
   private var count: Int?
 
@@ -41,7 +43,7 @@ class SelectImageButton: UIButton {
 
   private func setupView() {
     style({ v in
-     v.height(25).width(25)
+     v.height(SELECT_BUTTON_SIZE).width(SELECT_BUTTON_SIZE)
      v.layer.cornerRadius = 13
      v.layer.borderWidth = 2
      v.layer.borderColor = UIColor.white.cgColor
