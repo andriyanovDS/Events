@@ -130,7 +130,7 @@ class ImagesPreviewVC: UIViewController {
       }
     } else {
       selectedImageIndices.append(scrollOnIndex)
-      if let cell = collectionView.cellForItem(at: IndexPath(item: scrollOnIndex, section: 0)) as? ImagePreviewCell {
+      if let cell = collectionView.cellForItem(at: IndexPath(item: scrollOnIndex, section: 0)) as? ImageViewCell {
         cell.selectedCount = selectedImageIndices.count
         imagesPreviewView?.selectButton.setCount(selectedImageIndices.count)
       }

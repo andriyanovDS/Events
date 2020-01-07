@@ -105,8 +105,6 @@
 		74D9655F22F2272D00D828C1 /* UserDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D9655E22F2272D00D828C1 /* UserDetailsView.swift */; };
 		74DAFA452353701300331369 /* ImagePickerCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DAFA442353701300331369 /* ImagePickerCollectionViewLayout.swift */; };
 		74E2A2872337774200629C36 /* ImagePickerFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E2A2862337774200629C36 /* ImagePickerFlow.swift */; };
-		74E2A2892337EB0000629C36 /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E2A2882337EB0000629C36 /* Slider.swift */; };
-		74E2A28C2337EB8500629C36 /* EventRecoznizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E2A28B2337EB8500629C36 /* EventRecoznizer.swift */; };
 		74E5DAD22329974D00E1557D /* ViewModelBased.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E5DAD12329974D00E1557D /* ViewModelBased.swift */; };
 		74E5DAD4232999F500E1557D /* EventsFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E5DAD3232999F500E1557D /* EventsFlow.swift */; };
 		74F0F55F22FF6F5500170C6C /* CategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F55E22FF6F5500170C6C /* CategoriesView.swift */; };
@@ -230,8 +228,6 @@
 		74D9655E22F2272D00D828C1 /* UserDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsView.swift; sourceTree = "<group>"; };
 		74DAFA442353701300331369 /* ImagePickerCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerCollectionViewLayout.swift; sourceTree = "<group>"; };
 		74E2A2862337774200629C36 /* ImagePickerFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerFlow.swift; sourceTree = "<group>"; };
-		74E2A2882337EB0000629C36 /* Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
-		74E2A28B2337EB8500629C36 /* EventRecoznizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRecoznizer.swift; sourceTree = "<group>"; };
 		74E5DAD12329974D00E1557D /* ViewModelBased.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelBased.swift; sourceTree = "<group>"; };
 		74E5DAD3232999F500E1557D /* EventsFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsFlow.swift; sourceTree = "<group>"; };
 		74F0F55E22FF6F5500170C6C /* CategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesView.swift; sourceTree = "<group>"; };
@@ -326,7 +322,6 @@
 		742EF13B231F17EE002092CA /* ImagesPreview */ = {
 			isa = PBXGroup;
 			children = (
-				74E2A28A2337EB4D00629C36 /* Slider */,
 				742EF13C231F1822002092CA /* ImagesPreviewVC.swift */,
 				742EF13E231F1850002092CA /* ImagesPreviewViewModel.swift */,
 				742EF140231F1879002092CA /* ImagesPreviewView.swift */,
@@ -600,15 +595,6 @@
 			path = UserDetails;
 			sourceTree = "<group>";
 		};
-		74E2A28A2337EB4D00629C36 /* Slider */ = {
-			isa = PBXGroup;
-			children = (
-				74E2A2882337EB0000629C36 /* Slider.swift */,
-				74E2A28B2337EB8500629C36 /* EventRecoznizer.swift */,
-			);
-			path = Slider;
-			sourceTree = "<group>";
-		};
 		74F0F56A2300A76800170C6C /* TextFormattingTips */ = {
 			isa = PBXGroup;
 			children = (
@@ -850,14 +836,12 @@
 				746697442326F90F00406CD8 /* EventStep.swift in Sources */,
 				74E5DAD4232999F500E1557D /* EventsFlow.swift in Sources */,
 				748E0B2722DBBB2900B061C7 /* LocationSearchStackView.swift in Sources */,
-				74E2A2892337EB0000629C36 /* Slider.swift in Sources */,
 				74D8DB3422DD37F800E70CB4 /* UserDetailsViewModel.swift in Sources */,
 				741DCF8C22D3A878005783A3 /* CategoriesVC.swift in Sources */,
 				7408542123020C0700220B23 /* Tip.swift in Sources */,
 				745243BD22CF7B5A00C930C8 /* SearchBarViewController.swift in Sources */,
 				74F0F56122FF7E8800170C6C /* CategoryButton.swift in Sources */,
 				748E0B1222DA24DD00B061C7 /* APIClient.swift in Sources */,
-				74E2A28C2337EB8500629C36 /* EventRecoznizer.swift in Sources */,
 				742EF13F231F1850002092CA /* ImagesPreviewViewModel.swift in Sources */,
 				748E0B1A22DB6B9200B061C7 /* LocationSearchViewController.swift in Sources */,
 				74F0F5752300B5BF00170C6C /* HintPopupView.swift in Sources */,
