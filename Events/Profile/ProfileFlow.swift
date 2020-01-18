@@ -31,6 +31,8 @@ class ProfileFlow: Flow {
       return navigateToLoginScreen()
     case .locationSearch(let onResult):
       return navigateToLocationSearchBar(onResult: onResult)
+    case .calendar(let withSelectedDates, let onComplete):
+      return openCalendarScreen(withSelectedDates: withSelectedDates, onComplete: onComplete)
     case .userDetails(let user):
       return navigateToUserDetails(user: user)
     case .imagePickerDidComplete:
@@ -40,7 +42,13 @@ class ProfileFlow: Flow {
     case .userDetailsDidComplete, .locationSearchDidCompete:
       rootNavigationController.dismiss(animated: true, completion: nil)
       return .none
-    case .calendarDidComplete, .permissionModalDidComplete, .hintPopupDidComplete:
+    case .hintPopupDidComplete(let nextStep):
+      rootNavigationController.dismiss(animated: false, completion: nil)
+      if let step = nextStep {
+        return navigateToTextFormattingTips()
+      }
+      return .none
+    case .calendarDidComplete, .permissionModalDidComplete, .textFormattingTipsDidComplete:
       rootNavigationController.dismiss(animated: false, completion: nil)
       return .none
     case .imagePicker(let onComplete):
@@ -55,6 +63,8 @@ class ProfileFlow: Flow {
     case .createEventDidComplete:
       rootNavigationController.popViewController(animated: true)
       return .none
+    case .textFormattingTips:
+      return navigateToTextFormattingTips()
     default:
       return .none
     }
@@ -91,10 +101,13 @@ class ProfileFlow: Flow {
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
   }
 
-  private func openCalendarScreen(onComplete: @escaping (SelectedDates) -> Void) -> FlowContributors {
+  private func openCalendarScreen(
+    withSelectedDates: SelectedDates,
+    onComplete: @escaping (SelectedDates) -> Void
+  ) -> FlowContributors {
      let viewModel = CalendarViewModel(
-       selectedDateFrom: nil,
-       selectedDateTo: nil
+      selectedDateFrom: withSelectedDates.from,
+       selectedDateTo: withSelectedDates.to
      )
      let viewController = CalendarViewController.instantiate(with: viewModel)
      viewController.modalPresentationStyle = .overCurrentContext
@@ -107,6 +120,15 @@ class ProfileFlow: Flow {
   func navigateToHintPopup(hintPopup: HintPopup) -> FlowContributors {
     let viewModel = HintPopupViewModel()
     let viewController = HintPopupVC(hintPopup: hintPopup, viewModel: viewModel)
+    viewController.modalPresentationStyle = .overCurrentContext
+    viewController.isModalInPopover = true
+    rootNavigationController.present(viewController, animated: false, completion: nil)
+    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
+  }
+
+  private func navigateToTextFormattingTips() -> FlowContributors {
+    let viewModel = TextFormattingTipsViewModel()
+    let viewController = TextFormattingTipsVC.instantiate(with: viewModel)
     viewController.modalPresentationStyle = .overCurrentContext
     viewController.isModalInPopover = true
     rootNavigationController.present(viewController, animated: false, completion: nil)

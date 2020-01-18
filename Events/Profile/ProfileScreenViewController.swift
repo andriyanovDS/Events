@@ -62,13 +62,13 @@ class ProfileScreenViewController: UIViewController, ViewModelBased {
   
   private func setupButtons() {
     let createTaskButton = ProfileActionButton(
-      labelText: "Создать событие",
+      labelText: NSLocalizedString("Create event", comment: "create an event"),
       subtitleText: nil,
       iconName: "event"
     )
     createTaskButton.addTarget(self, action: #selector(createEvent), for: .touchUpInside)
     let settingsButton = ProfileActionButton(
-      labelText: "Настройки",
+      labelText: NSLocalizedString("Settings", comment: "User settings"),
       subtitleText: nil,
       iconName: "settings"
     )

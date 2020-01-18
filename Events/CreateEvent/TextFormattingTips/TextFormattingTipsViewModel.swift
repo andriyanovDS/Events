@@ -7,9 +7,11 @@
 //
 
 import Foundation
+import RxFlow
+import RxCocoa
 
-class TextFormattingTipsViewModel {
-  weak var coordinator: TextFormattingTipsCoordinator?
+class TextFormattingTipsViewModel: Stepper {
+  let steps = PublishRelay<Step>()
 
   let tips = [
     Tip(
@@ -30,10 +32,6 @@ class TextFormattingTipsViewModel {
   ]
 
   func closeScreen() {
-    coordinator?.closeTextFormattingTips()
+    steps.accept(EventStep.textFormattingTipsDidComplete)
   }
-}
-
-protocol TextFormattingTipsCoordinator: class {
-  func closeTextFormattingTips()
 }

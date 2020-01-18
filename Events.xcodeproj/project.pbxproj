@@ -27,6 +27,8 @@
 		744921DD23D3967B00B5BB43 /* CeraPro-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744921DA23D3967B00B5BB43 /* CeraPro-Italic.ttf */; };
 		744921DE23D3967B00B5BB43 /* CeraPro-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744921DB23D3967B00B5BB43 /* CeraPro-MediumItalic.ttf */; };
 		744921DF23D3967B00B5BB43 /* CeraPro-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744921DC23D3967B00B5BB43 /* CeraPro-BoldItalic.ttf */; };
+		744921E323D39F1F00B5BB43 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 744921E523D39F1F00B5BB43 /* Localizable.strings */; };
+		744921E923D3B1C000B5BB43 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 744921EB23D3B1C000B5BB43 /* Localizable.stringsdict */; };
 		744B7C8C22E39DB700A839A6 /* CeraPro-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8722E39DB700A839A6 /* CeraPro-Medium.ttf */; };
 		744B7C8D22E39DB700A839A6 /* CeraPro-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8822E39DB700A839A6 /* CeraPro-Light.ttf */; };
 		744B7C8E22E39DB700A839A6 /* CeraPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8922E39DB700A839A6 /* CeraPro-Regular.ttf */; };
@@ -148,6 +150,11 @@
 		744921DA23D3967B00B5BB43 /* CeraPro-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Italic.ttf"; sourceTree = "<group>"; };
 		744921DB23D3967B00B5BB43 /* CeraPro-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-MediumItalic.ttf"; sourceTree = "<group>"; };
 		744921DC23D3967B00B5BB43 /* CeraPro-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-BoldItalic.ttf"; sourceTree = "<group>"; };
+		744921E023D39E7F00B5BB43 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		744921E423D39F1F00B5BB43 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		744921E623D39F2E00B5BB43 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		744921EA23D3B1C000B5BB43 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		744921EC23D3B1C100B5BB43 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		744B7C8722E39DB700A839A6 /* CeraPro-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Medium.ttf"; sourceTree = "<group>"; };
 		744B7C8822E39DB700A839A6 /* CeraPro-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Light.ttf"; sourceTree = "<group>"; };
 		744B7C8922E39DB700A839A6 /* CeraPro-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Regular.ttf"; sourceTree = "<group>"; };
@@ -386,6 +393,8 @@
 				745243B222CE85BC00C930C8 /* LaunchScreen.storyboard */,
 				745243B522CE85BC00C930C8 /* Info.plist */,
 				7467B6EE22D514F500A1BFE9 /* GoogleService-Info.plist */,
+				744921E523D39F1F00B5BB43 /* Localizable.strings */,
+				744921EB23D3B1C000B5BB43 /* Localizable.stringsdict */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -677,6 +686,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 7452439D22CE85BA00C930C8;
 			productRefGroup = 745243A722CE85BA00C930C8 /* Products */;
@@ -696,10 +706,12 @@
 				7478F4F222F5FAB300A43F52 /* .gitignore in Resources */,
 				7481190A22D7E6BA004FBE48 /* .swiftlint.yml in Resources */,
 				745243B422CE85BC00C930C8 /* LaunchScreen.storyboard in Resources */,
+				744921E323D39F1F00B5BB43 /* Localizable.strings in Resources */,
 				744B7C8D22E39DB700A839A6 /* CeraPro-Light.ttf in Resources */,
 				744B7C8F22E39DB700A839A6 /* CeraPro-Black.ttf in Resources */,
 				744B7C8E22E39DB700A839A6 /* CeraPro-Regular.ttf in Resources */,
 				744921DF23D3967B00B5BB43 /* CeraPro-BoldItalic.ttf in Resources */,
+				744921E923D3B1C000B5BB43 /* Localizable.stringsdict in Resources */,
 				7467B6EF22D514F500A1BFE9 /* GoogleService-Info.plist in Resources */,
 				744B7C8C22E39DB700A839A6 /* CeraPro-Medium.ttf in Resources */,
 				744921DE23D3967B00B5BB43 /* CeraPro-MediumItalic.ttf in Resources */,
@@ -886,10 +898,29 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		744921E523D39F1F00B5BB43 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				744921E423D39F1F00B5BB43 /* ru */,
+				744921E623D39F2E00B5BB43 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		744921EB23D3B1C000B5BB43 /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				744921EA23D3B1C000B5BB43 /* ru */,
+				744921EC23D3B1C100B5BB43 /* en */,
+			);
+			name = Localizable.stringsdict;
+			sourceTree = "<group>";
+		};
 		745243B222CE85BC00C930C8 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				745243B322CE85BC00C930C8 /* Base */,
+				744921E023D39E7F00B5BB43 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -901,6 +932,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -962,6 +994,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

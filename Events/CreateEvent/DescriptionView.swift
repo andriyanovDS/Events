@@ -31,7 +31,10 @@ class DescriptionView: UIView {
 
     styleText(
       label: label,
-      text: "Расскажи о мероприятии",
+      text: NSLocalizedString(
+        "Tell more about event",
+        comment: "Create event: description section title"
+      ),
       size: 26,
       color: .gray900(),
       style: .bold
@@ -45,7 +48,7 @@ class DescriptionView: UIView {
     )
     styleText(
       button: submitButton,
-      text: "Далее",
+      text: NSLocalizedString("Next step",comment: "Create event: next step"),
       size: 20,
       color: .blue,
       style: .medium

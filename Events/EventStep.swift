@@ -29,6 +29,7 @@ indirect enum EventStep: Step {
   case hintPopup(popup: HintPopup)
   case hintPopupDidComplete(nextStep: EventStep?)
   case textFormattingTips
+  case textFormattingTipsDidComplete
   case permissionModal (withType: PermissionModalType)
   case permissionModalDidComplete
   case imagesPreview(

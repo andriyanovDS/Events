@@ -17,7 +17,6 @@ class HintPopupVC: UIViewController, UIGestureRecognizerDelegate {
     self.popup = hintPopup
     self.viewModel = viewModel
     super.init(nibName: nil, bundle: nil)
-
   }
 
   required init?(coder aDecoder: NSCoder) {

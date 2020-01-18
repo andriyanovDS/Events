@@ -31,7 +31,7 @@ class LocationView: UIView {
 
     styleText(
       label: titleLabel,
-      text: "Место проведения",
+      text: NSLocalizedString("Place of meeting", comment: "Create event: location section title"),
       size: 26,
       color: .gray900(),
       style: .bold
@@ -39,7 +39,10 @@ class LocationView: UIView {
 
     styleText(
       label: descriptionLabel,
-      text: "Где будет проходить мероприятие?",
+      text: NSLocalizedString(
+        "Where will the event be held?",
+        comment: "Create event: location section description"
+      ),
       size: 18,
       color: .gray400(),
       style: .regular
@@ -68,7 +71,7 @@ class LocationView: UIView {
 
     styleText(
       button: submitButton,
-      text: "Далее",
+      text: NSLocalizedString("Next step", comment: "Create event: next step"),
       size: 20,
       color: .blue(),
       style: .medium

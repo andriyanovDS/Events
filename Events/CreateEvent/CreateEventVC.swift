@@ -47,19 +47,18 @@ import SwiftIconFont
   }
   
   func setupDateView() {
-    setupDescriptionView()
-//    let dateFormatter = DateFormatter()
-//    dateFormatter.dateFormat = "HH:mm"
-//    dateView = DateView(
-//      startTime: dateFormatter.string(from: viewModel.dates[0]),
-//      duration: toLabel(duration: viewModel.duration!)
-//    )
-//    dateView?.delegate = self
-//    dateView?.datePicker.date = viewModel.dates[0]
-//    dateView?.dateButton.addTarget(self, action: #selector(selectDate), for: .touchUpInside)
-//    dateView?.submitButton.addTarget(self, action: #selector(setupCategoriesView), for: .touchUpInside)
-//    view = dateView
-//    locationView = nil
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm"
+    dateView = DateView(
+      startTime: dateFormatter.string(from: viewModel.dates[0]),
+      duration: toLabel(duration: viewModel.duration!)
+    )
+    dateView?.delegate = self
+    dateView?.datePicker.date = viewModel.dates[0]
+    dateView?.dateButton.addTarget(self, action: #selector(selectDate), for: .touchUpInside)
+    dateView?.submitButton.addTarget(self, action: #selector(setupCategoriesView), for: .touchUpInside)
+    view = dateView
+    locationView = nil
   }
 
   func setupCategoriesView() {
@@ -80,13 +79,16 @@ import SwiftIconFont
     descriptionView?.textView.delegate = self
     setupOpenImagePickerButton()
 
-//    let popup = HintPopup(
-//      title: "Оформите свой текст",
-//      description: "Форматируйте свой текст, используя специальные символы, чтобы сделать его более подробным и ясным.",
-//      link: "Нажмите, чтобы узнать больше",
-//      image: UIImage(named: "textFormatting")!
-//    )
-//    viewModel.openHintPopup(popup: popup)
+    let popup = HintPopup(
+      title: NSLocalizedString("Format you text", comment: "Format text hint: title"),
+      description: NSLocalizedString(
+        "Format you text using special symbols to make it more detailed",
+        comment: "Format text hint: description"
+      ),
+      link: NSLocalizedString("Press to get more info", comment: "Format text hint: open hint button label"),
+      image: UIImage(named: "textFormatting")!
+    )
+    viewModel.openHintPopup(popup: popup)
   }
 
   func onChangeLocationName(_ name: String) {
@@ -260,13 +262,21 @@ extension CreateEventViewController: UIPickerViewDataSource {
 }
 
 private func toLabel(duration: EventDurationRange) -> String {
-  return duration.min
-    .chain({ min in duration.max.foldL(
-      none: { "Более \(min) часов" },
-      some: { max in "\(min) - \(max) часов" }
-      )})
-    .alt({ duration.max.map { max in "\(max) \(max > 1 ? "часов" : "час")" } })
-    .getOrElse(result: "")
+  let formatString = NSLocalizedString("Event duration hours", comment: "Event duration hours plural")
+
+  let minRangeLabelFnOption = duration.min
+    .map { durationRangeLabel(formatString: formatString)($0) }
+    .orElse({ (max: Int) in String.localizedStringWithFormat(formatString, max) })
+
+  return duration.max
+    .ap(minRangeLabelFnOption)
+    .getOrElseL({ duration.min
+      .map { min in
+        "\(NSLocalizedString("More than", comment: "Event duration hours"))"
+        + " \(String.localizedStringWithFormat(formatString, min))"
+      }
+      .getOrElse(result: "")
+    })
 }
 
 extension CreateEventViewController: UITextViewDelegate {
@@ -276,5 +286,11 @@ extension CreateEventViewController: UITextViewDelegate {
       return
     }
     descriptionView.submitButton.isEnabled = textView.text.count > 0
+  }
+}
+
+func durationRangeLabel(formatString: String) -> (Int) -> (Int) -> String {
+  return { (min: Int) in
+    return { (max: Int) in "\(min) - \(String.localizedStringWithFormat(formatString, max))" }
   }
 }

@@ -60,16 +60,19 @@ class DateView: UIView {
 
     styleText(
       label: titleLabel,
-      text: "Время проведения",
+      text: NSLocalizedString("Date of event", comment: "Create event: date section title"),
       size: 26,
       color: .gray900(),
       style: .bold
     )
     setupSection(
       label: dateDescriptionLabel,
-      labelText: "Когда будет проходить мероприятие?",
+      labelText: NSLocalizedString(
+        "When will the event take place?",
+        comment: "Create event: location section description"
+      ),
       button: dateButton,
-      buttonLabelText: "Выберите дату"
+      buttonLabelText: NSLocalizedString("Select date", comment: "Create event: date section select title")
     )
     sv(scrollView.sv(
       contentView.sv([
@@ -138,7 +141,7 @@ class DateView: UIView {
   private func setupDateSection() {
     let toolBar = UIToolbar()
     let tabBarCloseButton = UIBarButtonItem(
-      title: "Закрыть",
+      title: NSLocalizedString("Cancel", comment: "Create event: date section close selection"),
       style: .done,
       target: delegate,
       action: #selector(delegate.endEditing)
@@ -149,7 +152,7 @@ class DateView: UIView {
       action: nil
     )
     let tabBarDoneButton = UIBarButtonItem(
-      title: "Выбрать",
+      title: NSLocalizedString("Select date", comment: "Create event: date section select date"),
       style: .done,
       target: delegate,
       action: #selector(delegate.onSelectTime)
@@ -164,7 +167,10 @@ class DateView: UIView {
     })
     setupSection(
       label: startTimeDescriptionLabel,
-      labelText: "Во сколько оно начнется?",
+      labelText: NSLocalizedString(
+        "What time will it start?",
+        comment: "Create event: time section select title"
+      ),
       textField: startTimeTextField
     )
   }
@@ -175,7 +181,10 @@ class DateView: UIView {
     durationTextField.inputView = pickerView
     setupSection(
       label: durationDescriptionLabel,
-      labelText: "Сколько оно будет длиться?",
+      labelText: NSLocalizedString(
+        "How long will it last?",
+        comment: "Create event: time section select duration"
+      ),
       textField: durationTextField
     )
   }
@@ -183,7 +192,7 @@ class DateView: UIView {
   private func setupSubmitButton() {
     styleText(
       button: submitButton,
-      text: "Далее",
+      text: NSLocalizedString("Next step",comment: "Create event: next step"),
       size: 20,
       color: .blue(),
       style: .medium

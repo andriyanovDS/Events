@@ -30,7 +30,10 @@ class ImagePickerView: UIView, ImagePickerActionsViewDelegate {
     self.onConfirmSendImages = onConfirmSendImages
     closeButton = ImagePickerItem(
       action: .close,
-      labelText: "Закрыть",
+      labelText: NSLocalizedString(
+        "Close",
+        comment: "Image picker: close"
+      ),
       isBoldLabel: true,
       hasBorder: false
     )
@@ -159,8 +162,11 @@ class ImagePickerView: UIView, ImagePickerActionsViewDelegate {
       changedAction.labelText = ImageSource.camera.localizedString()
       return
     }
+    let formatString = NSLocalizedString("image count", comment: "Image picker: select image")
     changedAction.action = .selectImages
-    changedAction.labelText = "Выбрать \(selectedImageCount) \(selectedImageCount > 1 ? "изображения" : "изображение")"
+    changedAction.labelText = NSLocalizedString("Select", comment: "Select images")
+      + " "
+      + String.localizedStringWithFormat(formatString, selectedImageCount)
   }
 
   private func setupPreviewView(activeIndex: Int) {

@@ -21,31 +21,55 @@ enum PermissionModalType {
     switch self {
     case .camera:
       return PermissionModal(
-        title: "Нужен доступ",
+        title: NSLocalizedString("Need access",comment: "Permission: title"),
         image: "camera",
-        description: "Разрешите доступ к камере, чтобы сделать фотографию",
-        buttonLabelText: "Разрешить доступ"
+        description: NSLocalizedString(
+          "Camera access",
+          comment: "Permission: get camera access"
+        ),
+        buttonLabelText: NSLocalizedString(
+          "OpenSettings",
+          comment: "Permission: open settings to give access"
+        )
       )
     case .library:
       return PermissionModal(
-        title: "Нет доступа",
+        title: NSLocalizedString("Need access",comment: "Permission: title"),
         image: "camera",
-        description: "Разрешите доступ к галерее, чтобы выбрать изображения и видео",
-        buttonLabelText: "Разрешить"
+        description: NSLocalizedString(
+          "Galery access",
+          comment: "Permission: get gallery access"
+        ),
+        buttonLabelText: NSLocalizedString(
+          "OpenSettings",
+          comment: "Permission: open settings to give access"
+        )
       )
     case .geolocation:
       return PermissionModal(
-        title: "Внимание",
+        title: NSLocalizedString("Need access",comment: "Permission: title"),
         image: "gallery",
-        description: "Разрешите доступ к геолокации",
-        buttonLabelText: "Понятно"
+        description: NSLocalizedString(
+          "Geolocation access",
+          comment: "Permission: get geolocation access"
+        ),
+        buttonLabelText: NSLocalizedString(
+          "OpenSettings",
+          comment: "Permission: open settings to give access"
+        )
       )
     case .notifications:
       return PermissionModal(
-        title: "Внимание",
+        title: NSLocalizedString("Need access",comment: "Permission: title"),
         image: "location",
-        description: "Разрешите доступ к геолокации",
-        buttonLabelText: "Понятно"
+        description: NSLocalizedString(
+          "Notification access",
+          comment: "Permission: get notification access"
+        ),
+        buttonLabelText: NSLocalizedString(
+          "OpenSettings",
+          comment: "Permission: open settings to give access"
+        )
       )
     }
   }

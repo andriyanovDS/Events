@@ -8,8 +8,7 @@
 
 import UIKit
 
-class TextFormattingTipsVC: UIViewController {
-  weak var coordinator: TextFormattingTipsCoordinator?
+class TextFormattingTipsVC: UIViewController, ViewModelBased {
   var viewModel: TextFormattingTipsViewModel!
   var textFormattingTipsView: TextFormattingTipsView?
 
@@ -17,7 +16,6 @@ class TextFormattingTipsVC: UIViewController {
     super.viewDidLoad()
 
     viewModel = TextFormattingTipsViewModel()
-    viewModel.coordinator = self.coordinator
     setupView()
   }
 

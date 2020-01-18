@@ -37,6 +37,13 @@ extension Optional {
     }
     return nonOptional
   }
+
+  func orElse(_ some: Wrapped) -> Wrapped {
+    guard let nonOptional = self else {
+      return some
+    }
+    return nonOptional
+  }
   
   func map<T>(_ callback: (Wrapped) -> T) -> T? {
     guard let nonOptional = self else {
@@ -57,5 +64,12 @@ extension Optional {
       return callback()
     }
     return nonOptional
+  }
+
+  func ap<T>(_ callbackOption: ((Wrapped) -> T)?) -> T? {
+    guard let nonOptional = self, let callback = callbackOption else {
+      return nil
+    }
+    return callback(nonOptional)
   }
 }

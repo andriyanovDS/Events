@@ -69,7 +69,7 @@ class RootScreenViewController: UIViewController, ViewModelBased, RootScreenView
       datesButton.setTitleColor(.white, for: .normal)
       datesButton.backgroundColor = UIColor.lightBlue()
     }
-    datesButton.setTitle(buttonTitle ?? "Dates", for: .normal)
+    datesButton.setTitle(buttonTitle ?? NSLocalizedString("Dates", comment: "Select calendar dates label"), for: .normal)
   }
 }
 
@@ -119,7 +119,7 @@ extension RootScreenViewController {
   }
   
   func setupTitleLabel() {
-    titleLabel.text = "Выбери следующее приключение"
+    titleLabel.text = NSLocalizedString("Choose your next experience", comment: "Home screen title")
     titleLabel.numberOfLines = 2
     titleLabel.font = UIFont.init(name: "CeraPro-Bold", size: 22)
     titleLabel.textAlignment = .left

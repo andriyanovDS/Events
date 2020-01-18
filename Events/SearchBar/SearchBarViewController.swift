@@ -79,7 +79,7 @@ extension SearchBarViewController {
     textField.isUserInteractionEnabled = true
     
     textField.attributedPlaceholder = NSAttributedString(
-      string: "Поиск",
+      string: NSLocalizedString("Search...", comment: "Search bar: placeholder"),
       attributes: [
         NSAttributedString.Key.foregroundColor: UIColor.gray,
         NSAttributedString.Key.font: UIFont.init(
@@ -117,7 +117,7 @@ extension SearchBarViewController {
   }
   
   private func setupCancelButton() {
-    cancelButton.setTitle("Закрыть", for: .normal)
+    cancelButton.setTitle(NSLocalizedString("Cancel", comment: "Search bar: close"), for: .normal)
     cancelButton.setTitleColor(.gray, for: .normal)
     cancelButton.titleLabel?.font = UIFont.init(name: "CeraPro-Medium", size: 14)
     

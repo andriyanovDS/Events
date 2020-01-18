@@ -22,6 +22,16 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>${PRODUCT_NAME} would like to aceess your camera</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Please, let us know where to find new events</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Please, let us know where to find new events</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Please, let us know where to find new events</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>${PRODUCT_NAME} would like to aceess your library</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>CeraPro-Black.ttf</string>
@@ -52,15 +62,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Please, let us know where to find new events</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Please, let us know where to find new events</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Please, let us know where to find new events</string>
-	<key>NSCameraUsageDescription</key>
-	<string>${PRODUCT_NAME} would like to aceess your camera</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>${PRODUCT_NAME} would like to aceess your library</string>
 </dict>
 </plist>

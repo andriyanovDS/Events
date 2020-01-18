@@ -220,9 +220,9 @@ extension UserDetailsViewController: UIPickerViewDataSource {
   
   private func pickerRowValueToGenderLabel(_ row: Int) -> String? {
     switch row {
-    case 0: return "Мужской"
-    case 1: return "Женский"
-    case 2: return "Другое"
+    case 0: return NSLocalizedString("Male", comment: "Select gender: Male")
+    case 1: return NSLocalizedString("Female", comment: "Select gender: Female")
+    case 2: return NSLocalizedString("Other", comment: "Select gender: Other")
     default: return nil
     }
   }

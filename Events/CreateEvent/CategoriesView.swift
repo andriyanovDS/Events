@@ -34,7 +34,7 @@ class CategoriesView: UIView {
 
     styleText(
       label: titleLabel,
-      text: "Категория",
+      text: NSLocalizedString("Category", comment: "Create event: category section title"),
       size: 26,
       color: .gray900(),
       style: .bold
@@ -42,7 +42,10 @@ class CategoriesView: UIView {
 
     styleText(
       label: descriptionLabel,
-      text: "К какой категории относится мероприятие?",
+      text: NSLocalizedString(
+        "Which category event belongs to?",
+        comment: "Create event: category section description"
+      ),
       size: 18,
       color: .gray400(),
       style: .regular

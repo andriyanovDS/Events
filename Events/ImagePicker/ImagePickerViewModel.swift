@@ -174,8 +174,14 @@ enum ImageSource: CaseIterable {
 
   func localizedString() -> String {
     switch self {
-    case .camera: return "Камера"
-    case .library: return "Галерея"
+    case .camera: return NSLocalizedString(
+      "Camera",
+      comment: "Image picker: open camera"
+    )
+    case .library: return NSLocalizedString(
+      "Gallery",
+      comment: "Image picker: open gallery"
+    )
     }
   }
 }

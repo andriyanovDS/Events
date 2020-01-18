@@ -86,7 +86,7 @@ class UserDetailsView: UIView {
   
   private func setipTitle() {
     titleLabel.style({ v in
-      v.text = "Расскажи другим пользователям о себе!"
+      v.text = NSLocalizedString("Tell other users about yourself!", comment: "Textfield to write about yourself")
       v.textColor = UIColor.gray900()
       v.font = UIFont(name: "CeraPro-Medium", size: 26)
       v.numberOfLines = 2
@@ -108,12 +108,30 @@ class UserDetailsView: UIView {
   }
   
   private func setupSections() {
-    firstNameSection.setupView(with: "Имя", childView: TextFieldWithBottomLine())
-    lastNameSection.setupView(with: "Фамилия", childView: TextFieldWithBottomLine())
-    dateSection.setupView(with: "Дата рождения", childView: dateTextField)
-    genderSection.setupView(with: "Пол", childView: genderTextField)
-    workSection.setupView(with: "Работа", childView: TextFieldWithBottomLine())
-    descriptionSection.setupView(with: "Дополнительная информация", childView: descriptionTextView)
+    firstNameSection.setupView(
+      with: NSLocalizedString("First name", comment: "User info: First name"),
+      childView: TextFieldWithBottomLine()
+    )
+    lastNameSection.setupView(
+      with: NSLocalizedString("Last name", comment: "User info: Last name"),
+      childView: TextFieldWithBottomLine()
+    )
+    dateSection.setupView(
+      with: NSLocalizedString("Date of birth", comment: "User info: Date of birth"),
+      childView: dateTextField
+    )
+    genderSection.setupView(
+      with: NSLocalizedString("Gender", comment: "User info: Gender"),
+      childView: genderTextField
+    )
+    workSection.setupView(
+      with: NSLocalizedString("Work", comment: "User info: Work"),
+      childView: TextFieldWithBottomLine()
+    )
+    descriptionSection.setupView(
+      with: NSLocalizedString("Additional information", comment: "User info: Additional info"),
+      childView: descriptionTextView
+    )
   }
   
   private func setupAvatarButton() {
@@ -134,7 +152,7 @@ class UserDetailsView: UIView {
   private func setupDateTextField() {
     let toolBar = UIToolbar()
     let tabBarCloseButton = UIBarButtonItem(
-      title: "Закрыть",
+      title: NSLocalizedString("Close", comment: "Date picker: close"),
       style: .done,
       target: delegate,
       action: #selector(delegate.endEditing)
@@ -145,7 +163,7 @@ class UserDetailsView: UIView {
       action: nil
     )
     let tabBarDoneButton = UIBarButtonItem(
-      title: "Выбрать",
+      title: NSLocalizedString("Select", comment: "Date picker: select date"),
       style: .done,
       target: delegate,
       action: #selector(delegate.selectDate)
@@ -179,7 +197,7 @@ class UserDetailsView: UIView {
   
   private func setupSubmitButton() {
     submitButton.style({ v in
-      v.setTitle("Сохранить", for: .normal)
+      v.setTitle(NSLocalizedString("Save", comment: "User info: Save"), for: .normal)
       v.layer.borderColor = UIColor.blue().cgColor
       v.setTitleColor(UIColor.blue(), for: .normal)
       v.contentEdgeInsets = UIEdgeInsets(

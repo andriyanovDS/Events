@@ -115,7 +115,7 @@ extension UserDetailsViewModel {
   func showSelectImageActionSheet() {
     let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
     actionSheetController.addAction(.init(
-      title: "Камера",
+      title: NSLocalizedString("Camera", comment: "Select image from: Camera"),
       style: .default,
       handler: {_ in
         requestCameraUsagePermission(
@@ -126,7 +126,7 @@ extension UserDetailsViewModel {
       }
     ))
     actionSheetController.addAction(.init(
-      title: "Галерея",
+      title: NSLocalizedString("Gallery", comment: "Select image from: Gallery"),
       style: .default,
       handler: {_ in
         requestLibraryUsagePermission(
@@ -138,7 +138,7 @@ extension UserDetailsViewModel {
       }
     ))
     actionSheetController.addAction(.init(
-      title: "Закрыть",
+      title: NSLocalizedString("Close", comment: "Close select image modal"),
       style: .cancel,
       handler: nil)
     )

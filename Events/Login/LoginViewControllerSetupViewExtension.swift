@@ -21,7 +21,7 @@ extension LoginViewController {
   func setupLoginButton() {
     loginButton.layer.borderColor = UIColor.red.cgColor
     loginButton.setTitleColor(.red, for: .normal)
-    loginButton.setTitle("Войти", for: .normal)
+    loginButton.setTitle(NSLocalizedString("Log in", comment: "Log in"), for: .normal)
     loginButton.titleLabel?.font = UIFont(name: "CeraPro-Medium", size: 20)
     loginButton.addTarget(self, action: #selector(login), for: .touchUpInside)
     
@@ -33,7 +33,7 @@ extension LoginViewController {
   func setupSignInBuntton() {
     signInButton.setTitleColor(.gray800(), for: .normal)
     signInButton.layer.borderColor = UIColor.gray800().cgColor
-    signInButton.setTitle("Зарегистрироваться", for: .normal)
+    signInButton.setTitle(NSLocalizedString("Sign in", comment: "Sign in"), for: .normal)
     signInButton.titleLabel?.font = UIFont(name: "CeraPro-Medium", size: 20)
     signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
     
@@ -71,7 +71,7 @@ extension LoginViewController {
   
   func setupPasswordTextField() {
     passwordTextField.attributedPlaceholder = NSAttributedString(
-      string: "Пароль",
+      string: NSLocalizedString("Password", comment: "Log in: Password"),
       attributes: [
         NSAttributedString.Key.foregroundColor: UIColor.gray,
         NSAttributedString.Key.font: UIFont.init(
