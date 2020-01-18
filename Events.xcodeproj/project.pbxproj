@@ -24,6 +24,9 @@
 		742EF13F231F1850002092CA /* ImagesPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742EF13E231F1850002092CA /* ImagesPreviewViewModel.swift */; };
 		742EF141231F1879002092CA /* ImagesPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742EF140231F1879002092CA /* ImagesPreviewView.swift */; };
 		743816A422E8F74400AA4960 /* DayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743816A322E8F74400AA4960 /* DayButton.swift */; };
+		744921DD23D3967B00B5BB43 /* CeraPro-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744921DA23D3967B00B5BB43 /* CeraPro-Italic.ttf */; };
+		744921DE23D3967B00B5BB43 /* CeraPro-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744921DB23D3967B00B5BB43 /* CeraPro-MediumItalic.ttf */; };
+		744921DF23D3967B00B5BB43 /* CeraPro-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744921DC23D3967B00B5BB43 /* CeraPro-BoldItalic.ttf */; };
 		744B7C8C22E39DB700A839A6 /* CeraPro-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8722E39DB700A839A6 /* CeraPro-Medium.ttf */; };
 		744B7C8D22E39DB700A839A6 /* CeraPro-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8822E39DB700A839A6 /* CeraPro-Light.ttf */; };
 		744B7C8E22E39DB700A839A6 /* CeraPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 744B7C8922E39DB700A839A6 /* CeraPro-Regular.ttf */; };
@@ -130,9 +133,6 @@
 		6079371023225CBF003AAD2B /* PermissionModalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionModalViewModel.swift; sourceTree = "<group>"; };
 		6079371223225D5B003AAD2B /* PermissionModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionModalView.swift; sourceTree = "<group>"; };
 		6079371423225DA5003AAD2B /* PermissionModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionModal.swift; sourceTree = "<group>"; };
-		6079371623225E5B003AAD2B /* CeraPro-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-MediumItalic.ttf"; path = "../../../Downloads/CeraPro-MediumItalic.ttf"; sourceTree = "<group>"; };
-		6079371723225E6E003AAD2B /* CeraPro-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-Italic.ttf"; path = "../../../Downloads/CeraPro-Italic.ttf"; sourceTree = "<group>"; };
-		6079371823225E78003AAD2B /* CeraPro-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "CeraPro-BoldItalic.ttf"; path = "../../../Downloads/CeraPro-BoldItalic.ttf"; sourceTree = "<group>"; };
 		7408541E2302030900220B23 /* TipSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipSectionView.swift; sourceTree = "<group>"; };
 		7408542023020C0700220B23 /* Tip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tip.swift; sourceTree = "<group>"; };
 		741DCF8822D38264005783A3 /* RootScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenViewModel.swift; sourceTree = "<group>"; };
@@ -145,6 +145,9 @@
 		742EF13E231F1850002092CA /* ImagesPreviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesPreviewViewModel.swift; sourceTree = "<group>"; };
 		742EF140231F1879002092CA /* ImagesPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesPreviewView.swift; sourceTree = "<group>"; };
 		743816A322E8F74400AA4960 /* DayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayButton.swift; sourceTree = "<group>"; };
+		744921DA23D3967B00B5BB43 /* CeraPro-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Italic.ttf"; sourceTree = "<group>"; };
+		744921DB23D3967B00B5BB43 /* CeraPro-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-MediumItalic.ttf"; sourceTree = "<group>"; };
+		744921DC23D3967B00B5BB43 /* CeraPro-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-BoldItalic.ttf"; sourceTree = "<group>"; };
 		744B7C8722E39DB700A839A6 /* CeraPro-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Medium.ttf"; sourceTree = "<group>"; };
 		744B7C8822E39DB700A839A6 /* CeraPro-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Light.ttf"; sourceTree = "<group>"; };
 		744B7C8922E39DB700A839A6 /* CeraPro-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "CeraPro-Regular.ttf"; sourceTree = "<group>"; };
@@ -294,9 +297,9 @@
 		741DCF9122D3DCAF005783A3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				6079371823225E78003AAD2B /* CeraPro-BoldItalic.ttf */,
-				6079371723225E6E003AAD2B /* CeraPro-Italic.ttf */,
-				6079371623225E5B003AAD2B /* CeraPro-MediumItalic.ttf */,
+				744921DC23D3967B00B5BB43 /* CeraPro-BoldItalic.ttf */,
+				744921DA23D3967B00B5BB43 /* CeraPro-Italic.ttf */,
+				744921DB23D3967B00B5BB43 /* CeraPro-MediumItalic.ttf */,
 				744B7C8A22E39DB700A839A6 /* CeraPro-Black.ttf */,
 				744B7C8B22E39DB700A839A6 /* CeraPro-Bold.ttf */,
 				744B7C8822E39DB700A839A6 /* CeraPro-Light.ttf */,
@@ -361,7 +364,7 @@
 				7478F4FC22F60BCF00A43F52 /* Models */,
 				7478F50722F6262400A43F52 /* Styles */,
 				7478F4F322F601FD00A43F52 /* CreateEvent */,
-				7463A49C22DE6EB9009171E1 /* CommonUIComponetns */,
+				7463A49C22DE6EB9009171E1 /* CommonUIComponents */,
 				745243BB22CF7B3000C930C8 /* SearchBar */,
 				748E0B1D22DB725700B061C7 /* Extensions */,
 				748E0B1C22DB721E00B061C7 /* RootScreen */,
@@ -397,7 +400,7 @@
 			path = SearchBar;
 			sourceTree = "<group>";
 		};
-		7463A49C22DE6EB9009171E1 /* CommonUIComponetns */ = {
+		7463A49C22DE6EB9009171E1 /* CommonUIComponents */ = {
 			isa = PBXGroup;
 			children = (
 				7463A49D22DE6EED009171E1 /* TextFieldWithShadow.swift */,
@@ -405,7 +408,7 @@
 				7463A4A122DE88AC009171E1 /* UIButtonScaleOnPress.swift */,
 				744B7C9122E3C6DF00A839A6 /* ButtonWithBorder.swift */,
 			);
-			path = CommonUIComponetns;
+			path = CommonUIComponents;
 			sourceTree = "<group>";
 		};
 		7467B6E022D50AD100A1BFE9 /* Events */ = {
@@ -696,8 +699,11 @@
 				744B7C8D22E39DB700A839A6 /* CeraPro-Light.ttf in Resources */,
 				744B7C8F22E39DB700A839A6 /* CeraPro-Black.ttf in Resources */,
 				744B7C8E22E39DB700A839A6 /* CeraPro-Regular.ttf in Resources */,
+				744921DF23D3967B00B5BB43 /* CeraPro-BoldItalic.ttf in Resources */,
 				7467B6EF22D514F500A1BFE9 /* GoogleService-Info.plist in Resources */,
 				744B7C8C22E39DB700A839A6 /* CeraPro-Medium.ttf in Resources */,
+				744921DE23D3967B00B5BB43 /* CeraPro-MediumItalic.ttf in Resources */,
+				744921DD23D3967B00B5BB43 /* CeraPro-Italic.ttf in Resources */,
 				744B7C9022E39DB700A839A6 /* CeraPro-Bold.ttf in Resources */,
 				745243B122CE85BC00C930C8 /* Assets.xcassets in Resources */,
 			);
