@@ -21,7 +21,7 @@ enum PermissionModalType {
     switch self {
     case .camera:
       return PermissionModal(
-        title: NSLocalizedString("Need access",comment: "Permission: title"),
+        title: NSLocalizedString("Need access", comment: "Permission: title"),
         image: "camera",
         description: NSLocalizedString(
           "Camera access",
@@ -34,7 +34,7 @@ enum PermissionModalType {
       )
     case .library:
       return PermissionModal(
-        title: NSLocalizedString("Need access",comment: "Permission: title"),
+        title: NSLocalizedString("Need access", comment: "Permission: title"),
         image: "camera",
         description: NSLocalizedString(
           "Galery access",
@@ -47,7 +47,7 @@ enum PermissionModalType {
       )
     case .geolocation:
       return PermissionModal(
-        title: NSLocalizedString("Need access",comment: "Permission: title"),
+        title: NSLocalizedString("Need access", comment: "Permission: title"),
         image: "gallery",
         description: NSLocalizedString(
           "Geolocation access",
@@ -60,7 +60,7 @@ enum PermissionModalType {
       )
     case .notifications:
       return PermissionModal(
-        title: NSLocalizedString("Need access",comment: "Permission: title"),
+        title: NSLocalizedString("Need access", comment: "Permission: title"),
         image: "location",
         description: NSLocalizedString(
           "Notification access",

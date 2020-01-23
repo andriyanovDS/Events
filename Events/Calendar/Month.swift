@@ -9,7 +9,6 @@
 import Foundation
 
 struct Month {
-  
   let title: String
   var days: [[Day?]]
 }

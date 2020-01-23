@@ -106,7 +106,7 @@ class TabBarFlow: Flow {
   private func setupTabBar() {
     rootViewController.tabBar.style({ v in
       v.barTintColor = .white
-      v.addBorder(toSide: .top, withColor: UIColor.gray800().cgColor, andThickness: 1)
+      _ = v.addBorder(toSide: .top, withColor: UIColor.gray800().cgColor, andThickness: 1)
       v.tintColor = UIColor.blue()
       v.unselectedItemTintColor = UIColor.gray800()
     })

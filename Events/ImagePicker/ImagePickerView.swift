@@ -114,7 +114,7 @@ class ImagePickerView: UIView, ImagePickerActionsViewDelegate {
       return
     }
     UIView.animate(withDuration: 0.2, animations: {
-      self.actionsView.scrollToSelectedImageView(at: index, scale: 1.0)
+      _ = self.actionsView.scrollToSelectedImageView(at: index, scale: 1.0)
       self.layoutIfNeeded()
     })
     return

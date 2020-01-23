@@ -57,9 +57,9 @@ func dateToButtonHighlightStateFn(selectedDates: SelectedDates) -> (Date) -> But
 }
 
 private func datesToTitleFn(dateFormatter: DateFormatter) -> (Date) -> (Date) -> String {
-  return { to in
-    { dateFormatter.string(from: $0) + " - " + dateFormatter.string(from: to) }
-  }
+  return { to in {
+    dateFormatter.string(from: $0) + " - " + dateFormatter.string(from: to)
+  }}
 }
 
 func selectedDatesToTitle(_ dates: SelectedDates) -> String? {

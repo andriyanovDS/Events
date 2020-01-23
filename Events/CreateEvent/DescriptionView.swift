@@ -48,7 +48,7 @@ class DescriptionView: UIView {
     )
     styleText(
       button: submitButton,
-      text: NSLocalizedString("Next step",comment: "Create event: next step"),
+      text: NSLocalizedString("Next step", comment: "Create event: next step"),
       size: 20,
       color: .blue,
       style: .medium

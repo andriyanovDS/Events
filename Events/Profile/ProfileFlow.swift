@@ -44,7 +44,7 @@ class ProfileFlow: Flow {
       return .none
     case .hintPopupDidComplete(let nextStep):
       rootNavigationController.dismiss(animated: false, completion: nil)
-      if let step = nextStep {
+      if nextStep != nil {
         return navigateToTextFormattingTips()
       }
       return .none

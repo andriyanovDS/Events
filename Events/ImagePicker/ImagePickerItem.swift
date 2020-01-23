@@ -24,7 +24,7 @@ class ImagePickerItem: UIButton {
       if !self.hasBorder {
         return
       }
-      addBorder(
+      _ = addBorder(
         toSide: .bottom,
         withColor: UIColor.gray100().cgColor,
         andThickness: 1

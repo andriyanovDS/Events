@@ -22,7 +22,7 @@ class ProfileActionButton: UIButton {
   
   override var bounds: CGRect {
     didSet {
-      addBorder(
+      _ = addBorder(
         toSide: .bottom,
         withColor: UIColor.gray200().cgColor,
         andThickness: 1.0

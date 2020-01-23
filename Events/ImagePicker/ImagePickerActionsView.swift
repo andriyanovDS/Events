@@ -196,5 +196,5 @@ class ImagePickerActionsView: UIView {
 
 protocol ImagePickerActionsViewDelegate: class {
   var state: ImagePickerState { get }
-  func onSelectAction(_: ImagePickerAction) -> Void
+  func onSelectAction(_: ImagePickerAction)
 }

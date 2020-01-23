@@ -109,7 +109,10 @@ class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate, Lo
           return
         }
         self.viewModel.tryLogin(email: email, password: password, onLoginFailed: {[weak self] in
-          self?.showErrorMessage(with: NSLocalizedString("Invalid credentials! Please, try again.", comment: "Failed login"))
+          self?.showErrorMessage(with: NSLocalizedString(
+            "Invalid credentials! Please, try again.",
+            comment: "Failed login"
+          ))
         })
 
     }
