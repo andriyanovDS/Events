@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Hero
+import Stevia
 
 class RootScreenViewController: UIViewController, ViewModelBased, RootScreenViewModelDelegate {
   var viewModel: RootScreenViewModel! {
@@ -57,7 +59,7 @@ class RootScreenViewController: UIViewController, ViewModelBased, RootScreenView
     if buttonTitle == datesButton.title(for: .normal) {
       return
     }
-    
+
     if buttonTitle == nil {
       datesButton.isFilterEmpty = true
       datesButton.layer.borderWidth = 1
@@ -69,7 +71,10 @@ class RootScreenViewController: UIViewController, ViewModelBased, RootScreenView
       datesButton.setTitleColor(.white, for: .normal)
       datesButton.backgroundColor = UIColor.lightBlue()
     }
-    datesButton.setTitle(buttonTitle ?? NSLocalizedString("Dates", comment: "Select calendar dates label"), for: .normal)
+    datesButton.setTitle(buttonTitle ?? NSLocalizedString(
+      "Dates",
+      comment: "Select calendar dates label"
+    ), for: .normal)
   }
 }
 
@@ -106,9 +111,10 @@ extension RootScreenViewController {
   }
   
   func setupDatesButton(containerView: UIView) {
+    datesButton.hero.id = CALENDAR_SHARED_ID
     datesButton.setTitle("Дата", for: .normal)
     datesButton.addTarget(self, action: #selector(openCalendar), for: .touchUpInside)
-    containerView.addSubview(datesButton)
+    containerView.sv(datesButton)
     setupDatesButtonConstraints(containerView: containerView)
   }
   
@@ -143,10 +149,10 @@ extension RootScreenViewController {
   }
   
   func setupDatesButtonConstraints(containerView: UIView) {
-    datesButton.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-      datesButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
-      ])
+//    datesButton.translatesAutoresizingMaskIntoConstraints = false
+//    NSLayoutConstraint.activate([
+//      datesButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor)
+//      ])
   }
   
   func setupTitleLabelConstraints() {

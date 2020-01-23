@@ -21,7 +21,7 @@ indirect enum EventStep: Step {
   case createEventDidComplete
   case imagePicker(onComplete: ([UIImage]) -> Void)
   case imagePickerDidComplete
-  case calendar(withSelectedDates: SelectedDates, onComplete: (SelectedDates) -> Void)
+  case calendar(withSelectedDates: SelectedDates, onComplete: (SelectedDates?) -> Void)
   case calendarDidComplete
   case locationSearch (onResult: (Geocode) -> Void)
   case locationSearchDidCompete

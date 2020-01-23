@@ -8,6 +8,7 @@
 
 import Foundation
 import RxFlow
+import Hero
 
 class HomeFlow: Flow {
   var root: Presentable {
@@ -26,7 +27,7 @@ class HomeFlow: Flow {
     case .calendar(let withSelectedDates, let onComplete):
       return openCalendarScreen(selectedDates: withSelectedDates, onComplete: onComplete)
     case .calendarDidComplete:
-      rootViewController.dismiss(animated: false, completion: nil)
+      rootViewController.dismiss(animated: true, completion: nil)
       return .none
     case .locationSearch(let onResult):
       return openLocationSearch(onResult: onResult)
@@ -47,7 +48,7 @@ class HomeFlow: Flow {
 
   private func openCalendarScreen(
     selectedDates: SelectedDates,
-    onComplete: @escaping (SelectedDates) -> Void
+    onComplete: @escaping (SelectedDates?) -> Void
     ) -> FlowContributors {
 
     let viewModel = CalendarViewModel(
@@ -55,10 +56,11 @@ class HomeFlow: Flow {
       selectedDateTo: selectedDates.to
     )
     let viewController = CalendarViewController.instantiate(with: viewModel)
-    viewController.modalPresentationStyle = .overCurrentContext
+    viewController.modalPresentationStyle = .overFullScreen
     viewController.isModalInPopover = true
     viewController.onResult = onComplete
-    rootViewController.present(viewController, animated: false, completion: nil)
+    viewController.hero.isEnabled = true
+    rootViewController.present(viewController, animated: true, completion: nil)
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
   }
 

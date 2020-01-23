@@ -59,23 +59,24 @@ class CreateEventViewModel: Stepper {
     steps.accept(EventStep.calendar(
       withSelectedDates: SelectedDates(from: nil, to: nil),
       onComplete: { selectedDates in
-        selectedDates.from
-          .map({ start in selectedDates.to.foldL(
-              none: { [start] },
-              some: { end in dateRange(start: start, end: end) }
-            )
-          })
-        .foldL(
-          none: {
-            self.dates = generateInitialDates()
-          },
-          some: { dates in
-            self.dates = dates
-        })
-        if let foramttedDate = selectedDatesToString(selectedDates) {
-          let daysDiff = daysCount(selectedDates: selectedDates)
-          self.delegate?.onDatesDidSelected(formattedDate: foramttedDate, daysCount: daysDiff)
-        }
+        selectedDates
+          .foldL(
+            none: {},
+            some: { dates in
+              let dateRangeFnOption = dates.to
+                .map { dateRange(end: $0) }
+                .orElse { [$0] }
+
+              self.dates = dates.from
+                .ap(dateRangeFnOption)
+                .getOrElseL(generateInitialDates)
+
+              if let foramttedDate = selectedDatesToString(dates) {
+                let daysDiff = daysCount(selectedDates: dates)
+                self.delegate?.onDatesDidSelected(formattedDate: foramttedDate, daysCount: daysDiff)
+              }
+            }
+          )
       }
     ))
   }
@@ -119,15 +120,17 @@ private func generateInitialDates() -> [Date] {
   return [Calendar.current.date(bySettingHour: 10, minute: 0, second: 0, of: tomorrow)!]
 }
 
-private func dateRange(start: Date, end: Date) -> [Date] {
-  var dates: [Date] = []
-  var date = start
+private func dateRange(end: Date) -> (Date) -> [Date] {
+  return { start in
+    var dates: [Date] = []
+    var date = start
 
-  while date <= end {
-    dates.append(date)
-    date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+    while date <= end {
+      dates.append(date)
+      date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+    }
+    return dates
   }
-  return dates
 }
 
 private func daysCount(selectedDates: SelectedDates) -> Int {

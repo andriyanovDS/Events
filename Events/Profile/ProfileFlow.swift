@@ -103,7 +103,7 @@ class ProfileFlow: Flow {
 
   private func openCalendarScreen(
     withSelectedDates: SelectedDates,
-    onComplete: @escaping (SelectedDates) -> Void
+    onComplete: @escaping (SelectedDates?) -> Void
   ) -> FlowContributors {
      let viewModel = CalendarViewModel(
       selectedDateFrom: withSelectedDates.from,

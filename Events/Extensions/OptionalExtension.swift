@@ -59,7 +59,7 @@ extension Optional {
     return callback(nonOptional)
   }
 
-  func alt(_ callback: () -> Wrapped?) -> Wrapped? {
+  func alt(_ callback: () -> Wrapped) -> Wrapped {
     guard let nonOptional = self else {
       return callback()
     }
@@ -71,5 +71,15 @@ extension Optional {
       return nil
     }
     return callback(nonOptional)
+  }
+
+  func filter(_ callback: (Wrapped) -> Bool) -> Wrapped? {
+    guard let nonOptional = self else {
+      return nil
+    }
+    if !callback(nonOptional) {
+      return nil
+    }
+    return nonOptional
   }
 }

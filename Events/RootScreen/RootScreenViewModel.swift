@@ -47,8 +47,13 @@ class RootScreenViewModel: Stepper {
     steps.accept(EventStep.calendar(
       withSelectedDates: getSelectedDates(),
       onComplete: { selectedDates in
-        self.setSelectedDates(dates: selectedDates)
-        self.delegate?.onDatesDidChange(dates: self.selectedDatesToString())
+        selectedDates.foldL(
+          none: {},
+          some: { dates in
+            self.setSelectedDates(dates: dates)
+            self.delegate?.onDatesDidChange(dates: self.selectedDatesToString())
+          }
+        )
       }
     ))
   }
