@@ -14,11 +14,10 @@
 		6079371523225DA5003AAD2B /* PermissionModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6079371423225DA5003AAD2B /* PermissionModal.swift */; };
 		7408541F2302030900220B23 /* TipSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7408541E2302030900220B23 /* TipSectionView.swift */; };
 		7408542123020C0700220B23 /* Tip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7408542023020C0700220B23 /* Tip.swift */; };
+		740C352023DC700600F00714 /* CalendarCloseByGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740C351F23DC700600F00714 /* CalendarCloseByGestureRecognizer.swift */; };
 		741CECB123D6EDF900BE6BA3 /* dateHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741CECB023D6EDF900BE6BA3 /* dateHelpers.swift */; };
 		741CECB323D6F72E00BE6BA3 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741CECB223D6F72E00BE6BA3 /* Date.swift */; };
 		741DCF8922D38264005783A3 /* RootScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8822D38264005783A3 /* RootScreenViewModel.swift */; };
-		741DCF8C22D3A878005783A3 /* CategoriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8B22D3A878005783A3 /* CategoriesVC.swift */; };
-		741DCF8E22D3A888005783A3 /* CategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */; };
 		741DCF9022D3AA81005783A3 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF8F22D3AA81005783A3 /* Category.swift */; };
 		741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DCF9F22D3E3E1005783A3 /* ProfileScreenViewController.swift */; };
 		74278AC923D4D7C600B8A5BB /* CalendarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74278AC823D4D7C600B8A5BB /* CalendarContentView.swift */; };
@@ -107,6 +106,8 @@
 		74A1AE1F22D5D18800C39525 /* KeyboardAttachViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1AE1E22D5D18800C39525 /* KeyboardAttachViewController.swift */; };
 		74A1AE2122D5DF0300C39525 /* OptionalExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */; };
 		74A1AE2322D64BFB00C39525 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1AE2222D64BFB00C39525 /* LoginViewModel.swift */; };
+		74AD9F5823DDC87300F07871 /* FilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AD9F5723DDC87300F07871 /* FilterButton.swift */; };
+		74AD9F5A23DDD10400F07871 /* RootScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74AD9F5923DDD10400F07871 /* RootScreenView.swift */; };
 		74D48E6D232994FB00FB3012 /* SavedFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D48E6C232994FB00FB3012 /* SavedFlow.swift */; };
 		74D5A2112302AA6500806695 /* TextFormattingsTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D5A2102302AA6500806695 /* TextFormattingsTextStorage.swift */; };
 		74D7E9F02348E5A90022BAC1 /* ImageViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D7E9EF2348E5A90022BAC1 /* ImageViewCell.swift */; };
@@ -143,11 +144,10 @@
 		6079371423225DA5003AAD2B /* PermissionModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionModal.swift; sourceTree = "<group>"; };
 		7408541E2302030900220B23 /* TipSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipSectionView.swift; sourceTree = "<group>"; };
 		7408542023020C0700220B23 /* Tip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tip.swift; sourceTree = "<group>"; };
+		740C351F23DC700600F00714 /* CalendarCloseByGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCloseByGestureRecognizer.swift; sourceTree = "<group>"; };
 		741CECB023D6EDF900BE6BA3 /* dateHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dateHelpers.swift; sourceTree = "<group>"; };
 		741CECB223D6F72E00BE6BA3 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		741DCF8822D38264005783A3 /* RootScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenViewModel.swift; sourceTree = "<group>"; };
-		741DCF8B22D3A878005783A3 /* CategoriesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesVC.swift; sourceTree = "<group>"; };
-		741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewModel.swift; sourceTree = "<group>"; };
 		741DCF8F22D3AA81005783A3 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		741DCF9F22D3E3E1005783A3 /* ProfileScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenViewController.swift; sourceTree = "<group>"; };
 		74278AC823D4D7C600B8A5BB /* CalendarContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarContentView.swift; sourceTree = "<group>"; };
@@ -241,6 +241,8 @@
 		74A1AE1E22D5D18800C39525 /* KeyboardAttachViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAttachViewController.swift; sourceTree = "<group>"; };
 		74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */ = {isa = PBXFileReference; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = OptionalExtension.swift; sourceTree = "<group>"; tabWidth = 2; };
 		74A1AE2222D64BFB00C39525 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		74AD9F5723DDC87300F07871 /* FilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButton.swift; sourceTree = "<group>"; };
+		74AD9F5923DDD10400F07871 /* RootScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenView.swift; sourceTree = "<group>"; };
 		74D48E6C232994FB00FB3012 /* SavedFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedFlow.swift; sourceTree = "<group>"; };
 		74D5A2102302AA6500806695 /* TextFormattingsTextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormattingsTextStorage.swift; sourceTree = "<group>"; };
 		74D7E9EF2348E5A90022BAC1 /* ImageViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewCell.swift; sourceTree = "<group>"; };
@@ -306,8 +308,6 @@
 		741DCF8A22D3A7F5005783A3 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				741DCF8B22D3A878005783A3 /* CategoriesVC.swift */,
-				741DCF8D22D3A888005783A3 /* CategoriesViewModel.swift */,
 				741DCF8F22D3AA81005783A3 /* Category.swift */,
 			);
 			path = Categories;
@@ -474,6 +474,7 @@
 			isa = PBXGroup;
 			children = (
 				74697FBF22D0E69B00D5B5F4 /* CalendarViewController.swift */,
+				740C351F23DC700600F00714 /* CalendarCloseByGestureRecognizer.swift */,
 				74697FCD22D2022700D5B5F4 /* CalendarViewModel.swift */,
 				74278AC823D4D7C600B8A5BB /* CalendarContentView.swift */,
 				74278ACE23D4F8F100B8A5BB /* CalendarMonthView.swift */,
@@ -576,8 +577,10 @@
 			isa = PBXGroup;
 			children = (
 				745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */,
+				74AD9F5923DDD10400F07871 /* RootScreenView.swift */,
 				748E0B0722DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift */,
 				741DCF8822D38264005783A3 /* RootScreenViewModel.swift */,
+				74AD9F5723DDC87300F07871 /* FilterButton.swift */,
 				746697472326FDEE00406CD8 /* HomeFlow.swift */,
 			);
 			path = RootScreen;
@@ -855,7 +858,6 @@
 				741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */,
 				744B7C9222E3C6DF00A839A6 /* ButtonWithBorder.swift in Sources */,
 				74D7E9F2234A6BF00022BAC1 /* SelectImageButton.swift in Sources */,
-				741DCF8E22D3A888005783A3 /* CategoriesViewModel.swift in Sources */,
 				6079371323225D5B003AAD2B /* PermissionModalView.swift in Sources */,
 				74F0F55F22FF6F5500170C6C /* CategoriesView.swift in Sources */,
 				74F0F5652300438C00170C6C /* DescriptionView.swift in Sources */,
@@ -865,6 +867,7 @@
 				74697FC822D11F7F00D5B5F4 /* UIViewExtension.swift in Sources */,
 				74A1AE1F22D5D18800C39525 /* KeyboardAttachViewController.swift in Sources */,
 				74D8DB2E22DD265500E70CB4 /* UserDetailsViewController.swift in Sources */,
+				740C352023DC700600F00714 /* CalendarCloseByGestureRecognizer.swift in Sources */,
 				7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */,
 				748E0B0222D8FD0000B061C7 /* LoginViewControllerSetupViewExtension.swift in Sources */,
 				7478F4F922F6033C00A43F52 /* CreateEventViewModel.swift in Sources */,
@@ -878,8 +881,8 @@
 				74E5DAD4232999F500E1557D /* EventsFlow.swift in Sources */,
 				748E0B2722DBBB2900B061C7 /* LocationSearchStackView.swift in Sources */,
 				74D8DB3422DD37F800E70CB4 /* UserDetailsViewModel.swift in Sources */,
-				741DCF8C22D3A878005783A3 /* CategoriesVC.swift in Sources */,
 				7408542123020C0700220B23 /* Tip.swift in Sources */,
+				74AD9F5A23DDD10400F07871 /* RootScreenView.swift in Sources */,
 				745243BD22CF7B5A00C930C8 /* SearchBarViewController.swift in Sources */,
 				74F0F56122FF7E8800170C6C /* CategoryButton.swift in Sources */,
 				748E0B1222DA24DD00B061C7 /* APIClient.swift in Sources */,
@@ -916,6 +919,7 @@
 				74278ACF23D4F8F100B8A5BB /* CalendarMonthView.swift in Sources */,
 				748E0AFE22D8E2D000B061C7 /* ProfileScreenViewModel.swift in Sources */,
 				746E10672310A1EA00B5B19D /* ImagePickerView.swift in Sources */,
+				74AD9F5823DDC87300F07871 /* FilterButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

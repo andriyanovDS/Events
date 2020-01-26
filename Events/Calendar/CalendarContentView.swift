@@ -14,6 +14,7 @@ let CALENDAR_SHARED_ID = "CALENDAR_SHARED_ID"
 
 class CalendarContentView: UIView {
   let backgroundView = UIView()
+  let contentView = UIView()
   private var days: [String: DayButton] = [:]
   private let headerView = CalendarHeaderView()
   private let footerView = CalendarFooterView()
@@ -123,10 +124,8 @@ class CalendarContentView: UIView {
     isOpaque = false
     backgroundColor = .clear
     backgroundView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.6)
-    let contentView = UIView()
 
     contentView.hero.id = CALENDAR_SHARED_ID
-
     let datesView = setupDates()
     contentView.style { v in
       v.backgroundColor = .white

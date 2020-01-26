@@ -16,6 +16,7 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate, Vie
     }
   }
   var onResult: ((SelectedDates?) -> Void)!
+  var calendarCloseByGestureRecognizer: CalendarCloseByGestureRecognizer?
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -42,7 +43,7 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate, Vie
   }
 
   private func setupView() {
-    viewContent = CalendarContentView(
+    let viewContent = CalendarContentView(
       months: viewModel.months,
       onClose: closeModal,
       onSave: { [weak self] in
@@ -55,10 +56,17 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate, Vie
       onSelectDate: viewModel.selectDate,
       onClearDates: viewModel.clearDates
     )
+    self.viewContent = viewContent
     let tapOutsideGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(closeModal))
     tapOutsideGestureRecognizer.cancelsTouchesInView = false
     tapOutsideGestureRecognizer.delegate = self
-    viewContent?.backgroundView.addGestureRecognizer(tapOutsideGestureRecognizer)
+    viewContent.backgroundView.addGestureRecognizer(tapOutsideGestureRecognizer)
+    calendarCloseByGestureRecognizer = CalendarCloseByGestureRecognizer(
+      parentView: viewContent,
+      animatedView: viewContent.contentView,
+      gestureBounds: CGRect(x: 0, y: 0, width: 0, height: 75),
+      onClose: closeModal
+    )
     view = viewContent
   }
 }
