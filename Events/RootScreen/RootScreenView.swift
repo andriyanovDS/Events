@@ -32,8 +32,12 @@ class RootScreenView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func setLocationButtonLabelText(_ text: String) {
-    locationButton.setTitle(text, for: .normal)
+  func setLocationButtonLabelText(_ text: String?) {
+    let labelText = text ?? NSLocalizedString(
+      "Select location",
+      comment: "Select location button: empty location"
+    )
+    locationButton.setTitle(labelText, for: .normal)
     locationButton.isEnabled = true
     if locationButton.alpha == 0 {
       UIView.animate(withDuration: 0.15, animations: {

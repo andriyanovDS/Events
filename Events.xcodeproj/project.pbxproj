@@ -93,7 +93,6 @@
 		748E0B0022D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0AFF22D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift */; };
 		748E0B0222D8FD0000B061C7 /* LoginViewControllerSetupViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B0122D8FD0000B061C7 /* LoginViewControllerSetupViewExtension.swift */; };
 		748E0B0622DA132F00B061C7 /* GeocodeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B0522DA132F00B061C7 /* GeocodeObserver.swift */; };
-		748E0B0822DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B0722DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift */; };
 		748E0B0E22DA24C000B061C7 /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B0D22DA24C000B061C7 /* APIRequest.swift */; };
 		748E0B1222DA24DD00B061C7 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B1122DA24DD00B061C7 /* APIClient.swift */; };
 		748E0B1422DA26BC00B061C7 /* GeolocationAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B1322DA26BC00B061C7 /* GeolocationAPI.swift */; };
@@ -228,7 +227,6 @@
 		748E0AFF22D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerWithActivityIndicator.swift; sourceTree = "<group>"; };
 		748E0B0122D8FD0000B061C7 /* LoginViewControllerSetupViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewControllerSetupViewExtension.swift; sourceTree = "<group>"; };
 		748E0B0522DA132F00B061C7 /* GeocodeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeObserver.swift; sourceTree = "<group>"; };
-		748E0B0722DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenViewControllerLocationExtension.swift; sourceTree = "<group>"; };
 		748E0B0D22DA24C000B061C7 /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		748E0B1122DA24DD00B061C7 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		748E0B1322DA26BC00B061C7 /* GeolocationAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeolocationAPI.swift; sourceTree = "<group>"; };
@@ -578,7 +576,6 @@
 			children = (
 				745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */,
 				74AD9F5923DDD10400F07871 /* RootScreenView.swift */,
-				748E0B0722DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift */,
 				741DCF8822D38264005783A3 /* RootScreenViewModel.swift */,
 				74AD9F5723DDC87300F07871 /* FilterButton.swift */,
 				746697472326FDEE00406CD8 /* HomeFlow.swift */,
@@ -906,7 +903,6 @@
 				7463A4A022DE7760009171E1 /* TextFieldWithBottomLine.swift in Sources */,
 				7467B6E522D50B2100A1BFE9 /* SavedViewController.swift in Sources */,
 				748E0B1722DA289800B061C7 /* Geocode.swift in Sources */,
-				748E0B0822DA16FE00B061C7 /* RootScreenViewControllerLocationExtension.swift in Sources */,
 				746697462326FBDE00406CD8 /* LoginFlow.swift in Sources */,
 				7478F50922F6263C00A43F52 /* text.swift in Sources */,
 				74697FCC22D200DF00D5B5F4 /* Day.swift in Sources */,

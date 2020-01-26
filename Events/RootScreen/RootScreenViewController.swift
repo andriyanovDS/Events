@@ -9,6 +9,7 @@
 import UIKit
 import Hero
 import Stevia
+import CoreLocation
 
 class RootScreenViewController: UIViewController, ViewModelBased {
   var viewModel: RootScreenViewModel! {
@@ -17,14 +18,17 @@ class RootScreenViewController: UIViewController, ViewModelBased {
       viewModel.delegate = self
     }
   }
-  var rootScreenView: RootScreenView?
-  let searchBar = SearchBarViewController(nibName: nil, bundle: nil)
+  private var rootScreenView: RootScreenView?
+  private let locationManager = CLLocationManager()
+  private let searchBar = SearchBarViewController(nibName: nil, bundle: nil)
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    initializeUserLocation()
+    locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+    locationManager.delegate = self
     setupView()
+    initializeUserLocation()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -53,6 +57,37 @@ class RootScreenViewController: UIViewController, ViewModelBased {
       action: #selector(openLocationSearch),
       for: .touchUpInside
     )
+  }
+}
+
+extension RootScreenViewController: CLLocationManagerDelegate {
+  func initializeUserLocation() {
+    let status = CLLocationManager.authorizationStatus()
+    switch status {
+    case .authorizedAlways, .authorizedWhenInUse:
+      locationManager.startUpdatingLocation()
+    case .notDetermined:
+      locationManager.requestWhenInUseAuthorization()
+    default:
+      rootScreenView?.setLocationButtonLabelText(nil)
+    }
+  }
+
+  func locationManager(
+    _ manager: CLLocationManager,
+    didChangeAuthorization status: CLAuthorizationStatus
+  ) {
+    if status == .denied || status == .restricted {
+      rootScreenView?.setLocationButtonLabelText(nil)
+      return
+    }
+    manager.startUpdatingLocation()
+  }
+
+  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    let coordinates: CLLocation = locations[0]
+    manager.stopUpdatingLocation()
+    onChangeUserLocation(coordinate: coordinates.coordinate)
   }
 }
 
