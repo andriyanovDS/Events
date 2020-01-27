@@ -10,8 +10,9 @@ import UIKit
 import Stevia
 
 class UserDetailsView: UIView {
-  
-  private let titleLabel = UILabel()
+
+  private let contentView = UIView()
+  private let headerContainer = UIView()
   let closeButton = UIButton()
   let avatarButton = UIButton()
   let datePicker = UIDatePicker()
@@ -42,33 +43,34 @@ class UserDetailsView: UIView {
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+
+  func setUserImage(_ image: UIImage) {
+    avatarButton.setImage(image, for: .normal)
+    avatarButton.imageView
+      .foldL(
+        none: {},
+        some: { v in
+          v.layer.cornerRadius = v.bounds.width / 2.0
+          v.contentMode = .scaleAspectFill
+        }
+      )
+  }
   
   private func setupView() {
     backgroundColor = .white
-    
-    let contentView = UIView()
     scrollView.showsVerticalScrollIndicator = false
-    
-    sv(scrollView.sv(contentView))
-    scrollView
-      .left(15)
-      .right(15)
-    
-    scrollView.Bottom == safeAreaLayoutGuide.Bottom
-    scrollView.Top == safeAreaLayoutGuide.Top
-    contentView.fillContainer().centerInContainer()
-    
-    setipTitle()
-    setupCloseButton()
+
+    setipHeader()
     setupAvatarButton()
     setupDateTextField()
     setupGenderTextField()
     setupDescriptionTextView()
     setupSubmitButton()
+
+    sv(scrollView.sv(contentView))
     
     contentView.sv([
-      titleLabel,
-      closeButton,
+      headerContainer,
       firstNameSection,
       lastNameSection,
       avatarButton,
@@ -78,23 +80,28 @@ class UserDetailsView: UIView {
       descriptionSection,
       submitButton
       ])
-    
-    setupViewsSizes()
-    setupViewsConstraints(contentView: contentView)
+
     setupSections()
+    setupViewsConstraints()
+    setupViewsSizes()
   }
   
-  private func setipTitle() {
-    titleLabel.style({ v in
-      v.text = NSLocalizedString("Tell other users about yourself!", comment: "Textfield to write about yourself")
-      v.textColor = UIColor.gray900()
-      v.font = UIFont(name: "CeraPro-Medium", size: 26)
+  private func setipHeader() {
+    let titleLabel = UILabel()
+    styleText(
+      label: titleLabel,
+      text: NSLocalizedString(
+        "Tell other users about yourself!",
+        comment: "Textfield to write about yourself"
+      ),
+      size: 26,
+      color: .gray900(),
+      style: .medium
+    )
+    titleLabel.style { v in
       v.numberOfLines = 2
       v.textAlignment = .left
-    })
-  }
-  
-  func setupCloseButton() {
+    }
     closeButton.style({ v in
       let image = UIImage(
         from: .materialIcon,
@@ -105,8 +112,13 @@ class UserDetailsView: UIView {
       )
       v.setImage(image, for: .normal)
     })
+    headerContainer.sv(titleLabel, closeButton)
+    titleLabel.left(0).bottom(0).top(0)
+    closeButton.right(0)
+    titleLabel.Right == closeButton.Left + 10
+    closeButton.CenterY == titleLabel.CenterY
   }
-  
+
   private func setupSections() {
     firstNameSection.setupView(
       with: NSLocalizedString("First name", comment: "User info: First name"),
@@ -182,6 +194,13 @@ class UserDetailsView: UIView {
   }
   
   private func setupDescriptionTextView() {
+    styleText(
+      textView: descriptionTextView,
+      text: "",
+      size: 16,
+      color: .gray900(),
+      style: .medium
+    )
     descriptionTextView.style({ v in
       v.isEditable = true
       v.textContainerInset = UIEdgeInsets(
@@ -190,69 +209,67 @@ class UserDetailsView: UIView {
         bottom: 0,
         right: 0
       )
-      v.font = UIFont(name: "CeraPro-Medium", size: 16)
-      v.textColor = UIColor.gray900()
     })
   }
   
   private func setupSubmitButton() {
+    styleText(
+      button: submitButton,
+      text: NSLocalizedString("Save", comment: "User info: Save"),
+      size: 20,
+      color: .blue(),
+      style: .medium
+    )
     submitButton.style({ v in
-      v.setTitle(NSLocalizedString("Save", comment: "User info: Save"), for: .normal)
       v.layer.borderColor = UIColor.blue().cgColor
-      v.setTitleColor(UIColor.blue(), for: .normal)
       v.contentEdgeInsets = UIEdgeInsets(
         top: 10,
         left: 0,
         bottom: 10,
         right: 0
       )
-      v.titleLabel?.font = UIFont(name: "CeraPro-Medium", size: 20)
     })
   }
   
   private func setupViewsSizes() {
-    firstNameSection.width(180).height(60)
-    avatarButton
-      .width(120)
-      .heightEqualsWidth()
-    descriptionSection.height(120)
+    firstNameSection.height(60)
     submitButton.width(200)
-    equal(sizes: [firstNameSection, lastNameSection])
-    equal(heights: [firstNameSection, dateSection, genderSection, workSection])
+    equal(heights: [firstNameSection, lastNameSection, dateSection, genderSection, workSection])
   }
   
-  private func setupViewsConstraints(contentView: UIView) {
-    titleLabel.top(20)
-    align(tops: [titleLabel, closeButton])
-    
-    |-titleLabel-10-closeButton.right(0)|
-    
-    firstNameSection.Top == titleLabel.Bottom + 50
-    lastNameSection.Top == firstNameSection.Bottom + 15
+  private func setupViewsConstraints() {
+    scrollView.left(0).right(0)
+    scrollView.Bottom == safeAreaLayoutGuide.Bottom
+    scrollView.Top == safeAreaLayoutGuide.Top
+    contentView.fillContainer().centerInContainer()
+
+    headerContainer.left(25).right(15).top(20)
+    firstNameSection.left(15)
+    firstNameSection.Top == headerContainer.Bottom + 50
     avatarButton.CenterY == lastNameSection.Top
-    avatarButton.right(0)
-    dateSection.Top == lastNameSection.Bottom + 15
-    align(lefts: [
-      firstNameSection,
+    avatarButton
+      .right(15)
+      .width(120)
+      .heightEqualsWidth()
+    [firstNameSection, lastNameSection].forEach { $0.Right == avatarButton.Left - 10 }
+
+    [
       lastNameSection,
       dateSection,
       genderSection,
       workSection,
       descriptionSection
-      ])
-    
-    layout(
-      |-dateSection-|,
-      15,
-      |-genderSection-|,
-      15,
-      |-workSection-|,
-      15,
-      |-descriptionSection-|
-    )
-    submitButton.centerHorizontally()
-    submitButton.Top == descriptionSection.Bottom + 30
-    submitButton.Bottom == contentView.Bottom - 20
+    ]
+    .forEach { view in
+      let index = contentView.subviews.firstIndex(of: view)
+      index.foldL(none: {}, some: { v in
+        view.Top == contentView.subviews[v - 1].Bottom + 15
+      })
+      view.left(15).right(15)
+    }
+    descriptionSection.Bottom == submitButton.Top - 10
+    submitButton.CenterX == contentView.CenterX
+    submitButton.bottom(20)
   }
 }
 

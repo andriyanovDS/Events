@@ -74,7 +74,7 @@ class ProfileFlow: Flow {
     let viewModel = UserDetailsViewModel()
     let viewController = UserDetailsViewController(user: user, viewModel: viewModel)
     viewController.modalTransitionStyle = .coverVertical
-    viewController.modalPresentationStyle = .overCurrentContext
+    viewController.modalPresentationStyle = .overFullScreen
     rootNavigationController.present(
       viewController,
       animated: true,

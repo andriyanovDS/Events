@@ -108,11 +108,14 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
     user.avatar.foldL(none: {}, some: { externalUrl in
       selectedAvatarUrl = URL(string: externalUrl)
       loadImage(url: externalUrl, onLoad: {[weak self] imageData in
-        guard let data = imageData else {
-          return
-        }
-        self?.userDetailsView.avatarButton.setImage(UIImage(data: data), for: .normal)
-        self?.userDetailsView.avatarButton.imageView?.layer.cornerRadius = 60
+        imageData
+          .chain { UIImage(data: $0) }
+          .foldL(
+            none: {},
+            some: {
+              self?.userDetailsView.setUserImage($0)
+            }
+          )
       })
     })
     user.description.foldL(none: {}, some: { description in
@@ -192,14 +195,11 @@ extension UserDetailsViewController: UIImagePickerControllerDelegate, UINavigati
     _ picker: UIImagePickerController,
     didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
     ) {
-    defer {
-      self.dismiss(animated: true, completion: nil)
-    }
+    picker.dismiss(animated: true, completion: nil)
     guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
       return
     }
-    userDetailsView.avatarButton.setImage(image, for: .normal)
-    userDetailsView.avatarButton.imageView?.layer.cornerRadius = 60
+    userDetailsView.setUserImage(image)
     guard let imageUrl = info[UIImagePickerController.InfoKey.imageURL] as? URL else {
       return
     }

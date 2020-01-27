@@ -117,7 +117,7 @@ extension UserDetailsViewModel {
     actionSheetController.addAction(.init(
       title: NSLocalizedString("Camera", comment: "Select image from: Camera"),
       style: .default,
-      handler: {_ in
+      handler: { _ in
         requestCameraUsagePermission(
           onOpenCamera: self.openCamera,
           openCameraAccessModal: {
@@ -128,7 +128,7 @@ extension UserDetailsViewModel {
     actionSheetController.addAction(.init(
       title: NSLocalizedString("Gallery", comment: "Select image from: Gallery"),
       style: .default,
-      handler: {_ in
+      handler: { _ in
         requestLibraryUsagePermission(
           onOpenLibrary: self.openLibrary,
           openLibraryAccessModal: {

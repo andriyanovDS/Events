@@ -139,7 +139,9 @@ func requestCameraUsagePermission(
       if !isAuthorized {
         return
       }
-      onOpenCamera()
+      DispatchQueue.main.async {
+        onOpenCamera()
+      }
     })
   case .denied:
     openCameraAccessModal()
@@ -161,7 +163,9 @@ func requestLibraryUsagePermission(
       if authStatus != .authorized {
         return
       }
-      onOpenLibrary()
+      DispatchQueue.main.async {
+        onOpenLibrary()
+      }
     })
   case .denied:
     openLibraryAccessModal()
