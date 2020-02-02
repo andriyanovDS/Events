@@ -9,17 +9,17 @@
 import UIKit
 
 class ImagePickerVC: UIViewController {
-   let viewModel: ImagePickerViewModel
-   var imagePickerView: ImagePickerView?
+  weak var viewModel: ImagePickerViewModel!
+  var imagePickerView: ImagePickerView?
 
-   init(viewModel: ImagePickerViewModel) {
-     self.viewModel = viewModel
-     super.init(nibName: nil, bundle: nil)
-   }
+  init(viewModel: ImagePickerViewModel) {
+    self.viewModel = viewModel
+    super.init(nibName: nil, bundle: nil)
+  }
 
-   required init?(coder: NSCoder) {
-     fatalError("init(coder:) has not been implemented")
-   }
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -41,8 +41,12 @@ class ImagePickerVC: UIViewController {
 
   private func setupView() {
     imagePickerView = ImagePickerView(
-      onSelectImageSource: onSelectImageSource,
-      onConfirmSendImages: onConfirmSendImages
+      onSelectImageSource: {[unowned self] source in
+        self.onSelectImageSource(source: source)
+      },
+      onConfirmSendImages: {[unowned self] in
+        self.onConfirmSendImages()
+      }
     )
     imagePickerView?.actionsView.collectionView.delegate = self
     imagePickerView?.actionsView.collectionView.dataSource = self
@@ -55,8 +59,8 @@ class ImagePickerVC: UIViewController {
   }
 
   @objc func onClose() {
-    imagePickerView?.animateHideContent(onComplete: {
-      self.viewModel.closeImagePicker(with: [])
+    imagePickerView?.animateHideContent(onComplete: {[unowned self] in
+      self.viewModel?.closeImagePicker(with: [])
     })
   }
 

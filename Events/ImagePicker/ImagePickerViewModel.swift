@@ -31,11 +31,61 @@ class ImagePickerViewModel: Stepper {
   var images: [UIImage] = []
   var selectedImageIndices: [Int] = []
   weak var delegate: ImagePickerViewModelDelegate?
+  private let disposeBag = DisposeBag()
+  private let loadLocalImage$ = PublishSubject<PHAsset>()
 
   init(onResult: @escaping (([UIImage]) -> Void)) {
     self.onResult = onResult
-  }
 
+    let requestOptions = PHImageRequestOptions()
+    requestOptions.version = .current
+    requestOptions.deliveryMode = .highQualityFormat
+    requestOptions.isSynchronous = false
+    let backgroundScheduler = ConcurrentDispatchQueueScheduler(qos: .background)
+
+    loadLocalImage$
+      .buffer(
+        timeSpan: DispatchTimeInterval.milliseconds(100),
+        count: 30,
+        scheduler: backgroundScheduler
+      )
+      .observeOn(backgroundScheduler)
+      .concatMap {[weak self] in Observable
+        .from($0)
+        .flatMap {[weak self] asset -> Observable<UIImage> in
+          guard let size = self?.targetSize else {
+            return Observable<UIImage>.never()
+          }
+          return Observable<UIImage>.create { observer in
+            PHImageManager.default().requestImage(
+              for: asset,
+              targetSize: size,
+              contentMode: .aspectFit,
+              options: requestOptions
+            ) { image, _ in
+              image.foldL(
+                none: { observer.on(.completed) },
+                some: {
+                  observer.on(.next($0))
+                  observer.on(.completed)
+                }
+              )
+            }
+            return Disposables.create()
+          }
+        }
+      }
+      .observeOn(MainScheduler.instance)
+      .subscribe {[weak self] event in
+        switch event {
+        case .next(let image):
+          self?.onRequestedImageDidLoad(image)
+        default: break
+        }
+      }
+      .disposed(by: disposeBag)
+  }
+  
   func onSelectImageSource(source: ImageSource) {
     switch source {
     case .camera:
@@ -54,10 +104,14 @@ class ImagePickerViewModel: Stepper {
   }
 
   func onConfirmSendImages() {
-    delegate?.performCloseAnimation {
-      self.onResult(self.selectedImageIndices.map { self.images[$0] })
-      self.steps.accept(EventStep.imagePickerDidComplete)
+    delegate?.performCloseAnimation {[weak self] in
+      self?.onCloseAnimationDidComplete()
     }
+  }
+
+  private func onCloseAnimationDidComplete() {
+    onResult(selectedImageIndices.map { images[$0] })
+    steps.accept(EventStep.imagePickerDidComplete)
   }
 
   private func handleCamera() {
@@ -74,34 +128,31 @@ class ImagePickerViewModel: Stepper {
       images: images,
       startAt: index,
       selectedImageIndices: selectedImageIndices,
-      onResult: { selectedImageIndices in
-        self.selectedImageIndices = selectedImageIndices
-        self.delegate?.updateImagePreviews(selectedImageIndices: selectedImageIndices)
+      onResult: {[weak self] selectedImageIndices in
+        self?.selectedImageIndices = selectedImageIndices
+        self?.delegate?.updateImagePreviews(selectedImageIndices: selectedImageIndices)
       }
     ))
+  }
+
+  private func onRequestedImageDidLoad(_ image: UIImage) {
+    delegate?.prepareImagesUpdate()
+    images.append(image)
+    delegate?.insertImage(at: self.images.count - 1)
   }
 
   private func handleLibrary() {
     let fetchOptions = PHFetchOptions()
     let images = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-    images.enumerateObjects({ asset, _, _ in
-      let options = PHImageRequestOptions()
-      options.version = .original
-      options.isSynchronous = true
-      PHImageManager.default().requestImage(
-        for: asset,
-        targetSize: self.targetSize,
-        contentMode: .aspectFit,
-        options: options
-        ) { image, _ in
-          guard let image = image else {
-            return
-          }
-          self.delegate?.prepareImagesUpdate()
-          self.images.append(image)
-          self.delegate?.insertImage(at: self.images.count - 1)
+    images.enumerateObjects(
+      options: [NSEnumerationOptions.reverse],
+      using: {[weak self] asset, index, _ in
+        self?.loadLocalImage$.on(.next(asset))
+        if index == 0 {
+          self?.loadLocalImage$.on(.completed)
+        }
       }
-    })
+    )
   }
 
   private func openCamera() {
@@ -135,7 +186,7 @@ func requestCameraUsagePermission(
     onOpenCamera()
     return
   case .notDetermined:
-    AVCaptureDevice.requestAccess(for: .video, completionHandler: {isAuthorized in
+    AVCaptureDevice.requestAccess(for: .video, completionHandler: { isAuthorized in
       if !isAuthorized {
         return
       }

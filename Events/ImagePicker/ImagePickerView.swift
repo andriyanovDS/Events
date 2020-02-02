@@ -46,12 +46,17 @@ class ImagePickerView: UIView, ImagePickerActionsViewDelegate {
   }
 
   func animateShowContent() {
-    contentView.bottomConstraint?.constant = -safeAreaInsets.bottom
     UIView.animate(
-      withDuration: 0.1,
-      animations: {
-        self.layoutIfNeeded()
-      }
+      withDuration: 0.4,
+      delay: 0,
+      usingSpringWithDamping: 0.8,
+      initialSpringVelocity: 0.75,
+      options: .curveEaseIn,
+      animations: {[weak self] in
+        self?.contentView.bottomConstraint?.constant = -(self?.safeAreaInsets.bottom ?? 0)
+        self?.layoutIfNeeded()
+      },
+      completion: nil
     )
   }
 
