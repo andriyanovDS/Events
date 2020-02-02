@@ -472,8 +472,8 @@
 			isa = PBXGroup;
 			children = (
 				74697FBF22D0E69B00D5B5F4 /* CalendarViewController.swift */,
-				740C351F23DC700600F00714 /* CalendarCloseByGestureRecognizer.swift */,
 				74697FCD22D2022700D5B5F4 /* CalendarViewModel.swift */,
+				740C351F23DC700600F00714 /* CalendarCloseByGestureRecognizer.swift */,
 				74278AC823D4D7C600B8A5BB /* CalendarContentView.swift */,
 				74278ACE23D4F8F100B8A5BB /* CalendarMonthView.swift */,
 				74278ACA23D4D88900B8A5BB /* CalendarHeaderView.swift */,

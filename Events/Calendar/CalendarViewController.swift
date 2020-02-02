@@ -10,9 +10,9 @@ import UIKit
 
 class CalendarViewController: UIViewController, UIGestureRecognizerDelegate, ViewModelBased, ScreenWithResult {
   var viewContent: CalendarContentView?
-  var viewModel: CalendarViewModel! {
+  weak var viewModel: CalendarViewModel! {
     didSet {
-      viewModel.delegate = self
+      viewModel?.delegate = self
     }
   }
   var onResult: ((SelectedDates?) -> Void)!
@@ -23,10 +23,10 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate, Vie
 
     setupView()
   }
-  
+
   override func viewDidLayoutSubviews() {
     onSelectedDatesDidChange(viewModel.selectedDates)
-    viewModel.selectedDates.from
+    viewModel?.selectedDates.from
       .map { v in
         let currentMonth = Calendar.current.component(.month, from: Date())
         let selectedMonth = Calendar.current.component(.month, from: v)
@@ -36,28 +36,14 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate, Vie
         viewContent?.sctollTo(selectedMonth: v)
       })
   }
-  
-  @objc func closeModal() {
-    onResult(nil)
-    viewModel.onClose()
-  }
 
   private func setupView() {
     let viewContent = CalendarContentView(
-      months: viewModel.months,
-      onClose: closeModal,
-      onSave: { [weak self] in
-        guard let self = self else {
-          return
-        }
-        self.onResult(self.viewModel.selectedDates)
-        self.viewModel.onClose()
-      },
-      onSelectDate: viewModel.selectDate,
-      onClearDates: viewModel.clearDates
+      months: (viewModel?.months ?? [])
     )
+    viewContent.delegate = self
     self.viewContent = viewContent
-    let tapOutsideGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(closeModal))
+    let tapOutsideGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onClose))
     tapOutsideGestureRecognizer.cancelsTouchesInView = false
     tapOutsideGestureRecognizer.delegate = self
     viewContent.backgroundView.addGestureRecognizer(tapOutsideGestureRecognizer)
@@ -65,9 +51,32 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate, Vie
       parentView: viewContent,
       animatedView: viewContent.contentView,
       gestureBounds: CGRect(x: 0, y: 0, width: 0, height: 75),
-      onClose: closeModal
+      onClose: {[unowned self] in
+        self.onClose()
+      }
     )
     view = viewContent
+  }
+}
+
+extension CalendarViewController: CalendarContentViewDelegate {
+  @objc func onClose() {
+    onResult(nil)
+    viewModel?.onClose()
+  }
+
+  func onSave() {
+    guard let viewModel = self.viewModel else { return }
+    self.onResult(viewModel.selectedDates)
+    viewModel.onClose()
+  }
+
+  func onClearDates() {
+     self.viewModel?.clearDates()
+  }
+
+  func onSelect(date: Date) {
+    self.viewModel?.selectDate(selectedDate: date)
   }
 }
 

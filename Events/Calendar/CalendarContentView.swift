@@ -21,23 +21,12 @@ class CalendarContentView: UIView {
   private let datesScrollView = UIScrollView()
 
   private let months: [Month]
-  private let onClose: () -> Void
-  private let onSave: () -> Void
-  private let onSelectDate: (Date) -> Void
-  private let onClearDates: () -> Void
+  weak var delegate: CalendarContentViewDelegate?
 
   init(
-    months: [Month],
-    onClose: @escaping () -> Void,
-    onSave: @escaping () -> Void,
-    onSelectDate: @escaping (Date) -> Void,
-    onClearDates: @escaping () -> Void
+    months: [Month]
   ) {
     self.months = months
-    self.onClose = onClose
-    self.onSave = onSave
-    self.onSelectDate = onSelectDate
-    self.onClearDates = onClearDates
     super.init(frame: CGRect.zero)
 
     setupView()
@@ -154,18 +143,25 @@ class CalendarContentView: UIView {
 
   @objc private func onPressDayButton(_ button: DayButton) {
     guard let date = button.date else { return }
-    onSelectDate(date)
+    delegate?.onSelect(date: date)
   }
 
   @objc private func onPressCloseButton() {
-    onClose()
+    delegate?.onClose()
   }
 
   @objc private func onPressClearButton() {
-    onClearDates()
+    delegate?.onClearDates()
   }
 
   @objc private func onPressSaveButton() {
-    onSave()
+    delegate?.onSave()
   }
+}
+
+protocol CalendarContentViewDelegate: class {
+  func onClose() -> Void
+  func onSave() -> Void
+  func onSelect(date: Date) -> Void
+  func onClearDates() -> Void
 }
