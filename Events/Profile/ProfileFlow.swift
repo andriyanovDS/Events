@@ -7,6 +7,7 @@
 //
 
 import RxFlow
+import Photos
 import Foundation
 
 class ProfileFlow: Flow {
@@ -146,7 +147,7 @@ class ProfileFlow: Flow {
       ))
   }
 
-  func navigateToImagePicker(onComplete: @escaping ([UIImage]) -> Void) -> FlowContributors {
+  func navigateToImagePicker(onComplete: @escaping ([PHAsset]) -> Void) -> FlowContributors {
     let flow = ImagePickerFlow()
     Flows.whenReady(flow1: flow, block: { rootVC in
       rootVC.modalPresentationStyle = .overCurrentContext

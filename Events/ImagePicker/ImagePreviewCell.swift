@@ -31,7 +31,8 @@ class ImagePreviewCell: UICollectionViewCell {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func reuseCell(image: UIImage) {
+	func reuseCell(image: UIImage, index: Int) {
+		selectButton.tag = index
     previewImageView.image = image
   }
 

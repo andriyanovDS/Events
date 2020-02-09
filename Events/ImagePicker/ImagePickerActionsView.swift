@@ -105,10 +105,7 @@ class ImagePickerActionsView: UIView {
     let top = -collectionView.adjustedContentInset.top
     if scale == 1 {
       if index == 0 {
-        return CGPoint(
-          x: 0,
-          y: top
-        )
+        return CGPoint(x: 0, y: top)
       }
 
       if index == collectionView.numberOfItems(inSection: 0) - 1 {
@@ -130,9 +127,11 @@ class ImagePickerActionsView: UIView {
       )
     }
     let frame = attributes.frame
-    let imageCenterX: CGFloat = abs(frame.minX) + frame.width / 2
+		let totalSpacingWidth = CGFloat(index) * IMAGES_STACK_VIEW_SPACING
+		let scaledMinX = (abs(frame.minX) - totalSpacingWidth) * scale + totalSpacingWidth
+		let imageCenterX: CGFloat = scaledMinX + (frame.width * scale) / 2
     return CGPoint(
-      x: imageCenterX * scale - collectionView.bounds.width / 2,
+      x: imageCenterX - collectionView.bounds.width / 2,
       y: top
     )
   }

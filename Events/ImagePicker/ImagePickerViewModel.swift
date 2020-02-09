@@ -16,7 +16,7 @@ import RxSwift
 
 class ImagePickerViewModel: Stepper {
   let steps = PublishRelay<Step>()
-  private let onResult: ([UIImage]) -> Void
+  private let onResult: ([PHAsset]) -> Void
 
   var targetSize: CGSize! {
     didSet {
@@ -28,63 +28,37 @@ class ImagePickerViewModel: Stepper {
       )
     }
   }
-  var images: [UIImage] = []
   var selectedImageIndices: [Int] = []
   weak var delegate: ImagePickerViewModelDelegate?
-  private let disposeBag = DisposeBag()
-  private let loadLocalImage$ = PublishSubject<PHAsset>()
+	private var assets: PHFetchResult<PHAsset>?
+	private var lastCachedAssetIndex: Int = 0
+	private let imageRequestOptions = PHImageRequestOptions()
+	private let imageManager = PHImageManager()
+	var assetsCount: Int {
+		assets?.count ?? 0
+	}
 
-  init(onResult: @escaping (([UIImage]) -> Void)) {
+  init(onResult: @escaping (([PHAsset]) -> Void)) {
     self.onResult = onResult
 
-    let requestOptions = PHImageRequestOptions()
-    requestOptions.version = .current
-    requestOptions.deliveryMode = .highQualityFormat
-    requestOptions.isSynchronous = false
-    let backgroundScheduler = ConcurrentDispatchQueueScheduler(qos: .background)
-
-    loadLocalImage$
-      .buffer(
-        timeSpan: DispatchTimeInterval.milliseconds(100),
-        count: 30,
-        scheduler: backgroundScheduler
-      )
-      .observeOn(backgroundScheduler)
-      .concatMap {[weak self] in Observable
-        .from($0)
-        .flatMap {[weak self] asset -> Observable<UIImage> in
-          guard let size = self?.targetSize else {
-            return Observable<UIImage>.never()
-          }
-          return Observable<UIImage>.create { observer in
-            PHImageManager.default().requestImage(
-              for: asset,
-              targetSize: size,
-              contentMode: .aspectFit,
-              options: requestOptions
-            ) { image, _ in
-              image.foldL(
-                none: { observer.on(.completed) },
-                some: {
-                  observer.on(.next($0))
-                  observer.on(.completed)
-                }
-              )
-            }
-            return Disposables.create()
-          }
-        }
-      }
-      .observeOn(MainScheduler.instance)
-      .subscribe {[weak self] event in
-        switch event {
-        case .next(let image):
-          self?.onRequestedImageDidLoad(image)
-        default: break
-        }
-      }
-      .disposed(by: disposeBag)
+    imageRequestOptions.version = .current
+    imageRequestOptions.deliveryMode = .highQualityFormat
+    imageRequestOptions.isSynchronous = false
   }
+	
+	func getImage(at index: Int, onResult: @escaping (UIImage) -> Void) {
+		guard let asset = assets.map({ $0.object(at: index) }) else { return }
+
+		imageManager.requestImage(
+			for: asset,
+			targetSize: targetSize,
+			contentMode: .aspectFill,
+			options: imageRequestOptions,
+			resultHandler: { imageNullable, _ in
+				imageNullable.foldL(none: {}, some: onResult)
+		  }
+		)
+	}
   
   func onSelectImageSource(source: ImageSource) {
     switch source {
@@ -110,22 +84,31 @@ class ImagePickerViewModel: Stepper {
   }
 
   private func onCloseAnimationDidComplete() {
-    onResult(selectedImageIndices.map { images[$0] })
-    steps.accept(EventStep.imagePickerDidComplete)
+		defer {
+			steps.accept(EventStep.imagePickerDidComplete)
+		}
+		
+		guard let imageAssets = assets else {
+			return
+		}
+		onResult(
+			selectedImageIndices.map { imageAssets.object(at: $0) }
+		)
   }
 
   private func handleCamera() {
 
   }
 
-  func closeImagePicker(with result: [UIImage]) {
+  func closeImagePicker(with result: [PHAsset]) {
     self.onResult(result)
     self.steps.accept(EventStep.imagePickerDidComplete)
   }
 
   func openImagesPreview(startAt index: Int) {
+		guard let assets = assets else { return }
     steps.accept(EventStep.imagesPreview(
-      images: images,
+      assets: assets,
       startAt: index,
       selectedImageIndices: selectedImageIndices,
       onResult: {[weak self] selectedImageIndices in
@@ -135,24 +118,11 @@ class ImagePickerViewModel: Stepper {
     ))
   }
 
-  private func onRequestedImageDidLoad(_ image: UIImage) {
-    delegate?.prepareImagesUpdate()
-    images.append(image)
-    delegate?.insertImage(at: self.images.count - 1)
-  }
-
   private func handleLibrary() {
     let fetchOptions = PHFetchOptions()
-    let images = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-    images.enumerateObjects(
-      options: [NSEnumerationOptions.reverse],
-      using: {[weak self] asset, index, _ in
-        self?.loadLocalImage$.on(.next(asset))
-        if index == 0 {
-          self?.loadLocalImage$.on(.completed)
-        }
-      }
-    )
+		let sortByDateDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
+		fetchOptions.sortDescriptors = [sortByDateDescriptor]
+    assets = PHAsset.fetchAssets(with: .image, options: fetchOptions)
   }
 
   private func openCamera() {
@@ -244,8 +214,6 @@ enum ImageSource: CaseIterable {
 protocol ImagePickerViewModelDelegate: UIImagePickerControllerDelegate,
   UIViewController,
   UINavigationControllerDelegate {
-  func prepareImagesUpdate()
-  func insertImage(at index: Int)
   func updateImagePreviews(selectedImageIndices: [Int])
   func performCloseAnimation(onComplete: @escaping () -> Void)
 }

@@ -168,8 +168,8 @@ import SwiftIconFont
   }
 
   @objc private func openImagePicker() {
-    viewModel.openImagePicker(onResult: { images in
-      self.descriptionView?.selectImagesView.handleImagePickerResult(images: images)
+    viewModel.openImagePicker(onResult: { assets in
+      self.descriptionView?.selectImagesView.handleImagePickerResult(assets: assets)
     })
   }
   

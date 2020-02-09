@@ -8,6 +8,7 @@
 
 import Foundation
 import RxFlow
+import Photos
 
 indirect enum EventStep: Step {
   case login
@@ -19,7 +20,7 @@ indirect enum EventStep: Step {
   case userDetailsDidComplete
   case createEvent
   case createEventDidComplete
-  case imagePicker(onComplete: ([UIImage]) -> Void)
+  case imagePicker(onComplete: ([PHAsset]) -> Void)
   case imagePickerDidComplete
   case calendar(withSelectedDates: SelectedDates, onComplete: (SelectedDates?) -> Void)
   case calendarDidComplete
@@ -33,7 +34,7 @@ indirect enum EventStep: Step {
   case permissionModal (withType: PermissionModalType)
   case permissionModalDidComplete
   case imagesPreview(
-    images: [UIImage],
+    assets: PHFetchResult<PHAsset>,
     startAt: Int,
     selectedImageIndices: [Int],
     onResult: ([Int]) -> Void

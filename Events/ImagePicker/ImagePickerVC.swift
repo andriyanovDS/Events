@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class ImagePickerVC: UIViewController {
   weak var viewModel: ImagePickerViewModel!
@@ -28,7 +29,11 @@ class ImagePickerVC: UIViewController {
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
       self.imagePickerView?.animateShowContent()
     }
-    viewModel.targetSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+		let scale = UIScreen.main.scale
+    viewModel.targetSize = CGSize(
+			width: PICKER_IMAGE_MAX_SIZE * scale,
+			height: PICKER_IMAGE_MAX_SIZE * scale
+		)
   }
 
   private func onSelectImageSource(source: ImageSource) {
@@ -89,37 +94,21 @@ extension ImagePickerVC: ImagePickerViewModelDelegate {
     defer {
       self.dismiss(animated: true, completion: nil)
     }
-    guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+		
+    guard let asset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset else {
       return
     }
-    viewModel.closeImagePicker(with: [image])
+    viewModel.closeImagePicker(with: [asset])
   }
 
   func updateImagePreviews(selectedImageIndices: [Int]) {
     imagePickerView?.updateImagePreviews(selectedImageIndices: selectedImageIndices)
   }
-
-  func prepareImagesUpdate() {
-    guard let collectionView = imagePickerView?.actionsView.collectionView else {
-      return
-    }
-    collectionView.numberOfItems(inSection: 0)
-  }
-
-  func insertImage(at index: Int) {
-    guard let collectionView = imagePickerView?.actionsView.collectionView else {
-      return
-    }
-    collectionView.performBatchUpdates({
-      let indexPath = IndexPath(item: index, section: 0)
-      collectionView.insertItems(at: [indexPath])
-    })
-  }
 }
 
 extension ImagePickerVC: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return viewModel.images.count
+    return viewModel.assetsCount
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -127,10 +116,11 @@ extension ImagePickerVC: UICollectionViewDataSource {
       withReuseIdentifier: "ImagePreviewCell",
       for: indexPath
       ) as? ImagePreviewCell ?? ImagePreviewCell()
-    cell.selectButton.tag = indexPath.item
     cell.selectButton.addTarget(self, action: #selector(onImageDidSelected(_:)), for: .touchUpInside)
-    let image = viewModel.images[indexPath.item]
-    cell.reuseCell(image: image)
+		viewModel.getImage(
+			at: indexPath.item,
+			onResult: { cell.reuseCell(image: $0, index: indexPath.item) }
+		)
     let selectButtonOffset = imagePickerView!.actionsView.selectButtonOffset(
       forCellAt: indexPath.item,
       contentOffsetX: collectionView.contentOffset.x

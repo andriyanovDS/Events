@@ -8,28 +8,62 @@
 
 import UIKit
 import Stevia
+import Photos
+
+private let IMAGE_WIDTH: CGFloat = 100.0
+private let IMAGE_HEIGHT: CGFloat = 80.0
 
 class SelectedImagesView: UIView {
   let openImagePickerButton = UIButton()
-  private lazy var imagesStackView = UIStackView()
+  private var selectedAssets: [PHAsset] = []
+	private var imageSizeScale: CGFloat {
+		UIScreen.main.scale
+	}
+	private lazy var imagesStackView = UIStackView()
   private lazy var imagesScrollView = UIScrollView()
-  private var selectedImages: [UIImage] = []
+	private lazy var imageManager = PHImageManager()
+	private lazy var imageRequestOptions: PHImageRequestOptions = {
+		let requestOptions = PHImageRequestOptions()
+		requestOptions.version = .current
+    requestOptions.deliveryMode = .highQualityFormat
+    requestOptions.isSynchronous = false
+		return requestOptions
+	}()
 
-  func handleImagePickerResult(images: [UIImage]) {
-    if images.count == 0 {
+  func handleImagePickerResult(assets: [PHAsset]) {
+    if assets.count == 0 {
       return
     }
-    if self.selectedImages.count == 0 {
-      self.openImagePickerButton.removeFromSuperview()
-      self.setupImageViews(with: images)
-      self.selectedImages = images
+    if selectedAssets.count == 0 {
+      openImagePickerButton.removeFromSuperview()
+      setupImageViews()
+      selectedAssets = assets
+			appendAssets(assets)
       return
     }
-    self.selectedImages.append(contentsOf: images)
-    images.forEach { self.addSelectedImage($0) }
+    selectedAssets.append(contentsOf: assets)
+		appendAssets(assets)
   }
+	
+	private func appendAssets(_ assets: [PHAsset]) {
+		assets.forEach { asset in
+			imageManager.requestImage(
+				for: asset,
+				targetSize: CGSize(
+					width: IMAGE_WIDTH * imageSizeScale,
+					height: IMAGE_HEIGHT * imageSizeScale
+				),
+				contentMode: .aspectFill,
+				options: imageRequestOptions,
+				resultHandler: {[weak self] image, _ in
+					guard let image = image else { return }
+					self?.addSelectedImage(image, asset: asset)
+				}
+			)
+		}
+	}
 
-  private func addSelectedImage(_ image: UIImage) {
+	private func addSelectedImage(_ image: UIImage, asset: PHAsset) {
     let imageContentView = UIView()
     let imageView = UIImageView(image: image)
     let removeButton = UIButtonScaleOnPress()
@@ -52,7 +86,7 @@ class SelectedImagesView: UIView {
       )
       v.setImage(image, for: .normal)
     })
-    removeButton.uniqueData = image
+    removeButton.uniqueData = asset
     removeButton.addTarget(self, action: #selector(onPressRemoveButton(_:)), for: .touchUpInside)
     imageContentView.sv(imageView, removeButton)
     imageView.fillContainer().centerInContainer()
@@ -61,7 +95,7 @@ class SelectedImagesView: UIView {
     imageContentView.width(100).height(80)
   }
 
-  private func setupImageViews(with images: [UIImage]) {
+  private func setupImageViews() {
     imagesScrollView.showsHorizontalScrollIndicator = false
     imagesScrollView.canCancelContentTouches = true
     imagesStackView.style({ v in
@@ -70,14 +104,13 @@ class SelectedImagesView: UIView {
       v.distribution = .fillEqually
       v.spacing = 5
     })
-    images.forEach { addSelectedImage($0) }
     sv(imagesScrollView.sv(imagesStackView))
     imagesScrollView.fillContainer().centerInContainer()
     imagesStackView.top(5).right(5).left(5).bottom(5)
     heightConstraint?.constant = 90
   }
 
-  private func removeSelectedImage(inside view: UIView) {
+  private func removeSelectedImage(_ view: UIView) {
     UIView.animate(withDuration: 0.1, animations: {
       view.alpha = 0
       self.layoutIfNeeded()
@@ -86,7 +119,7 @@ class SelectedImagesView: UIView {
         self.imagesStackView.removeArrangedSubview(view)
         self.layoutIfNeeded()
       }, completion: { _ in
-        if self.selectedImages.count == 0 {
+        if self.selectedAssets.count == 0 {
           self.heightConstraint?.constant = 0
           UIView.animate(withDuration: 0.1, animations: {
             self.superview?.layoutIfNeeded()
@@ -97,12 +130,13 @@ class SelectedImagesView: UIView {
   }
 
   @objc private func onPressRemoveButton(_ button: UIButtonScaleOnPress) {
-    guard let image = button.uniqueData as? UIImage else {
+    guard let asset = button.uniqueData as? PHAsset else {
       return
     }
-    let index = selectedImages.firstIndex(of: image)
-    selectedImages = selectedImages.filter { $0 != image }
-    let removedView = imagesStackView.arrangedSubviews[index!]
-    self.removeSelectedImage(inside: removedView)
+		if let index = selectedAssets.firstIndex(where: { $0 == asset }) {
+			selectedAssets.remove(at: index)
+			let removedView = imagesStackView.arrangedSubviews[index]
+			self.removeSelectedImage(removedView)
+		}
   }
 }

@@ -12,6 +12,7 @@ import Stevia
 let PICKER_IMAGE_HEIGHT: CGFloat = 80.0
 let PICKER_IMAGE_WIDTH: CGFloat = 100.0
 let PICKER_ACTION_BUTTON_HEIGHT: CGFloat = 50
+let PICKER_IMAGE_MAX_SIZE = PICKER_IMAGE_WIDTH + PICKER_ACTION_BUTTON_HEIGHT
 private let PICKER_HEIGHT: CGFloat = 265.0
 
 class ImagePickerView: UIView, ImagePickerActionsViewDelegate {

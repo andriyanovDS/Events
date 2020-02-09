@@ -9,27 +9,41 @@
 import UIKit
 import Hero
 import Stevia
+import Photos
 
 class ImagesPreviewVC: UIViewController {
   var imagesPreviewView: ImagesPreviewView?
   var activeIndex: Int
-  let images: [UIImage]
+  let assets: PHFetchResult<PHAsset>
   var scrollOnIndex: Int
   var selectedImageIndices: [Int]
   let onResult: ([Int]) -> Void
   let viewModel: ImagesPreviewViewModel
   let layout = UICollectionViewFlowLayout()
   let collectionView: UICollectionView
+	private var isInitialOffsetDidSet: Bool = false
+	private var imageManager = PHImageManager()
+	private var imageRequestOptions: PHImageRequestOptions = {
+		let requestOptions = PHImageRequestOptions()
+		requestOptions.version = .current
+		requestOptions.deliveryMode = .highQualityFormat
+    requestOptions.isSynchronous = false
+		return requestOptions
+	}()
+	private let imageSize = CGSize(
+		width: UIScreen.main.bounds.width,
+		height: UIScreen.main.bounds.height
+	)
 
   init(
     viewModel: ImagesPreviewViewModel,
-    images: [UIImage],
+    assets: PHFetchResult<PHAsset>,
     startAt index: Int,
     selectedImageIndices: [Int],
     onResult: @escaping ([Int]) -> Void
   ) {
     self.viewModel = viewModel
-    self.images = images
+    self.assets = assets
     self.selectedImageIndices = selectedImageIndices
     activeIndex = index
     scrollOnIndex = index
@@ -65,12 +79,13 @@ class ImagesPreviewVC: UIViewController {
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
 
-    if activeIndex > 0 {
+    if !isInitialOffsetDidSet && activeIndex > 0 {
       collectionView.scrollToItem(
         at: IndexPath(item: activeIndex, section: 0),
         at: .centeredHorizontally,
         animated: false
       )
+			isInitialOffsetDidSet = true
     }
   }
 
@@ -110,7 +125,7 @@ class ImagesPreviewVC: UIViewController {
   }
 
   private func scrollTo(index: Int) {
-    if index < 0 || index > images.count - 1 {
+    if index < 0 || index > assets.count - 1 {
       return
     }
     collectionView.scrollToItem(
@@ -151,11 +166,21 @@ class ImagesPreviewVC: UIViewController {
         ? activeIndex - 1
         : activeIndex
   }
+	
+	private func requestImage(for asset: PHAsset, onResult: @escaping (UIImage?) -> Void) {
+		imageManager.requestImage(
+			for: asset,
+			targetSize: imageSize,
+			contentMode: .aspectFill,
+			options: imageRequestOptions,
+			resultHandler: { image, _ in onResult(image) }
+		)
+	}
 }
 
 extension ImagesPreviewVC: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return images.count
+    return assets.count
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -163,8 +188,10 @@ extension ImagesPreviewVC: UICollectionViewDataSource {
       withReuseIdentifier: "ImageViewCell",
       for: indexPath
       ) as? ImageViewCell ?? ImageViewCell()
-    let image = images[indexPath.item]
-    cell.setImage(image: image)
+		requestImage(for: assets.object(at: indexPath.item), onResult: { image in
+			guard let image = image else { return }
+			cell.setImage(image: image)
+		})
     if let index = selectedImageIndices.firstIndex(of: indexPath.item) {
       cell.selectedCount = index + 1
     }

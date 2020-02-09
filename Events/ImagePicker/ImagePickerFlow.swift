@@ -9,6 +9,7 @@
 import Foundation
 import RxFlow
 import UIKit
+import Photos
 
 class ImagePickerFlow: Flow {
   var root: Presentable {
@@ -31,9 +32,9 @@ class ImagePickerFlow: Flow {
     case .imagePickerDidComplete:
       rootNavigationController.popViewController(animated: false)
       return .end(forwardToParentFlowWithStep: EventStep.imagePickerDidComplete)
-    case .imagesPreview(let images, let startAt, let selectedImageIndices, let onResult):
+    case .imagesPreview(let assets, let startAt, let selectedImageIndices, let onResult):
       return navigateToImagesPreview(
-        images: images,
+        assets: assets,
         startAt: startAt,
         selectedImageIndices: selectedImageIndices,
         onResult: onResult
@@ -46,7 +47,7 @@ class ImagePickerFlow: Flow {
     }
   }
 
-  func navigateToImagePicker(onComplete: @escaping ([UIImage]) -> Void) -> FlowContributors {
+  func navigateToImagePicker(onComplete: @escaping ([PHAsset]) -> Void) -> FlowContributors {
      let viewModel = ImagePickerViewModel(onResult: onComplete)
      let viewController = ImagePickerVC(viewModel: viewModel)
      viewController.modalTransitionStyle = .coverVertical
@@ -56,7 +57,7 @@ class ImagePickerFlow: Flow {
    }
 
   func navigateToImagesPreview(
-    images: [UIImage],
+    assets: PHFetchResult<PHAsset>,
     startAt: Int,
     selectedImageIndices: [Int],
     onResult: @escaping ([Int]) -> Void
@@ -64,7 +65,7 @@ class ImagePickerFlow: Flow {
     let viewModel = ImagesPreviewViewModel()
     let viewController = ImagesPreviewVC(
       viewModel: viewModel,
-      images: images,
+      assets: assets,
       startAt: startAt,
       selectedImageIndices: selectedImageIndices,
       onResult: onResult

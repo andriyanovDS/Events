@@ -10,6 +10,7 @@ import Foundation
 import RxSwift
 import RxFlow
 import RxCocoa
+import Photos
 
 class CreateEventViewModel: Stepper {
   let steps = PublishRelay<Step>()
@@ -110,7 +111,7 @@ class CreateEventViewModel: Stepper {
     steps.accept(EventStep.hintPopup(popup: popup))
   }
 
-  func openImagePicker(onResult: @escaping ([UIImage]) -> Void) {
+  func openImagePicker(onResult: @escaping ([PHAsset]) -> Void) {
     steps.accept(EventStep.imagePicker(onComplete: onResult))
   }
 }
@@ -176,5 +177,5 @@ protocol CreateEventCoordinator: class {
   func openCalendar(onResult: @escaping (SelectedDates) -> Void)
   func openLocationSearchBar(onResult: @escaping (Geocode) -> Void)
   func openHintPopup(hintPopup: HintPopup)
-  func openImagePicker(imagesDidSelected: @escaping ([UIImage]) -> Void)
+  func openImagePicker(imagesDidSelected: @escaping ([PHAsset]) -> Void)
 }

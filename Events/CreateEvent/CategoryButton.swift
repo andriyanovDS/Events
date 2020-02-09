@@ -11,12 +11,17 @@ import Stevia
 
 class CategoryButton: UIButtonScaleOnPress {
   let category: CategoryId
+	private let categoryImageView = UIImageView()
 
   init(category: CategoryId) {
     self.category = category
     super.init(frame: CGRect.zero)
     setupView()
   }
+	
+	deinit {
+		categoryImageView.removeFromSuperview()
+	}
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
@@ -31,10 +36,9 @@ class CategoryButton: UIButtonScaleOnPress {
 
     titleLabel?.numberOfLines = 0
     let image = UIImage(named: category.rawValue)
-    let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
-    imageView.image = image
-    imageView.clipsToBounds = true
-    imageView.contentMode = .scaleAspectFit
+    categoryImageView.image = image
+    categoryImageView.clipsToBounds = true
+    categoryImageView.contentMode = .scaleAspectFit
 
     let label = UILabel()
     label.numberOfLines = 2
@@ -46,9 +50,13 @@ class CategoryButton: UIButtonScaleOnPress {
       style: .bold
     )
     label.textAlignment = .center
-    sv(imageView, label)
-    imageView.top(10).centerHorizontally()
+    sv(categoryImageView, label)
+    categoryImageView
+			.top(10)
+		  .width(60)
+		  .height(60)
+			.centerHorizontally()
     label.bottom(10).left(10).right(10).centerHorizontally()
-    label.Top == imageView.Bottom + 7
+    label.Top == categoryImageView.Bottom + 7
   }
 }
