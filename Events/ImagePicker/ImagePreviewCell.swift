@@ -13,6 +13,7 @@ let SELECT_BUTTON_PADDING: CGFloat = 4.0
 
 class ImagePreviewCell: UICollectionViewCell {
   var image: UIImage?
+  var assetIndentifier: String?
   let selectButton = SelectImageButton()
   let previewImageView = UIImageView()
 

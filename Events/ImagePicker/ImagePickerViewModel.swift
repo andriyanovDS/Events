@@ -33,7 +33,8 @@ class ImagePickerViewModel: Stepper {
 	private var assets: PHFetchResult<PHAsset>?
 	private var lastCachedAssetIndex: Int = 0
 	private let imageRequestOptions = PHImageRequestOptions()
-	private let imageManager = PHImageManager()
+	private let imageManager = PHCachingImageManager()
+  private let previousPreheatRect = CGRect.zero
 	var assetsCount: Int {
 		assets?.count ?? 0
 	}
@@ -44,6 +45,14 @@ class ImagePickerViewModel: Stepper {
     imageRequestOptions.version = .current
     imageRequestOptions.deliveryMode = .highQualityFormat
     imageRequestOptions.isSynchronous = false
+  }
+
+  deinit {
+    imageManager.stopCachingImagesForAllAssets()
+  }
+
+  func asset(at index: Int) -> PHAsset {
+    assets!.object(at: index)
   }
 	
 	func getImage(at index: Int, onResult: @escaping (UIImage) -> Void) {
@@ -116,6 +125,40 @@ class ImagePickerViewModel: Stepper {
         self?.delegate?.updateImagePreviews(selectedImageIndices: selectedImageIndices)
       }
     ))
+  }
+
+  func attemptToCacheAssets(_ collectionView: UICollectionView) {
+    guard let assets = self.assets else { return }
+    let visibleRect = CGRect(
+      origin: collectionView.contentOffset,
+      size: collectionView.bounds.size
+    )
+    let preheatRect = visibleRect.insetBy(dx: -0.5 * visibleRect.width, dy: 0)
+    let delta = abs(preheatRect.midX - previousPreheatRect.midX)
+    guard delta > view.bounds.width / 3 else { return }
+
+    let (added, removed) = differencesBetweenRects(previousPreheatRect, preheatRect)
+    let addedAssets = added
+      .flatMap { indices(in: $0, inside: collectionView) }
+      .map { assets.object(at: $0) }
+    let removedAssets = removed
+      .flatMap { indices(in: $0, inside: collectionView) }
+      .map { assets.object(at: $0) }
+
+    imageManager.startCachingImages(
+      for: addedAssets,
+      targetSize: targetSize,
+      contentMode: .aspectFill,
+      options: nil
+      )
+   imageManager.stopCachingImages(
+     for: removedAssets,
+     targetSize: targetSize,
+     contentMode: .aspectFill,
+     options: nil
+     )
+
+    previousPreheatRect = preheatRect
   }
 
   private func handleLibrary() {
@@ -216,4 +259,36 @@ protocol ImagePickerViewModelDelegate: UIImagePickerControllerDelegate,
   UINavigationControllerDelegate {
   func updateImagePreviews(selectedImageIndices: [Int])
   func performCloseAnimation(onComplete: @escaping () -> Void)
+}
+
+private func indices(in rect: CGRect, inside: UICollectionView) -> [Int] {
+  let startIndex = collectionView.indexPathForItem(at: rect.minX)
+  let endIndex = collectionView.indexPathForItem(at: rect.maxX)
+  return [startIndex...endIndex]
+}
+
+private func differencesBetweenRects(_ old: CGRect, _ new: CGRect) -> (added: [CGRect], removed: [CGRect]) {
+  if old.intersects(new) {
+    var added = [CGRect]()
+    if new.maxY > old.maxY {
+      added += [CGRect(x: new.origin.x, y: old.maxY,
+                            width: new.width, height: new.maxY - old.maxY)]
+    }
+    if old.minY > new.minY {
+      added += [CGRect(x: new.origin.x, y: new.minY,
+                            width: new.width, height: old.minY - new.minY)]
+    }
+    var removed = [CGRect]()
+    if new.maxY < old.maxY {
+      removed += [CGRect(x: new.origin.x, y: new.maxY,
+                              width: new.width, height: old.maxY - new.maxY)]
+    }
+    if old.minY < new.minY {
+      removed += [CGRect(x: new.origin.x, y: old.minY,
+                              width: new.width, height: new.minY - old.minY)]
+    }
+    return (added, removed)
+  } else {
+      return ([new], [old])
+  }
 }

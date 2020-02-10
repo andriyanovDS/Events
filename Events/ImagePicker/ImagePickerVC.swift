@@ -112,14 +112,21 @@ extension ImagePickerVC: UICollectionViewDataSource {
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(
+    guard let cell = collectionView.dequeueReusableCell(
       withReuseIdentifier: "ImagePreviewCell",
       for: indexPath
-      ) as? ImagePreviewCell ?? ImagePreviewCell()
+      ) as? ImagePreviewCell else {
+        fatalError("unexpected cell in collection view")
+    }
+    let asset = viewModel.asset(at: indexPath.item)
+    cell.assetIndentifier = asset.localIdentifier
     cell.selectButton.addTarget(self, action: #selector(onImageDidSelected(_:)), for: .touchUpInside)
 		viewModel.getImage(
 			at: indexPath.item,
-			onResult: { cell.reuseCell(image: $0, index: indexPath.item) }
+			onResult: {
+        guard cell.assetIndentifier == asset.localIdentifier else { return }
+        cell.reuseCell(image: $0, index: indexPath.item)
+      }
 		)
     let selectButtonOffset = imagePickerView!.actionsView.selectButtonOffset(
       forCellAt: indexPath.item,
@@ -145,5 +152,6 @@ extension ImagePickerVC: UICollectionViewDelegate {
 
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     imagePickerView?.collectionViewDidScroll()
+    attemptToCacheAssets(scrollView as! UICollectionView)
   }
 }
