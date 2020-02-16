@@ -32,7 +32,6 @@ class ImagesPreviewVC: UIViewControllerWithActivityIndicator {
 	private var isInitialOffsetDidSet: Bool = false
   private var isVerticalGestureActive: Bool = false
   private var lastTranslationY: CGFloat = 0.0
-  private var originalViewCenterY: CGFloat = 0.0
   private var feedbackGenerator: UISelectionFeedbackGenerator?
 
   init(
@@ -128,7 +127,6 @@ class ImagesPreviewVC: UIViewControllerWithActivityIndicator {
     switch recognizer.state {
     case .began:
       isVerticalGestureActive = true
-      originalViewCenterY = cell.center.y
       feedbackGenerator = UISelectionFeedbackGenerator()
       feedbackGenerator?.prepare()
     case .changed:
