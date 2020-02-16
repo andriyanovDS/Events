@@ -26,7 +26,7 @@ class ImagesPreviewVC: UIViewControllerWithActivityIndicator {
   private var activeCellIndex: Int = 0
 	private let sharedImage: SharedImage
   private var selectedImageIndices: [Int]
-  private let onResult: ([Int]) -> Void
+  private let onImageDidSelected: (Int) -> Void
   private let viewModel: ImagesPreviewViewModel
   private let collectionView: UICollectionView
 	private var isInitialOffsetDidSet: Bool = false
@@ -38,13 +38,13 @@ class ImagesPreviewVC: UIViewControllerWithActivityIndicator {
 		viewModel: ImagesPreviewViewModel,
 		sharedImage: SharedImage,
 		selectedImageIndices: [Int],
-		onResult: @escaping ([Int]) -> Void
+		onImageDidSelected: @escaping (Int) -> Void
   ) {
     self.viewModel = viewModel
 		self.sharedImage = sharedImage
 		activeCellIndex = sharedImage.index
     self.selectedImageIndices = selectedImageIndices
-    self.onResult = onResult
+    self.onImageDidSelected = onImageDidSelected
     collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout())
     super.init(nibName: nil, bundle: nil)
 
@@ -73,7 +73,8 @@ class ImagesPreviewVC: UIViewControllerWithActivityIndicator {
     let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleVerticalPanGesture))
     panGestureRecognizer.delegate = self
     collectionView.addGestureRecognizer(panGestureRecognizer)
-	
+    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handlePressCollectionView))
+    collectionView.addGestureRecognizer(tapGestureRecognizer)
     sutupView()
   }
 
@@ -97,7 +98,6 @@ class ImagesPreviewVC: UIViewControllerWithActivityIndicator {
   }
 
   @objc private func closeModal() {
-    onResult(selectedImageIndices)
     viewModel.onCloseModal()
   }
 
@@ -166,6 +166,12 @@ class ImagesPreviewVC: UIViewControllerWithActivityIndicator {
     }
   }
 
+  @objc private func handlePressCollectionView(_ recognizer: UITapGestureRecognizer) {
+    if recognizer.state == .ended {
+      onSelectImage()
+    }
+  }
+
   private func scrollTo(index: Int) {
     if index < 0 || index > viewModel.assetsCount - 1 {
       return
@@ -192,6 +198,7 @@ class ImagesPreviewVC: UIViewControllerWithActivityIndicator {
         imagesPreviewView?.selectButton.setCount(selectedImageIndices.count)
       }
     }
+    onImageDidSelected(activeCellIndex)
   }
 
   private func nextActiveCellIndex() -> Int? {

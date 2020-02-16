@@ -77,6 +77,7 @@ class ImagePickerViewModel: Stepper {
     } else {
       selectedImageIndices.append(index)
     }
+    delegate?.onImageDidSelected(at: index)
   }
 
   func onConfirmSendImages() {
@@ -116,9 +117,8 @@ class ImagePickerViewModel: Stepper {
         assets: assets,
         sharedImage: SharedImage(index: index, image: image, isICloudAsset: isICloudAsset),
         selectedImageIndices: indices,
-        onResult: {[weak self] selectedImageIndices in
-          self?.selectedImageIndices = selectedImageIndices
-          self?.delegate?.updateImagePreviews(selectedImageIndices: selectedImageIndices)
+        onImageDidSelected: {[weak self] index in
+          self?.onSelectImage(at: index)
         }
       ))
     })
@@ -247,6 +247,7 @@ enum ImageSource: CaseIterable {
 protocol ImagePickerViewModelDelegate: UIImagePickerControllerDelegate,
   UIViewController,
   UINavigationControllerDelegate {
+  func onImageDidSelected(at index: Int)
   func updateImagePreviews(selectedImageIndices: [Int])
   func performCloseAnimation(onComplete: @escaping () -> Void)
 }

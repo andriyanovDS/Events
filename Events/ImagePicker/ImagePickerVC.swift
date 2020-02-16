@@ -70,20 +70,25 @@ class ImagePickerVC: UIViewController {
     })
   }
 
-  @objc private func onImageDidSelected(_ button: SelectImageButton) {
+  @objc private func onPressSelectButton(_ button: SelectImageButton) {
     let index = button.tag
     viewModel.onSelectImage(at: index)
+  }
+}
 
+extension ImagePickerVC: ImagePickerViewModelDelegate {
+  func onImageDidSelected(at index: Int) {
+    guard let collectionView = imagePickerView?.actionsView.collectionView else { return }
     let indexPath = IndexPath(item: index, section: 0)
-    guard let cell = imagePickerView?.actionsView.collectionView.cellForItem(at: indexPath) as? ImagePreviewCell else {
+    guard let cell = collectionView.cellForItem(at: indexPath) as? ImagePreviewCell else {
+      collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
+      imagePickerView?.onImageDidSelected(at: index, selectedImageIndices: viewModel.selectedImageIndices)
       return
     }
     cell.selectButton.setCount(viewModel.selectedImageIndices.count)
     imagePickerView?.onImageDidSelected(at: index, selectedImageIndices: viewModel.selectedImageIndices)
   }
-}
 
-extension ImagePickerVC: ImagePickerViewModelDelegate {
   func performCloseAnimation(onComplete: @escaping () -> Void) {
     imagePickerView?.animateHideContent(onComplete: onComplete)
   }
@@ -121,7 +126,7 @@ extension ImagePickerVC: UICollectionViewDataSource {
     }
     let asset = viewModel.asset(at: indexPath.item)
     cell.assetIndentifier = asset.localIdentifier
-    cell.selectButton.addTarget(self, action: #selector(onImageDidSelected(_:)), for: .touchUpInside)
+    cell.selectButton.addTarget(self, action: #selector(onPressSelectButton(_:)), for: .touchUpInside)
     viewModel.image(for: asset, onResult: { image in
       guard cell.assetIndentifier == asset.localIdentifier else { return }
       cell.reuseCell(image: image, index: indexPath.item)

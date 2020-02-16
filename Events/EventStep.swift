@@ -37,7 +37,7 @@ indirect enum EventStep: Step {
     assets: PHFetchResult<PHAsset>,
 		sharedImage: SharedImage,
     selectedImageIndices: [Int],
-    onResult: ([Int]) -> Void
+    onImageDidSelected: (Int) -> Void
   )
   case imagesPreviewDidComplete
 }

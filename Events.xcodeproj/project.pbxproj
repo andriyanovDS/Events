@@ -495,12 +495,12 @@
 				746E10642310A03B00B5B19D /* ImagePickerViewModel.swift */,
 				746E10662310A1EA00B5B19D /* ImagePickerView.swift */,
 				746E10702313E56A00B5B19D /* ImagePickerActionsView.swift */,
-				74DAFA442353701300331369 /* ImagePickerCollectionViewLayout.swift */,
 				746E107623147A9C00B5B19D /* ImagePreviewCell.swift */,
 				746E106823113E3600B5B19D /* ImagePickerItem.swift */,
 				74E2A2862337774200629C36 /* ImagePickerFlow.swift */,
 				74D7E9F1234A6BF00022BAC1 /* SelectImageButton.swift */,
 				74155CA823F8114B00E6A66C /* ImageCacheManager.swift */,
+				74DAFA442353701300331369 /* ImagePickerCollectionViewLayout.swift */,
 			);
 			path = ImagePicker;
 			sourceTree = "<group>";

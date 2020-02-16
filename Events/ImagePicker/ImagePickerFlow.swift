@@ -32,12 +32,12 @@ class ImagePickerFlow: Flow {
     case .imagePickerDidComplete:
       rootNavigationController.popViewController(animated: false)
       return .end(forwardToParentFlowWithStep: EventStep.imagePickerDidComplete)
-    case .imagesPreview(let assets, let sharedImage, let selectedImageIndices, let onResult):
+    case .imagesPreview(let assets, let sharedImage, let selectedImageIndices, let onImageDidSelected):
       return navigateToImagesPreview(
         assets: assets,
 				sharedImage: sharedImage,
         selectedImageIndices: selectedImageIndices,
-        onResult: onResult
+        onImageDidSelected: onImageDidSelected
       )
     case .imagesPreviewDidComplete:
       rootNavigationController.dismiss(animated: true, completion: nil)
@@ -60,14 +60,14 @@ class ImagePickerFlow: Flow {
     assets: PHFetchResult<PHAsset>,
     sharedImage: SharedImage,
     selectedImageIndices: [Int],
-    onResult: @escaping ([Int]) -> Void
+    onImageDidSelected: @escaping (Int) -> Void
   ) -> FlowContributors {
     let viewModel = ImagesPreviewViewModel(assets: assets)
     let viewController = ImagesPreviewVC(
       viewModel: viewModel,
 			sharedImage: sharedImage,
       selectedImageIndices: selectedImageIndices,
-      onResult: onResult
+      onImageDidSelected: onImageDidSelected
     )
     viewController.hero.isEnabled = true
     viewController.modalPresentationStyle = .overCurrentContext
