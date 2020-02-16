@@ -13,61 +13,54 @@ import Photos
 import RxFlow
 import RxCocoa
 import RxSwift
+import Promises
 
 class ImagePickerViewModel: Stepper {
   let steps = PublishRelay<Step>()
   private let onResult: ([PHAsset]) -> Void
 
-  var targetSize: CGSize! {
+  var targetSize: CGSize = CGSize.zero {
     didSet {
-      requestLibraryUsagePermission(
-        onOpenLibrary: handleLibrary,
-        openLibraryAccessModal: {
-          self.steps.accept(EventStep.permissionModal(withType: .library))
-        }
-      )
+      self.imageCacheManager.setTargetSize(self.targetSize)
     }
   }
   var selectedImageIndices: [Int] = []
   weak var delegate: ImagePickerViewModelDelegate?
+  private let imageCacheManager: ImageCacheManager
 	private var assets: PHFetchResult<PHAsset>?
 	private var lastCachedAssetIndex: Int = 0
 	private let imageRequestOptions = PHImageRequestOptions()
-	private let imageManager = PHCachingImageManager()
-  private let previousPreheatRect = CGRect.zero
+  private var previousPreheatRect = CGRect.zero
 	var assetsCount: Int {
 		assets?.count ?? 0
 	}
 
   init(onResult: @escaping (([PHAsset]) -> Void)) {
     self.onResult = onResult
-
-    imageRequestOptions.version = .current
-    imageRequestOptions.deliveryMode = .highQualityFormat
-    imageRequestOptions.isSynchronous = false
+    imageCacheManager = ImageCacheManager(targetSize: targetSize, imageRequestOptions: nil)
   }
 
-  deinit {
-    imageManager.stopCachingImagesForAllAssets()
+  func onViewReady() {
+    requestLibraryUsagePermission(
+      onOpenLibrary: handleLibrary,
+      openLibraryAccessModal: {
+        self.steps.accept(EventStep.permissionModal(withType: .library))
+      }
+    )
   }
 
   func asset(at index: Int) -> PHAsset {
     assets!.object(at: index)
   }
-	
-	func getImage(at index: Int, onResult: @escaping (UIImage) -> Void) {
-		guard let asset = assets.map({ $0.object(at: index) }) else { return }
 
-		imageManager.requestImage(
-			for: asset,
-			targetSize: targetSize,
-			contentMode: .aspectFill,
-			options: imageRequestOptions,
-			resultHandler: { imageNullable, _ in
-				imageNullable.foldL(none: {}, some: onResult)
-		  }
-		)
-	}
+  func image(for asset: PHAsset, onResult: @escaping (UIImage) -> Void) {
+    return imageCacheManager.getImage(for: asset, onResult: onResult)
+  }
+
+  func attemptToCacheAssets(_ collectionView: UICollectionView) {
+    guard let assets = self.assets else { return }
+    imageCacheManager.attemptToCacheAssets(collectionView, assets: assets)
+  }
   
   func onSelectImageSource(source: ImageSource) {
     switch source {
@@ -116,53 +109,50 @@ class ImagePickerViewModel: Stepper {
 
   func openImagesPreview(startAt index: Int) {
 		guard let assets = assets else { return }
-    steps.accept(EventStep.imagesPreview(
-      assets: assets,
-      startAt: index,
-      selectedImageIndices: selectedImageIndices,
-      onResult: {[weak self] selectedImageIndices in
-        self?.selectedImageIndices = selectedImageIndices
-        self?.delegate?.updateImagePreviews(selectedImageIndices: selectedImageIndices)
-      }
-    ))
+		let indices = selectedImageIndices
+
+    loadSharedImage(for: asset(at: index), onResult: {[weak self] image, isICloudAsset in
+      self?.steps.accept(EventStep.imagesPreview(
+        assets: assets,
+        sharedImage: SharedImage(index: index, image: image, isICloudAsset: isICloudAsset),
+        selectedImageIndices: indices,
+        onResult: {[weak self] selectedImageIndices in
+          self?.selectedImageIndices = selectedImageIndices
+          self?.delegate?.updateImagePreviews(selectedImageIndices: selectedImageIndices)
+        }
+      ))
+    })
   }
 
-  func attemptToCacheAssets(_ collectionView: UICollectionView) {
-    guard let assets = self.assets else { return }
-    let visibleRect = CGRect(
-      origin: collectionView.contentOffset,
-      size: collectionView.bounds.size
+  private func loadSharedImage(for asset: PHAsset, onResult: @escaping (UIImage, Bool) -> Void) {
+    let options = PHImageRequestOptions()
+    options.isSynchronous = false
+    options.deliveryMode = .highQualityFormat
+    let scale = UIScreen.main.scale
+    PHImageManager.default().requestImage(
+      for: asset,
+      targetSize: CGSize(
+        width: UIScreen.main.bounds.width * scale,
+        height: UIScreen.main.bounds.height * scale
+      ),
+      contentMode: .aspectFit,
+      options: options,
+      resultHandler: {[weak self] image, _ in
+        image.foldL(
+          none: {
+            self?.imageCacheManager.getImage(for: asset, onResult: { image in
+              onResult(image, true)
+            })
+          },
+          some: { onResult($0, false) }
+        )
+      }
     )
-    let preheatRect = visibleRect.insetBy(dx: -0.5 * visibleRect.width, dy: 0)
-    let delta = abs(preheatRect.midX - previousPreheatRect.midX)
-    guard delta > view.bounds.width / 3 else { return }
-
-    let (added, removed) = differencesBetweenRects(previousPreheatRect, preheatRect)
-    let addedAssets = added
-      .flatMap { indices(in: $0, inside: collectionView) }
-      .map { assets.object(at: $0) }
-    let removedAssets = removed
-      .flatMap { indices(in: $0, inside: collectionView) }
-      .map { assets.object(at: $0) }
-
-    imageManager.startCachingImages(
-      for: addedAssets,
-      targetSize: targetSize,
-      contentMode: .aspectFill,
-      options: nil
-      )
-   imageManager.stopCachingImages(
-     for: removedAssets,
-     targetSize: targetSize,
-     contentMode: .aspectFill,
-     options: nil
-     )
-
-    previousPreheatRect = preheatRect
   }
 
   private func handleLibrary() {
     let fetchOptions = PHFetchOptions()
+    fetchOptions.includeAssetSourceTypes = .typeUserLibrary
 		let sortByDateDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
 		fetchOptions.sortDescriptors = [sortByDateDescriptor]
     assets = PHAsset.fetchAssets(with: .image, options: fetchOptions)
@@ -259,36 +249,4 @@ protocol ImagePickerViewModelDelegate: UIImagePickerControllerDelegate,
   UINavigationControllerDelegate {
   func updateImagePreviews(selectedImageIndices: [Int])
   func performCloseAnimation(onComplete: @escaping () -> Void)
-}
-
-private func indices(in rect: CGRect, inside: UICollectionView) -> [Int] {
-  let startIndex = collectionView.indexPathForItem(at: rect.minX)
-  let endIndex = collectionView.indexPathForItem(at: rect.maxX)
-  return [startIndex...endIndex]
-}
-
-private func differencesBetweenRects(_ old: CGRect, _ new: CGRect) -> (added: [CGRect], removed: [CGRect]) {
-  if old.intersects(new) {
-    var added = [CGRect]()
-    if new.maxY > old.maxY {
-      added += [CGRect(x: new.origin.x, y: old.maxY,
-                            width: new.width, height: new.maxY - old.maxY)]
-    }
-    if old.minY > new.minY {
-      added += [CGRect(x: new.origin.x, y: new.minY,
-                            width: new.width, height: old.minY - new.minY)]
-    }
-    var removed = [CGRect]()
-    if new.maxY < old.maxY {
-      removed += [CGRect(x: new.origin.x, y: new.maxY,
-                              width: new.width, height: old.maxY - new.maxY)]
-    }
-    if old.minY < new.minY {
-      removed += [CGRect(x: new.origin.x, y: old.minY,
-                              width: new.width, height: new.minY - old.minY)]
-    }
-    return (added, removed)
-  } else {
-      return ([new], [old])
-  }
 }

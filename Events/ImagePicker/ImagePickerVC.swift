@@ -15,6 +15,11 @@ class ImagePickerVC: UIViewController {
 
   init(viewModel: ImagePickerViewModel) {
     self.viewModel = viewModel
+    let scale = UIScreen.main.scale
+    viewModel.targetSize = CGSize(
+      width: PICKER_IMAGE_MAX_SIZE * scale,
+      height: PICKER_IMAGE_MAX_SIZE * scale
+    )
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -26,14 +31,10 @@ class ImagePickerVC: UIViewController {
     super.viewDidLoad()
     setupView()
     viewModel.delegate = self
+    viewModel.onViewReady()
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
       self.imagePickerView?.animateShowContent()
     }
-		let scale = UIScreen.main.scale
-    viewModel.targetSize = CGSize(
-			width: PICKER_IMAGE_MAX_SIZE * scale,
-			height: PICKER_IMAGE_MAX_SIZE * scale
-		)
   }
 
   private func onSelectImageSource(source: ImageSource) {
@@ -121,13 +122,10 @@ extension ImagePickerVC: UICollectionViewDataSource {
     let asset = viewModel.asset(at: indexPath.item)
     cell.assetIndentifier = asset.localIdentifier
     cell.selectButton.addTarget(self, action: #selector(onImageDidSelected(_:)), for: .touchUpInside)
-		viewModel.getImage(
-			at: indexPath.item,
-			onResult: {
-        guard cell.assetIndentifier == asset.localIdentifier else { return }
-        cell.reuseCell(image: $0, index: indexPath.item)
-      }
-		)
+    viewModel.image(for: asset, onResult: { image in
+      guard cell.assetIndentifier == asset.localIdentifier else { return }
+      cell.reuseCell(image: image, index: indexPath.item)
+    })
     let selectButtonOffset = imagePickerView!.actionsView.selectButtonOffset(
       forCellAt: indexPath.item,
       contentOffsetX: collectionView.contentOffset.x
@@ -152,6 +150,7 @@ extension ImagePickerVC: UICollectionViewDelegate {
 
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     imagePickerView?.collectionViewDidScroll()
-    attemptToCacheAssets(scrollView as! UICollectionView)
+		guard let collectionView = scrollView as? UICollectionView else { return }
+		viewModel.attemptToCacheAssets(collectionView)
   }
 }

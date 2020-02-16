@@ -15,4 +15,5 @@ use_frameworks!
     pod 'SteviaLayout', '~> 4.5.0'
     pod 'RxFlow', '~> 2.4.0'
     pod 'Hero', '~> 1.4.0'
+		pod 'PromisesSwift', '~> 1.2.8'
   end

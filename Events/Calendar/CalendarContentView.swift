@@ -160,8 +160,8 @@ class CalendarContentView: UIView {
 }
 
 protocol CalendarContentViewDelegate: class {
-  func onClose() -> Void
-  func onSave() -> Void
-  func onSelect(date: Date) -> Void
-  func onClearDates() -> Void
+  func onClose()
+  func onSave()
+  func onSelect(date: Date)
+  func onClearDates()
 }

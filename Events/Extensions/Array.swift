@@ -15,3 +15,14 @@ extension Array {
     }
   }
 }
+
+extension Array where Element: Equatable {
+	func uniq() -> [Element] {
+		self.reduce([], { result, element in
+			if !result.contains(where: { $0 == element }) {
+				return result + [element]
+			}
+			return result
+		})
+	}
+}

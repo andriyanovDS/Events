@@ -14,7 +14,7 @@ let SELECT_BUTTON_PADDING: CGFloat = 4.0
 class ImagePreviewCell: UICollectionViewCell {
   var image: UIImage?
   var assetIndentifier: String?
-  let selectButton = SelectImageButton()
+	let selectButton: SelectImageButton
   let previewImageView = UIImageView()
 
   var selectedCount: Int = 0 {
@@ -24,6 +24,11 @@ class ImagePreviewCell: UICollectionViewCell {
   }
 
   override init(frame: CGRect) {
+		selectButton = SelectImageButton(size: CGSize(
+			width: SELECT_BUTTON_SIZE,
+			height: SELECT_BUTTON_SIZE
+		))
+		
     super.init(frame: frame)
     setupView()
   }
@@ -43,8 +48,8 @@ class ImagePreviewCell: UICollectionViewCell {
   }
 
   private func setupView() {
-    layer.cornerRadius = 10
-    clipsToBounds = true
+    previewImageView.clipsToBounds = true
+    previewImageView.layer.cornerRadius = 10
     previewImageView.contentMode = .scaleAspectFill
 
     sv(previewImageView, selectButton)
@@ -62,5 +67,6 @@ class ImagePreviewCell: UICollectionViewCell {
 
   override func prepareForReuse() {
     selectedCount = 0
+    previewImageView.image = nil
   }
 }

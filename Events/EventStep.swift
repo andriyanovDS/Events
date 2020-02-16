@@ -35,7 +35,7 @@ indirect enum EventStep: Step {
   case permissionModalDidComplete
   case imagesPreview(
     assets: PHFetchResult<PHAsset>,
-    startAt: Int,
+		sharedImage: SharedImage,
     selectedImageIndices: [Int],
     onResult: ([Int]) -> Void
   )

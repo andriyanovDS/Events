@@ -32,10 +32,10 @@ class ImagePickerFlow: Flow {
     case .imagePickerDidComplete:
       rootNavigationController.popViewController(animated: false)
       return .end(forwardToParentFlowWithStep: EventStep.imagePickerDidComplete)
-    case .imagesPreview(let assets, let startAt, let selectedImageIndices, let onResult):
+    case .imagesPreview(let assets, let sharedImage, let selectedImageIndices, let onResult):
       return navigateToImagesPreview(
         assets: assets,
-        startAt: startAt,
+				sharedImage: sharedImage,
         selectedImageIndices: selectedImageIndices,
         onResult: onResult
       )
@@ -58,15 +58,14 @@ class ImagePickerFlow: Flow {
 
   func navigateToImagesPreview(
     assets: PHFetchResult<PHAsset>,
-    startAt: Int,
+    sharedImage: SharedImage,
     selectedImageIndices: [Int],
     onResult: @escaping ([Int]) -> Void
   ) -> FlowContributors {
-    let viewModel = ImagesPreviewViewModel()
+    let viewModel = ImagesPreviewViewModel(assets: assets)
     let viewController = ImagesPreviewVC(
       viewModel: viewModel,
-      assets: assets,
-      startAt: startAt,
+			sharedImage: sharedImage,
       selectedImageIndices: selectedImageIndices,
       onResult: onResult
     )

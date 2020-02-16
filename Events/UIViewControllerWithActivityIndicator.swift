@@ -21,15 +21,18 @@ class UIViewControllerWithActivityIndicator: UIViewController {
   }()
 
   func showActivityIndicator(for view: UIView?) {
-
     let wrapperView: UIView = view ?? self.view
-    if view !== self.view {
+    if view != self.view {
       activityIndicatorView.bounds = wrapperView.bounds
     }
     wrapperView.addSubview(activityIndicatorView)
   }
 
   func removeActivityIndicator() {
-    activityIndicatorView.removeFromSuperview()
+    UIView.animate(withDuration: 0.1, animations: {
+      self.activityIndicatorView.alpha = 0
+    }, completion: {[weak self] _ in
+      self?.activityIndicatorView.removeFromSuperview()
+    })
   }
 }

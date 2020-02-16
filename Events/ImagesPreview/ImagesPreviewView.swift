@@ -13,11 +13,16 @@ import Hero
 class ImagesPreviewView: UIView {
   let closeButton = UIButtonScaleOnPress()
   let backButton = UIButtonScaleOnPress()
-  let selectButton = SelectImageButton()
+	let selectButton: SelectImageButton
   private let collectionView: UICollectionView
 
   init(collectionView: UICollectionView) {
     self.collectionView = collectionView
+		selectButton = SelectImageButton(size: CGSize(
+			width: 35,
+			height: 35
+		))
+		
     super.init(frame: CGRect.zero)
     setupView()
   }
@@ -27,11 +32,13 @@ class ImagesPreviewView: UIView {
   }
 
   private func setupView() {
+    isOpaque = false
     backgroundColor = .black
     collectionView.style { v in
       v.showsVerticalScrollIndicator = false
       v.showsHorizontalScrollIndicator = false
     }
+    collectionView.backgroundColor = .clear
     sv(collectionView, selectButton)
     collectionView.fillContainer().centerInContainer()
     selectButton.right(20)

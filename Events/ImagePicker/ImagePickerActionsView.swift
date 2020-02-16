@@ -11,15 +11,22 @@ import Stevia
 import Hero
 
 let IMAGES_STACK_VIEW_SPACING: CGFloat = 6.0
+let SELECT_BUTTON_SIZE: CGFloat = 25
 
 class ImagePickerActionsView: UIView {
   let collectionView: UICollectionView
   let actionsStackView = UIStackView()
-  let layout = ImagePickerCollectionViewLayout()
+  let layout: ImagePickerCollectionViewLayout
   var actions: [ImagePickerItem] = []
   weak var delegate: ImagePickerActionsViewDelegate?
 
   init() {
+    layout = ImagePickerCollectionViewLayout(
+      cellSize: CGSize(
+        width: PICKER_IMAGE_WIDTH,
+        height: PICKER_IMAGE_HEIGHT
+      )
+    )
     collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout())
     super.init(frame: CGRect.zero)
     setupView()

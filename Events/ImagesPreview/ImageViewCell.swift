@@ -13,11 +13,11 @@ import AVFoundation
 
 class ImageViewCell: UICollectionViewCell {
   var selectedCount: Int?
+  var assetIndentifier: String?
   let previewImageView = UIImageView()
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-
     setupView()
   }
 
@@ -26,19 +26,26 @@ class ImageViewCell: UICollectionViewCell {
   }
 
   func setupView() {
-    previewImageView.contentMode = .scaleAspectFill
+    previewImageView.contentMode = .scaleAspectFit
 
     sv(previewImageView)
     previewImageView.centerInContainer()
   }
 
-  func setImage(image: UIImage) {
+  func setSharedImage(image: UIImage) {
     let size = AVMakeRect(aspectRatio: image.size, insideRect: UIScreen.main.bounds)
     previewImageView.image = image
     previewImageView.width(size.width).height(size.height)
   }
 
+  func setImage(image: UIImage) {
+    previewImageView.image = image
+    previewImageView.fillContainer().centerInContainer()
+  }
+
   override func prepareForReuse() {
     selectedCount = nil
+    assetIndentifier = nil
+    previewImageView.image = nil
   }
 }

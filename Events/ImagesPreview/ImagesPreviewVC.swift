@@ -10,46 +10,46 @@ import UIKit
 import Hero
 import Stevia
 import Photos
+import Promises
 
-class ImagesPreviewVC: UIViewController {
-  var imagesPreviewView: ImagesPreviewView?
-  var activeIndex: Int
-  let assets: PHFetchResult<PHAsset>
-  var scrollOnIndex: Int
-  var selectedImageIndices: [Int]
-  let onResult: ([Int]) -> Void
-  let viewModel: ImagesPreviewViewModel
-  let layout = UICollectionViewFlowLayout()
-  let collectionView: UICollectionView
+struct SharedImage {
+	let index: Int
+	let image: UIImage
+  let isICloudAsset: Bool
+}
+
+private let SWIPE_VELOCITY: CGFloat = 400
+private let VERTICAL_TRANSLATION_BOUND: CGFloat = 75.0
+
+class ImagesPreviewVC: UIViewControllerWithActivityIndicator {
+  private var imagesPreviewView: ImagesPreviewView?
+  private var activeCellIndex: Int = 0
+	private let sharedImage: SharedImage
+  private var selectedImageIndices: [Int]
+  private let onResult: ([Int]) -> Void
+  private let viewModel: ImagesPreviewViewModel
+  private let collectionView: UICollectionView
 	private var isInitialOffsetDidSet: Bool = false
-	private var imageManager = PHImageManager()
-	private var imageRequestOptions: PHImageRequestOptions = {
-		let requestOptions = PHImageRequestOptions()
-		requestOptions.version = .current
-		requestOptions.deliveryMode = .highQualityFormat
-    requestOptions.isSynchronous = false
-		return requestOptions
-	}()
-	private let imageSize = CGSize(
-		width: UIScreen.main.bounds.width,
-		height: UIScreen.main.bounds.height
-	)
+  private var isVerticalGestureActive: Bool = false
+  private var lastTranslationY: CGFloat = 0.0
+  private var originalViewCenterY: CGFloat = 0.0
+  private var feedbackGenerator: UISelectionFeedbackGenerator?
 
   init(
-    viewModel: ImagesPreviewViewModel,
-    assets: PHFetchResult<PHAsset>,
-    startAt index: Int,
-    selectedImageIndices: [Int],
-    onResult: @escaping ([Int]) -> Void
+		viewModel: ImagesPreviewViewModel,
+		sharedImage: SharedImage,
+		selectedImageIndices: [Int],
+		onResult: @escaping ([Int]) -> Void
   ) {
     self.viewModel = viewModel
-    self.assets = assets
+		self.sharedImage = sharedImage
+		activeCellIndex = sharedImage.index
     self.selectedImageIndices = selectedImageIndices
-    activeIndex = index
-    scrollOnIndex = index
     self.onResult = onResult
     collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout())
     super.init(nibName: nil, bundle: nil)
+
+    viewModel.delegate = self
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -59,32 +59,30 @@ class ImagesPreviewVC: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    layout.itemSize = CGSize(
-      width: UIScreen.main.bounds.width,
-      height: UIScreen.main.bounds.height
+    let layout = ImagePickerCollectionViewLayout(
+      cellSize: CGSize(
+        width: UIScreen.main.bounds.width,
+        height: UIScreen.main.bounds.height
+      )
     )
     layout.scrollDirection = .horizontal
     collectionView.dataSource = self
     collectionView.delegate = self
     collectionView.collectionViewLayout = layout
     collectionView.register(ImageViewCell.self, forCellWithReuseIdentifier: "ImageViewCell")
-
-    let swipeRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeRecognizer))
-    collectionView.panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture))
-    collectionView.addGestureRecognizer(swipeRecognizer)
-
+    collectionView.panGestureRecognizer.addTarget(self, action: #selector(handleHorizontalPanGesture))
+    let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handleVerticalPanGesture))
+    panGestureRecognizer.delegate = self
+    collectionView.addGestureRecognizer(panGestureRecognizer)
+	
     sutupView()
   }
 
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
 
-    if !isInitialOffsetDidSet && activeIndex > 0 {
-      collectionView.scrollToItem(
-        at: IndexPath(item: activeIndex, section: 0),
-        at: .centeredHorizontally,
-        animated: false
-      )
+		if !isInitialOffsetDidSet && sharedImage.index > 0 {
+			scrollTo(index: sharedImage.index)
 			isInitialOffsetDidSet = true
     }
   }
@@ -92,7 +90,7 @@ class ImagesPreviewVC: UIViewController {
   private func sutupView() {
     imagesPreviewView = ImagesPreviewView(collectionView: collectionView)
     view = imagesPreviewView
-    if let selectedImageIndex = selectedImageIndices.firstIndex(of: activeIndex) {
+    if let selectedImageIndex = selectedImageIndices.firstIndex(of: activeCellIndex) {
       imagesPreviewView?.selectButton.setCount(selectedImageIndex + 1)
     }
     imagesPreviewView?.selectButton.addTarget(self, action: #selector(onSelectImage), for: .touchUpInside)
@@ -104,107 +102,170 @@ class ImagesPreviewVC: UIViewController {
     viewModel.onCloseModal()
   }
 
-  @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
-    if recognizer.state == .ended || recognizer.state == .cancelled {
-      scrollOnIndex = calculateImageIndex(on: collectionView.contentOffset.x)
-      scrollTo(index: scrollOnIndex)
+  private func panGestureEnded(translationY: CGFloat, view: UIView) {
+     if !isVerticalGestureActive { return }
+
+     isVerticalGestureActive = false
+     if abs(translationY) > VERTICAL_TRANSLATION_BOUND {
+       view.topConstraint?.constant = (view.topConstraint?.constant ?? 0) + translationY
+       closeModal()
+       return
+     }
+
+     UIView.animate(
+       withDuration: 0.3,
+       animations: {
+        view.transform = .identity
+       }
+     )
+   }
+
+  @objc private func handleVerticalPanGesture(_ recognizer: UIPanGestureRecognizer) {
+    let activeCellIndexPath = IndexPath(item: activeCellIndex, section: 0)
+    guard let cell = collectionView.cellForItem(at: activeCellIndexPath) else { return }
+    let translation = recognizer.translation(in: view)
+
+    switch recognizer.state {
+    case .began:
+      isVerticalGestureActive = true
+      originalViewCenterY = cell.center.y
+      feedbackGenerator = UISelectionFeedbackGenerator()
+      feedbackGenerator?.prepare()
+    case .changed:
+      let translationYAbs = abs(translation.y)
+      cell.transform = CGAffineTransform(translationX: 0, y: translation.y)
+      let alpha = 1 - translationYAbs / view.bounds.height
+      view.backgroundColor = view.backgroundColor?.withAlphaComponent(alpha)
+      if
+        (lastTranslationY > VERTICAL_TRANSLATION_BOUND && translationYAbs < VERTICAL_TRANSLATION_BOUND)
+        || (translationYAbs > VERTICAL_TRANSLATION_BOUND && lastTranslationY < VERTICAL_TRANSLATION_BOUND)
+      {
+        feedbackGenerator?.selectionChanged()
+        feedbackGenerator?.prepare()
+        lastTranslationY = translationYAbs
+      }
+    case .cancelled, .ended:
+      feedbackGenerator = nil
+      lastTranslationY = 0.0
+      panGestureEnded(translationY: translation.y, view: cell)
+    default:
+      break
     }
   }
 
-  @objc private func handleSwipeRecognizer(_  recognizer: UISwipeGestureRecognizer) {
-    if recognizer.state != .ended {
-      return
+  @objc private func handleHorizontalPanGesture(_ recognizer: UIPanGestureRecognizer) {
+    if recognizer.state == .ended || recognizer.state == .cancelled {
+			let velocity = recognizer.velocity(in: view).x
+			if abs(velocity) >= SWIPE_VELOCITY {
+				let index = velocity > 0
+					? activeCellIndex - 1
+					: activeCellIndex + 1
+				scrollTo(index: index)
+				return
+			}
+			guard let index = nextActiveCellIndex() else { return }
+			scrollTo(index: index)
     }
-    if recognizer.direction != .left && recognizer.direction != .right {
-      return
-    }
-    let scrollToIndex = recognizer.direction == .right
-      ? activeIndex + 1
-      : activeIndex - 1
-    scrollTo(index: scrollToIndex)
   }
 
   private func scrollTo(index: Int) {
-    if index < 0 || index > assets.count - 1 {
+    if index < 0 || index > viewModel.assetsCount - 1 {
       return
     }
+    collectionView.isUserInteractionEnabled = false
     collectionView.scrollToItem(
       at: IndexPath(item: index, section: 0),
       at: .centeredHorizontally,
       animated: true
     )
-    activeIndex = index
   }
 
   @objc private func onSelectImage() {
-    if let selectedImageIndex = selectedImageIndices.firstIndex(of: scrollOnIndex) {
+    if let selectedImageIndex = selectedImageIndices.firstIndex(of: activeCellIndex) {
       selectedImageIndices.remove(at: selectedImageIndex)
-      if let cell = collectionView.cellForItem(at: IndexPath(item: scrollOnIndex, section: 0)) as? ImageViewCell {
+      if let cell = collectionView.cellForItem(at: IndexPath(item: activeCellIndex, section: 0)) as? ImageViewCell {
         cell.selectedCount = nil
         imagesPreviewView?.selectButton.clearCount()
       }
     } else {
-      selectedImageIndices.append(scrollOnIndex)
-      if let cell = collectionView.cellForItem(at: IndexPath(item: scrollOnIndex, section: 0)) as? ImageViewCell {
+      selectedImageIndices.append(activeCellIndex)
+      if let cell = collectionView.cellForItem(at: IndexPath(item: activeCellIndex, section: 0)) as? ImageViewCell {
         cell.selectedCount = selectedImageIndices.count
         imagesPreviewView?.selectButton.setCount(selectedImageIndices.count)
       }
     }
   }
 
-  private func calculateImageIndex(on scrollOffset: CGFloat) -> Int {
-    let itemWidth = UIScreen.main.bounds.width
-    let itemsInScrollOffset = collectionView.contentOffset.x / itemWidth
-    let scrollOnIndex = itemsInScrollOffset.rounded(.towardZero)
-    let scrollDistance = (itemsInScrollOffset - scrollOnIndex) * itemWidth
-    let minScrollDistance = itemWidth / 2
-    return Int(scrollOnIndex) + 1 > activeIndex
-      ? scrollDistance > minScrollDistance
-        ? activeIndex + 1
-        : activeIndex
-      : itemWidth - scrollDistance > minScrollDistance
-        ? activeIndex - 1
-        : activeIndex
+  private func nextActiveCellIndex() -> Int? {
+    let offset = collectionView.contentOffset
+		guard let scrollAtIndexPath = collectionView.indexPathForItem(at: offset) else {
+			return nil
+		}
+		let scrollDistance = collectionView
+			.layoutAttributesForItem(at: IndexPath(item: activeCellIndex, section: 0))
+			.map { abs(offset.x - $0.frame.minX) }
+		
+		guard let distance = scrollDistance else {
+			return nil
+		}
+		
+		return distance > collectionView.bounds.width / 4.0
+			? scrollAtIndexPath.item >= activeCellIndex
+				? activeCellIndex + 1
+				: activeCellIndex - 1
+			: activeCellIndex
   }
-	
-	private func requestImage(for asset: PHAsset, onResult: @escaping (UIImage?) -> Void) {
-		imageManager.requestImage(
-			for: asset,
-			targetSize: imageSize,
-			contentMode: .aspectFill,
-			options: imageRequestOptions,
-			resultHandler: { image, _ in onResult(image) }
-		)
-	}
 }
 
 extension ImagesPreviewVC: UICollectionViewDataSource {
+
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return assets.count
+    return viewModel.assetsCount
   }
 
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(
+    guard let cell = collectionView.dequeueReusableCell(
       withReuseIdentifier: "ImageViewCell",
       for: indexPath
-      ) as? ImageViewCell ?? ImageViewCell()
-		requestImage(for: assets.object(at: indexPath.item), onResult: { image in
-			guard let image = image else { return }
-			cell.setImage(image: image)
-		})
+			) as? ImageViewCell else {
+				fatalError("Unexpected cell")
+		}
+
     if let index = selectedImageIndices.firstIndex(of: indexPath.item) {
       cell.selectedCount = index + 1
     }
     cell.previewImageView.hero.id = indexPath.item.description
+
+    if sharedImage.index == indexPath.item {
+      cell.setSharedImage(image: sharedImage.image)
+      if !sharedImage.isICloudAsset {
+        return cell
+      }
+    }
+
+    let asset = viewModel.asset(at: indexPath.item)
+    cell.assetIndentifier = asset.localIdentifier
+    viewModel.image(for: asset, onResult: { image in
+      guard cell.assetIndentifier == asset.localIdentifier else { return }
+      cell.setImage(image: image)
+    })
     return cell
   }
 }
 
 extension ImagesPreviewVC: UICollectionViewDelegate {
+	func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+    collectionView.isUserInteractionEnabled = true
+		guard let indexPath = collectionView.indexPathForItem(at: scrollView.contentOffset) else {
+			return
+		}
+		activeCellIndex = indexPath.item
+	}
 
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    activeIndex = calculateImageIndex(on: scrollView.contentOffset.x)
+		guard let activeIndex = nextActiveCellIndex() else { return }
     let indexPath = IndexPath(item: activeIndex, section: 0)
+		
     guard let cell = collectionView.cellForItem(at: indexPath) as? ImageViewCell else {
       return
     }
@@ -214,5 +275,25 @@ extension ImagesPreviewVC: UICollectionViewDelegate {
         imagesPreviewView?.selectButton.setCount(v)
       }
     )
+  }
+}
+
+extension ImagesPreviewVC: ImagesPreviewViewModelDelegate {
+  func showImageLoadingProgress() {
+    showActivityIndicator(for: view)
+  }
+
+  func hideImageLoadingProgress() {
+    removeActivityIndicator()
+  }
+}
+
+extension ImagesPreviewVC: UIGestureRecognizerDelegate {
+  func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    guard let panGestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer else {
+      return false
+    }
+    let velocity = panGestureRecognizer.velocity(in: view)
+    return abs(velocity.y) > abs(velocity.x)
   }
 }

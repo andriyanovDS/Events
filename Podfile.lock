@@ -88,6 +88,9 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
+  - PromisesObjC (1.2.8)
+  - PromisesSwift (1.2.8):
+    - PromisesObjC (= 1.2.8)
   - RxCocoa (5.0.0):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
@@ -107,6 +110,7 @@ DEPENDENCIES:
   - Firebase/Database (~> 6)
   - Firebase/Storage (~> 6)
   - Hero (~> 1.4.0)
+  - PromisesSwift (~> 1.2.8)
   - RxCocoa (~> 5)
   - RxFlow (~> 2.4.0)
   - RxSwift (~> 5)
@@ -115,7 +119,7 @@ DEPENDENCIES:
   - SwiftLint (~> 0.33)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - Firebase
     - FirebaseAnalytics
     - FirebaseAuth
@@ -134,6 +138,8 @@ SPEC REPOS:
     - Hero
     - leveldb-library
     - nanopb
+    - PromisesObjC
+    - PromisesSwift
     - RxCocoa
     - RxFlow
     - RxRelay
@@ -161,6 +167,8 @@ SPEC CHECKSUMS:
   Hero: bac92350d7201a1a940003e0767c7b52ce7c99a1
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
+  PromisesSwift: 37bad6f4daddb02f7c9c531efe91e8b21c13ee2f
   RxCocoa: fcf32050ac00d801f34a7f71d5e8e7f23026dcd8
   RxFlow: d8342d7ba30f78f509f84cf1d801fbd540406870
   RxRelay: 4f7409406a51a55cd88483f21ed898c234d60f18
@@ -169,6 +177,6 @@ SPEC CHECKSUMS:
   SwiftIconFont: 2ba18554a77c44948dc35b561b344e3c23834a84
   SwiftLint: 5553187048b900c91aa03552807681bb6b027846
 
-PODFILE CHECKSUM: c343beb0db8531542b19806800800f589f1893db
+PODFILE CHECKSUM: d9049a5c222e1d03e9c16b71ad91d30ec71f43ae
 
-COCOAPODS: 1.7.3
+COCOAPODS: 1.8.4

@@ -9,14 +9,12 @@
 import UIKit
 import Stevia
 
-let SELECT_BUTTON_SIZE: CGFloat = 25.0
-
 class SelectImageButton: UIButton {
   private var count: Int?
 
-  init() {
+	init(size: CGSize) {
     super.init(frame: CGRect.zero)
-    setupView()
+		setupView(with: size)
   }
 
   required init?(coder: NSCoder) {
@@ -41,13 +39,13 @@ class SelectImageButton: UIButton {
     setTitle(count.description, for: .normal)
   }
 
-  private func setupView() {
+  private func setupView(with size: CGSize) {
     style({ v in
-     v.height(SELECT_BUTTON_SIZE).width(SELECT_BUTTON_SIZE)
-     v.layer.cornerRadius = 13
-     v.layer.borderWidth = 2
-     v.layer.borderColor = UIColor.white.cgColor
-   })
+			v.height(size.height).width(size.width)
+			v.layer.cornerRadius = size.width / 2
+      v.layer.borderWidth = 2
+      v.layer.borderColor = UIColor.white.cgColor
+		})
 
     styleText(
       button: self,

@@ -10,19 +10,26 @@ import Foundation
 import UIKit
 
 class ImagePickerCollectionViewLayout: UICollectionViewFlowLayout {
-  var cellSize: CGSize = CGSize(
-    width: PICKER_IMAGE_WIDTH,
-    height: PICKER_IMAGE_HEIGHT
-  )
   // We need it to calculate collectionViewContentSize before cellSize changes to perform setContentOffset
-  var cellWidthForContentSizeCalculation: CGFloat = PICKER_IMAGE_WIDTH
+  var cellWidthForContentSizeCalculation: CGFloat
   var previousAttributes: [UICollectionViewLayoutAttributes] = []
   var currentAttributes: [UICollectionViewLayoutAttributes] = []
+  var cellSize: CGSize
+
+  init(cellSize: CGSize) {
+    self.cellSize = cellSize
+    cellWidthForContentSizeCalculation = cellSize.width
+    super.init()
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
   override var collectionViewContentSize: CGSize {
     let count = CGFloat(currentAttributes.count)
     return CGSize(
-      width: (cellWidthForContentSizeCalculation + self.minimumInteritemSpacing) * count,
+      width: (cellWidthForContentSizeCalculation + minimumInteritemSpacing) * count,
       height: cellSize.height
     )
   }
@@ -38,7 +45,7 @@ class ImagePickerCollectionViewLayout: UICollectionViewFlowLayout {
         let indexPath = IndexPath(item: itemIndex, section: 0)
         let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         attributes.frame = CGRect(
-          x: (cellSize.width + IMAGES_STACK_VIEW_SPACING) * CGFloat(itemIndex),
+          x: (cellSize.width + minimumInteritemSpacing) * CGFloat(itemIndex),
           y: 0,
           width: cellSize.width,
           height: cellSize.height
