@@ -8,36 +8,50 @@
 
 import UIKit
 import Stevia
+import RxSwift
 
-class DateView: UIView {
-  weak var delegate: DateViewDelegate!
-  let dateButton = ButtonWithBorder()
-  var submitButton = ButtonWithBorder()
-  lazy var datePicker = UIDatePicker()
-  lazy var startTimeTextField = UITextField()
-  lazy var durationTextField = UITextField()
-  let scrollView = UIScrollView()
+class DateView: UIView, CreateEventView {
+  weak var delegate: DateViewDelegate?
+  private let dateButton = UIButton()
+  private let submitButton = ButtonScale()
+
+  private let scrollView = UIScrollView()
   private let contentView = UIView()
   private let titleLabel = UILabel()
   private let dateDescriptionLabel = UILabel()
+  private lazy var datePicker = UIDatePicker()
+  private lazy var startTimeTextField = UITextField()
+  private lazy var durationTextField = UITextField()
   private lazy var startTimeDescriptionLabel = UILabel()
   private lazy var durationDescriptionLabel = UILabel()
+  private let disposableBag = DisposeBag()
 
-  init(startTime: String, duration: String) {
+  init(date: Date) {
     super.init(frame: CGRect.zero)
 
-    startTimeTextField.text = startTime
-    durationTextField.text = duration
-
+    datePicker.date = date
+    startTimeTextField.text = formattedDatePickerDate()
     setupView()
+
+    keyboardAttach$
+      .subscribe(
+        onNext: {[weak self] info in
+          self?.keyboardHeightDidChange(info: info)
+        }
+      )
+      .disposed(by: disposableBag)
+      
   }
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+	
+	func setDurationLabelText(_ text: String) {
+		durationTextField.text = text
+	}
 
   func setFormattedDate(_ date: String, daysCount: Int) {
-    dateButton.setTitle(date, for: .normal)
     setupDateSection()
     setupDurationSection()
     setupSubmitButton()
@@ -52,6 +66,59 @@ class DateView: UIView {
     setupTimeSectionConstraints()
     setupDurationSectionConstraints()
     setupSubmitButtonConstraints()
+  }
+
+  private func formattedDatePickerDate() -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm"
+    return dateFormatter.string(from: datePicker.date)
+  }
+
+  @objc private func onSelectTime() {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm"
+    startTimeTextField.text = dateFormatter.string(from: datePicker.date)
+    endEditing(true)
+    delegate?.onSelect(date: datePicker.date)
+  }
+
+  @objc private func onDateButtonDidPress() {
+    delegate?.onOpenCalendar()
+  }
+
+  private func scrollToActiveTextField(keyboardHeight: CGFloat) {
+    let activeField = [
+      startTimeTextField,
+      durationTextField
+      ].first { $0.isFirstResponder }
+
+    if let activeField = activeField {
+      frame.size.height -= keyboardHeight
+
+      if frame.contains(activeField.frame.origin) {
+        let scrollPointY = activeField.frame.origin.y - keyboardHeight
+        let scrollPoint = CGPoint(x: 0, y: scrollPointY >= 0 ? scrollPointY : 0)
+        scrollView.setContentOffset(scrollPoint, animated: true)
+      }
+    }
+  }
+
+  private func keyboardHeightDidChange(info: KeyboardAttachInfo?) {
+    let inset = info.foldL(
+      none: { UIEdgeInsets.zero },
+      some: { info in UIEdgeInsets(
+        top: 0,
+        left: 0,
+        bottom: info.height,
+        right: 0
+        )}
+    )
+    scrollView.contentInset = inset
+    scrollView.scrollIndicatorInsets = inset
+
+    if inset.bottom > 0 {
+      scrollToActiveTextField(keyboardHeight: inset.bottom)
+    }
   }
 
   private func setupView() {
@@ -74,6 +141,18 @@ class DateView: UIView {
       button: dateButton,
       buttonLabelText: NSLocalizedString("Select date", comment: "Create event: date section select title")
     )
+    let dateButtonBackgroundView = UIView()
+    dateButton.sv(dateButtonBackgroundView)
+    dateButtonBackgroundView.style { v in
+      v.fillContainer()
+      v.isUserInteractionEnabled = false
+      v.isExclusiveTouch = false
+      v.hero.id = CALENDAR_SHARED_ID
+      v.hero.modifiers = [.duration(0.2)]
+    }
+    titleLabel.numberOfLines = 2
+    dateButton.bringSubviewToFront(dateButton.titleLabel!)
+    dateButton.addTarget(self, action: #selector(onDateButtonDidPress), for: .touchUpInside)
     sv(scrollView.sv(
       contentView.sv([
         titleLabel,
@@ -109,7 +188,7 @@ class DateView: UIView {
       )
     })
     styleText(
-      button: button,
+      button: selectButtonStyle(button),
       text: buttonLabelText,
       size: 20,
       color: .gray600(),
@@ -129,13 +208,13 @@ class DateView: UIView {
       color: .gray400(),
       style: .regular
     )
-    textField.style({ v in
-      v.layer.borderWidth = 1
-      v.layer.borderColor = UIColor.gray200().cgColor
-      v.setupLeftView(width: 15)
-      v.layer.cornerRadius = 4
-      styleText(textField: v, text: "", size: 18, color: .gray600(), style: .medium)
-    })
+    styleText(
+      textField: selectTextFieldStyle(textField),
+      text: "",
+      size: 20,
+      color: .gray600(),
+      style: .medium
+    )
   }
 
   private func setupDateSection() {
@@ -143,8 +222,8 @@ class DateView: UIView {
     let tabBarCloseButton = UIBarButtonItem(
       title: NSLocalizedString("Cancel", comment: "Create event: date section close selection"),
       style: .done,
-      target: delegate,
-      action: #selector(delegate.endEditing)
+      target: self,
+      action: #selector(endEditing(_:))
     )
     let spaceButton = UIBarButtonItem(
       barButtonSystemItem: .flexibleSpace,
@@ -154,8 +233,8 @@ class DateView: UIView {
     let tabBarDoneButton = UIBarButtonItem(
       title: NSLocalizedString("Select date", comment: "Create event: date section select date"),
       style: .done,
-      target: delegate,
-      action: #selector(delegate.onSelectTime)
+      target: self,
+      action: #selector(onSelectTime)
     )
     datePicker.datePickerMode = .time
     datePicker.locale = Locale(identifier: "ru_RU")
@@ -178,6 +257,7 @@ class DateView: UIView {
   private func setupDurationSection() {
     let pickerView = UIPickerView()
     pickerView.delegate = delegate
+    pickerView.dataSource = delegate
     durationTextField.inputView = pickerView
     setupSection(
       label: durationDescriptionLabel,
@@ -194,16 +274,12 @@ class DateView: UIView {
       button: submitButton,
       text: NSLocalizedString("Next step", comment: "Create event: next step"),
       size: 20,
-      color: .blue(),
+      color: .white,
       style: .medium
     )
-    submitButton.contentEdgeInsets = UIEdgeInsets(
-      top: 7,
-      left: 0,
-      bottom: 7,
-      right: 0
-    )
-    submitButton.layer.borderColor = UIColor.blue().cgColor
+    submitButton.backgroundColor = UIColor.blue()
+    guard let delegate = self.delegate else { return }
+    submitButton.addTarget(delegate, action: #selector(delegate.openNextScreen), for: .touchUpInside)
   }
 
   private func setupConstraints() {
@@ -255,7 +331,8 @@ class DateView: UIView {
   }
 }
 
-@objc protocol DateViewDelegate: class, UIPickerViewDelegate {
-  func endEditing()
-  func onSelectTime()
+protocol DateViewDelegate: CreateEventViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+  func onOpenCalendar()
+  func onSelect(date: Date)
+  func onSelect(duration: EventDurationRange)
 }

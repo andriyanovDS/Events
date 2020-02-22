@@ -64,7 +64,7 @@ class ImagesPreviewVC: UIViewControllerWithActivityIndicator {
         height: UIScreen.main.bounds.height
       )
     )
-    layout.scrollDirection = .horizontal
+		layout.scrollDirection = .horizontal
     collectionView.dataSource = self
     collectionView.delegate = self
     collectionView.collectionViewLayout = layout

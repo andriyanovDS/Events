@@ -18,7 +18,7 @@ class UserDetailsView: UIView {
   let datePicker = UIDatePicker()
   let scrollView = UIScrollView()
   let descriptionTextView = UITextView()
-  let submitButton = ButtonWithBorder()
+  let submitButton = ButtonScale()
   let genderTextField = TextFieldWithBottomLine()
   let dateTextField = TextFieldWithBottomLine()
   let firstNameSection = UserDetailsSectionView()
@@ -217,18 +217,10 @@ class UserDetailsView: UIView {
       button: submitButton,
       text: NSLocalizedString("Save", comment: "User info: Save"),
       size: 20,
-      color: .blue(),
+      color: .white,
       style: .medium
     )
-    submitButton.style({ v in
-      v.layer.borderColor = UIColor.blue().cgColor
-      v.contentEdgeInsets = UIEdgeInsets(
-        top: 10,
-        left: 0,
-        bottom: 10,
-        right: 0
-      )
-    })
+    submitButton.backgroundColor = UIColor.blue()
   }
   
   private func setupViewsSizes() {
@@ -269,7 +261,7 @@ class UserDetailsView: UIView {
     }
     descriptionSection.Bottom == submitButton.Top - 10
     submitButton.CenterX == contentView.CenterX
-    submitButton.bottom(20)
+    submitButton.bottom(50)
   }
 }
 

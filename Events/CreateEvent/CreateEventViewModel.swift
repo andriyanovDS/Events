@@ -11,38 +11,46 @@ import RxSwift
 import RxFlow
 import RxCocoa
 import Photos
+import Promises
 
 class CreateEventViewModel: Stepper {
   let steps = PublishRelay<Step>()
-  weak var delegate: CreateEventViewModelDelegate? {
-    didSet {
-      geocodeObserver
-      .take(1)
-      .subscribe(onNext: { geocode in
-        self.geocode = geocode
-        self.delegate?.setupLocationView(locationName: geocode.fullLocationName())
-      })
-      .disposed(by: disposeBag)
-    }
-  }
+  weak var delegate: CreateEventViewModelDelegate?
   private let disposeBag = DisposeBag()
+  private let imageCacheManager: ImageCacheManager
 
   var geocode: Geocode?
   var dates: [Date]
   var duration: EventDurationRange?
   var category: CategoryId?
+  var selectedAssets: [PHAsset] = []
 
-  lazy var durations = [
-    EventDurationRange(min: nil, max: 1),
-    EventDurationRange(min: nil, max: 2),
-    EventDurationRange(min: 3, max: 5),
-    EventDurationRange(min: 5, max: 8),
-    EventDurationRange(min: 8, max: nil)
+  var durations: [EventDurationRange] = [
+    EventDurationRange(min: nil, max: 1)!,
+    EventDurationRange(min: nil, max: 2)!,
+    EventDurationRange(min: 3, max: 5)!,
+    EventDurationRange(min: 5, max: 8)!,
+    EventDurationRange(min: 8, max: nil)!
   ]
 
   init() {
-    self.dates = generateInitialDates()
-    self.duration = durations[0]
+    dates = generateInitialDates()
+    let scale = UIScreen.main.scale
+    imageCacheManager = ImageCacheManager(
+      targetSize: CGSize(
+        width: SELECTED_IMAGE_SIZE.width * scale,
+        height: SELECTED_IMAGE_SIZE.height * scale
+      ),
+      imageRequestOptions: nil
+    )
+    self.duration = self.durations[0]
+    geocodeObserver
+      .take(1)
+      .subscribe(onNext: {[weak self] geocode in
+        self?.geocode = geocode
+        self?.delegate?.onLocationNameDidChange(geocode.fullLocationName())
+      })
+      .disposed(by: disposeBag)
   }
 
   func closeScreen() {
@@ -52,7 +60,7 @@ class CreateEventViewModel: Stepper {
   func openLocationSearchBar() {
     steps.accept(EventStep.locationSearch(onResult: { geocode in
       self.geocode = geocode
-      self.delegate?.onChangeLocationName(geocode.fullLocationName())
+      self.delegate?.onLocationNameDidChange(geocode.fullLocationName())
     }))
   }
 
@@ -72,7 +80,7 @@ class CreateEventViewModel: Stepper {
                 .ap(dateRangeFnOption)
                 .getOrElseL(generateInitialDates)
 
-              if let foramttedDate = selectedDatesToString(dates) {
+              if let foramttedDate = dates.localizedLabel {
                 let daysDiff = daysCount(selectedDates: dates)
                 self.delegate?.onDatesDidSelected(formattedDate: foramttedDate, daysCount: daysDiff)
               }
@@ -82,7 +90,7 @@ class CreateEventViewModel: Stepper {
     ))
   }
 
-  func onSelectStartTime(date: Date) {
+  func onSelect(date: Date) {
     let
       hour = Calendar.current.component(.hour, from: date),
       minutes = Calendar.current.component(.minute, from: date)
@@ -93,17 +101,11 @@ class CreateEventViewModel: Stepper {
     })
   }
 
-  func onSelectEventDuration(_ index: Int) {
-    let duration = durations[index]
-    duration.foldL(
-      none: {},
-      some: { v in
-        self.duration = v
-      }
-    )
+  func onSelect(duration: EventDurationRange) {
+    self.duration = duration
   }
 
-  func onSelectCategory(id: CategoryId) {
+  func onSelect(category id: CategoryId) {
     category = id
   }
 
@@ -111,8 +113,59 @@ class CreateEventViewModel: Stepper {
     steps.accept(EventStep.hintPopup(popup: popup))
   }
 
-  func openImagePicker(onResult: @escaping ([PHAsset]) -> Void) {
-    steps.accept(EventStep.imagePicker(onComplete: onResult))
+  func openImagePicker() {
+    steps.accept(EventStep.imagePicker(selectedAssets: selectedAssets, onComplete: { assets in
+      self.update(assets: assets)
+    }))
+  }
+
+ func remove(asset: PHAsset) {
+    guard let index = selectedAssets.firstIndex(of: asset) else { return }
+    selectedAssets.remove(at: index)
+    delegate?.performCellsUpdate(
+      removedIndexPaths: [IndexPath(item: index, section: 0)],
+      insertedIndexPaths: []
+    )
+  }
+
+  private func update(assets: [PHAsset]) {
+    let newAssetsSet = Set(assets.map { $0.localIdentifier })
+    let currentAssetsSet = Set(selectedAssets.map { $0.localIdentifier })
+    let removedIndices = selectedAssets
+      .enumerated()
+      .filter {_, asset in !newAssetsSet.contains(asset.localIdentifier) }
+      .map { index, _ in index }
+    let newAssets: [PHAsset] = assets.filter { !currentAssetsSet.contains($0.localIdentifier) }
+    removedIndices
+      .enumerated()
+      .map { $1 - $0 }
+      .forEach { selectedAssets.remove(at: $0) }
+    selectedAssets.insert(contentsOf: newAssets, at: selectedAssets.count)
+
+    delegate?.performCellsUpdate(
+      removedIndexPaths: removedIndices.map { IndexPath(item: $0, section: 0) },
+      insertedIndexPaths: newAssets
+        .enumerated()
+        .map { index, _ in
+          IndexPath(item: selectedAssets.count - newAssets.count + index, section: 0)
+        }
+      )
+  }
+}
+
+extension CreateEventViewModel {
+  func asset(at index: Int) -> PHAsset {
+    selectedAssets[index]
+  }
+
+  func image(for asset: PHAsset, onResult: @escaping (UIImage) -> Void) {
+    return imageCacheManager.getImage(for: asset, onResult: onResult)
+  }
+
+  func attemptToCacheAssets(_ collectionView: UICollectionView) {
+    imageCacheManager.attemptToCacheAssets(collectionView, assetGetter: { index in
+      selectedAssets[index]
+    })
   }
 }
 
@@ -144,38 +197,10 @@ private func daysCount(selectedDates: SelectedDates) -> Int {
   return 1
 }
 
-private func selectedDatesToString(_ selectedDates: SelectedDates) -> String? {
-  guard let dateFrom = selectedDates.from else {
-    return nil
-  }
-
-  let dateFormatter = DateFormatter()
-  dateFormatter.locale = Locale(identifier: "ru_RU")
-  dateFormatter.dateFormat = "dd MMMM"
-
-  let dateFromFormatted = dateFormatter.string(from: dateFrom)
-
-  guard let dateTo = selectedDates.to else {
-    return dateFromFormatted
-  }
-
-  let isSameYear = Calendar.current.isDate(dateFrom, equalTo: dateTo, toGranularity: .year)
-  if !isSameYear {
-    dateFormatter.dateFormat = "dd MMMM YYYY"
-  }
-  return "\(dateFromFormatted) - \(dateFormatter.string(from: dateTo))"
-}
-
 protocol CreateEventViewModelDelegate: class, UIViewControllerWithActivityIndicator {
-  func onChangeLocationName(_: String)
-  func setupLocationView(locationName: String)
+  func performCellsUpdate(removedIndexPaths: [IndexPath], insertedIndexPaths: [IndexPath])
+  func onLocationNameDidChange(_: String)
   func onDatesDidSelected(formattedDate: String, daysCount: Int)
-  
 }
 
-protocol CreateEventCoordinator: class {
-  func openCalendar(onResult: @escaping (SelectedDates) -> Void)
-  func openLocationSearchBar(onResult: @escaping (Geocode) -> Void)
-  func openHintPopup(hintPopup: HintPopup)
-  func openImagePicker(imagesDidSelected: @escaping ([PHAsset]) -> Void)
-}
+struct FailedToLoadBackgroundImage: Error {}

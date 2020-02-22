@@ -46,7 +46,7 @@ class ImageCacheManager {
     )
   }
 
-  func attemptToCacheAssets(_ collectionView: UICollectionView, assets: PHFetchResult<PHAsset>) {
+  func attemptToCacheAssets(_ collectionView: UICollectionView, assetGetter: (Int) -> PHAsset) {
     let visibleRect = CGRect(
       origin: CGPoint(x: collectionView.contentOffset.x, y: 0),
       size: collectionView.bounds.size
@@ -59,12 +59,12 @@ class ImageCacheManager {
     let (added, removed) = differencesBetweenRects(previousPreheatRect, preheatRect)
     let addedAssets = added
       .flatMap { indices(in: $0, inside: collectionView) }
-      .map { assets.object(at: $0) }
       .uniq()
+      .map { assetGetter($0) }
     let removedAssets = removed
       .flatMap { indices(in: $0, inside: collectionView) }
-      .map { assets.object(at: $0) }
       .uniq()
+      .map { assetGetter($0) }
 
     imageManager.startCachingImages(
       for: addedAssets,

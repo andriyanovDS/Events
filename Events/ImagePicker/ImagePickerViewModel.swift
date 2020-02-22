@@ -24,18 +24,23 @@ class ImagePickerViewModel: Stepper {
       self.imageCacheManager.setTargetSize(self.targetSize)
     }
   }
-  var selectedImageIndices: [Int] = []
+  var selectedAssetIndices: [Int] = []
   weak var delegate: ImagePickerViewModelDelegate?
   private let imageCacheManager: ImageCacheManager
 	private var assets: PHFetchResult<PHAsset>?
 	private var lastCachedAssetIndex: Int = 0
+  private var previouslySelectedAssets: [PHAsset]
 	private let imageRequestOptions = PHImageRequestOptions()
   private var previousPreheatRect = CGRect.zero
 	var assetsCount: Int {
 		assets?.count ?? 0
 	}
 
-  init(onResult: @escaping (([PHAsset]) -> Void)) {
+  init(
+    selectedAssets: [PHAsset],
+    onResult: @escaping (([PHAsset]) -> Void)
+  ) {
+    self.previouslySelectedAssets = selectedAssets
     self.onResult = onResult
     imageCacheManager = ImageCacheManager(targetSize: targetSize, imageRequestOptions: nil)
   }
@@ -59,7 +64,9 @@ class ImagePickerViewModel: Stepper {
 
   func attemptToCacheAssets(_ collectionView: UICollectionView) {
     guard let assets = self.assets else { return }
-    imageCacheManager.attemptToCacheAssets(collectionView, assets: assets)
+    imageCacheManager.attemptToCacheAssets(collectionView, assetGetter: {
+      assets.object(at: $0)
+    })
   }
   
   func onSelectImageSource(source: ImageSource) {
@@ -72,10 +79,10 @@ class ImagePickerViewModel: Stepper {
   }
 
   func onSelectImage(at index: Int) {
-    if let selectedImageIndex = selectedImageIndices.firstIndex(of: index) {
-      selectedImageIndices.remove(at: selectedImageIndex)
+    if let selectedImageIndex = selectedAssetIndices.firstIndex(of: index) {
+      selectedAssetIndices.remove(at: selectedImageIndex)
     } else {
-      selectedImageIndices.append(index)
+      selectedAssetIndices.append(index)
     }
     delegate?.onImageDidSelected(at: index)
   }
@@ -94,9 +101,7 @@ class ImagePickerViewModel: Stepper {
 		guard let imageAssets = assets else {
 			return
 		}
-		onResult(
-			selectedImageIndices.map { imageAssets.object(at: $0) }
-		)
+    onResult(imageAssets.objects(at: IndexSet(selectedAssetIndices)))
   }
 
   private func handleCamera() {
@@ -110,7 +115,7 @@ class ImagePickerViewModel: Stepper {
 
   func openImagesPreview(startAt index: Int) {
 		guard let assets = assets else { return }
-		let indices = selectedImageIndices
+		let indices = selectedAssetIndices
 
     loadSharedImage(for: asset(at: index), onResult: {[weak self] image, isICloudAsset in
       self?.steps.accept(EventStep.imagesPreview(
@@ -155,7 +160,12 @@ class ImagePickerViewModel: Stepper {
     fetchOptions.includeAssetSourceTypes = .typeUserLibrary
 		let sortByDateDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
 		fetchOptions.sortDescriptors = [sortByDateDescriptor]
-    assets = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+    let assets = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+    self.assets = assets
+    selectedAssetIndices = previouslySelectedAssets.map {
+      assets.index(of: $0)
+    }
+    previouslySelectedAssets = []
   }
 
   private func openCamera() {

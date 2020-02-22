@@ -60,7 +60,9 @@ class ImagesPreviewViewModel: Stepper {
   }
 
   func attemptToCacheAssets(_ collectionView: UICollectionView) {
-    imageManager.attemptToCacheAssets(collectionView, assets: assets)
+    imageManager.attemptToCacheAssets(collectionView, assetGetter: {
+      self.assets.object(at: $0)
+    })
   }
 
   func onCloseModal() {

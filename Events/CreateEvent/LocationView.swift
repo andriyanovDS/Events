@@ -9,26 +9,29 @@
 import UIKit
 import Stevia
 
-class LocationView: UIView {
-
-  let locationButton = UIButton()
-  let submitButton = ButtonWithBorder()
+class LocationView: UIView, CreateEventView {
+	weak var delegate: LocationViewDelegate?
+  private let locationButton = UIButton()
+  private let submitButton = UIButton()
   private let contentView = UIView()
   private let titleLabel = UILabel()
   private let descriptionLabel = UILabel()
 
-  init(locationName: String) {
+  init() {
     super.init(frame: CGRect.zero)
-    setupView(locationName: locationName)
+		setupView()
   }
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+	
+	func setLocationName(_ name: String) {
+		locationButton.setTitle(name, for: .normal)
+	}
 
-  private func setupView(locationName: String) {
+  private func setupView() {
     backgroundColor = .white
-
     styleText(
       label: titleLabel,
       text: NSLocalizedString("Place of meeting", comment: "Create event: location section title"),
@@ -49,36 +52,53 @@ class LocationView: UIView {
     )
 
     styleText(
-      button: locationButton,
-      text: locationName,
+      button: selectButtonStyle(locationButton),
+      text: "",
       size: 18,
       color: .gray600(),
       style: .medium
     )
 
-    locationButton.style({ v in
-      v.contentEdgeInsets = UIEdgeInsets(
-        top: 7,
-        left: 10,
-        bottom: 7,
-        right: 10
+    titleLabel.numberOfLines = 2
+		sv(
+			contentView.sv(
+        [titleLabel, descriptionLabel, locationButton, submitButton]
       )
-      v.contentHorizontalAlignment = .left
-      v.layer.borderWidth = 1
-      v.layer.cornerRadius = 4
-      v.layer.borderColor = UIColor.gray200().cgColor
-    })
+		)
+    setupSubmitButton()
+    setupConstraints()
+		setupHandlers()
+  }
 
+  @objc private func onSubmitButtonDidPress() {
+    delegate?.openNextScreen()
+  }
+
+  @objc private func onLocationButtonDidPress() {
+    delegate?.openChangeLocationModal()
+  }
+	
+	private func setupHandlers() {
+		locationButton.addTarget(self, action: #selector(onLocationButtonDidPress), for: .touchUpInside)
+		submitButton.addTarget(self, action: #selector(onSubmitButtonDidPress), for: .touchUpInside)
+	}
+
+  private func setupSubmitButton() {
     styleText(
       button: submitButton,
       text: NSLocalizedString("Next step", comment: "Create event: next step"),
       size: 20,
-      color: .blue(),
+      color: .white,
       style: .medium
+      )
+    submitButton.contentEdgeInsets = UIEdgeInsets(
+      top: 8,
+      left: 15,
+      bottom: 8,
+      right: 15
     )
-    submitButton.layer.borderColor = UIColor.blue().cgColor
-    sv(contentView.sv([titleLabel, descriptionLabel, locationButton, submitButton]))
-    setupConstraints()
+    submitButton.layer.cornerRadius = 8
+    submitButton.backgroundColor = .blue()
   }
 
   private func setupConstraints() {
@@ -98,10 +118,14 @@ class LocationView: UIView {
       8,
       |-descriptionLabel-|,
       45,
-      |-locationButton.height(40)-|
+      |-locationButton-|
     )
 
     submitButton.width(200).centerHorizontally()
     submitButton.Bottom == contentView.Bottom - 50
   }
+}
+
+@objc protocol LocationViewDelegate: CreateEventViewDelegate {
+	func openChangeLocationModal()
 }

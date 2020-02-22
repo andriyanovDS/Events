@@ -40,7 +40,7 @@ class ProfileFlow: Flow {
       self.rootNavigationController.tabBarController?.tabBar.isHidden = false
       rootNavigationController.dismiss(animated: false, completion: nil)
       return .none
-    case .userDetailsDidComplete, .locationSearchDidCompete:
+    case .userDetailsDidComplete, .locationSearchDidCompete, .calendarDidComplete:
       rootNavigationController.dismiss(animated: true, completion: nil)
       return .none
     case .hintPopupDidComplete(let nextStep):
@@ -49,12 +49,15 @@ class ProfileFlow: Flow {
         return navigateToTextFormattingTips()
       }
       return .none
-    case .calendarDidComplete, .permissionModalDidComplete, .textFormattingTipsDidComplete:
+    case .permissionModalDidComplete, .textFormattingTipsDidComplete:
       rootNavigationController.dismiss(animated: false, completion: nil)
       return .none
-    case .imagePicker(let onComplete):
+    case .imagePicker(let selectedAssets, let onComplete):
       self.rootNavigationController.tabBarController?.tabBar.isHidden = true
-      return navigateToImagePicker(onComplete: onComplete)
+      return navigateToImagePicker(
+        selectedAssets: selectedAssets,
+        onComplete: onComplete
+      )
     case .permissionModal(let withType):
       return navigateToPermissionModal(with: withType)
     case .hintPopup(let popup):
@@ -106,16 +109,17 @@ class ProfileFlow: Flow {
     withSelectedDates: SelectedDates,
     onComplete: @escaping (SelectedDates?) -> Void
   ) -> FlowContributors {
-     let viewModel = CalendarViewModel(
-      selectedDateFrom: withSelectedDates.from,
-       selectedDateTo: withSelectedDates.to
-     )
-     let viewController = CalendarViewController.instantiate(with: viewModel)
-     viewController.modalPresentationStyle = .overCurrentContext
-     viewController.isModalInPopover = true
-     viewController.onResult = onComplete
-     rootNavigationController.present(viewController, animated: false, completion: nil)
-     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
+    let viewModel = CalendarViewModel(
+    selectedDateFrom: withSelectedDates.from,
+      selectedDateTo: withSelectedDates.to
+    )
+    let viewController = CalendarViewController.instantiate(with: viewModel)
+    viewController.modalPresentationStyle = .overFullScreen
+    viewController.isModalInPopover = true
+    viewController.hero.isEnabled = true
+    viewController.onResult = onComplete
+    rootNavigationController.present(viewController, animated: true, completion: nil)
+    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
    }
 
   func navigateToHintPopup(hintPopup: HintPopup) -> FlowContributors {
@@ -147,15 +151,21 @@ class ProfileFlow: Flow {
       ))
   }
 
-  func navigateToImagePicker(onComplete: @escaping ([PHAsset]) -> Void) -> FlowContributors {
+  func navigateToImagePicker(
+    selectedAssets: [PHAsset],
+    onComplete: @escaping ([PHAsset]) -> Void
+  ) -> FlowContributors {
     let flow = ImagePickerFlow()
     Flows.whenReady(flow1: flow, block: { rootVC in
-      rootVC.modalPresentationStyle = .overCurrentContext
+      rootVC.modalPresentationStyle = .overFullScreen
       self.rootNavigationController.present(rootVC, animated: false)
     })
     return .one(flowContributor: .contribute(
       withNextPresentable: flow,
-      withNextStepper: OneStepper(withSingleStep: EventStep.imagePicker(onComplete: onComplete))
+      withNextStepper: OneStepper(withSingleStep: EventStep.imagePicker(
+        selectedAssets: selectedAssets,
+        onComplete: onComplete
+        ))
       ))
   }
 

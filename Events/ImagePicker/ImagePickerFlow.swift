@@ -18,17 +18,24 @@ class ImagePickerFlow: Flow {
 
   private lazy var rootNavigationController: UINavigationController = {
     let controller = UINavigationController()
-    controller.setNavigationBarHidden(true, animated: true)
+		controller.setNavigationBarHidden(true, animated: true)
     return controller
   }()
+	
+	deinit {
+		rootNavigationController.setNavigationBarHidden(false, animated: true)
+	}
 
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? EventStep else {
       return .none
     }
     switch step {
-    case .imagePicker(let onComplete):
-      return navigateToImagePicker(onComplete: onComplete)
+    case .imagePicker(let selectedAssets, let onComplete):
+      return navigateToImagePicker(
+        selectedAssets: selectedAssets,
+        onComplete: onComplete
+      )
     case .imagePickerDidComplete:
       rootNavigationController.popViewController(animated: false)
       return .end(forwardToParentFlowWithStep: EventStep.imagePickerDidComplete)
@@ -47,11 +54,17 @@ class ImagePickerFlow: Flow {
     }
   }
 
-  func navigateToImagePicker(onComplete: @escaping ([PHAsset]) -> Void) -> FlowContributors {
-     let viewModel = ImagePickerViewModel(onResult: onComplete)
+  func navigateToImagePicker(
+    selectedAssets: [PHAsset],
+    onComplete: @escaping ([PHAsset]
+    ) -> Void) -> FlowContributors {
+    let viewModel = ImagePickerViewModel(
+      selectedAssets: selectedAssets,
+      onResult: onComplete
+    )
      let viewController = ImagePickerVC(viewModel: viewModel)
      viewController.modalTransitionStyle = .coverVertical
-     viewController.modalPresentationStyle = .overCurrentContext
+     viewController.modalPresentationStyle = .overFullScreen
      rootNavigationController.pushViewController(viewController, animated: true)
      return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
    }
@@ -70,7 +83,7 @@ class ImagePickerFlow: Flow {
       onImageDidSelected: onImageDidSelected
     )
     viewController.hero.isEnabled = true
-    viewController.modalPresentationStyle = .overCurrentContext
+		viewController.modalPresentationStyle = .overFullScreen
     rootNavigationController.present(viewController, animated: true, completion: nil)
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
   }

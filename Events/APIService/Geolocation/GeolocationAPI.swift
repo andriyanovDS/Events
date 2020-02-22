@@ -85,7 +85,7 @@ class GeolocationAPI: APIClientBase {
     ) {
     var requestParams = params
     requestParams["key"] = GOOGLE_API_KEY
-    requestParams["language"] = "ru"
+    requestParams["language"] = "en"
     let endpoint = self.endpoint(for: "geocode/json", params: requestParams)
     let task = session.dataTask(with: URLRequest(url: endpoint)) { data, _, error in
       if let requestError = error {

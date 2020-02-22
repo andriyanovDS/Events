@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import RxSwift
 import SwiftIconFont
 
-class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate, LoginViewModelDelegate {
+class LoginViewController: UIViewControllerWithActivityIndicator, UITextFieldDelegate, LoginViewModelDelegate {
   var messageView: UIView?
-  let loginButton = ButtonWithBorder()
-  let signInButton = ButtonWithBorder()
+  let loginButton = ButtonScale()
+  let signInButton = ButtonScale()
   let backButton = UIButton()
   let textFieldWrapperView = UIView()
   let emailTextField = TextFieldWithShadow()
@@ -26,6 +27,7 @@ class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate, Lo
   var isEmailValid: Bool = false
   var isPasswordValid: Bool = false
   private let viewModel: LoginViewModel
+  private let disposeBag = DisposeBag()
 
   init(viewModel: LoginViewModel) {
     self.viewModel = viewModel
@@ -67,17 +69,6 @@ class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate, Lo
     }
   }
 
-  override var keyboardAttachInfo: KeyboardAttachInfo? {
-    didSet {
-      bottomConstraintForKeyboard?.constant = keyboardAttachInfo.fold(
-        none: -loginButtonBottomPadding,
-        some: { info in
-          return -(info.height + 40)
-      }
-      )
-    }
-  }
-
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -88,6 +79,12 @@ class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate, Lo
 
     emailTextField.addTarget(self, action: #selector(emailDidChange(_:)), for: .editingChanged)
     passwordTextField.addTarget(self, action: #selector(passwordDidChange(_:)), for: .editingChanged)
+
+    keyboardAttach$
+      .subscribe(onNext: {[weak self] info in
+        self?.onKeyboardHeightDidChange(info: info)
+      })
+      .disposed(by: disposeBag)
   }
 
   override func viewDidAppear(_ animated: Bool) {
@@ -165,10 +162,16 @@ class LoginViewController: KeyboardAttachViewController, UITextFieldDelegate, Lo
       }
     }
   }
+
+  private func onKeyboardHeightDidChange(info: KeyboardAttachInfo?) {
+    bottomConstraintForKeyboard?.constant = info.fold(
+      none: -loginButtonBottomPadding,
+      some: { -($0.height + 40) }
+    )
+  }
 }
 
 extension LoginViewController {
-
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
     textField.resignFirstResponder()
 

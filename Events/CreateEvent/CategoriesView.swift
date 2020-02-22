@@ -9,8 +9,11 @@
 import UIKit
 import Stevia
 
-class CategoriesView: UIView {
-  let categoryButtons: [CategoryButton]
+class CategoriesView: UIView, CreateEventView {
+
+  weak var delegate: CreateEventViewDelegate?
+  var selectedCategory: CategoryId?
+  private let categoryButtons: [CategoryButton]
   private let contentView = UIView()
   private let titleLabel = UILabel()
   private let descriptionLabel = UILabel()
@@ -78,6 +81,11 @@ class CategoriesView: UIView {
       }
       stackView.addArrangedSubview(chunckStackView)
     })
+    categoryButtons.forEach { $0.addTarget(
+      self,
+      action: #selector(onPressCategoryButton(_:)),
+      for: .touchUpInside
+    )}
     contentView.sv(stackView)
     stackView.Top == descriptionLabel.Bottom + 30
   }
@@ -102,5 +110,10 @@ class CategoriesView: UIView {
       8,
       |-descriptionLabel-|
     )
+  }
+
+  @objc private func onPressCategoryButton(_ button: CategoryButton) {
+    selectedCategory = button.category
+    delegate?.openNextScreen()
   }
 }

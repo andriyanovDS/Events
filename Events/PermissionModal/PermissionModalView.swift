@@ -9,7 +9,7 @@ import UIKit
 import Stevia
 
 class PermissionModalView: UIView {
-  let submitButton = ButtonWithBorder()
+  let submitButton = ButtonScale()
   let titleLabel = UILabel()
   let descriptionLabel = UILabel()
   let imageView = UIImageView()
@@ -103,18 +103,9 @@ class PermissionModalView: UIView {
       button: submitButton,
       text: viewData.buttonLabelText,
       size: 20,
-      color: .blue(),
+      color: .white,
       style: .medium
     )
-    
-    submitButton.style({ v in
-      v.layer.borderColor = UIColor.blue().cgColor
-      v.contentEdgeInsets = UIEdgeInsets(
-        top: 10,
-        left: 0,
-        bottom: 10,
-        right: 0
-      )
-    })
+    submitButton.backgroundColor = UIColor.blue()
   }
 }

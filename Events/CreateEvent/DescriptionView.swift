@@ -8,22 +8,46 @@
 
 import UIKit
 import Stevia
+import Photos
 
-class DescriptionView: UIView {
-  let textView = UITextView()
-  let selectImagesView: SelectedImagesView
-  let submitButton = ButtonWithBorder()
-  private let contentView = UIView()
+class DescriptionView: UIView, CreateEventView {
+  weak var delegate: DescriptionViewDelegate? {
+    didSet {
+      self.collectionView.delegate = self.delegate
+      self.collectionView.dataSource = self.delegate
+    }
+  }
+  let collectionView: UICollectionView
+  private let textView = UITextView()
+  private let submitButton = ButtonScale()
   private let label = UILabel()
 
   init() {
-    selectImagesView = SelectedImagesView()
+    let layout = UICollectionViewFlowLayout()
+    layout.scrollDirection = .horizontal
+    layout.itemSize = SELECTED_IMAGE_SIZE
+    layout.minimumLineSpacing = 10
+    collectionView = UICollectionView(
+      frame: CGRect.zero,
+      collectionViewLayout: layout
+    )
     super.init(frame: CGRect.zero)
     setupView()
+    setupCollectionView()
+    textView.delegate = self
   }
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  private func setupCollectionView() {
+    collectionView.backgroundColor = .white
+    collectionView.showsHorizontalScrollIndicator = false
+    collectionView.register(
+      SelectedImageCell.self,
+      forCellWithReuseIdentifier: String(describing: SelectedImageCell.self)
+    )
   }
 
   private func setupView() {
@@ -39,6 +63,7 @@ class DescriptionView: UIView {
       color: .gray900(),
       style: .bold
     )
+    label.numberOfLines = 2
     styleText(
       textView: textView,
       text: "",
@@ -50,7 +75,7 @@ class DescriptionView: UIView {
       button: submitButton,
       text: NSLocalizedString("Next step", comment: "Create event: next step"),
       size: 20,
-      color: .blue,
+      color: .white,
       style: .medium
     )
 
@@ -60,35 +85,42 @@ class DescriptionView: UIView {
     })
 
     submitButton.style({ v in
-      v.contentEdgeInsets = UIEdgeInsets(
-        top: 7,
-        left: 0,
-        bottom: 7,
-        right: 0
-      )
       v.isEnabled = false
-      v.layer.borderColor = UIColor.blue().cgColor
+      v.backgroundColor = .blue()
     })
 
-    sv(contentView.sv([label, textView, selectImagesView, submitButton]))
+    sv([label, textView, collectionView, submitButton])
     setupConstraints()
   }
 
   private func setupConstraints() {
-    contentView.fillContainer().centerInContainer()
-    contentView.Top == safeAreaLayoutGuide.Top
-    contentView.Bottom == safeAreaLayoutGuide.Bottom
+    label.Top == safeAreaLayoutGuide.Top + 20
+    label.left(15).right(15)
+    label.centerHorizontally()
+    submitButton
+      .centerHorizontally()
+      .width(200)
+      .Bottom == Bottom - 50
+    collectionView
+      .left(15)
+      .right(15)
+			.height(SELECTED_IMAGE_SIZE.height)
+      .Bottom == submitButton.Top - 15
 
-    layout(
-      |-label.top(20).centerHorizontally()-|,
-      10,
-      |-textView-|,
-      10,
-      |-selectImagesView.height(0)-|,
-      15,
-      |-submitButton.centerHorizontally().width(200)-|,
-      30
-    )
-
+    textView
+      .left(10).right(10)
+      .Top == label.Bottom + 15
+    textView.Bottom == collectionView.Top - 10
   }
 }
+
+extension DescriptionView: UITextViewDelegate {
+  func textViewDidChange(_ textView: UITextView) {
+    submitButton.isEnabled = textView.text.count > 0
+  }
+}
+
+protocol DescriptionViewDelegate:
+	CreateEventViewDelegate,
+  UICollectionViewDataSource,
+  UICollectionViewDelegate {}

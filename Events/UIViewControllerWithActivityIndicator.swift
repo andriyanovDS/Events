@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import Stevia
 
 class UIViewControllerWithActivityIndicator: UIViewController {
 
   lazy var activityIndicatorView: UIView = {
-    let activityIndicatorView = UIView(frame: self.view.bounds)
+		let activityIndicatorView = UIView(frame: CGRect.zero)
     activityIndicatorView.backgroundColor = UIColor.gray200(alpha: 0.5)
     let activityIndicator = UIActivityIndicatorView.init(style: .gray)
     activityIndicator.center = activityIndicatorView.center
@@ -22,10 +23,8 @@ class UIViewControllerWithActivityIndicator: UIViewController {
 
   func showActivityIndicator(for view: UIView?) {
     let wrapperView: UIView = view ?? self.view
-    if view != self.view {
-      activityIndicatorView.bounds = wrapperView.bounds
-    }
     wrapperView.addSubview(activityIndicatorView)
+		activityIndicatorView.fillContainer().centerInContainer()
   }
 
   func removeActivityIndicator() {

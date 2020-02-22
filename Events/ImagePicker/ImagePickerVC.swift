@@ -82,11 +82,11 @@ extension ImagePickerVC: ImagePickerViewModelDelegate {
     let indexPath = IndexPath(item: index, section: 0)
     guard let cell = collectionView.cellForItem(at: indexPath) as? ImagePreviewCell else {
       collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
-      imagePickerView?.onImageDidSelected(at: index, selectedImageIndices: viewModel.selectedImageIndices)
+      imagePickerView?.onImageDidSelected(at: index, selectedImageIndices: viewModel.selectedAssetIndices)
       return
     }
-    cell.selectButton.setCount(viewModel.selectedImageIndices.count)
-    imagePickerView?.onImageDidSelected(at: index, selectedImageIndices: viewModel.selectedImageIndices)
+    cell.selectButton.setCount(viewModel.selectedAssetIndices.count)
+    imagePickerView?.onImageDidSelected(at: index, selectedImageIndices: viewModel.selectedAssetIndices)
   }
 
   func performCloseAnimation(onComplete: @escaping () -> Void) {
@@ -136,7 +136,7 @@ extension ImagePickerVC: UICollectionViewDataSource {
       contentOffsetX: collectionView.contentOffset.x
     )
     cell.setSelectButtonPosition(selectButtonOffset)
-    if let index = viewModel.selectedImageIndices.firstIndex(of: indexPath.item) {
+    if let index = viewModel.selectedAssetIndices.firstIndex(of: indexPath.item) {
       cell.selectedCount = index + 1
     }
     cell.previewImageView.hero.id = indexPath.item.description
@@ -156,6 +156,7 @@ extension ImagePickerVC: UICollectionViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     imagePickerView?.collectionViewDidScroll()
 		guard let collectionView = scrollView as? UICollectionView else { return }
+    if viewModel == nil { return }
 		viewModel.attemptToCacheAssets(collectionView)
   }
 }

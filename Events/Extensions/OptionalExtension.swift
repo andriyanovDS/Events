@@ -83,3 +83,12 @@ extension Optional {
     return nonOptional
   }
 }
+
+extension Optional where Wrapped: Equatable {
+  static func == (lhs: Self, rhs: Self) -> Bool {
+    if let lhs = lhs, let rhs = rhs {
+      return lhs == rhs
+    }
+    return lhs == nil && rhs == nil
+  }
+}

@@ -8,19 +8,15 @@
 
 import UIKit
 import Photos
+import RxSwift
 
-class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewModelDelegate, UserDetailsView.Delegate {
+class UserDetailsViewController: UIViewControllerWithActivityIndicator, UserDetailsViewModelDelegate, UserDetailsView.Delegate {
   var userDetailsView: UserDetailsView!
   let user: User
   var selectedGender: Gender?
   var selectedAvatarUrl: URL?
   private let viewModel: UserDetailsViewModel
-  
-  override var keyboardAttachInfo: KeyboardAttachInfo? {
-    didSet {
-      onKeyboardHeightDidChange()
-    }
-  }
+  private let disposeBag = DisposeBag()
   
   func loadCustomView() {
     userDetailsView = UserDetailsView()
@@ -47,6 +43,12 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
     super.viewDidLoad()
     loadCustomView()
     setUserData()
+
+    keyboardAttach$
+      .subscribe(onNext: {[weak self] info in
+        self?.onKeyboardHeightDidChange(info: info)
+      })
+      .disposed(by: disposeBag)
   }
   
   @objc func showSelectImageActionSheet() {
@@ -171,8 +173,8 @@ class UserDetailsViewController: KeyboardAttachViewController, UserDetailsViewMo
     }
   }
   
-  private func onKeyboardHeightDidChange() {
-    let inset = keyboardAttachInfo.foldL(
+  private func onKeyboardHeightDidChange(info: KeyboardAttachInfo?) {
+    let inset = info.foldL(
       none: { UIEdgeInsets.zero },
       some: { info in UIEdgeInsets(
         top: 0,

@@ -20,7 +20,10 @@ indirect enum EventStep: Step {
   case userDetailsDidComplete
   case createEvent
   case createEventDidComplete
-  case imagePicker(onComplete: ([PHAsset]) -> Void)
+  case imagePicker(
+    selectedAssets: [PHAsset],
+    onComplete: ([PHAsset]) -> Void
+  )
   case imagePickerDidComplete
   case calendar(withSelectedDates: SelectedDates, onComplete: (SelectedDates?) -> Void)
   case calendarDidComplete

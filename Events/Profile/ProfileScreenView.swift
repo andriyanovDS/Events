@@ -20,7 +20,7 @@ class ProfileScreenView: UIView {
   let avatarViewButton = UIButton()
   let avatarImageView = UIImageView()
   let editButton = UIButtonScaleOnPress()
-  let logoutButton = ButtonWithBorder()
+  let logoutButton = ButtonScale()
   
   init() {
     super.init(frame: CGRect.zero)
@@ -148,13 +148,14 @@ class ProfileScreenView: UIView {
   }
   
   private func setupLogoutButton() {
-    logoutButton.style({ v in
-      v.setTitle("Выйти", for: .normal)
-      v.setTitleColor(UIColor.gray600(), for: .normal)
-      v.layer.borderColor = UIColor.gray600().cgColor
-      v.titleLabel?.font = UIFont(name: "CeraPro-Medium", size: 20)
-    })
-    
+    styleText(
+      button: logoutButton,
+      text: "Выйти",
+      size: 20,
+      color: .white,
+      style: .medium
+    )
+    logoutButton.backgroundColor = .gray400()
     contentView.sv(logoutButton)
     
     logoutButton

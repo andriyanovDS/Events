@@ -76,6 +76,28 @@ class CalendarViewModel: Stepper {
 struct SelectedDates {
   let from: Date?
   let to: Date?
+
+  var localizedLabel: String? {
+    guard let dateFrom = from else {
+      return nil
+    }
+
+    let dateFormatter = DateFormatter()
+    dateFormatter.locale = Locale(identifier: "ru_RU")
+    dateFormatter.dateFormat = "dd MMMM"
+
+    let dateFromFormatted = dateFormatter.string(from: dateFrom)
+
+    guard let dateTo = to else {
+      return dateFromFormatted
+    }
+
+    let isSameYear = Calendar.current.isDate(dateFrom, equalTo: dateTo, toGranularity: .year)
+    if !isSameYear {
+      dateFormatter.dateFormat = "dd MMMM YYYY"
+    }
+    return "\(dateFromFormatted) - \(dateFormatter.string(from: dateTo))"
+  }
 }
 
 protocol CalendarViewModelDelegate: class {
