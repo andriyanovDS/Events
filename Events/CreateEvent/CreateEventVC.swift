@@ -295,6 +295,47 @@ extension CreateEventViewController: DescriptionViewDelegate {
     guard let collectionView = scrollView as? UICollectionView else { return }
     viewModel.attemptToCacheAssets(collectionView)
   }
+	
+	func collectionView(
+		_ collectionView: UICollectionView,
+		itemsForBeginning session: UIDragSession,
+		at indexPath: IndexPath
+	) -> [UIDragItem] {
+		let itemProvider = NSItemProvider(object: String(indexPath.item) as NSString)
+		let dragItem = UIDragItem(itemProvider: itemProvider)
+		return [dragItem]
+	}
+	
+	func collectionView(
+		_ collectionView: UICollectionView,
+		dropSessionDidUpdate session: UIDropSession,
+		withDestinationIndexPath destinationIndexPath: IndexPath?
+	) -> UICollectionViewDropProposal {
+		if collectionView.hasActiveDrag {
+			return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+		}
+		return UICollectionViewDropProposal(operation: .forbidden)
+	}
+	
+	func collectionView(
+		_ collectionView: UICollectionView,
+		performDropWith coordinator: UICollectionViewDropCoordinator
+	) {
+		guard let item = coordinator.items.first else { return }
+		guard let sourceIndexPath = item.sourceIndexPath else { return }
+		let destinationIndexPath = coordinator
+			.destinationIndexPath
+			.getOrElse(result: IndexPath(item: viewModel.selectedAssets.count - 1, section: 0))
+		
+		collectionView.performBatchUpdates({
+			let asset = viewModel.asset(at: sourceIndexPath.item)
+			viewModel.selectedAssets.remove(at: sourceIndexPath.item)
+			viewModel.selectedAssets.insert(asset, at: destinationIndexPath.item)
+			
+			collectionView.moveItem(at: sourceIndexPath, to: destinationIndexPath)
+		}, completion: nil)
+		coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+	}
 }
 
 extension CreateEventViewController: CreateEventViewModelDelegate {

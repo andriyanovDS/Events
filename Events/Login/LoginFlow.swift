@@ -14,7 +14,11 @@ class LoginFlow: Flow {
     return self.rootViewController
   }
 
-  private let rootViewController = UINavigationController()
+	private var rootViewController: UINavigationController = {
+		let controller = UINavigationController()
+		controller.view.backgroundColor = .white
+		return controller
+	}()
 
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? EventStep else {

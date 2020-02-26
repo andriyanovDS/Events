@@ -15,6 +15,8 @@ class DescriptionView: UIView, CreateEventView {
     didSet {
       self.collectionView.delegate = self.delegate
       self.collectionView.dataSource = self.delegate
+			self.collectionView.dragDelegate = self.delegate
+			self.collectionView.dropDelegate = self.delegate
     }
   }
   let collectionView: UICollectionView
@@ -25,12 +27,19 @@ class DescriptionView: UIView, CreateEventView {
   init() {
     let layout = UICollectionViewFlowLayout()
     layout.scrollDirection = .horizontal
+		layout.sectionInset = UIEdgeInsets(
+			top: 0,
+			left: 10,
+			bottom: 0,
+			right: 10
+		)
     layout.itemSize = SELECTED_IMAGE_SIZE
     layout.minimumLineSpacing = 10
     collectionView = UICollectionView(
       frame: CGRect.zero,
       collectionViewLayout: layout
     )
+		collectionView.dragInteractionEnabled = true
     super.init(frame: CGRect.zero)
     setupView()
     setupCollectionView()
@@ -102,9 +111,9 @@ class DescriptionView: UIView, CreateEventView {
       .width(200)
       .Bottom == Bottom - 50
     collectionView
-      .left(15)
-      .right(15)
-			.height(SELECTED_IMAGE_SIZE.height)
+      .left(5)
+      .right(5)
+			.height(SELECTED_IMAGE_SIZE.height + 10)
       .Bottom == submitButton.Top - 15
 
     textView
@@ -123,4 +132,6 @@ extension DescriptionView: UITextViewDelegate {
 protocol DescriptionViewDelegate:
 	CreateEventViewDelegate,
   UICollectionViewDataSource,
-  UICollectionViewDelegate {}
+  UICollectionViewDelegate,
+	UICollectionViewDragDelegate,
+	UICollectionViewDropDelegate {}

@@ -18,6 +18,7 @@ class MainFlow: Flow {
 
   private lazy var rootViewController: UINavigationController = {
     let viewController = UINavigationController()
+		viewController.view.backgroundColor = .white
     viewController.setNavigationBarHidden(true, animated: false)
     return viewController
   }()
@@ -41,6 +42,8 @@ class MainFlow: Flow {
     Flows.whenReady(flow1: loginFlow, block: { [unowned self] root in
       DispatchQueue.main.async {
         root.modalPresentationStyle = .fullScreen
+				root.hero.modalAnimationType = .fade
+				root.hero.isEnabled = true
         self.rootViewController.present(root, animated: true)
       }
     })

@@ -39,11 +39,9 @@ class SelectedImageCell: UICollectionViewCell {
   }
 
   private func setupView() {
-    imageView.style { v in
-      v.clipsToBounds = true
-      v.contentMode = .scaleAspectFill
-      v.layer.cornerRadius = 10
-    }
+		layer.cornerRadius = 10
+		clipsToBounds = true
+    imageView.contentMode = .scaleAspectFill
     removeButton.style { v in
       v.layer.cornerRadius = 10
       v.layer.borderColor = UIColor.white.cgColor
