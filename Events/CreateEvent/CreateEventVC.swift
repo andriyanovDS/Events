@@ -8,6 +8,7 @@
 
 import UIKit
 import Stevia
+import RxSwift
 import Photos.PHAsset
 import SwiftIconFont
 
@@ -20,9 +21,14 @@ protocol CreateEventView: UIView {
   var delegate: Delegate { get set }
 }
 
+protocol ViewWithKeyboard {
+  func keyboardHeightDidChange(_: KeyboardAttachInfo?)
+}
+
 class CreateEventViewController: UIViewControllerWithActivityIndicator, ViewModelBased {
   var viewModel: CreateEventViewModel!
   private var foregroundView: UIView?
+  private let disposeBag = DisposeBag()
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -30,6 +36,16 @@ class CreateEventViewController: UIViewControllerWithActivityIndicator, ViewMode
     setupNavigationBar()
     setupView()
     showActivityIndicator(for: nil)
+
+    keyboardAttach$
+    .subscribe(
+      onNext: {[weak self] info in
+        if let view = self?.foregroundView as? ViewWithKeyboard {
+          view.keyboardHeightDidChange(info)
+        }
+      }
+    )
+    .disposed(by: disposeBag)
   }
 
   private func setupView() {
@@ -353,6 +369,12 @@ extension CreateEventViewController: CreateEventViewModelDelegate {
     guard let collectionView = (foregroundView as? DescriptionView)?.collectionView else {
       return
     }
+
+    if collectionView.visibleCells.count == 0 && insertedIndexPaths.count > 0 {
+      guard let descriptionView = foregroundView as? DescriptionView else { return }
+      descriptionView.showCollectionView()
+    }
+
     collectionView.performBatchUpdates({
       if removedIndexPaths.count > 0 {
         collectionView.deleteItems(at: removedIndexPaths)
@@ -360,6 +382,11 @@ extension CreateEventViewController: CreateEventViewModelDelegate {
       if insertedIndexPaths.count > 0 {
         collectionView.insertItems(at: insertedIndexPaths)
       }
-		}, completion: nil)
+    }, completion: {[weak self] _ in
+      if collectionView.visibleCells.count == 0 {
+        guard let descriptionView = self?.foregroundView as? DescriptionView else { return }
+        descriptionView.hideCollectionView()
+      }
+    })
   }
 }

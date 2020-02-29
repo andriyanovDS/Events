@@ -24,7 +24,6 @@ class DateView: UIView, CreateEventView {
   private lazy var durationTextField = UITextField()
   private lazy var startTimeDescriptionLabel = UILabel()
   private lazy var durationDescriptionLabel = UILabel()
-  private let disposableBag = DisposeBag()
 
   init(date: Date) {
     super.init(frame: CGRect.zero)
@@ -32,15 +31,6 @@ class DateView: UIView, CreateEventView {
     datePicker.date = date
     startTimeTextField.text = formattedDatePickerDate()
     setupView()
-
-    keyboardAttach$
-      .subscribe(
-        onNext: {[weak self] info in
-          self?.keyboardHeightDidChange(info: info)
-        }
-      )
-      .disposed(by: disposableBag)
-      
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -98,26 +88,8 @@ class DateView: UIView, CreateEventView {
       if frame.contains(activeField.frame.origin) {
         let scrollPointY = activeField.frame.origin.y - keyboardHeight
         let scrollPoint = CGPoint(x: 0, y: scrollPointY >= 0 ? scrollPointY : 0)
-        scrollView.setContentOffset(scrollPoint, animated: true)
+        scrollView.setContentOffset(scrollPoint, animated: false)
       }
-    }
-  }
-
-  private func keyboardHeightDidChange(info: KeyboardAttachInfo?) {
-    let inset = info.foldL(
-      none: { UIEdgeInsets.zero },
-      some: { info in UIEdgeInsets(
-        top: 0,
-        left: 0,
-        bottom: info.height,
-        right: 0
-        )}
-    )
-    scrollView.contentInset = inset
-    scrollView.scrollIndicatorInsets = inset
-
-    if inset.bottom > 0 {
-      scrollToActiveTextField(keyboardHeight: inset.bottom)
     }
   }
 
@@ -329,6 +301,28 @@ class DateView: UIView, CreateEventView {
     submitButton.Bottom == contentView.Bottom - 50
     submitButton.width(200).centerHorizontally()
   }
+}
+
+extension DateView: ViewWithKeyboard {
+  func keyboardHeightDidChange(_ info: KeyboardAttachInfo?) {
+     let inset = info.foldL(
+       none: { UIEdgeInsets.zero },
+       some: { info in UIEdgeInsets(
+         top: 0,
+         left: 0,
+         bottom: info.height,
+         right: 0
+         )}
+     )
+     UIView.animate(withDuration: info?.duration ?? 0.2, animations: {
+       self.scrollView.contentInset = inset
+       self.scrollView.scrollIndicatorInsets = inset
+
+       if inset.bottom > 0 {
+         self.scrollToActiveTextField(keyboardHeight: inset.bottom)
+       }
+     })
+   }
 }
 
 protocol DateViewDelegate: CreateEventViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {

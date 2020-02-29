@@ -44,10 +44,27 @@ class DescriptionView: UIView, CreateEventView {
     setupView()
     setupCollectionView()
     textView.delegate = self
+
+    let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap))
+    addGestureRecognizer(tapRecognizer)
   }
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  func hideCollectionView() {
+    UIView.animate(withDuration: 0.2, animations: {
+      self.collectionView.heightConstraint?.constant = 0
+      self.layoutIfNeeded()
+    })
+  }
+
+  func showCollectionView() {
+    UIView.animate(withDuration: 0.2, animations: {
+      self.collectionView.heightConstraint?.constant = SELECTED_IMAGE_SIZE.height + 10
+      self.layoutIfNeeded()
+    })
   }
 
   private func setupCollectionView() {
@@ -57,6 +74,10 @@ class DescriptionView: UIView, CreateEventView {
       SelectedImageCell.self,
       forCellWithReuseIdentifier: String(describing: SelectedImageCell.self)
     )
+  }
+
+  @objc private func onTap(_ recognizer: UITapGestureRecognizer) {
+    endEditing(true)
   }
 
   private func setupView() {
@@ -109,11 +130,11 @@ class DescriptionView: UIView, CreateEventView {
     submitButton
       .centerHorizontally()
       .width(200)
-      .Bottom == Bottom - 50
+      .bottom(50)
     collectionView
       .left(5)
       .right(5)
-			.height(SELECTED_IMAGE_SIZE.height + 10)
+			.height(0)
       .Bottom == submitButton.Top - 15
 
     textView
@@ -126,6 +147,31 @@ class DescriptionView: UIView, CreateEventView {
 extension DescriptionView: UITextViewDelegate {
   func textViewDidChange(_ textView: UITextView) {
     submitButton.isEnabled = textView.text.count > 0
+  }
+}
+
+extension DescriptionView: ViewWithKeyboard {
+  func keyboardHeightDidChange(_ info: KeyboardAttachInfo?) {
+    UIView.animate(withDuration: info?.duration ?? 0.2, animations: {
+      let bottomConstraint = info
+        .map { $0.height - self.safeAreaInsets.bottom }
+        .getOrElse(result: 50)
+      self.collectionView.heightConstraint?.constant = info
+        .foldL(
+          none: {
+            if let itemsCount = self.collectionView.dataSource?.collectionView(
+              self.collectionView,
+              numberOfItemsInSection: 0
+              ) {
+              if itemsCount > 0 { return SELECTED_IMAGE_SIZE.height + 10 }
+            }
+            return 0
+          },
+          some: { _ in 0 }
+        )
+      self.submitButton.bottomConstraint?.constant = -bottomConstraint
+      self.layoutIfNeeded()
+    })
   }
 }
 
