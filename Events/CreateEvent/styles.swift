@@ -9,7 +9,7 @@
 import UIKit
 
 func selectButtonStyle(_ view: UIButton) -> UIButton {
-  view.style({ v in
+  view.style { v in
     v.contentEdgeInsets = UIEdgeInsets(
       top: 12,
       left: 10,
@@ -19,16 +19,16 @@ func selectButtonStyle(_ view: UIButton) -> UIButton {
     v.contentHorizontalAlignment = .left
     v.layer.cornerRadius = 15
     v.backgroundColor = UIColor.gray100()
-  })
+  }
   return view
 }
 
 func selectTextFieldStyle(_ view: UITextField) -> UITextField {
-  view.style({ v in
+  view.style { v in
     v.setupLeftView(width: 15)
     v.contentHorizontalAlignment = .left
     v.layer.cornerRadius = 15
     v.backgroundColor = UIColor.gray100()
-  })
+  }
   return view
 }

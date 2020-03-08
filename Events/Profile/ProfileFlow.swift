@@ -8,6 +8,7 @@
 
 import RxFlow
 import Photos
+import Hero
 import Foundation
 
 class ProfileFlow: Flow {
@@ -30,45 +31,21 @@ class ProfileFlow: Flow {
       return navigateToProfileScreen()
     case .login:
       return navigateToLoginScreen()
-    case .locationSearch(let onResult):
-      return navigateToLocationSearchBar(onResult: onResult)
-    case .calendar(let withSelectedDates, let onComplete):
-      return openCalendarScreen(withSelectedDates: withSelectedDates, onComplete: onComplete)
     case .userDetails(let user):
       return navigateToUserDetails(user: user)
-    case .imagePickerDidComplete:
-      self.rootNavigationController.tabBarController?.tabBar.isHidden = false
-      rootNavigationController.dismiss(animated: false, completion: nil)
-      return .none
-    case .userDetailsDidComplete, .locationSearchDidCompete, .calendarDidComplete:
+		case .userDetailsDidComplete:
       rootNavigationController.dismiss(animated: true, completion: nil)
       return .none
-    case .hintPopupDidComplete(let nextStep):
-      rootNavigationController.dismiss(animated: false, completion: nil)
-      if nextStep != nil {
-        return navigateToTextFormattingTips()
-      }
-      return .none
-    case .permissionModalDidComplete, .textFormattingTipsDidComplete:
+    case .permissionModalDidComplete:
       rootNavigationController.dismiss(animated: false, completion: nil)
       return .none
-    case .imagePicker(let selectedAssets, let onComplete):
-      self.rootNavigationController.tabBarController?.tabBar.isHidden = true
-      return navigateToImagePicker(
-        selectedAssets: selectedAssets,
-        onComplete: onComplete
-      )
     case .permissionModal(let withType):
       return navigateToPermissionModal(with: withType)
-    case .hintPopup(let popup):
-      return navigateToHintPopup(hintPopup: popup)
     case .createEvent:
       return navigateToCreateEventScreen()
     case .createEventDidComplete:
-      rootNavigationController.popViewController(animated: true)
+      rootNavigationController.dismiss(animated: true, completion: nil)
       return .none
-    case .textFormattingTips:
-      return navigateToTextFormattingTips()
     default:
       return .none
     }
@@ -88,56 +65,20 @@ class ProfileFlow: Flow {
   }
 
   func navigateToCreateEventScreen() -> FlowContributors {
-    let viewModel = CreateEventViewModel()
-    let viewController = CreateEventViewController.instantiate(with: viewModel)
-    rootNavigationController.pushViewController(viewController, animated: true)
-    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
-  }
-
-  func navigateToLocationSearchBar(onResult: @escaping (Geocode) -> Void) -> FlowContributors {
-    let searchBar = SearchBarViewController(nibName: nil, bundle: nil)
-    let viewModel = LocationSearchViewModel(textField: searchBar.textField)
-    let viewController = LocationSearchViewController(searchBar: searchBar, viewModel: viewModel)
-    viewController.onResult = onResult
-    viewController.modalPresentationStyle = .overFullScreen
-    viewController.modalTransitionStyle = .coverVertical
-    rootNavigationController.present(viewController, animated: true, completion: nil)
-    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
-  }
-
-  private func openCalendarScreen(
-    withSelectedDates: SelectedDates,
-    onComplete: @escaping (SelectedDates?) -> Void
-  ) -> FlowContributors {
-    let viewModel = CalendarViewModel(
-    selectedDateFrom: withSelectedDates.from,
-      selectedDateTo: withSelectedDates.to
+		let createEventFlow = CreateEventFlow()
+    Flows.whenReady(flow1: createEventFlow, block: {[unowned self] root in
+      root.modalPresentationStyle = .fullScreen
+      root.hero.modalAnimationType = .selectBy(
+        presenting: .push(direction: .left),
+        dismissing: .push(direction: .right)
+      )
+      root.hero.isEnabled = true
+      self.rootNavigationController.present(root, animated: true)
+    })
+    return .one(flowContributor: .contribute(
+      withNextPresentable: createEventFlow,
+      withNextStepper: OneStepper(withSingleStep: EventStep.createEvent))
     )
-    let viewController = CalendarViewController.instantiate(with: viewModel)
-    viewController.modalPresentationStyle = .overFullScreen
-    viewController.isModalInPopover = true
-    viewController.hero.isEnabled = true
-    viewController.onResult = onComplete
-    rootNavigationController.present(viewController, animated: true, completion: nil)
-    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
-   }
-
-  func navigateToHintPopup(hintPopup: HintPopup) -> FlowContributors {
-    let viewModel = HintPopupViewModel()
-    let viewController = HintPopupVC(hintPopup: hintPopup, viewModel: viewModel)
-    viewController.modalPresentationStyle = .overCurrentContext
-    viewController.isModalInPopover = true
-    rootNavigationController.present(viewController, animated: false, completion: nil)
-    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
-  }
-
-  private func navigateToTextFormattingTips() -> FlowContributors {
-    let viewModel = TextFormattingTipsViewModel()
-    let viewController = TextFormattingTipsVC.instantiate(with: viewModel)
-    viewController.modalPresentationStyle = .overCurrentContext
-    viewController.isModalInPopover = true
-    rootNavigationController.present(viewController, animated: false, completion: nil)
-    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
   }
 
   func navigateToPermissionModal(with type: PermissionModalType) -> FlowContributors {
@@ -148,24 +89,6 @@ class ProfileFlow: Flow {
     return .one(flowContributor: .contribute(
       withNextPresentable: flow,
       withNextStepper: OneStepper(withSingleStep: EventStep.permissionModal(withType: type))
-      ))
-  }
-
-  func navigateToImagePicker(
-    selectedAssets: [PHAsset],
-    onComplete: @escaping ([PHAsset]) -> Void
-  ) -> FlowContributors {
-    let flow = ImagePickerFlow()
-    Flows.whenReady(flow1: flow, block: { rootVC in
-      rootVC.modalPresentationStyle = .overFullScreen
-      self.rootNavigationController.present(rootVC, animated: false)
-    })
-    return .one(flowContributor: .contribute(
-      withNextPresentable: flow,
-      withNextStepper: OneStepper(withSingleStep: EventStep.imagePicker(
-        selectedAssets: selectedAssets,
-        onComplete: onComplete
-        ))
       ))
   }
 

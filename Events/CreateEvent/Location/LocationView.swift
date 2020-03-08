@@ -126,6 +126,6 @@ class LocationView: UIView, CreateEventView {
   }
 }
 
-@objc protocol LocationViewDelegate: CreateEventViewDelegate {
+protocol LocationViewDelegate: CreateEventViewDelegate {
 	func openChangeLocationModal()
 }

@@ -7,11 +7,24 @@
 //
 
 import Foundation
+import Photos
 
 struct Description {
-  let title: String
-  let imageUrl: String?
+  let isMain: Bool
+  let title: String?
+  let assets: [PHAsset]
   let text: String
+}
+
+struct MutableDescription {
+  let isMain: Bool
+  var title: String?
+  var assets: [PHAsset]
+  var text: String
+
+  func immutable() -> Description {
+    Description(isMain: isMain, title: title, assets: assets, text: text)
+  }
 }
 
 struct Event {

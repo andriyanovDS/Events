@@ -1,5 +1,5 @@
 //
-//  CategoriesView.swift
+//  CategoryView.swift
 //  Events
 //
 //  Created by Дмитрий Андриянов on 11/08/2019.
@@ -10,9 +10,7 @@ import UIKit
 import Stevia
 
 class CategoriesView: UIView, CreateEventView {
-
-  weak var delegate: CreateEventViewDelegate?
-  var selectedCategory: CategoryId?
+  weak var delegate: CategoriesViewDelegate?
   private let categoryButtons: [CategoryButton]
   private let contentView = UIView()
   private let titleLabel = UILabel()
@@ -113,7 +111,11 @@ class CategoriesView: UIView, CreateEventView {
   }
 
   @objc private func onPressCategoryButton(_ button: CategoryButton) {
-    selectedCategory = button.category
+    delegate?.onSelect(category: button.category)
     delegate?.openNextScreen()
   }
+}
+
+protocol CategoriesViewDelegate: CreateEventViewDelegate {
+  func onSelect(category: CategoryId)
 }

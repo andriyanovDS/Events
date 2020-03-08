@@ -303,28 +303,6 @@ class DateView: UIView, CreateEventView {
   }
 }
 
-extension DateView: ViewWithKeyboard {
-  func keyboardHeightDidChange(_ info: KeyboardAttachInfo?) {
-     let inset = info.foldL(
-       none: { UIEdgeInsets.zero },
-       some: { info in UIEdgeInsets(
-         top: 0,
-         left: 0,
-         bottom: info.height,
-         right: 0
-         )}
-     )
-     UIView.animate(withDuration: info?.duration ?? 0.2, animations: {
-       self.scrollView.contentInset = inset
-       self.scrollView.scrollIndicatorInsets = inset
-
-       if inset.bottom > 0 {
-         self.scrollToActiveTextField(keyboardHeight: inset.bottom)
-       }
-     })
-   }
-}
-
 protocol DateViewDelegate: CreateEventViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
   func onOpenCalendar()
   func onSelect(date: Date)

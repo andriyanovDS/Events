@@ -58,7 +58,7 @@ func styleText(
   textField.attributedPlaceholder = NSAttributedString(
     string: text,
     attributes: [
-      NSAttributedString.Key.foregroundColor: color,
+      NSAttributedString.Key.foregroundColor: color.withAlphaComponent(0.7),
       NSAttributedString.Key.font: style.font(size: size)
     ]
   )
