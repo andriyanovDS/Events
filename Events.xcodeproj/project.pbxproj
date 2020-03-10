@@ -11,8 +11,10 @@
 		0A48948E23F9C2370035A4A4 /* UnspashAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948D23F9C2370035A4A4 /* UnspashAPI.swift */; };
 		0A48949023F9C9050035A4A4 /* internalImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948F23F9C9050035A4A4 /* internalImageCache.swift */; };
 		0A48949223F9D0510035A4A4 /* md5.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48949123F9D0510035A4A4 /* md5.swift */; };
+		0A4F3F79241837300003F4C1 /* SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4F3F78241837300003F4C1 /* SkeletonView.swift */; };
 		0A5CD06A2405DC9F00BC9B2C /* LoginTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5CD0692405DC9F00BC9B2C /* LoginTextField.swift */; };
 		0AA421812415A74400554121 /* DateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421802415A74400554121 /* DateViewModel.swift */; };
+		0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421842416351000554121 /* DescriptionCellButton.swift */; };
 		0AEF8D272413B14B00BBB45D /* CreateEventFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEF8D262413B14B00BBB45D /* CreateEventFlow.swift */; };
 		0AFA14AD2402BE4400F07E82 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFA14AC2402BE4400F07E82 /* LoginView.swift */; };
 		0AFA14AF240518CB00F07E82 /* ObservableType+Nwise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFA14AE240518CB00F07E82 /* ObservableType+Nwise.swift */; };
@@ -136,7 +138,6 @@
 		74D9655F22F2272D00D828C1 /* UserDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D9655E22F2272D00D828C1 /* UserDetailsView.swift */; };
 		74DAFA452353701300331369 /* ImagePickerCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DAFA442353701300331369 /* ImagePickerCollectionViewLayout.swift */; };
 		74E2A2872337774200629C36 /* ImagePickerFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E2A2862337774200629C36 /* ImagePickerFlow.swift */; };
-		74E3766224105E440023E405 /* AddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E3766124105E440023E405 /* AddButton.swift */; };
 		74E5DAD22329974D00E1557D /* ViewModelBased.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E5DAD12329974D00E1557D /* ViewModelBased.swift */; };
 		74E5DAD4232999F500E1557D /* EventsFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E5DAD3232999F500E1557D /* EventsFlow.swift */; };
 		74F0F55F22FF6F5500170C6C /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F0F55E22FF6F5500170C6C /* CategoryView.swift */; };
@@ -161,8 +162,10 @@
 		0A48948D23F9C2370035A4A4 /* UnspashAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnspashAPI.swift; sourceTree = "<group>"; };
 		0A48948F23F9C9050035A4A4 /* internalImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = internalImageCache.swift; sourceTree = "<group>"; };
 		0A48949123F9D0510035A4A4 /* md5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = md5.swift; sourceTree = "<group>"; };
+		0A4F3F78241837300003F4C1 /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
 		0A5CD0692405DC9F00BC9B2C /* LoginTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextField.swift; sourceTree = "<group>"; };
 		0AA421802415A74400554121 /* DateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewModel.swift; sourceTree = "<group>"; };
+		0AA421842416351000554121 /* DescriptionCellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCellButton.swift; sourceTree = "<group>"; };
 		0AEF8D262413B14B00BBB45D /* CreateEventFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventFlow.swift; sourceTree = "<group>"; };
 		0AFA14AC2402BE4400F07E82 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		0AFA14AE240518CB00F07E82 /* ObservableType+Nwise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ObservableType+Nwise.swift"; sourceTree = "<group>"; };
@@ -291,7 +294,6 @@
 		74D9655E22F2272D00D828C1 /* UserDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsView.swift; sourceTree = "<group>"; };
 		74DAFA442353701300331369 /* ImagePickerCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerCollectionViewLayout.swift; sourceTree = "<group>"; };
 		74E2A2862337774200629C36 /* ImagePickerFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerFlow.swift; sourceTree = "<group>"; };
-		74E3766124105E440023E405 /* AddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddButton.swift; sourceTree = "<group>"; };
 		74E5DAD12329974D00E1557D /* ViewModelBased.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelBased.swift; sourceTree = "<group>"; };
 		74E5DAD3232999F500E1557D /* EventsFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsFlow.swift; sourceTree = "<group>"; };
 		74F0F55E22FF6F5500170C6C /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
@@ -429,7 +431,8 @@
 				74F0F5642300438C00170C6C /* DescriptionView.swift */,
 				749898B424019E08007EF352 /* SelectedImageCell.swift */,
 				747961E9240DB120006B8EB0 /* DescriptionCellView.swift */,
-				74E3766124105E440023E405 /* AddButton.swift */,
+				0AA421842416351000554121 /* DescriptionCellButton.swift */,
+				0A4F3F78241837300003F4C1 /* SkeletonView.swift */,
 			);
 			path = Description;
 			sourceTree = "<group>";
@@ -914,6 +917,7 @@
 				74F0F5772300B7EC00170C6C /* HintPopupViewModel.swift in Sources */,
 				7478F50622F6251900A43F52 /* LocationView.swift in Sources */,
 				74E2A2872337774200629C36 /* ImagePickerFlow.swift in Sources */,
+				0A4F3F79241837300003F4C1 /* SkeletonView.swift in Sources */,
 				748E0B0622DA132F00B061C7 /* GeocodeObserver.swift in Sources */,
 				0A5CD06A2405DC9F00BC9B2C /* LoginTextField.swift in Sources */,
 				74A1AE2122D5DF0300C39525 /* OptionalExtension.swift in Sources */,
@@ -949,6 +953,7 @@
 				746E106923113E3600B5B19D /* ImagePickerItem.swift in Sources */,
 				74A1AE2322D64BFB00C39525 /* LoginViewModel.swift in Sources */,
 				745243C122CFE2B400C930C8 /* UIColorExtension.swift in Sources */,
+				0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */,
 				741DCF9022D3AA81005783A3 /* Category.swift in Sources */,
 				741CECB123D6EDF900BE6BA3 /* dateHelpers.swift in Sources */,
 				7467B6ED22D510AA00A1BFE9 /* LoginViewController.swift in Sources */,
@@ -1023,7 +1028,6 @@
 				7463A4A022DE7760009171E1 /* TextFieldWithBottomLine.swift in Sources */,
 				7467B6E522D50B2100A1BFE9 /* SavedViewController.swift in Sources */,
 				748E0B1722DA289800B061C7 /* Geocode.swift in Sources */,
-				74E3766224105E440023E405 /* AddButton.swift in Sources */,
 				746697462326FBDE00406CD8 /* LoginFlow.swift in Sources */,
 				7478F50922F6263C00A43F52 /* text.swift in Sources */,
 				74697FCC22D200DF00D5B5F4 /* Day.swift in Sources */,

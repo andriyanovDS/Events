@@ -11,6 +11,7 @@ import RxSwift
 import Photos.PHAsset
 
 class DescriptionViewController: UIViewController, ViewModelBased, ScreenWithResult {
+	var onResult: (([Description]) -> Void)!
   var viewModel: DescriptionViewModel! {
     didSet {
       viewModel.delegate = self
@@ -19,7 +20,7 @@ class DescriptionViewController: UIViewController, ViewModelBased, ScreenWithRes
   private let disposeBag = DisposeBag()
   private var descriptionView: DescriptionView?
   private var activeDescriptionIndex: Int = 0
-  var onResult: (([Description]) -> Void)!
+	private var isDeleteMode: Bool = false
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -62,10 +63,34 @@ class DescriptionViewController: UIViewController, ViewModelBased, ScreenWithRes
      openImagePickerButton.width(35).height(35)
      openImagePickerButton.addTarget(self, action: #selector(openImagePicker), for: .touchUpInside)
    }
+	
+	private func setupCancelBarButton() {
+		let cancelBarButton = UIButton()
+		styleText(
+			button: cancelBarButton,
+			text: NSLocalizedString("Cancel", comment: "Create event description view: cancel delete"),
+			size: 16,
+			color: .blue,
+			style: .medium
+		)
+		navigationItem.rightBarButtonItem = UIBarButtonItem(
+			title: NSLocalizedString("Cancel", comment: "Create event description view: cancel delete"),
+			style: .plain,
+			target: self,
+			action: #selector(cancelDeleteMode)
+		)
+	}
 
   @objc private func openImagePicker() {
     viewModel.openImagePicker(activeDescription: activeDescriptionIndex)
   }
+	
+	@objc private func cancelDeleteMode() {
+		if !isDeleteMode { return }
+		isDeleteMode = false
+		descriptionView?.descriptionsCollectionView.reloadData()
+		setupOpenImagePickerButton()
+	}
 
   @objc private func onRemoveImage(_ sender: UIButtonScaleOnPress) {
     guard let asset = sender.uniqueData as? PHAsset else { return }
@@ -120,8 +145,13 @@ extension DescriptionViewController: DescriptionViewDelegate {
       }
       let description = viewModel.descriptions[indexPath.item]
       cell.eventDescription = description
-      cell.isLastCell = indexPath.item == viewModel.descriptions.count - 1
-      cell.addButton?.addTarget(self, action: #selector(addDescription), for: .touchUpInside)
+			cell.isActive = activeDescriptionIndex == indexPath.item
+			cell.isDeleteMode = isDeleteMode
+			if !isDeleteMode {
+				cell.isLastCell = indexPath.item == viewModel.descriptions.count - 1
+				cell.addButton?.addTarget(self, action: #selector(addDescription), for: .touchUpInside)
+			}
+			
       return cell
     }
 
@@ -186,7 +216,10 @@ extension DescriptionViewController: DescriptionViewDelegate {
     guard let sourceIndexPath = item.sourceIndexPath else { return }
     let destinationIndexPath = coordinator
       .destinationIndexPath
-      .getOrElse(result: IndexPath(item: viewModel.descriptions[activeDescriptionIndex].assets.count - 1, section: 0))
+      .getOrElse(result: IndexPath(
+				item: viewModel.descriptions[activeDescriptionIndex].assets.count - 1,
+				section: 0
+			))
 
     collectionView.performBatchUpdates({
       let asset = viewModel.asset(at: sourceIndexPath.item, forDescriptionAtIndex: activeDescriptionIndex)
@@ -199,16 +232,25 @@ extension DescriptionViewController: DescriptionViewDelegate {
 
   func description(titleDidChange title: String) {
     viewModel.descriptions[activeDescriptionIndex].title = title
-    descriptionView?.descriptionsCollectionView.reloadItems(at: [
-      IndexPath(item: activeDescriptionIndex, section: 0)
-    ])
+		guard let view = descriptionView else { return }
+		let cellOption = view.descriptionsCollectionView.cellForItem(at: IndexPath(
+			item: activeDescriptionIndex,
+			section: 0
+		))
+		guard let cell = cellOption as? DescriptionCellView else { return }
+		cell.eventDescription = viewModel.descriptions[activeDescriptionIndex]
+		cell.change(labelText: title)
   }
 
   func description(textDidChange text: String) {
     viewModel.descriptions[activeDescriptionIndex].text = text
-    descriptionView?.descriptionsCollectionView.reloadItems(at: [
-      IndexPath(item: activeDescriptionIndex, section: 0)
-    ])
+		guard let view = descriptionView else { return }
+		let cellOption = view.descriptionsCollectionView.cellForItem(at: IndexPath(
+			item: activeDescriptionIndex,
+			section: 0
+		))
+		guard let cell = cellOption as? DescriptionCellView else { return }
+		cell.eventDescription = viewModel.descriptions[activeDescriptionIndex]
   }
 
   @objc private func addDescription() {
@@ -238,6 +280,9 @@ extension DescriptionViewController: DescriptionViewDelegate {
   @objc private func onDescriptionCollectionViewLongPress(
     _ recognizer: UILongPressGestureRecognizer
   ) {
-
+		if isDeleteMode { return }
+		isDeleteMode = true
+		descriptionView?.descriptionsCollectionView.reloadData()
+		setupCancelBarButton()
   }
 }

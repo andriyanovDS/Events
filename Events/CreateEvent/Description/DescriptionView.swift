@@ -54,10 +54,10 @@ class DescriptionView: UIView, CreateEventView {
       right: 10
     )
     descriptionsLayout.itemSize = CGSize(
-      width: UIScreen.main.bounds.width * 0.3,
+			width: UIScreen.main.bounds.width * 0.3,
       height: 130
     )
-    descriptionsLayout.minimumLineSpacing = 10
+    descriptionsLayout.minimumLineSpacing = 2
     descriptionsCollectionView = DescriptionsCollectionView(
       frame: CGRect.zero,
       collectionViewLayout: descriptionsLayout

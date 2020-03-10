@@ -42,6 +42,17 @@ class DescriptionCellView: UICollectionViewCell {
     scaleAnimator.addCompletion { _ in identityAnimator.startAnimation() }
     return scaleAnimator
   }
+	
+	var isActive: Bool = false {
+		didSet {
+			if isActive {
+				print("set active cell")
+				addShadow(view: self, radius: 1.8, color: UIColor.blue())
+			} else {
+				addShadow(view: self, radius: 1.8)
+			}
+		}
+	}
 
   var isLastCell: Bool = false {
     willSet (nextValue) {
@@ -50,20 +61,38 @@ class DescriptionCellView: UICollectionViewCell {
         setupAddButton()
         return
       }
-      addButton?.removeFromSuperview()
-      addButton = nil
+			guard let button = addButton else { return }
+			animateButtonRemove(button, completion: {[unowned self] in
+				self.addButton = nil
+			})
     }
   }
+	
+	var isDeleteMode: Bool = false {
+		willSet (nextValue) {
+			guard nextValue != isDeleteMode else { return }
+			if nextValue {
+				setupRemoveButton()
+				return
+			}
+			guard let button = removeButton else { return }
+			animateButtonRemove(button, completion: {[unowned self] in
+				self.removeButton = nil
+			})
+		}
+	}
 
-  var addButton: AddButton?
+  var addButton: DescriptionCellButton?
+	var removeButton: DescriptionCellButton?
 
   private let titleLabel = UILabel()
+	private let buttonContentView = UIView()
 
-  override var bounds: CGRect {
-    didSet {
-      addShadow(view: self, radius: 1.8)
-    }
-  }
+//  override var bounds: CGRect {
+//    didSet {
+//      addShadow(view: self, radius: 1.8)
+//    }
+//  }
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -73,26 +102,37 @@ class DescriptionCellView: UICollectionViewCell {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+	
+	func change(labelText: String) {
+		titleLabel.text = labelText
+	}
 
   private func setupView() {
-    backgroundColor = .white
-    layer.cornerRadius = 10
+		buttonContentView.backgroundColor = .white
+		buttonContentView.layer.cornerRadius = 10
 
     titleLabel.textAlignment = .center
+		titleLabel.numberOfLines = 1
+		
     styleText(
       label: titleLabel,
       text: "",
-      size: 14,
+      size: 16,
       color: .black,
-      style: .medium
+      style: .bold
     )
-    let skeletonView = UIView()
-    skeletonView.style { v in
-      v.layer.cornerRadius = 5
-      v.backgroundColor = UIColor.gray200()
-    }
-    sv([titleLabel, skeletonView])
-    titleLabel.centerHorizontally().top(5)
+    let skeletonView = SkeletonView()
+		skeletonView.backgroundColor = .white
+		sv(buttonContentView.sv([titleLabel, skeletonView]))
+		
+		buttonContentView
+			.left(0)
+			.bottom(0)
+			.right(Constants.addButtonSize / 3)
+			.top(Constants.addButtonSize / 3)
+		
+		titleLabel.left(5).right(5).top(5)
+		
     skeletonView
       .right(5)
       .left(5)
@@ -105,20 +145,61 @@ class DescriptionCellView: UICollectionViewCell {
   ) {
     titleLabel.text = description.title
   }
+	
+	private func animateButtonRemove(_ button: UIButton, completion: @escaping () -> Void) {
+		let animator = UIViewPropertyAnimator(
+			duration: 0.4,
+			dampingRatio: 1,
+			animations: { button.alpha = 0 }
+		)
+		animator.addCompletion { _ in
+			button.removeFromSuperview()
+		}
+		animator.startAnimation()
+	}
 
   private func setupAddButton() {
-    let button = AddButton(frame: CGRect.zero)
+		let button = DescriptionCellButton(backgroundColor: .blue200())
     sv(button)
     button
-      .right(-Constants.addButtonSize / 2)
-      .top(-Constants.addButtonSize / 3)
+      .right(0)
+      .top(0)
       .width(Constants.addButtonSize)
       .height(Constants.addButtonSize)
     addButton = button
   }
+	
+	private func setupRemoveButton() {
+		let button = DescriptionCellButton(backgroundColor: .red)
+		button.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 4)
+		button.alpha = 0
+		sv(button)
+		button
+			.right(0)
+			.top(0)
+			.width(Constants.addButtonSize)
+			.height(Constants.addButtonSize)
+		removeButton = button
+		
+		UIView.animate(withDuration: 0.4, animations: {
+			button.alpha = 1
+		})
+	 }
+	
+	private func removeAddButton() {
+		addButton?.removeFromSuperview()
+		addButton = nil
+	}
+	
+	private func removeRemoveButton() {
+		removeButton?.removeFromSuperview()
+		removeButton = nil
+	}
 
   override func prepareForReuse() {
     eventDescription = nil
     titleLabel.text = nil
+		removeAddButton()
+		removeRemoveButton()
   }
 }

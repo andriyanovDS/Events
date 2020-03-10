@@ -1,23 +1,33 @@
 //
-//  AddButton.swift
+//  DescriptionCellButton.swift
 //  Events
 //
-//  Created by Дмитрий Андриянов on 05/03/2020.
+//  Created by Dmitry on 09.03.2020.
 //  Copyright © 2020 Дмитрий Андриянов. All rights reserved.
 //
 
 import UIKit
 
-class AddButton: UIButton {
-
-  private var halfWidth: CGFloat {
+class DescriptionCellButton: UIButton {
+	private let _backgroundColor: UIColor
+	
+	private var halfWidth: CGFloat {
     return bounds.width / 2
   }
 
   private var halfHeight: CGFloat {
     return bounds.height / 2
   }
-
+	
+	init(backgroundColor: UIColor) {
+		self._backgroundColor = backgroundColor
+		super.init(frame: CGRect.zero)
+	}
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
   override func draw(_ rect: CGRect) {
     drawCircle(rect: rect, color: .black)
     drawCircle(
@@ -27,7 +37,7 @@ class AddButton: UIButton {
         width: rect.width - 2,
         height: rect.height - 2
       ),
-      color: .blue200()
+      color: _backgroundColor
     )
     drawPlus(lineWidth: 3, scale: 0.65, color: .black)
     drawPlus(lineWidth: 2, scale: 0.6, color: .white)
