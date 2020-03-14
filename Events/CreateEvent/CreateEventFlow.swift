@@ -206,7 +206,7 @@ class CreateEventFlow: Flow {
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
   }
 
-  private func navigateToDescriptionScreen(onResult: @escaping ([Description]) -> Void) -> FlowContributors {
+  private func navigateToDescriptionScreen(onResult: @escaping ([DescriptionWithAssets]) -> Void) -> FlowContributors {
     let viewModel = DescriptionViewModel()
     let viewController = DescriptionViewController.instantiate(with: viewModel)
     viewController.onResult = onResult

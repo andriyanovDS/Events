@@ -38,7 +38,7 @@ struct AddressComponent: Decodable {
   let types: [String]
 }
 
-struct Location: Decodable {
+struct Location: Codable {
   let lng: Double
   let lat: Double
 }

@@ -16,6 +16,6 @@ enum CreateEventStep: Step {
     dateDidComplete,
     category(onResult: (CategoryId) -> Void),
     categoryDidComplete,
-    description(onResult: ([Description]) -> Void),
+    description(onResult: ([DescriptionWithAssets]) -> Void),
     descriptionDidComplete
 }

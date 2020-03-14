@@ -109,7 +109,7 @@ extension DescriptionViewModel {
 }
 
 protocol DescriptionViewModelDelegate: class {
-  var onResult: (([Description]) -> Void)! { get }
+  var onResult: (([DescriptionWithAssets]) -> Void)! { get }
   func performCellsUpdate(removedIndexPaths: [IndexPath], insertedIndexPaths: [IndexPath])
 }
 

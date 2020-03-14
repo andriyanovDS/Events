@@ -11,7 +11,7 @@ import RxSwift
 import Photos.PHAsset
 
 class DescriptionViewController: UIViewController, ViewModelBased, ScreenWithResult {
-	var onResult: (([Description]) -> Void)!
+	var onResult: (([DescriptionWithAssets]) -> Void)!
   var viewModel: DescriptionViewModel! {
     didSet {
       viewModel.delegate = self

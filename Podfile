@@ -16,4 +16,5 @@ use_frameworks!
     pod 'RxFlow', '~> 2.7.0'
     pod 'Hero', '~> 1.4.0'
 		pod 'PromisesSwift', '~> 1.2.8'
+    pod 'CodableFirebase'
   end

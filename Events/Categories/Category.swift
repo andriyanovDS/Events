@@ -18,7 +18,7 @@ struct Category {
   }
 }
 
-enum CategoryId: String, CaseIterable {
+enum CategoryId: String, CaseIterable, Codable {
   case art, workshop, food, health, sport
 
   func translatedLabel() -> String {

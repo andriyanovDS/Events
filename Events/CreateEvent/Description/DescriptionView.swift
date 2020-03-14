@@ -250,7 +250,7 @@ class DescriptionView: UIView, CreateEventView {
       v.isEnabled = false
       v.backgroundColor = .blue()
     })
-
+    submitButton.addTarget(self, action: #selector(onPressSubmitButton), for: .touchUpInside)
     sv([titleLabel, textView, selectedImagesCollectionView, submitButton, descriptionsCollectionView])
     setupConstraints()
   }
@@ -280,6 +280,10 @@ class DescriptionView: UIView, CreateEventView {
       .left(15).right(15)
       .Top == titleLabel.Bottom + 30
     textView.Bottom == selectedImagesCollectionView.Top - 10
+  }
+
+  @objc private func onPressSubmitButton() {
+    delegate?.openNextScreen()
   }
 }
 

@@ -9,11 +9,19 @@
 import Foundation
 import Photos
 
-struct Description {
+struct DescriptionWithAssets {
   let isMain: Bool
   let id: String
   let title: String?
   let assets: [PHAsset]
+  let text: String
+}
+
+struct DescriptionWithImageUrls: Codable {
+  let isMain: Bool
+  let id: String
+  let title: String?
+  let imageUrls: [String]
   let text: String
 }
 
@@ -37,8 +45,8 @@ class MutableDescription {
     id = UUID().uuidString
   }
 
-  func immutable() -> Description {
-    Description(isMain: isMain, id: id, title: title, assets: assets, text: text)
+  func immutable() -> DescriptionWithAssets {
+    DescriptionWithAssets(isMain: isMain, id: id, title: title, assets: assets, text: text)
   }
 }
 
@@ -48,13 +56,13 @@ extension MutableDescription: Equatable {
   }
 }
 
-struct Event {
+struct Event: Codable {
   let name: String
   let author: String
   let location: Location
   let dates: [Date]
   let duration: EventDurationRange
   let createDate: Date
-  let categories: [Category]
-  let description: [Description]
+  let categories: [CategoryId]
+  let description: [DescriptionWithImageUrls]
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct EventDurationRange: Equatable {
+struct EventDurationRange: Equatable, Codable {
   let min: Int?
   let max: Int?
   
