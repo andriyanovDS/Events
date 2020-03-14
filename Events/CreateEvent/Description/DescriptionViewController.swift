@@ -21,6 +21,7 @@ class DescriptionViewController: UIViewController, ViewModelBased, ScreenWithRes
   private var descriptionView: DescriptionView?
   private var activeDescriptionIndex: Int = 0
 	private var isDeleteMode: Bool = false
+  private var feedbackGenerator: UIImpactFeedbackGenerator?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -166,8 +167,10 @@ extension DescriptionViewController: DescriptionViewDelegate {
   }
 
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    guard collectionView is DescriptionsCollectionView else { return }
     if indexPath.item == activeDescriptionIndex { return }
     guard let descriptionView = self.descriptionView else { return }
+
     let collectionView = descriptionView.descriptionsCollectionView
     guard let cell = collectionView.cellForItem(at: indexPath) as? DescriptionCellView else { return }
     activeDescriptionIndex = indexPath.item
@@ -329,9 +332,21 @@ extension DescriptionViewController: DescriptionViewDelegate {
   @objc private func onDescriptionCollectionViewLongPress(
     _ recognizer: UILongPressGestureRecognizer
   ) {
-		if isDeleteMode { return }
-		isDeleteMode = true
-		descriptionView?.descriptionsCollectionView.reloadData()
-		setupCancelBarButton()
+    switch recognizer.state {
+    case .began:
+      feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
+      feedbackGenerator?.prepare()
+    case .changed:
+      if isDeleteMode { return }
+      isDeleteMode = true
+
+      feedbackGenerator?.impactOccurred()
+      descriptionView?.descriptionsCollectionView.reloadData()
+      setupCancelBarButton()
+    case .ended:
+      feedbackGenerator = nil
+    default:
+      return
+    }
   }
 }

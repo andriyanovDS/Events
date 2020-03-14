@@ -274,7 +274,7 @@ class DescriptionView: UIView, CreateEventView {
       .left(5)
       .right(5)
       .height(150)
-      .Top == Bottom - 75
+      .bottom(-75)
 
     textView
       .left(15).right(15)
@@ -295,7 +295,7 @@ extension DescriptionView: ViewWithKeyboard {
     UIView.animate(withDuration: info?.duration ?? 0.2, animations: {
       let bottomConstraint = info
         .map { $0.height + 15.0 }
-        .getOrElse(result: 50)
+        .getOrElse(result: 75)
       self.selectedImagesCollectionView.heightConstraint?.constant = info
         .foldL(
           none: {
