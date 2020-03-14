@@ -41,7 +41,8 @@ class DateView: UIView, CreateEventView {
 		durationTextField.text = text
 	}
 
-  func setFormattedDate(_ date: String, daysCount: Int) {
+  func setFormattedDate(_ formattedDate: String, daysCount: Int) {
+    dateButton.setTitle(formattedDate, for: .normal)
     setupDateSection()
     setupDurationSection()
     setupSubmitButton()
@@ -124,6 +125,7 @@ class DateView: UIView, CreateEventView {
     }
     titleLabel.numberOfLines = 2
     dateButton.bringSubviewToFront(dateButton.titleLabel!)
+    dateButton.titleLabel?.numberOfLines = 1
     dateButton.addTarget(self, action: #selector(onDateButtonDidPress), for: .touchUpInside)
     sv(scrollView.sv(
       contentView.sv([
@@ -266,7 +268,8 @@ class DateView: UIView, CreateEventView {
       .right(0)
 
     align(vertically: [titleLabel, dateDescriptionLabel, dateButton])
-
+    dateButton.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
+    dateButton.titleLabel?.left(0).right(0)
     layout(
       |-titleLabel-|,
       8,

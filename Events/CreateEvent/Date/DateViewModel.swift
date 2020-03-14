@@ -98,7 +98,7 @@ private func daysCount(selectedDates: SelectedDates) -> Int {
     return 0
   }
   if let dateTo = selectedDates.to {
-    return Calendar.current.compare(dateFrom, to: dateTo, toGranularity: .day).rawValue
+    return Calendar.current.dateComponents([.day], from: dateFrom, to: dateTo).day!
   }
   return 1
 }
