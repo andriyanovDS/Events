@@ -67,7 +67,7 @@ class DescriptionViewModel: Stepper {
        .map { $1 - $0 }
        .forEach { selectedAssets.remove(at: $0) }
      selectedAssets.insert(contentsOf: newAssets, at: selectedAssets.count)
-     descriptions[index].assets = selectedAssets
+     descriptions[index].assets = assets
      delegate?.performCellsUpdate(
        removedIndexPaths: removedIndices.map { IndexPath(item: $0, section: 0) },
        insertedIndexPaths: newAssets
@@ -94,7 +94,7 @@ extension DescriptionViewModel {
 
 extension DescriptionViewModel {
   func asset(at index: Int, forDescriptionAtIndex descriptionIndex: Int) -> PHAsset {
-    descriptions[descriptionIndex].assets[index]
+    return descriptions[descriptionIndex].assets[index]
   }
 
   func image(for asset: PHAsset, onResult: @escaping (UIImage) -> Void) {

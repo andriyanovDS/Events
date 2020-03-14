@@ -17,7 +17,7 @@ struct Description {
   let text: String
 }
 
-struct MutableDescription {
+class MutableDescription {
   let isMain: Bool
   let id: String
   var title: String?
@@ -43,7 +43,7 @@ struct MutableDescription {
 }
 
 extension MutableDescription: Equatable {
-  static func == (lhs: Self, rhs: Self) -> Bool {
+  static func == (lhs: MutableDescription, rhs: MutableDescription) -> Bool {
     return lhs.id == rhs.id
   }
 }

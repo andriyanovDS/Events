@@ -179,6 +179,7 @@ extension DescriptionViewController: DescriptionViewDelegate {
       .filter { $0.isActive }
       .forEach { $0.isActive = false }
     cell.isActive = true
+    descriptionView.selectedImagesCollectionView.reloadData()
     collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
   }
 
@@ -277,6 +278,7 @@ extension DescriptionViewController: DescriptionViewDelegate {
       collectionView.insertItems(at: [newCellIndexPath])
     }, completion: {[unowned self] _ in
       descriptionView.onChange(description: self.viewModel.descriptions[newCellIndexPath.item])
+      descriptionView.selectedImagesCollectionView.reloadData()
       collectionView.scrollToItem(at: newCellIndexPath, at: .right, animated: true)
     })
   }
@@ -300,6 +302,7 @@ extension DescriptionViewController: DescriptionViewDelegate {
       .forEach { $0.isActive = cell == $0 }
     let description = viewModel.descriptions[activeDescriptionIndex]
     descriptionView?.onChange(description: description)
+    descriptionView?.selectedImagesCollectionView.reloadData()
     if viewModel.descriptions.count == 1 {
       cancelDeleteMode()
     }
