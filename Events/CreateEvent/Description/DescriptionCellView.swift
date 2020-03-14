@@ -9,20 +9,14 @@
 import UIKit
 import Stevia
 
-class DescriptionCellView: UICollectionViewCell {
+class DescriptionCellView: UICollectionViewCell, DescriptionCellButtonDataSource {
 
   private struct Constants {
     static let animationDuration: CGFloat = 0.3
     static let addButtonSize: CGFloat = 27
   }
 
-  var eventDescription: MutableDescription? {
-    didSet {
-      if let description = eventDescription {
-        setupCell(description: description)
-      }
-    }
-  }
+  var eventDescription: MutableDescription?
 
   var selectAnimation: UIViewPropertyAnimator {
     let scaleAnimator = UIViewPropertyAnimator(
@@ -46,8 +40,7 @@ class DescriptionCellView: UICollectionViewCell {
 	var isActive: Bool = false {
 		didSet {
 			if isActive {
-				print("set active cell")
-				addShadow(view: self, radius: 1.8, color: UIColor.blue())
+        addShadow(view: self, radius: 7, color: UIColor.blue(), opacity: 0.5)
 			} else {
 				addShadow(view: self, radius: 1.8)
 			}
@@ -88,12 +81,6 @@ class DescriptionCellView: UICollectionViewCell {
   private let titleLabel = UILabel()
 	private let buttonContentView = UIView()
 
-//  override var bounds: CGRect {
-//    didSet {
-//      addShadow(view: self, radius: 1.8)
-//    }
-//  }
-
   override init(frame: CGRect) {
     super.init(frame: frame)
     setupView()
@@ -106,6 +93,10 @@ class DescriptionCellView: UICollectionViewCell {
 	func change(labelText: String) {
 		titleLabel.text = labelText
 	}
+
+  func setupCell() {
+    titleLabel.text = eventDescription?.title
+  }
 
   private func setupView() {
 		buttonContentView.backgroundColor = .white
@@ -139,12 +130,6 @@ class DescriptionCellView: UICollectionViewCell {
       .bottom(30)
       .Top == titleLabel.Bottom + 5
   }
-
-  private func setupCell(
-    description: MutableDescription
-  ) {
-    titleLabel.text = description.title
-  }
 	
 	private func animateButtonRemove(_ button: UIButton, completion: @escaping () -> Void) {
 		let animator = UIViewPropertyAnimator(
@@ -173,6 +158,7 @@ class DescriptionCellView: UICollectionViewCell {
 		let button = DescriptionCellButton(backgroundColor: .red)
 		button.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 4)
 		button.alpha = 0
+    button.dataSource = self
 		sv(button)
 		button
 			.right(0)
@@ -201,5 +187,7 @@ class DescriptionCellView: UICollectionViewCell {
     titleLabel.text = nil
 		removeAddButton()
 		removeRemoveButton()
+    isDeleteMode = false
+    isLastCell = false
   }
 }

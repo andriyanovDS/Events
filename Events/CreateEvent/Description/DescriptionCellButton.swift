@@ -9,7 +9,13 @@
 import UIKit
 
 class DescriptionCellButton: UIButton {
-	private let _backgroundColor: UIColor
+  weak var dataSource: DescriptionCellButtonDataSource?
+
+  var eventDescription: MutableDescription? {
+    dataSource?.eventDescription
+  }
+
+  private let _backgroundColor: UIColor
 	
 	private var halfWidth: CGFloat {
     return bounds.width / 2
@@ -78,4 +84,8 @@ class DescriptionCellButton: UIButton {
     color.setStroke()
     plusPath.stroke()
   }
+}
+
+protocol DescriptionCellButtonDataSource: class {
+  var eventDescription: MutableDescription? { get }
 }

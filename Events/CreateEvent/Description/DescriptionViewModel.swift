@@ -14,7 +14,7 @@ class DescriptionViewModel: Stepper {
   weak var delegate: DescriptionViewModelDelegate?
   let steps = PublishRelay<Step>()
   var descriptions: [MutableDescription] = [
-    MutableDescription(isMain: true, assets: [], text: "Test text")
+    MutableDescription(isMain: true, title: nil, assets: [], text: "Test text")
   ]
   private let imageCacheManager: ImageCacheManager
 
@@ -35,13 +35,12 @@ class DescriptionViewModel: Stepper {
   }
 
   func addDescription() {
-     descriptions.append(MutableDescription(
-       isMain: false,
-       title: nil,
-       assets: [],
-       text: ""
-     ))
+     descriptions.append(MutableDescription(isMain: false))
    }
+
+  func remove(descriptionAtIndex: Int) {
+    descriptions.remove(at: descriptionAtIndex)
+  }
 
   func remove(asset: PHAsset, forDescriptionAtIndex index: Int) {
    var selectedAssets = descriptions[index].assets
@@ -108,7 +107,6 @@ extension DescriptionViewModel {
     })
   }
 }
-
 
 protocol DescriptionViewModelDelegate: class {
   var onResult: (([Description]) -> Void)! { get }

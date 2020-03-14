@@ -65,14 +65,6 @@ class DescriptionViewController: UIViewController, ViewModelBased, ScreenWithRes
    }
 	
 	private func setupCancelBarButton() {
-		let cancelBarButton = UIButton()
-		styleText(
-			button: cancelBarButton,
-			text: NSLocalizedString("Cancel", comment: "Create event description view: cancel delete"),
-			size: 16,
-			color: .blue,
-			style: .medium
-		)
 		navigationItem.rightBarButtonItem = UIBarButtonItem(
 			title: NSLocalizedString("Cancel", comment: "Create event description view: cancel delete"),
 			style: .plain,
@@ -146,12 +138,15 @@ extension DescriptionViewController: DescriptionViewDelegate {
       let description = viewModel.descriptions[indexPath.item]
       cell.eventDescription = description
 			cell.isActive = activeDescriptionIndex == indexPath.item
-			cell.isDeleteMode = isDeleteMode
+
 			if !isDeleteMode {
 				cell.isLastCell = indexPath.item == viewModel.descriptions.count - 1
 				cell.addButton?.addTarget(self, action: #selector(addDescription), for: .touchUpInside)
-			}
-			
+      } else if !description.isMain {
+        cell.isDeleteMode = isDeleteMode
+        cell.removeButton?.addTarget(self, action: #selector(removeDescription(_:)), for: .touchUpInside)
+      }
+      cell.setupCell()
       return cell
     }
 
@@ -178,7 +173,13 @@ extension DescriptionViewController: DescriptionViewDelegate {
     activeDescriptionIndex = indexPath.item
     cell.selectAnimation.startAnimation()
     descriptionView.onChange(description: cell.eventDescription!)
-    descriptionView.selectedImagesCollectionView.reloadData()
+    collectionView
+      .visibleCells
+      .compactMap { $0 as? DescriptionCellView }
+      .filter { $0.isActive }
+      .forEach { $0.isActive = false }
+    cell.isActive = true
+    collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
   }
 
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -267,13 +268,58 @@ extension DescriptionViewController: DescriptionViewDelegate {
         if v.isLastCell == true {
           v.isLastCell = false
         }
+        v.isActive = false
       }
+
+    activeDescriptionIndex = newCellIndexPath.item
+
     collectionView.performBatchUpdates({
       collectionView.insertItems(at: [newCellIndexPath])
     }, completion: {[unowned self] _ in
-      self.activeDescriptionIndex = newCellIndexPath.item
       descriptionView.onChange(description: self.viewModel.descriptions[newCellIndexPath.item])
       collectionView.scrollToItem(at: newCellIndexPath, at: .right, animated: true)
+    })
+  }
+
+  private func changeDescription(afterRemoveAt index: Int) {
+    guard activeDescriptionIndex == index else {
+      activeDescriptionIndex -= 1
+      return
+    }
+    activeDescriptionIndex = index - 1
+    guard let collectionView = descriptionView?.descriptionsCollectionView else {
+      return
+    }
+    let cellOption = collectionView.cellForItem(at: IndexPath(
+      item: activeDescriptionIndex,
+      section: 0
+    ))
+    guard let cell = cellOption as? DescriptionCellView else { return }
+    collectionView.visibleCells
+      .compactMap { $0 as? DescriptionCellView }
+      .forEach { $0.isActive = cell == $0 }
+    let description = viewModel.descriptions[activeDescriptionIndex]
+    descriptionView?.onChange(description: description)
+    if viewModel.descriptions.count == 1 {
+      cancelDeleteMode()
+    }
+  }
+
+  @objc private func removeDescription(_ sender: DescriptionCellButton) {
+    guard let descriptionView = self.descriptionView else { return }
+    let collectionView = descriptionView.descriptionsCollectionView
+    let cellIndexOption = viewModel.descriptions.firstIndex(where: { v in
+      v == sender.dataSource?.eventDescription
+    })
+    guard let index = cellIndexOption else { return }
+    viewModel.remove(descriptionAtIndex: index)
+    collectionView.performBatchUpdates({
+      collectionView.deleteItems(at: [IndexPath(
+        item: index,
+        section: 0
+        )])
+    }, completion: {[weak self] _ in
+      self?.changeDescription(afterRemoveAt: index)
     })
   }
 

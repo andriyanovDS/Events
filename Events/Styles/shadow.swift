@@ -8,9 +8,9 @@
 
 import UIKit
 
-func addShadow(view: UIView, radius: CGFloat, color: UIColor = .black) {
+func addShadow(view: UIView, radius: CGFloat, color: UIColor = .black, opacity: Float = 0.3) {
   view.layer.shadowRadius = radius
-  view.layer.shadowOpacity = 0.3
+  view.layer.shadowOpacity = opacity
   view.layer.shadowColor = color.cgColor
   view.layer.shadowOffset = .zero
   view.layer.masksToBounds = false

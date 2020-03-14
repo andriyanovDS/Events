@@ -11,6 +11,7 @@ import Photos
 
 struct Description {
   let isMain: Bool
+  let id: String
   let title: String?
   let assets: [PHAsset]
   let text: String
@@ -18,12 +19,32 @@ struct Description {
 
 struct MutableDescription {
   let isMain: Bool
+  let id: String
   var title: String?
   var assets: [PHAsset]
   var text: String
 
+  init(
+    isMain: Bool,
+    title: String? = nil,
+    assets: [PHAsset] = [],
+    text: String = ""
+  ) {
+    self.isMain = isMain
+    self.title = title
+    self.assets = assets
+    self.text = text
+    id = UUID().uuidString
+  }
+
   func immutable() -> Description {
-    Description(isMain: isMain, title: title, assets: assets, text: text)
+    Description(isMain: isMain, id: id, title: title, assets: assets, text: text)
+  }
+}
+
+extension MutableDescription: Equatable {
+  static func == (lhs: Self, rhs: Self) -> Bool {
+    return lhs.id == rhs.id
   }
 }
 
