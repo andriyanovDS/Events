@@ -12,9 +12,10 @@ use_frameworks!
     pod 'Firebase/Auth', '~> 6'
     pod 'Firebase/Database', '~> 6'
     pod 'Firebase/Storage', '~> 6'
+		pod 'Firebase/Firestore'
+		pod 'FirebaseFirestoreSwift'
     pod 'SteviaLayout', '~> 4.5.0'
     pod 'RxFlow', '~> 2.7.0'
     pod 'Hero', '~> 1.4.0'
 		pod 'PromisesSwift', '~> 1.2.8'
-    pod 'CodableFirebase'
   end

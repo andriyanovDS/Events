@@ -11,8 +11,12 @@ import Stevia
 import RxSwift
 import SwiftIconFont
 
-class CreateEventViewController: UIViewController, ViewModelBased {
-  var viewModel: CreateEventViewModel!
+class CreateEventViewController: UIViewControllerWithActivityIndicator, ViewModelBased {
+	var viewModel: CreateEventViewModel! {
+		didSet {
+			viewModel.delegate = self
+		}
+	}
   private let disposeBag = DisposeBag()
   private var initialScreenViewController: LocationViewController?
 
@@ -20,6 +24,16 @@ class CreateEventViewController: UIViewController, ViewModelBased {
     super.viewDidLoad()
     view.backgroundColor = .white
   }
+}
+
+extension CreateEventViewController: CreateEventViewModelDelegate {
+	func showProgress() {
+		showActivityIndicator(for: navigationController?.view)
+	}
+	
+	func hideProgress() {
+		removeActivityIndicator()
+	}
 }
 
 @objc protocol CreateEventViewDelegate: class {

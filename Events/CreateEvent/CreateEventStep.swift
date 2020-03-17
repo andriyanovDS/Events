@@ -12,6 +12,8 @@ import Photos.PHFetchResult
 
 enum CreateEventStep: Step {
   case
+		location(onResult: (Geocode) -> Void),
+		locationDidComplete,
     date(onResult: (DateScreenResult) -> Void),
     dateDidComplete,
     category(onResult: (CategoryId) -> Void),

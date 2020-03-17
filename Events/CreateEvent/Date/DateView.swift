@@ -8,7 +8,6 @@
 
 import UIKit
 import Stevia
-import RxSwift
 
 class DateView: UIView, CreateEventView {
   weak var delegate: DateViewDelegate?

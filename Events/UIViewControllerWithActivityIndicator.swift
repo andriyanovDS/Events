@@ -13,17 +13,17 @@ class UIViewControllerWithActivityIndicator: UIViewController {
 
   lazy var activityIndicatorView: UIView = {
 		let activityIndicatorView = UIView(frame: CGRect.zero)
-    activityIndicatorView.backgroundColor = UIColor.gray200(alpha: 0.5)
+		activityIndicatorView.backgroundColor = UIColor.white.withAlphaComponent(0.6)
     let activityIndicator = UIActivityIndicatorView.init(style: .gray)
-    activityIndicator.center = activityIndicatorView.center
     activityIndicator.startAnimating()
-    activityIndicatorView.addSubview(activityIndicator)
+    activityIndicatorView.sv(activityIndicator)
+		activityIndicator.centerInContainer()
     return activityIndicatorView
   }()
 
   func showActivityIndicator(for view: UIView?) {
     let wrapperView: UIView = view ?? self.view
-    wrapperView.addSubview(activityIndicatorView)
+    wrapperView.sv(activityIndicatorView)
 		activityIndicatorView.fillContainer().centerInContainer()
   }
 

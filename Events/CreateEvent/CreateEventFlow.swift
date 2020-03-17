@@ -33,8 +33,11 @@ class CreateEventFlow: Flow {
     case
       .dateDidComplete,
       .categoryDidComplete,
+			.locationDidComplete,
       .descriptionDidComplete:
       return .none
+		case .location(let onResult):
+			return navigateToLocationScreen(onResult: onResult)
     case .date(let onResult):
       return navigateToDateScreen(onResult: onResult)
     case .category(let onResult):
@@ -166,15 +169,15 @@ class CreateEventFlow: Flow {
     let createEventViewController = CreateEventViewController.instantiate(with: createEventViewModel)
     rootNavigationController.pushViewController(createEventViewController, animated: false)
 
-    let locationViewModel = LocationViewModel()
-    let locationViewController = LocationViewController.instantiate(with: locationViewModel)
-    locationViewController.onResult = { geocode in
-      createEventViewModel.locationDidSelected(geocode: geocode)
+    let startViewModel = StartViewModel()
+    let startViewController = StartViewController.instantiate(with: startViewModel)
+    startViewController.onResult = { data in
+			createEventViewModel.eventStartDataDidSelected(data: data)
     }
-    locationViewController.onBackAction = {
+    startViewController.onBackAction = {
       createEventViewModel.onClose()
     }
-    rootNavigationController.pushViewController(locationViewController, animated: false)
+    rootNavigationController.pushViewController(startViewController, animated: false)
 
     return .multiple(flowContributors: [
       .contribute(
@@ -183,11 +186,19 @@ class CreateEventFlow: Flow {
         allowStepWhenNotPresented: true
       ),
       .contribute(
-        withNextPresentable: locationViewController,
-        withNextStepper: locationViewModel,
+        withNextPresentable: startViewController,
+        withNextStepper: startViewModel,
         allowStepWhenNotPresented: false
       )
     ])
+  }
+	
+	private func navigateToLocationScreen(onResult: @escaping (Geocode) -> Void) -> FlowContributors {
+    let viewModel = LocationViewModel()
+    let viewController = LocationViewController.instantiate(with: viewModel)
+    viewController.onResult = onResult
+    rootNavigationController.pushViewController(viewController, animated: true)
+    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
   }
 
   private func navigateToDateScreen(onResult: @escaping (DateScreenResult) -> Void) -> FlowContributors {

@@ -9,11 +9,16 @@
 import Foundation
 import Photos
 
+struct DescriptionAsset {
+	let asset: PHAsset
+	let localUrl: URL
+}
+
 struct DescriptionWithAssets {
   let isMain: Bool
   let id: String
   let title: String?
-  let assets: [PHAsset]
+  let assets: [DescriptionAsset]
   let text: String
 }
 
@@ -29,13 +34,13 @@ class MutableDescription {
   let isMain: Bool
   let id: String
   var title: String?
-  var assets: [PHAsset]
+  var assets: [DescriptionAsset]
   var text: String
 
   init(
     isMain: Bool,
     title: String? = nil,
-    assets: [PHAsset] = [],
+    assets: [DescriptionAsset] = [],
     text: String = ""
   ) {
     self.isMain = isMain
@@ -60,9 +65,16 @@ struct Event: Codable {
   let name: String
   let author: String
   let location: Location
-  let dates: [Date]
+  let dates: [String]
+	let isPublic: Bool
   let duration: EventDurationRange
-  let createDate: Date
+  let createDate: String
   let categories: [CategoryId]
   let description: [DescriptionWithImageUrls]
+	
+	static func format(date: Date) -> String {
+		let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = fbDateFormat
+    return dateFormatter.string(from: date)
+	}
 }

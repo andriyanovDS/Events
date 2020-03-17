@@ -113,6 +113,7 @@ class DescriptionView: UIView, CreateEventView {
   }
 
   func showSelectedImagesCollectionView() {
+		if textView.isFocused || (titleTextField?.isFocused ?? false) { return }
     UIView.animate(withDuration: 0.2, animations: {
       self.selectedImagesCollectionView.heightConstraint?.constant = SELECTED_IMAGE_SIZE.height + 10
       self.layoutIfNeeded()

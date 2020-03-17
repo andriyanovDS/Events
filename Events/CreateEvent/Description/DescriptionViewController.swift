@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import Photos.PHAsset
 
-class DescriptionViewController: UIViewController, ViewModelBased, ScreenWithResult {
+class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewModelBased, ScreenWithResult {
 	var onResult: (([DescriptionWithAssets]) -> Void)!
   var viewModel: DescriptionViewModel! {
     didSet {
@@ -25,7 +25,7 @@ class DescriptionViewController: UIViewController, ViewModelBased, ScreenWithRes
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
+	
     setupView()
     keyboardAttach$.subscribe(
       onNext: {[weak self] info in
@@ -92,6 +92,14 @@ class DescriptionViewController: UIViewController, ViewModelBased, ScreenWithRes
 }
 
 extension DescriptionViewController: DescriptionViewModelDelegate {
+	func showProgress() {
+		showActivityIndicator(for: view)
+	}
+	
+	func hideProgress() {
+		removeActivityIndicator()
+	}
+	
   func performCellsUpdate(removedIndexPaths: [IndexPath], insertedIndexPaths: [IndexPath]) {
     guard let descriptionView = self.descriptionView else { return }
     let collectionView = descriptionView.selectedImagesCollectionView
@@ -227,7 +235,7 @@ extension DescriptionViewController: DescriptionViewDelegate {
 			))
 
     collectionView.performBatchUpdates({
-      let asset = viewModel.asset(at: sourceIndexPath.item, forDescriptionAtIndex: activeDescriptionIndex)
+			let asset = viewModel.descriptions[activeDescriptionIndex].assets[sourceIndexPath.item]
       viewModel.descriptions[activeDescriptionIndex].assets.remove(at: sourceIndexPath.item)
       viewModel.descriptions[activeDescriptionIndex].assets.insert(asset, at: destinationIndexPath.item)
       collectionView.moveItem(at: sourceIndexPath, to: destinationIndexPath)

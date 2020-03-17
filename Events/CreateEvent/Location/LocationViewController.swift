@@ -10,7 +10,6 @@ import UIKit
 
 class LocationViewController: UIViewController, ViewModelBased, ScreenWithResult {
   var onResult: ((Geocode) -> Void)!
-  var onBackAction: (() -> Void)!
   var viewModel: LocationViewModel! {
     didSet {
       viewModel.delegate = self
@@ -21,14 +20,6 @@ class LocationViewController: UIViewController, ViewModelBased, ScreenWithResult
   override func viewDidLoad() {
     super.viewDidLoad()
     setupView()
-  }
-
-  override func viewWillDisappear(_ animated: Bool) {
-    super.viewWillDisappear(animated)
-
-    if isMovingFromParent {
-      onBackAction()
-    }
   }
 
   private func setupView() {
