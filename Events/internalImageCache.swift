@@ -19,7 +19,7 @@ class InternalImageCache {
 	}()
 	private let imageLoadingPromiseCache = NSCache<AnyObject, AnyObject>()
 	
-	init(config: Config = Config.defaultConfig) {
+	private init(config: Config = Config.defaultConfig) {
 		self.config = config
 	}
 	
@@ -42,9 +42,9 @@ class InternalImageCache {
 		imageLoadingPromiseCache.setObject(imageLoadingPromise, forKey: hex as AnyObject)
 		return imageLoadingPromise
 	}
-	
+
 	private func loadInternalImage(by url: String, hex: String) -> Promise<UIImage> {
-		Promise {[weak self] resolve, reject in
+    Promise(on: .global()) {[weak self] resolve, reject in
 			guard let imageURL = URL(string: url) else {
 				reject(FailedToLoadInternalImage.incorrectUrl)
 				return

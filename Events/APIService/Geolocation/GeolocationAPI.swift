@@ -31,8 +31,10 @@ enum GeocoderError: Error {
 }
 
 class GeolocationAPI: APIClientBase {
+
+  static let shared = GeolocationAPI()
   
-  init() {
+  private init() {
     super.init(baseURL: "https://maps.googleapis.com/maps/api/")!
   }
   

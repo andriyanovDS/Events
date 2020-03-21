@@ -16,6 +16,7 @@ import FirebaseAuth
 import FirebaseStorage
 import Photos.PHAsset
 import Promises
+import FirebaseFirestore
 
 class CreateEventViewModel: Stepper {
   let steps = PublishRelay<Step>()
@@ -133,26 +134,28 @@ class CreateEventViewModel: Stepper {
       let event = Event(
         name: name,
         author: user.uid,
-        location: geocode.geometry.location,
-				dates: self.dates.map { Event.format(date: $0) },
-				isPublic: self.isPublic!,
+        isPublic: self.isPublic!,
+        location: EventLocation(
+          lat: geocode.geometry.location.lat,
+          lng: geocode.geometry.location.lng,
+          fullName: geocode.fullLocationName()
+        ),
+				dates: self.dates,
         duration: duration,
-				createDate: Event.format(date: Date()),
+				createDate: Date(),
         categories: [categoryId],
         description: descriptions
       )
-			let encoder = Firestore.Encoder()
-      let eventEncoded = try encoder.encode(event)
 			let db = Firestore.firestore()
-      db
+      try db
 				.collection("event-list")
-				.addDocument(data: eventEncoded, completion: { error in
-					if let error = error {
-						print("Error", error)
-						return
-					}
-					self.eventDidCreated()
-				})
+        .addDocument(from: event, completion: { error in
+           if let error = error {
+             print("Error", error)
+             return
+           }
+           self.eventDidCreated()
+         })
     }
 		.always(on: .main, {
 			self.delegate?.hideProgress()

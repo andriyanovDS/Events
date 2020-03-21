@@ -63,13 +63,13 @@ class UserDetailsSectionView: UIView {
   }
   
   private func sutupLabel(with text: String) {
-    label.style({ v in
-      v.text = text
-      v.textColor = UIColor.gray800()
-      v.font = UIFont(name: "CeraPro-Medium", size: 16)
-      v.numberOfLines = 1
-    })
-    
+    styleText(
+      label: label,
+      text: text,
+      size: 16,
+      color: .gray800(),
+      style: .medium
+    )
     sv(label)
     label.top(0).left(10).right(0).height(15)
   }

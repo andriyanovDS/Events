@@ -61,14 +61,20 @@ extension MutableDescription: Equatable {
   }
 }
 
+struct EventLocation: Codable {
+  let lat: Double
+  let lng: Double
+  let fullName: String
+}
+
 struct Event: Codable {
   let name: String
   let author: String
-  let location: Location
-  let dates: [String]
-	let isPublic: Bool
+  let isPublic: Bool
+  let location: EventLocation
+  let dates: [Date]
   let duration: EventDurationRange
-  let createDate: String
+  let createDate: Date
   let categories: [CategoryId]
   let description: [DescriptionWithImageUrls]
 	

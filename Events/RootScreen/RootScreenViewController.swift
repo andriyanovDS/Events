@@ -10,24 +10,30 @@ import UIKit
 import Hero
 import Stevia
 import CoreLocation
+import AsyncDisplayKit
 
-class RootScreenViewController: UIViewController, ViewModelBased {
+class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased {
   var viewModel: RootScreenViewModel! {
     didSet {
-      viewModel.onChangeLocation = onChangeLocation
       viewModel.delegate = self
     }
   }
-  private var rootScreenView: RootScreenView?
   private let locationManager = CLLocationManager()
-  private let searchBar = SearchBarViewController(nibName: nil, bundle: nil)
+
+  init() {
+    super.init(node: RootScreenNode())
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
     locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
     locationManager.delegate = self
-    setupView()
+    node.eventTableNode.dataSource = self
     initializeUserLocation()
   }
   
@@ -36,27 +42,8 @@ class RootScreenViewController: UIViewController, ViewModelBased {
     navigationController?.setNavigationBarHidden(true, animated: false)
   }
 
-  @objc func openCalendar() {
-    viewModel.openCalendar()
-  }
-  
-  @objc func openLocationSearch() {
-    viewModel.openLocationSearch()
-  }
-
   private func setupView() {
-    rootScreenView = RootScreenView(searchBarView: searchBar.view)
-    view = rootScreenView
-    rootScreenView?.datesButton.addTarget(
-      self,
-      action: #selector(openCalendar),
-      for: .touchUpInside
-    )
-    rootScreenView?.locationButton.addTarget(
-      self,
-      action: #selector(openLocationSearch),
-      for: .touchUpInside
-    )
+    node.eventTableNode.dataSource = self
   }
 }
 
@@ -69,7 +56,7 @@ extension RootScreenViewController: CLLocationManagerDelegate {
     case .notDetermined:
       locationManager.requestWhenInUseAuthorization()
     default:
-      rootScreenView?.setLocationButtonLabelText(nil)
+      return
     }
   }
 
@@ -78,7 +65,6 @@ extension RootScreenViewController: CLLocationManagerDelegate {
     didChangeAuthorization status: CLAuthorizationStatus
   ) {
     if status == .denied || status == .restricted {
-      rootScreenView?.setLocationButtonLabelText(nil)
       return
     }
     manager.startUpdatingLocation()
@@ -92,11 +78,26 @@ extension RootScreenViewController: CLLocationManagerDelegate {
 }
 
 extension RootScreenViewController: RootScreenViewModelDelegate {
-  func onChangeLocation(locationName: String) {
-    rootScreenView?.setLocationButtonLabelText(locationName)
+  func onAppendEventList(_ newData: [Event]) {
+    node.eventTableNode.reloadData()
+  }
+}
+
+extension RootScreenViewController: ASTableDataSource {
+  func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
+    return viewModel.eventList.count
   }
 
-  func onDatesDidChange(dates: String?) {
-    rootScreenView?.setDatesButtonLabelText(dates)
+  func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
+    let event = viewModel.eventList[indexPath.item]
+    guard let author = viewModel.author(id: event.author) else {
+      fatalError("Event must have author")
+    }
+    let block = { () -> EventCellNode in
+      let cell = EventCellNode(event: event, author: author)
+      cell.delegate = self.viewModel
+      return cell
+    }
+    return block
   }
 }

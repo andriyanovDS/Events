@@ -55,20 +55,24 @@ class ProfileActionButton: UIButton {
   }
   
   private func setupLabel() {
-    label.style({ v in
-      v.text = labelText
-      v.textColor = UIColor.gray800()
-      v.font = UIFont.init(name: "CeraPro-Medium", size: 18)
-    })
+    styleText(
+      label: label,
+      text: labelText,
+      size: 18,
+      color: .black,
+      style: .medium
+    )
     label.left(0).centerVertically(0)
   }
   
   private func setupSubtitle(text: String) {
-    subtitleLabel.style({ v in
-      v.text = text
-      v.textColor = UIColor.gray600()
-      v.font = UIFont.init(name: "CeraPro-Medium", size: 18)
-    })
+    styleText(
+      label: subtitleLabel,
+      text: text,
+      size: 18,
+      color: .black,
+      style: .medium
+    )
     label.sv(subtitleLabel)
     subtitleLabel
       .top(7)

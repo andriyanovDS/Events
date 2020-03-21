@@ -82,10 +82,7 @@ extension SearchBarViewController {
       string: NSLocalizedString("Search...", comment: "Search bar: placeholder"),
       attributes: [
         NSAttributedString.Key.foregroundColor: UIColor.gray,
-        NSAttributedString.Key.font: UIFont.init(
-          name: "CeraPro-Medium",
-          size: 18
-          ) ?? UIFont.systemFont(ofSize: 18)
+        NSAttributedString.Key.font: FontStyle.medium.font(size: 18)
       ]
     )
     
@@ -119,7 +116,7 @@ extension SearchBarViewController {
   private func setupCancelButton() {
     cancelButton.setTitle(NSLocalizedString("Cancel", comment: "Search bar: close"), for: .normal)
     cancelButton.setTitleColor(.gray, for: .normal)
-    cancelButton.titleLabel?.font = UIFont.init(name: "CeraPro-Medium", size: 14)
+    cancelButton.titleLabel?.font = FontStyle.medium.font(size: 18)
     
     cancelButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 12, right: 0)
     view.addSubview(cancelButton)

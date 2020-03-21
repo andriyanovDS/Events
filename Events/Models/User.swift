@@ -10,7 +10,7 @@ import Foundation
 
 let fbDateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
 
-struct User {
+struct User: Codable {
   let id: String
   let firstName: String
   let lastName: String?
@@ -21,24 +21,10 @@ struct User {
   let location: Location?
   let work: String?
   let avatar: String?
-
-  func getUserDetails() -> [String: Any] {
-    var details: [String: Any?] = [
-      "firstName": firstName,
-      "lastName": lastName,
-      "description": description,
-      "gender": gender?.rawValue,
-      "work": work,
-      "avatar": avatar
-    ]
-
-    if let dateOfBirth = dateOfBirthToString() {
-      details["dateOfBirth"] = dateOfBirth
-    }
-
-    return details
-      .filter {(_, value) in value != nil }
-      .mapValues { $0! }
+  var fullName: String {
+    lastName
+      .map { "\(firstName) \($0)" }
+      .getOrElse(result: firstName)
   }
 
   private func dateOfBirthToString() -> String? {
@@ -51,7 +37,22 @@ struct User {
   }
 }
 
-enum Gender: String {
+extension User {
+  init(id: String, email: String) {
+    self.id = id
+    self.firstName = "Anonymous user"
+    self.email = email
+    self.lastName = nil
+    self.description = nil
+    self.gender = nil
+    self.dateOfBirth = nil
+    self.location = nil
+    self.work = nil
+    self.avatar = nil
+  }
+}
+
+enum Gender: String, Codable {
   case male = "Male", female = "Female", other = "Other"
 
   func translateValue() -> String {

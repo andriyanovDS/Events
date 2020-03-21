@@ -50,7 +50,7 @@ class TipSectionView: UIView {
   }
 
   private func setupExampleTextView() -> UITextView {
-    let attributes = [NSAttributedString.Key.font: UIFont.init(name: "CeraPro", size: 16)]
+    let attributes = [NSAttributedString.Key.font: UIFont.init(name: "Montserrat", size: 16)]
     let attrString = NSAttributedString(
       string: tip.example,
       attributes: attributes as [NSAttributedString.Key: Any]

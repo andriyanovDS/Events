@@ -9,61 +9,42 @@
 import Foundation
 import RxSwift
 import FirebaseAuth
-import FirebaseDatabase
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 private let changeUserS = PublishSubject<User>()
 
 let userObserver = Observable<User?>
   .create({ observer in
-    var reference = Database.database().reference()
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+    var db = Firestore.firestore()
     let userAuthChange = Auth.auth().addStateDidChangeListener { (_, fbUserOptional) in
       guard let fbUser = fbUserOptional else {
         observer.on(.next(nil))
         return
       }
-      reference
-        .child("users")
-        .child("details")
-        .child(fbUser.uid)
-        .observeSingleEvent(of: .value, with: { snapshot in
-          let value = snapshot.value as? NSDictionary
-          let genderValue =  value?["gender"] as? String
-          let firstName = value?["firstName"] as? String ?? ""
-          let lastName = value?["lastName"] as? String
-          let description = value?["description"] as? String
-          let dateOfBirth = value?["dateOfBirth"] as? String
-          let gender = genderValue.foldL(
-            none: { nil },
-            some: { v in Gender(rawValue: v)
-          })
-          let work = value?["work"] as? String
-          let avatar = value?["avatar"] as? String
-          let dateFormatter = DateFormatter()
-          dateFormatter.dateFormat = fbDateFormat
-          
-          let date = dateOfBirth.foldL(
-            none: { nil },
-            some: { dateString in
-              return dateFormatter.date(from: dateString)
+
+      db
+      .collection("user_details")
+      .document(fbUser.uid)
+      .getDocument { (document, error) in
+        let result = Result {
+          try document.flatMap {
+            try $0.data(as: User.self)
           }
-          )
-          
-          let user = User(
-            id: fbUser.uid,
-            firstName: firstName,
-            lastName: lastName,
-            description: description,
-            gender: gender,
-            dateOfBirth: date,
-            email: fbUser.email ?? "",
-            location: nil,
-            work: work,
-            avatar: avatar
-          )
+        }
+        switch result {
+        case .success(let user):
+          if let user = user {
+            observer.on(.next(user))
+          } else {
+            let user = User(id: fbUser.uid, email: fbUser.email ?? "")
+            observer.on(.next(user))
+          }
+        case .failure(let error):
+          let user = User(id: fbUser.uid, email: fbUser.email ?? "")
           observer.on(.next(user))
-        })
+        }
+      }
     }
     return Disposables.create {
       Auth.auth().removeStateDidChangeListener(userAuthChange)
@@ -80,20 +61,22 @@ let currentUserObserver: Observable<User> = Observable.merge(
   .share(replay: 1, scope: .forever)
 
 func updateUserProfile(user: User, onComplete: @escaping (Result<Void, Error>) -> Void) {
-  let reference = Database.database().reference()
-  
-  reference
-    .child("users")
-    .child("details")
-    .child(user.id)
-    .setValue(user.getUserDetails()) { error, _  in
-      if let error = error {
-        onComplete(.failure(error))
-        return
-      }
-      changeUserS.onNext(user)
-      let result: Result<Void, Error> = .success
-      onComplete(result)
+  do {
+    let db = Firestore.firestore()
+    let collectionRef = db.collection("user_details")
+    try collectionRef
+      .document(user.id)
+      .setData(from: user, completion: { error in
+        if let error = error {
+          onComplete(.failure(error))
+          return
+        }
+        changeUserS.onNext(user)
+        let result: Result<Void, Error> = .success
+        onComplete(result)
+      })
+  } catch {
+    onComplete(.failure(error))
   }
 }
 

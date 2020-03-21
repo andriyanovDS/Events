@@ -14,7 +14,7 @@ import CoreLocation
 
 class LocationSearchViewModel: Stepper {
   let steps = PublishRelay<Step>()
-  let apiService = GeolocationAPI()
+  let apiService = GeolocationAPI.shared
   var disposable: Disposable?
   weak var delegate: LocationSearchViewModelDelegate?
   

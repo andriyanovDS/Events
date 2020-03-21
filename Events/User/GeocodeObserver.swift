@@ -15,7 +15,7 @@ private let geocodeS = ReplaySubject<Geocode>.create(bufferSize: 1)
 let geocodeObserver = geocodeS.asObserver()
 
 func onChangeUserLocation(coordinate: CLLocationCoordinate2D) {
-  let apiService = GeolocationAPI()
+  let apiService = GeolocationAPI.shared
   let location = GetAddressByCoordinate(
     lng: coordinate.longitude,
     lat: coordinate.latitude

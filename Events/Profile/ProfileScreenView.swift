@@ -79,10 +79,13 @@ class ProfileScreenView: UIView {
   }
   
   private func setupUserInfoView() {
-    userNameLabel.style({ v in
-      v.textColor = UIColor.gray800()
-      v.font = UIFont.init(name: "CeraPro-Medium", size: 32)
-    })
+    styleText(
+      label: userNameLabel,
+      text: "",
+      size: 32,
+      color: .black,
+      style: .medium
+    )
     
     editButton.style({ v in
       let icon = UIImage(

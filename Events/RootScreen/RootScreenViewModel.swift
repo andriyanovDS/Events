@@ -7,96 +7,104 @@
 //
 
 import Foundation
-import RxSwift
-import RxCocoa
 import RxFlow
+import RxCocoa
+import Promises
+import UIKit
+import FirebaseFirestore
+import AVFoundation
 
-class RootScreenViewModel: Stepper {
+class RootScreenViewModel: Stepper, EventCellNodeDelegate {
   let steps = PublishRelay<Step>()
   weak var delegate: RootScreenViewModelDelegate?
-  private var selectedDateFrom: Date?
-  private var selectedDateTo: Date?
-  private var geocodeDisposable: Disposable?
-  var onChangeLocation: ((String) -> Void)? {
+  var eventList: [Event] { _eventList }
+  let loadUserAvatar: (_: String) -> Promise<UIImage>
+  private var authors: [String: User] = [:]
+  private lazy var firestoreDb = Firestore.firestore()
+  private var _eventList: [Event] = [] {
     didSet {
-      guard let onChangeLocation = onChangeLocation else {
-        return
-      }
-      geocodeDisposable = geocodeObserver.subscribe(
-        onNext: { geocode in
-          DispatchQueue.main.async {
-            onChangeLocation(geocode.shortLocationName())
-          }
-        },
-        onError: { [weak self] _ in
-          self?.disposeGeocodeSubscription()
-        },
-        onCompleted: { [weak self] in
-          self?.disposeGeocodeSubscription()
-        },
-        onDisposed: nil
+      delegate?.onAppendEventList(
+        Array(_eventList.dropFirst(oldValue.count))
       )
     }
   }
-  
-  deinit {
-    disposeGeocodeSubscription()
-  }
 
-  func openCalendar() {
-    steps.accept(EventStep.calendar(
-      withSelectedDates: getSelectedDates(),
-      onComplete: { selectedDates in
-        selectedDates.foldL(
-          none: {},
-          some: { dates in
-            self.setSelectedDates(dates: dates)
-            self.delegate?.onDatesDidChange(dates: self.selectedDatesToString())
+  init() {
+    loadUserAvatar = memoize(callback: { (v: String) -> Promise<UIImage> in
+      InternalImageCache.shared.loadImage(by: v)
+        .then { image -> UIImage in
+          let size = EventCellNode.Constants.authorImageSize
+          let renderer = UIGraphicsImageRenderer(size: size)
+          let resultImage = renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: size))
           }
-        )
+          return resultImage.makeRoundedImage(size: size, radius: size.width / 2.0)
+        }
+    })
+
+    loadEventList()
+  }
+
+  func author(id: String) -> User? {
+    authors[id]
+  }
+
+  private func loadAuthors(ids: [String]) -> Promise<[User]> {
+    Promise(on: .global()) { resolve, reject in
+      self.firestoreDb
+        .collection("user_details")
+        .whereField("id", in: ids)
+        .getDocuments(completion: { snapshot, error in
+          if let error = error {
+            reject(error)
+            return
+          }
+          do {
+            guard let documents = snapshot?.documents else {
+              print("Empty snapshot for user_details collection")
+              return
+            }
+            let users = try documents.compactMap {
+              try $0.data(as: User.self)
+            }
+            resolve(users)
+          } catch {
+            reject(error)
+          }
+        })
       }
-    ))
   }
 
-  func openLocationSearch() {
-    steps.accept(EventStep.locationSearch(onResult: { geocode in
-      onChangeUserLocation(geocode: geocode)
-    }))
+  private func loadEventList() {
+    firestoreDb
+      .collection("event-list")
+      .getDocuments(completion: {[weak self] snapshot, error in
+        guard let self = self else { return }
+        if let error = error {
+          // TODO: handle erorr on UI
+          print("error", error.localizedDescription)
+          return
+        }
+        guard let documents = snapshot?.documents else {
+          print("Empty snapshot for event-list collection")
+          return
+        }
+        Promise<Void>(on: .global()) {
+          let list = try documents.compactMap {
+             try $0.data(as: Event.self)
+           }
+          if !list.isEmpty {
+            let authors = try await(self.loadAuthors(ids: list.map { $0.author }))
+            authors.forEach { user in self.authors[user.id] = user }
+          }
+          DispatchQueue.main.async {
+            self._eventList = list
+          }
+        }
+    })
   }
-
-  func disposeGeocodeSubscription() {
-    geocodeDisposable?.dispose()
-    geocodeDisposable = nil
-  }
-  
-  private func selectedDatesToString() -> String? {
-    guard let dateFrom = selectedDateFrom else {
-      return nil
-    }
-    
-    let dateFormatter = DateFormatter()
-    dateFormatter.locale = Locale(identifier: "ru_RU")
-    dateFormatter.dateFormat = "dd MMM"
-    
-    let dateFromFormatted = dateFormatter.string(from: dateFrom)
-    
-    guard let dateTo = selectedDateTo else {
-      return dateFromFormatted
-    }
-    return "\(dateFromFormatted) - \(dateFormatter.string(from: dateTo))"
-  }
-
-  private func setSelectedDates(dates: SelectedDates) {
-    selectedDateFrom = dates.from
-    selectedDateTo = dates.to
-  }
-  
-  private func getSelectedDates() -> SelectedDates {
-    return SelectedDates(from: selectedDateFrom, to: selectedDateTo)
-  }
-  
 }
 
 protocol RootScreenViewModelDelegate: class {
-  func onDatesDidChange(dates: String?)
+  func onAppendEventList(_: [Event])
 }
