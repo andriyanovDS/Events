@@ -131,7 +131,11 @@ class CreateEventViewModel: Stepper {
 				}
 			)
       let descriptions = try await(descriptionsPromise)
+			let db = Firestore.firestore()
+      let document = db.collection("event-list").document()
+
       let event = Event(
+        id: document.documentID,
         name: name,
         author: user.uid,
         isPublic: self.isPublic!,
@@ -140,22 +144,20 @@ class CreateEventViewModel: Stepper {
           lng: geocode.geometry.location.lng,
           fullName: geocode.fullLocationName()
         ),
-				dates: self.dates,
+        dates: self.dates,
         duration: duration,
-				createDate: Date(),
+        createDate: Date(),
         categories: [categoryId],
         description: descriptions
       )
-			let db = Firestore.firestore()
-      try db
-				.collection("event-list")
-        .addDocument(from: event, completion: { error in
-           if let error = error {
-             print("Error", error)
-             return
-           }
-           self.eventDidCreated()
-         })
+
+      try document.setData(from: event, completion: { error in
+        if let error = error {
+          print("Error", error)
+          return
+        }
+        self.eventDidCreated()
+      })
     }
 		.always(on: .main, {
 			self.delegate?.hideProgress()

@@ -16,6 +16,8 @@ indirect enum EventStep: Step {
   case profile
   case saved
   case events
+	case event(event: Event, author: User, sharedImage: UIImage?)
+  case eventDidComplete
   case userDetails(user: User)
   case userDetailsDidComplete
   case createEvent
@@ -43,4 +45,5 @@ indirect enum EventStep: Step {
     onImageDidSelected: (Int) -> Void
   )
   case imagesPreviewDidComplete
+
 }

@@ -22,12 +22,21 @@ struct DescriptionWithAssets {
   let text: String
 }
 
-struct DescriptionWithImageUrls: Codable {
+struct DescriptionWithImageUrls: Codable, Equatable {
   let isMain: Bool
   let id: String
   let title: String?
   let imageUrls: [String]
   let text: String
+
+  static func == (lhs: DescriptionWithImageUrls, rhs: DescriptionWithImageUrls) -> Bool {
+    return lhs.id == rhs.id
+  }
+}
+
+struct EventUser: Codable {
+	let isFollow: Bool
+	let isJoin: Bool
 }
 
 class MutableDescription {
@@ -67,7 +76,8 @@ struct EventLocation: Codable {
   let fullName: String
 }
 
-struct Event: Codable {
+struct Event: Codable, Equatable {
+  let id: String
   let name: String
   let author: String
   let isPublic: Bool
@@ -77,10 +87,38 @@ struct Event: Codable {
   let createDate: Date
   let categories: [CategoryId]
   let description: [DescriptionWithImageUrls]
-	
-	static func format(date: Date) -> String {
-		let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = fbDateFormat
-    return dateFormatter.string(from: date)
-	}
+  var mainImageUrl: String? {
+    description
+      .first(where: { !$0.imageUrls.isEmpty })
+      .chain { $0.imageUrls.first }
+  }
+  var dateLabelText: String {
+    guard let firstDate = dates.first else {
+      return ""
+    }
+    let lastDateOption = dates.last
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm"
+    let startTime = dateFormatter.string(from: firstDate)
+    let currentYear = Calendar.current.component(.year, from: Date())
+    let labelWithOptionYear = {(date: Date) -> String in
+      let dateYear = Calendar.current.component(.year, from: date)
+      if dateYear == currentYear {
+        dateFormatter.dateFormat = "dd.MM"
+        return dateFormatter.string(from: date)
+      }
+      dateFormatter.dateFormat = "dd.MM YYYY"
+      return dateFormatter.string(from: date)
+    }
+    if dates.count > 1, let lastDate = lastDateOption {
+      return [firstDate, lastDate]
+        .map { labelWithOptionYear($0) }
+        .joined(separator: " - ") + " \(startTime)"
+    }
+    return "\(labelWithOptionYear(firstDate)) \(startTime)"
+  }
+
+  static func == (lhs: Self, rhs: Self) -> Bool {
+    return lhs.id == rhs.id
+  }
 }

@@ -9,18 +9,49 @@
 import UIKit
 import Hero
 import Stevia
+import Promises
 import CoreLocation
 import AsyncDisplayKit
 
-class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased {
+class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased, EventCellNodeDelegate {
   var viewModel: RootScreenViewModel! {
     didSet {
       viewModel.delegate = self
     }
   }
   private let locationManager = CLLocationManager()
+  let loadUserAvatar: (_: String) -> Promise<UIImage>
+  let loadEventImage: (_: String) -> Promise<UIImage>
 
   init() {
+    loadUserAvatar = memoize(callback: { (v: String) -> Promise<UIImage> in
+      InternalImageCache.shared.loadImage(by: v)
+        .then(on: .global()) { image -> UIImage in
+          let size = EventCellNode.Constants.authorImageSize
+          let renderer = UIGraphicsImageRenderer(size: size)
+          let resultImage = renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: size))
+          }
+          return resultImage.makeRoundedImage(size: size, radius: size.width / 2.0)
+        }
+    })
+
+    loadEventImage = memoize(callback: { (url: String) -> Promise<UIImage> in
+      InternalImageCache.shared.loadImage(by: url)
+      .then(on: .global()) {image -> UIImage in
+        let imageSize = EventCellNode.Constants.eventImageSize
+        let rect = AVMakeRect(aspectRatio: image.size, insideRect: CGRect(
+          x: 0, y: 0, width: imageSize.width, height: imageSize.height
+        ))
+        let size = CGSize(width: rect.width, height: rect.height)
+        UIGraphicsBeginImageContextWithOptions(size, true, 0)
+        image.draw(in: CGRect(origin: CGPoint.zero, size: size))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
+      }
+    })
+
     super.init(node: RootScreenNode())
   }
 
@@ -34,6 +65,7 @@ class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased
     locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
     locationManager.delegate = self
     node.eventTableNode.dataSource = self
+    node.eventTableNode.delegate = self
     initializeUserLocation()
   }
   
@@ -93,11 +125,20 @@ extension RootScreenViewController: ASTableDataSource {
     guard let author = viewModel.author(id: event.author) else {
       fatalError("Event must have author")
     }
-    let block = { () -> EventCellNode in
+    let block = {() -> EventCellNode in
       let cell = EventCellNode(event: event, author: author)
-      cell.delegate = self.viewModel
+      cell.delegate = self
       return cell
     }
     return block
+  }
+}
+
+extension RootScreenViewController: ASTableDelegate {
+  func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
+    guard let cell = tableNode.nodeForRow(at: indexPath) as? EventCellNode else {
+      return
+    }
+    viewModel.openEvent(at: indexPath.item, sharedImage: cell.eventImageNode.image)
   }
 }

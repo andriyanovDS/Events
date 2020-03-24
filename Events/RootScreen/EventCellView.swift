@@ -7,17 +7,18 @@
 //
 
 import Promises
+import Hero
 import SwiftIconFont
 import AsyncDisplayKit
 import func AVFoundation.AVMakeRect
 
 class EventCellNode: ASCellNode {
   weak var delegate: EventCellNodeDelegate?
+  let eventImageNode = ASImageNode()
   private let event: Event
   private let author: User
   private let nameTextNode = ASTextNode()
   private let imageBackgroundNode: ASDisplayNode
-  private let eventImageNode = ASImageNode()
   private let locationTextNode = ASTextNode()
   private let locationIconImageNode = ASImageNode()
   private let locationBackgroundNode: ASDisplayNode
@@ -25,42 +26,20 @@ class EventCellNode: ASCellNode {
   private let authorAvatarImageNode = ASImageNode()
   private let authorNameTextNode = ASTextNode()
   private let dateTextNode = ASTextNode()
-  private var imageSize: CGSize {
-    let scaleFactor = UIScreen.main.scale
-    let scale = CGAffineTransform(scaleX: scaleFactor, y: scaleFactor)
-    return CGSize(width: bounds.width, height: Constants.imageHeight).applying(scale)
-  }
-  private var eventDateLabelText: String {
-    guard let firstDate = event.dates.first else {
-      return ""
-    }
-    let lastDateOption = event.dates.last
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "HH:mm"
-    let startTime = dateFormatter.string(from: firstDate)
-    let currentYear = Calendar.current.component(.year, from: Date())
-    let labelWithOptionYear = {(date: Date) -> String in
-      let dateYear = Calendar.current.component(.year, from: date)
-      if dateYear == currentYear {
-        dateFormatter.dateFormat = "dd.MM"
-        return dateFormatter.string(from: date)
-      }
-      dateFormatter.dateFormat = "dd.MM YYYY"
-      return dateFormatter.string(from: date)
-    }
-    if let lastDate = lastDateOption {
-      return [firstDate, lastDate]
-        .map { labelWithOptionYear($0) }
-        .joined(separator: " - ") + " \(startTime)"
-    }
-    return "\(labelWithOptionYear(firstDate)) \(startTime)"
-  }
   
   struct Constants {
     static let authorImageSize = CGSize(width: 30, height: 30)
     static let cellPaddingHorizontal: CGFloat = 10
     static let imageHeight: CGFloat = 250.0
     static let imageWidth: CGFloat = UIScreen.main.bounds.width - (Constants.cellPaddingHorizontal * 2.0)
+    static var eventImageSize: CGSize = {
+      let scaleFactor = UIScreen.main.scale
+      let scale = CGAffineTransform(scaleX: scaleFactor, y: scaleFactor)
+      return CGSize(
+        width: UIScreen.main.bounds.width - Constants.cellPaddingHorizontal * 2,
+        height: Constants.imageHeight
+      ).applying(scale)
+    }()
   }
 
   init(event: Event, author: User) {
@@ -94,7 +73,6 @@ class EventCellNode: ASCellNode {
       style: .bold
     )
     eventImageNode.contentMode = .scaleAspectFill
-    eventImageNode.clipsToBounds = true
     eventImageNode.imageModificationBlock = { image in
       return image.makeRoundedImage(
         size: CGSize(width: Constants.imageWidth, height: Constants.imageHeight),
@@ -104,6 +82,14 @@ class EventCellNode: ASCellNode {
     setupLocationSection()
     setupAuthorSection()
     setupDateSection()
+  }
+
+  override func didLoad() {
+    super.didLoad()
+    eventImageNode.backgroundColor = .clear
+    authorAvatarImageNode.backgroundColor = .clear
+    eventImageNode.isCropEnabled = false
+    eventImageNode.view.hero.id = event.id
   }
 
   override func layout() {
@@ -217,7 +203,7 @@ class EventCellNode: ASCellNode {
   private func setupDateSection() {
     styleLayerBackedText(
       textNode: dateTextNode,
-      text: eventDateLabelText,
+      text: event.dateLabelText,
       size: 18,
       color: .black,
       style: .medium
@@ -245,31 +231,16 @@ class EventCellNode: ASCellNode {
   }
 
   private func loadMainImage() {
-    let urlOption = event.description
-      .first(where: { !$0.imageUrls.isEmpty })
-      .chain { $0.imageUrls.first }
-
-    guard let url = urlOption else { return }
-
-    InternalImageCache.shared.loadImage(by: url)
-      .then(on: .main) {[weak self] image -> UIImage? in
-        guard let self = self else { return nil }
-        let rect = AVMakeRect(aspectRatio: image.size, insideRect: CGRect(
-          x: 0, y: 0, width: self.imageSize.width, height: self.imageSize.height
-        ))
-        let size = CGSize(width: rect.width, height: rect.height)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { _ in
-          image.draw(in: CGRect(origin: .zero, size: size))
-        }
+    guard let url = event.mainImageUrl, let delegate = delegate else { return }
+    delegate
+      .loadEventImage(url)
+      .then {[weak self] image in
+        self?.setLoadedEventImage(image)
       }
-    .then {[weak self] image in
-      guard let image = image else { return }
-      self?.setLoadedEventImage(image)
-    }
   }
 }
 
 protocol EventCellNodeDelegate: class {
   var loadUserAvatar: (_: String) -> Promise<UIImage> { get }
+  var loadEventImage: (_: String) -> Promise<UIImage> { get }
 }

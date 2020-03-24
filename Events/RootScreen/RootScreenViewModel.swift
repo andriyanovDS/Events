@@ -14,11 +14,10 @@ import UIKit
 import FirebaseFirestore
 import AVFoundation
 
-class RootScreenViewModel: Stepper, EventCellNodeDelegate {
+class RootScreenViewModel: Stepper {
   let steps = PublishRelay<Step>()
   weak var delegate: RootScreenViewModelDelegate?
   var eventList: [Event] { _eventList }
-  let loadUserAvatar: (_: String) -> Promise<UIImage>
   private var authors: [String: User] = [:]
   private lazy var firestoreDb = Firestore.firestore()
   private var _eventList: [Event] = [] {
@@ -30,23 +29,21 @@ class RootScreenViewModel: Stepper, EventCellNodeDelegate {
   }
 
   init() {
-    loadUserAvatar = memoize(callback: { (v: String) -> Promise<UIImage> in
-      InternalImageCache.shared.loadImage(by: v)
-        .then { image -> UIImage in
-          let size = EventCellNode.Constants.authorImageSize
-          let renderer = UIGraphicsImageRenderer(size: size)
-          let resultImage = renderer.image { _ in
-            image.draw(in: CGRect(origin: .zero, size: size))
-          }
-          return resultImage.makeRoundedImage(size: size, radius: size.width / 2.0)
-        }
-    })
-
     loadEventList()
   }
 
   func author(id: String) -> User? {
     authors[id]
+  }
+
+  func openEvent(at index: Int, sharedImage: UIImage?) {
+		let event = eventList[index]
+		guard let author = authors[event.author] else { return }
+		steps.accept(EventStep.event(
+			event: event,
+			author: author,
+			sharedImage: sharedImage
+		))
   }
 
   private func loadAuthors(ids: [String]) -> Promise<[User]> {

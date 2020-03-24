@@ -30,7 +30,7 @@ class InternalImageCache {
 		static let defaultConfig = Config(countLimit: 100)
 	}
 	
-	func loadImage(by url: String) -> Promise<UIImage> {
+  func loadImage(by url: String, queue: DispatchQueue = .global()) -> Promise<UIImage> {
 		let hex = md5Hex(string: url)
 		if let cachedImage = imageCache.object(forKey: hex as AnyObject) as? UIImage {
 			return Promise(cachedImage)
@@ -38,13 +38,17 @@ class InternalImageCache {
 		if let cachedLoadingPromise = imageLoadingPromiseCache.object(forKey: hex as AnyObject) as? Promise<UIImage> {
 			return cachedLoadingPromise
 		}
-		let imageLoadingPromise = loadInternalImage(by: url, hex: hex)
-		imageLoadingPromiseCache.setObject(imageLoadingPromise, forKey: hex as AnyObject)
+		let imageLoadingPromise = loadInternalImage(by: url, hex: hex, queue: queue)
+    imageLoadingPromiseCache.setObject(imageLoadingPromise, forKey: hex as AnyObject)
 		return imageLoadingPromise
 	}
 
-	private func loadInternalImage(by url: String, hex: String) -> Promise<UIImage> {
-    Promise(on: .global()) {[weak self] resolve, reject in
+	private func loadInternalImage(
+    by url: String,
+    hex: String,
+    queue: DispatchQueue
+  ) -> Promise<UIImage> {
+    Promise(on: queue) {[weak self] resolve, reject in
 			guard let imageURL = URL(string: url) else {
 				reject(FailedToLoadInternalImage.incorrectUrl)
 				return

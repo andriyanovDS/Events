@@ -26,7 +26,7 @@ class HomeFlow: Flow {
       return navigateToHomeScreen()
     case .calendar(let withSelectedDates, let onComplete):
       return openCalendarScreen(selectedDates: withSelectedDates, onComplete: onComplete)
-    case .calendarDidComplete:
+    case .calendarDidComplete, .eventDidComplete:
       rootViewController.dismiss(animated: true, completion: nil)
       return .none
     case .locationSearch(let onResult):
@@ -34,6 +34,8 @@ class HomeFlow: Flow {
     case .locationSearchDidCompete:
       rootViewController.dismiss(animated: true, completion: nil)
       return .none
+    case .event(let event, let author, let sharedImage):
+			return openEvent(event, author: author, sharedImage: sharedImage)
     default:
       return .none
     }
@@ -73,5 +75,18 @@ class HomeFlow: Flow {
     viewController.modalTransitionStyle = .coverVertical
     rootViewController.present(viewController, animated: true, completion: nil)
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
+  }
+
+	private func openEvent(_ event: Event, author: User, sharedImage: UIImage?) -> FlowContributors {
+		let viewModel = EventViewModel(event: event, author: author)
+    let viewController = EventViewController(viewModel: viewModel, sharedImage: sharedImage)
+    viewController.modalPresentationStyle = .fullScreen
+    viewController.hero.isEnabled = true
+    rootViewController.present(viewController, animated: true)
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: viewModel,
+      allowStepWhenNotPresented: false
+      ))
   }
 }
