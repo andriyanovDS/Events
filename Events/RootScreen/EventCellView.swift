@@ -86,8 +86,9 @@ class EventCellNode: ASCellNode {
 
   override func didLoad() {
     super.didLoad()
-    eventImageNode.backgroundColor = .clear
-    authorAvatarImageNode.backgroundColor = .clear
+		imageBackgroundNode.backgroundColor = .clear
+		locationBackgroundNode.backgroundColor = .clear
+		authorAvatarBackgroundView.backgroundColor = .clear
     eventImageNode.isCropEnabled = false
     eventImageNode.view.hero.id = event.id
   }
