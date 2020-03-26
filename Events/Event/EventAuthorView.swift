@@ -71,9 +71,10 @@ class EventAuthorView: UIStackView {
 			width: Constants.avatarImageSize,
 			height: Constants.avatarImageSize
 		)
-		delegate.loadImage(url: url, with: size)
-			.then {[weak self] image in
-				self?.avatarImageView.image = image
-			}
+		avatarImageView.fromExternalUrl(
+			url,
+			withResizeTo: size,
+			loadOn: delegate.loadImageQueue
+		)
 	}
 }

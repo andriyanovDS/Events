@@ -19,6 +19,14 @@ class EventView: UIView {
   let eventImageView = UIImageView()
 	let scrollView = UIScrollView()
 	let footerView: EventFooterView
+	let loadImageQueue = DispatchQueue(
+    label: "com.event.eventImageLoad",
+    qos: .default,
+    attributes: [.concurrent],
+    autoreleaseFrequency: .inherit,
+    target: nil
+  )
+	let loadImageSemaphore = DispatchSemaphore(value: 3)
 	private let contentView = UIView()
 	private let actionsStackView = UIStackView()
 	private let actionsBackgroundView = UIView()
@@ -31,14 +39,6 @@ class EventView: UIView {
   private let infoSections: [EventInfoSection]
 	private let descriptionsStackView = UIStackView()
   private let descriptionViews: [EventDescriptionView]
-  private let imageLoadQueue = DispatchQueue(
-    label: "com.event.imageLoad",
-    qos: .default,
-    attributes: [.concurrent],
-    autoreleaseFrequency: .inherit,
-    target: nil
-  )
-  private let loadImageSemaphore = DispatchSemaphore(value: 3)
 	private let animator = UIViewPropertyAnimator(duration: 1.0, curve: .linear)
   private var imageSize: CGSize = {
     let scaleFactor = UIScreen.main.scale
@@ -277,34 +277,12 @@ class EventView: UIView {
   }
 
   private func loadEventImage(url: String) {
-		loadImage(url: url, with: imageSize)
-      .then(on: .main) {[weak self] imageOption in
-        guard let image = imageOption else { return }
-        self?.eventImageView.image = image
-      }
+		eventImageView.fromExternalUrl(
+			url,
+			withResizeTo: imageSize,
+			loadOn: loadImageQueue
+		)
   }
-}
-
-extension EventView: EventViewSectionDelegate {
-	func loadImage(url: String, with size: CGSize) -> Promise<UIImage?> {
-		 Promise<UIImage?>(on: imageLoadQueue) {[weak self] () -> UIImage? in
-			 guard let self = self else { return nil }
-			 self.loadImageSemaphore.wait()
-			 let originImage = try await(InternalImageCache.shared.loadImage(by: url, queue: self.imageLoadQueue))
-			 let rect = AVMakeRect(aspectRatio: originImage.size, insideRect: CGRect(
-				 x: 0, y: 0, width: size.width, height: size.height
-			 ))
-			 let aspectSize = CGSize(width: rect.width, height: rect.height)
-			 UIGraphicsBeginImageContextWithOptions(aspectSize, true, 0)
-			 originImage.draw(in: CGRect(origin: CGPoint.zero, size: aspectSize))
-			 let newImage = UIGraphicsGetImageFromCurrentImageContext()
-			 UIGraphicsEndImageContext()
-			 return newImage!
-		 }
-		 .always(on: imageLoadQueue) {[weak self] in
-			 self?.loadImageSemaphore.signal()
-		 }
-	 }
 }
 
 extension EventView: EventDescriptionDelegate {
@@ -363,5 +341,6 @@ protocol EventNodeDataSource: class {
 }
 
 protocol EventViewSectionDelegate: class {
-	func loadImage(url: String, with size: CGSize) -> Promise<UIImage?>
+	var loadImageQueue: DispatchQueue { get }
+	var loadImageSemaphore: DispatchSemaphore { get }
 }

@@ -11,11 +11,7 @@ import Stevia
 import Promises
 
 class EventDescriptionView: UIStackView {
-	weak var delegate: EventDescriptionDelegate? {
-		didSet {
-			loadDescriptionImages()
-		}
-	}
+	weak var delegate: EventDescriptionDelegate?
   var isExpanded: Bool {
     didSet {
       if isExpanded == oldValue { return }
@@ -24,6 +20,7 @@ class EventDescriptionView: UIStackView {
   }
   let eventDescription: DescriptionWithImageUrls
   let titleButton = UIButtonScaleOnPress()
+	private var isImageLoadingDidStarted: Bool = false
   private let descriptionLabel = UILabel()
   private var imageViews: [UIImageView]
   private let imageSizes = [
@@ -131,6 +128,9 @@ class EventDescriptionView: UIStackView {
 	}
 	
 	private func toggleExpand() {
+		if isExpanded {
+			attemptToLoadDescriptionImages()
+		}
 		UIView.animate(
 			withDuration: 0.4,
 			animations: {
@@ -146,21 +146,24 @@ class EventDescriptionView: UIStackView {
     return imageSizes[index % imageSizes.count]
   }
 
-  private func loadDescriptionImages() {
+  private func attemptToLoadDescriptionImages() {
+		if isImageLoadingDidStarted { return }
 		if eventDescription.isMain { return }
     guard let delegate = delegate else { return }
+		isImageLoadingDidStarted = true
     eventDescription.imageUrls
       .enumerated()
       .forEach { (index, url) in
-        delegate.loadImage(url: url, with: Constants.largeImageSize)
-          .then {[weak self] image in
-            self?.imageViews[index].image = image
-          }
-        .catch { error in print(error) }
+				imageViews[index].fromExternalUrl(
+					url,
+					withResizeTo: Constants.largeImageSize,
+					loadOn: delegate.loadImageQueue,
+					semaphore: delegate.loadImageSemaphore
+				)
       }
   }
 }
 
-protocol EventDescriptionDelegate: class, EventViewSectionDelegate {
+protocol EventDescriptionDelegate: EventViewSectionDelegate {
   func scrollTo(description: DescriptionWithImageUrls)
 }
