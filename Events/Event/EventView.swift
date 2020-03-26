@@ -77,6 +77,11 @@ class EventView: UIView {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+	
+	deinit {
+		animator.stopAnimation(true)
+		animator.finishAnimation(at: .current)
+	}
 
   struct Constants {
 		static let actionsStackHeight: CGFloat = 60.0
@@ -86,10 +91,12 @@ class EventView: UIView {
   }
 
   private func setupView(sharedImage: UIImage?) {
-    backgroundColor = .white
+		backgroundColor = .white
+		isOpaque = false
+		layer.cornerRadius = 15
+		clipsToBounds = true
     infoBackgroundView.backgroundColor = .black
 		actionsBackgroundView.backgroundColor = .clear
-		scrollView.isDirectionalLockEnabled = true
     eventImageView.image = sharedImage
 		separatorView.backgroundColor = .white
 		eventImageView.contentMode = .scaleAspectFill
@@ -317,6 +324,11 @@ extension EventView: EventDescriptionDelegate {
 
 extension EventView: UIScrollViewDelegate {
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		if let isInProgress = dataSource?.isCloseAnimationInProgress, isInProgress {
+			scrollView.contentOffset.y = -safeAreaInsets.top
+			return
+		}
+		
 		let offsetY = scrollView.contentOffset.y
 		let relativeDistance = abs(offsetY / Constants.eventImageHeight)
 		let fractionComplete = min(max(0, relativeDistance), 1)
@@ -324,7 +336,6 @@ extension EventView: UIScrollViewDelegate {
 		if animator.fractionComplete < Constants.actionStackAnimationDelayFactor,
 			fractionComplete >= Constants.actionStackAnimationDelayFactor {
 			closeButtonView.setTitleColor(.black, for: .normal)
-			print("state", dataSource?.userFollowEventState)
 			if let dataSource = dataSource,
 				dataSource.userFollowEventState == .notFollowed {
 				followButtonView.setTitleColor(.black, for: .normal)
@@ -347,6 +358,7 @@ extension EventView: UIScrollViewDelegate {
 protocol EventNodeDataSource: class {
   var event: Event { get }
 	var author: User { get }
+	var isCloseAnimationInProgress: Bool { get }
 	var userFollowEventState: EventViewController.FollowEventState { get }
 }
 

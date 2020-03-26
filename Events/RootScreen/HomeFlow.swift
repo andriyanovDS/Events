@@ -80,7 +80,8 @@ class HomeFlow: Flow {
 	private func openEvent(_ event: Event, author: User, sharedImage: UIImage?) -> FlowContributors {
 		let viewModel = EventViewModel(event: event, author: author)
     let viewController = EventViewController(viewModel: viewModel, sharedImage: sharedImage)
-    viewController.modalPresentationStyle = .fullScreen
+    viewController.modalPresentationStyle = .overFullScreen
+		viewController.isModalInPopover = true
     viewController.hero.isEnabled = true
     rootViewController.present(viewController, animated: true)
     return .one(flowContributor: .contribute(

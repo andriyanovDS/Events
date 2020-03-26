@@ -25,6 +25,7 @@ class EventViewModel: Stepper, EventNodeDataSource {
 
   let event: Event
 	let author: User
+	var isCloseAnimationInProgress: Bool = false
 	var userFollowEventState: EventViewController.FollowEventState = .inProgress
 
 	init(event: Event, author: User) {

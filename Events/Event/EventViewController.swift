@@ -14,6 +14,7 @@ class EventViewController: UIViewController {
   unowned var viewModel: EventViewModel
   let sharedImage: UIImage?
   private var eventView: EventView?
+	private var originalViewCenter: CGPoint = CGPoint.zero
 
   init(viewModel: EventViewModel, sharedImage: UIImage?) {
     self.viewModel = viewModel
@@ -54,6 +55,11 @@ class EventViewController: UIViewController {
 			value ? .followed : .notFollowed
 		}
 	}
+	
+	struct Constants {
+		static let maxScale: CGFloat = 0.6
+		static let closeAnimationBound: CGFloat = 75.0
+	}
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -76,6 +82,10 @@ class EventViewController: UIViewController {
 			action: #selector(onPressFollowEventButton),
 			for: .touchUpInside
 		)
+		eventView.scrollView.panGestureRecognizer.addTarget(
+			self,
+			action: #selector(handleScrollViewPanGesture)
+		)
     view = eventView
     self.eventView = eventView
 		viewModel.userEvent()
@@ -85,7 +95,6 @@ class EventViewController: UIViewController {
 					eventUser.isFollow
 				)
 				self.viewModel.userFollowEventState = followState
-				print("set initial value", followState)
 				self.eventView?.followButtonView.setTitleColor(followState.iconColor, for: .normal)
 				self.eventView?.followButtonView.setTitle(followState.iconName, for: .normal)
 				self.eventView?.footerView.joinButtonState = eventUser.isJoin
@@ -93,6 +102,63 @@ class EventViewController: UIViewController {
 					: .notJoined
 			}
   }
+	
+	private func scrollViewPanGestureEnded(translation: CGPoint) {
+		viewModel.isCloseAnimationInProgress = false
+		if translation.y > Constants.closeAnimationBound {
+			
+			view.topConstraint?.constant = (view.topConstraint?.constant ?? 0) + translation.y
+			view.rightConstraint?.constant = (view.rightConstraint?.constant ?? 0) + translation.x
+			view.leftConstraint?.constant = (view.leftConstraint?.constant ?? 0) + translation.x
+
+			onClose()
+			return
+		}
+
+		UIView.animate(
+			withDuration: 0.3,
+			animations: {
+				self.view.center = CGPoint(
+					x: self.originalViewCenter.x,
+					y: self.originalViewCenter.y
+				)
+				self.view.transform = .identity
+				self.view.layoutIfNeeded()
+			}
+		)
+	}
+	
+	@objc private func handleScrollViewPanGesture(_ recognizer: UIPanGestureRecognizer) {
+		guard let scrollView = eventView?.scrollView else { return }
+		let translation = recognizer.translation(in: scrollView)
+		switch recognizer.state {
+		case .began:
+			if scrollView.contentOffset.y + view.safeAreaInsets.top < 0 {
+				viewModel.isCloseAnimationInProgress = true
+				originalViewCenter = view.center
+			}
+		case .changed:
+			if viewModel.isCloseAnimationInProgress {
+				let translation = recognizer.translation(in: scrollView)
+				view.center = CGPoint(
+					x: self.originalViewCenter.x + translation.x,
+					y: self.originalViewCenter.y + translation.y
+				)
+				let scale = max(
+					Constants.maxScale,
+					1 - abs(translation.y / UIScreen.main.bounds.height * 0.5)
+				)
+				view.transform = CGAffineTransform(scaleX: scale, y: scale)
+			}
+			return
+		case .ended:
+			if viewModel.isCloseAnimationInProgress {
+				scrollViewPanGestureEnded(translation: translation)
+			}
+		default:
+			return
+		}
+	}
 	
 	@objc private func onPressJoinEventButton() {
 		let currentButtonState = eventView!.footerView.joinButtonState
