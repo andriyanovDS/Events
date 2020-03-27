@@ -64,7 +64,7 @@ class GeolocationAPI: APIClientBase {
       "input": input
     ]
     let endpoint = self.endpoint(for: "place/autocomplete/json", params: params)
-    let task = session.dataTask(with: URLRequest(url: endpoint)) { data, _, error in
+    let task = session.dataTask(with: request(for: endpoint)) { data, _, error in
       if let requestError = error {
         completion(.failure(.badRequest(requestError.localizedDescription)))
         return
@@ -89,7 +89,7 @@ class GeolocationAPI: APIClientBase {
     requestParams["key"] = GOOGLE_API_KEY
     requestParams["language"] = "en"
     let endpoint = self.endpoint(for: "geocode/json", params: requestParams)
-    let task = session.dataTask(with: URLRequest(url: endpoint)) { data, _, error in
+    let task = session.dataTask(with: request(for: endpoint)) { data, _, error in
       if let requestError = error {
         completion(.failure(.badRequest(requestError.localizedDescription)))
         return
@@ -105,4 +105,12 @@ class GeolocationAPI: APIClientBase {
     }
     task.resume()
   }
+	
+	private func request(for url: URL) -> URLRequest {
+		var request = URLRequest(url: url)
+		if let identifier = Bundle.main.bundleIdentifier {
+			request.addValue(identifier, forHTTPHeaderField: "X-Ios-Bundle-Identifier")
+		}
+		return request
+	}
 }
