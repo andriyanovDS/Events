@@ -48,8 +48,8 @@ class TabBarFlow: Flow {
         let profileScreenTabBarItem = self.getTabBarItem(forState: .profile)
 
         homeVC.tabBarItem = rootScreenTabBarItem
-        eventsVC.tabBarItem = savedScreenTabBarItem
-        savedVC.tabBarItem = eventsScreenTabBarItem
+        eventsVC.tabBarItem = eventsScreenTabBarItem
+        savedVC.tabBarItem = savedScreenTabBarItem
         profileVC.tabBarItem = profileScreenTabBarItem
         
         self.rootViewController.setViewControllers([homeVC, savedVC, eventsVC, profileVC], animated: false)

@@ -69,8 +69,8 @@ class EventViewController: UIViewController {
   private func setupView() {
     let eventView = EventView(sharedImage: sharedImage, dataSource: viewModel)
     eventView.eventImageView.hero.id = viewModel.event.id
-    eventView.eventImageView.hero.modifiers = [.duration(0.4)]
-    eventView.scrollView.hero.modifiers = [.translate(y: 100), .fade, .duration(0.4)]
+		eventView.eventImageView.hero.modifiers = [.duration(0.4)]
+		eventView.scrollView.hero.modifiers = [.translate(y: 100), .fade, .duration(0.4)]
     eventView.closeButtonView.addTarget(self, action: #selector(onClose), for: .touchUpInside)
 		eventView.footerView.joinEventButton.addTarget(
 			self,
@@ -110,7 +110,7 @@ class EventViewController: UIViewController {
 			view.topConstraint?.constant = (view.topConstraint?.constant ?? 0) + translation.y
 			view.rightConstraint?.constant = (view.rightConstraint?.constant ?? 0) + translation.x
 			view.leftConstraint?.constant = (view.leftConstraint?.constant ?? 0) + translation.x
-
+			eventView?.scrollView.hero.modifiers = nil
 			onClose()
 			return
 		}

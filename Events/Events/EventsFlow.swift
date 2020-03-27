@@ -11,10 +11,14 @@ import RxFlow
 
 class EventsFlow: Flow {
   var root: Presentable {
-    return rootViewContoller
+    return rootNavigationController
   }
 
-  private var rootViewContoller = UINavigationController()
+ private lazy var rootNavigationController: UINavigationController = {
+    let controller = UINavigationController()
+    controller.setNavigationBarHidden(true, animated: false)
+    return controller
+  }()
 
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? EventStep else {
@@ -23,14 +27,41 @@ class EventsFlow: Flow {
     switch step {
     case .events:
       return navigateToEventsScreen()
+		case .event(let event, let author, let sharedImage):
+			return navigateToEvent(
+				event,
+				author: author,
+				sharedImage: sharedImage
+			)
+		case .eventDidComplete:
+			rootNavigationController.dismiss(animated: true, completion: nil)
+			return .none
     default:
       return .none
     }
   }
 
   private func navigateToEventsScreen() -> FlowContributors {
-    let viewController = EventsViewController()
-    rootViewContoller.pushViewController(viewController, animated: false)
-    return .none
+		let viewModel = EventsViewModel()
+		let viewController = EventsViewController.instantiate(with: viewModel)
+    rootNavigationController.pushViewController(viewController, animated: false)
+		return .one(flowContributor: .contribute(
+			withNextPresentable: viewController,
+			withNextStepper: viewModel
+			))
+  }
+	
+	private func navigateToEvent(_ event: Event, author: User, sharedImage: UIImage?) -> FlowContributors {
+		let viewModel = EventViewModel(event: event, author: author)
+    let viewController = EventViewController(viewModel: viewModel, sharedImage: sharedImage)
+    viewController.modalPresentationStyle = .overFullScreen
+		viewController.isModalInPopover = true
+    viewController.hero.isEnabled = true
+    rootNavigationController.present(viewController, animated: true)
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: viewModel,
+      allowStepWhenNotPresented: false
+      ))
   }
 }

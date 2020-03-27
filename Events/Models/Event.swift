@@ -35,6 +35,8 @@ struct DescriptionWithImageUrls: Codable, Equatable {
 }
 
 struct EventUser: Codable {
+	let eventId: String
+	let userId: String
 	let isFollow: Bool
 	let isJoin: Bool
 }

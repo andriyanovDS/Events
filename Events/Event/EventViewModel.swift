@@ -43,8 +43,15 @@ class EventViewModel: Stepper, EventNodeDataSource {
 			.document(event.id)
 			.collection("users")
 			.document(uid)
+		let eventId = event.id
+		let userId = uid
 		return Promise<EventUser> { resolve, _ in
-			let failedEventUser = EventUser(isFollow: false, isJoin: false)
+			let failedEventUser = EventUser(
+				eventId: eventId,
+				userId: userId,
+				isFollow: false,
+				isJoin: false
+			)
 			reference.getDocument(completion: { snapshot, error in
 				if let error = error {
 					print("Failed to get user event document \(error.localizedDescription)")
@@ -78,14 +85,17 @@ class EventViewModel: Stepper, EventNodeDataSource {
 			.collection("user_details")
 			.document(uid)
 			.collection("events")
-			.document(uid)
+			.document(event.id)
+		let eventId = event.id
 		return Promise<Void>(on: .global(qos: .default)) {
 			_ = try await(self.updateUserEventInFirestore(
 				value: value,
+				eventId: eventId,
 				reference: eventListReference
 			))
 			_ = try await(self.updateUserEventInFirestore(
 				value: value,
+				eventId: eventId,
 				reference: userDetailsReference
 			))
 		}
@@ -93,14 +103,21 @@ class EventViewModel: Stepper, EventNodeDataSource {
 	
 	private func updateUserEventInFirestore(
 		value: [String: Bool],
+		eventId: String,
 		reference: DocumentReference
 	) -> Promise<Any?> {
-		wrap(on: .global(qos: .default)) { handler in
+		let userId = self.uid
+		return wrap(on: .global(qos: .default)) { handler in
 			self.db.runTransaction({(transaction, errorPointer) in
 				do {
 					let document = try transaction.getDocument(reference)
 					if !document.exists {
-						let user = EventUser(isFollow: false, isJoin: true)
+						let user = EventUser(
+							eventId: eventId,
+							userId: userId,
+							isFollow: false,
+							isJoin: true
+						)
 						try reference.setData(from: user)
 						return nil
 					}

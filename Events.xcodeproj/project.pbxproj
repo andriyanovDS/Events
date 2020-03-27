@@ -21,7 +21,13 @@
 		0A5CD06A2405DC9F00BC9B2C /* LoginTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5CD0692405DC9F00BC9B2C /* LoginTextField.swift */; };
 		0AA421812415A74400554121 /* DateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421802415A74400554121 /* DateViewModel.swift */; };
 		0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421842416351000554121 /* DescriptionCellButton.swift */; };
-		0AE899DE242CE63800EF427E /* UIImage+fromExternalUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE899DD242CE63800EF427E /* UIImage+fromExternalUrl.swift */; };
+		0AE899DE242CE63800EF427E /* UIImageView+fromExternalUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE899DD242CE63800EF427E /* UIImageView+fromExternalUrl.swift */; };
+		0AE899E0242D194C00EF427E /* EventsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE899DF242D194C00EF427E /* EventsNode.swift */; };
+		0AEE5CF4242D2337007A2D10 /* EventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE5CF3242D2337007A2D10 /* EventsViewModel.swift */; };
+		0AEE5CF6242D2E82007A2D10 /* UserEventCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE5CF5242D2E82007A2D10 /* UserEventCellNode.swift */; };
+		0AEE5CF8242D4B37007A2D10 /* SectionHeaderCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE5CF7242D4B37007A2D10 /* SectionHeaderCellNode.swift */; };
+		0AEE5CFA242D5CA5007A2D10 /* EventsCollectionNodeFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE5CF9242D5CA4007A2D10 /* EventsCollectionNodeFlowLayout.swift */; };
+		0AEE5CFC242E73FE007A2D10 /* ASImageNode+loadImageFromExternalUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE5CFB242E73FE007A2D10 /* ASImageNode+loadImageFromExternalUrl.swift */; };
 		0AEF8D272413B14B00BBB45D /* CreateEventFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEF8D262413B14B00BBB45D /* CreateEventFlow.swift */; };
 		0AFA14AD2402BE4400F07E82 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFA14AC2402BE4400F07E82 /* LoginView.swift */; };
 		0AFA14AF240518CB00F07E82 /* ObservableType+Nwise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFA14AE240518CB00F07E82 /* ObservableType+Nwise.swift */; };
@@ -189,7 +195,13 @@
 		0A5CD0692405DC9F00BC9B2C /* LoginTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextField.swift; sourceTree = "<group>"; };
 		0AA421802415A74400554121 /* DateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewModel.swift; sourceTree = "<group>"; };
 		0AA421842416351000554121 /* DescriptionCellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCellButton.swift; sourceTree = "<group>"; };
-		0AE899DD242CE63800EF427E /* UIImage+fromExternalUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+fromExternalUrl.swift"; sourceTree = "<group>"; };
+		0AE899DD242CE63800EF427E /* UIImageView+fromExternalUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+fromExternalUrl.swift"; sourceTree = "<group>"; };
+		0AE899DF242D194C00EF427E /* EventsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsNode.swift; sourceTree = "<group>"; };
+		0AEE5CF3242D2337007A2D10 /* EventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewModel.swift; sourceTree = "<group>"; };
+		0AEE5CF5242D2E82007A2D10 /* UserEventCellNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEventCellNode.swift; sourceTree = "<group>"; };
+		0AEE5CF7242D4B37007A2D10 /* SectionHeaderCellNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderCellNode.swift; sourceTree = "<group>"; };
+		0AEE5CF9242D5CA4007A2D10 /* EventsCollectionNodeFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCollectionNodeFlowLayout.swift; sourceTree = "<group>"; };
+		0AEE5CFB242E73FE007A2D10 /* ASImageNode+loadImageFromExternalUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ASImageNode+loadImageFromExternalUrl.swift"; sourceTree = "<group>"; };
 		0AEF8D262413B14B00BBB45D /* CreateEventFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventFlow.swift; sourceTree = "<group>"; };
 		0AFA14AC2402BE4400F07E82 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		0AFA14AE240518CB00F07E82 /* ObservableType+Nwise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ObservableType+Nwise.swift"; sourceTree = "<group>"; };
@@ -581,7 +593,12 @@
 			isa = PBXGroup;
 			children = (
 				7467B6E122D50AEE00A1BFE9 /* EventsViewController.swift */,
+				0AEE5CF3242D2337007A2D10 /* EventsViewModel.swift */,
+				0AE899DF242D194C00EF427E /* EventsNode.swift */,
+				0AEE5CF5242D2E82007A2D10 /* UserEventCellNode.swift */,
 				74E5DAD3232999F500E1557D /* EventsFlow.swift */,
+				0AEE5CF7242D4B37007A2D10 /* SectionHeaderCellNode.swift */,
+				0AEE5CF9242D5CA4007A2D10 /* EventsCollectionNodeFlowLayout.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -750,7 +767,8 @@
 				0AFA14AE240518CB00F07E82 /* ObservableType+Nwise.swift */,
 				74D3A42224239A6600E6CDF4 /* UIImage+makeRoundedImage.swift */,
 				74D3A42424239FFD00E6CDF4 /* UIView+shadow.swift */,
-				0AE899DD242CE63800EF427E /* UIImage+fromExternalUrl.swift */,
+				0AE899DD242CE63800EF427E /* UIImageView+fromExternalUrl.swift */,
+				0AEE5CFB242E73FE007A2D10 /* ASImageNode+loadImageFromExternalUrl.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -981,11 +999,13 @@
 				74F0F5732300B55A00170C6C /* HintPopupVC.swift in Sources */,
 				74697FCE22D2022700D5B5F4 /* CalendarViewModel.swift in Sources */,
 				74E882F02426BC6600DAF4B4 /* EventView.swift in Sources */,
+				0AE899E0242D194C00EF427E /* EventsNode.swift in Sources */,
 				74F0F5772300B7EC00170C6C /* HintPopupViewModel.swift in Sources */,
 				7478F50622F6251900A43F52 /* LocationView.swift in Sources */,
 				74E2A2872337774200629C36 /* ImagePickerFlow.swift in Sources */,
 				0A4F3F79241837300003F4C1 /* SkeletonView.swift in Sources */,
 				0A52F853242ABB0E00CACEAF /* EventFooterView.swift in Sources */,
+				0AEE5CF4242D2337007A2D10 /* EventsViewModel.swift in Sources */,
 				748E0B0622DA132F00B061C7 /* GeocodeObserver.swift in Sources */,
 				0A5CD06A2405DC9F00BC9B2C /* LoginTextField.swift in Sources */,
 				74A1AE2122D5DF0300C39525 /* OptionalExtension.swift in Sources */,
@@ -1055,6 +1075,7 @@
 				748E0B2322DB87AA00B061C7 /* LocationItem.swift in Sources */,
 				74697FC822D11F7F00D5B5F4 /* UIViewExtension+addBorder.swift in Sources */,
 				74A1AE1F22D5D18800C39525 /* keyboardAttach.swift in Sources */,
+				0AEE5CF6242D2E82007A2D10 /* UserEventCellNode.swift in Sources */,
 				7423345E2413CF3700B46037 /* DateViewController.swift in Sources */,
 				742334652415627300B46037 /* CategoryViewModel.swift in Sources */,
 				0A4919A2241E9CEC0068BDFE /* StartViewController.swift in Sources */,
@@ -1067,6 +1088,7 @@
 				74F0F56C2300A79000170C6C /* TextFormattingTipsVC.swift in Sources */,
 				7408541F2302030900220B23 /* TipSectionView.swift in Sources */,
 				742334592413CB7400B46037 /* LocationViewController.swift in Sources */,
+				0AEE5CFC242E73FE007A2D10 /* ASImageNode+loadImageFromExternalUrl.swift in Sources */,
 				0A48949023F9C9050035A4A4 /* InternalImageCache.swift in Sources */,
 				746F0B6022FCDB0800F7301D /* EventDurationRange.swift in Sources */,
 				746E10712313E56A00B5B19D /* ImagePickerActionsView.swift in Sources */,
@@ -1097,6 +1119,7 @@
 				74F0F56723008BAC00170C6C /* HintView.swift in Sources */,
 				74697FCA22D200A900D5B5F4 /* Month.swift in Sources */,
 				745243BF22CF965500C930C8 /* SearchBarUITextField.swift in Sources */,
+				0AEE5CF8242D4B37007A2D10 /* SectionHeaderCellNode.swift in Sources */,
 				74E882F42428C09300DAF4B4 /* EventInfoSection.swift in Sources */,
 				74DAFA452353701300331369 /* ImagePickerCollectionViewLayout.swift in Sources */,
 				748E0B1422DA26BC00B061C7 /* GeolocationAPI.swift in Sources */,
@@ -1114,11 +1137,12 @@
 				74E882F62428E13900DAF4B4 /* ButtonNodeScaledOnPress.swift in Sources */,
 				74D48E6D232994FB00FB3012 /* SavedFlow.swift in Sources */,
 				74E5DAD22329974D00E1557D /* ViewModelBased.swift in Sources */,
-				0AE899DE242CE63800EF427E /* UIImage+fromExternalUrl.swift in Sources */,
+				0AE899DE242CE63800EF427E /* UIImageView+fromExternalUrl.swift in Sources */,
 				7430406D24211010007F50A2 /* ImageCache.swift in Sources */,
 				742334632415626800B46037 /* CategoryViewController.swift in Sources */,
 				7478F50422F60D2700A43F52 /* Prediction.swift in Sources */,
 				7453637C22EE4940004C9717 /* ProfileActionSection.swift in Sources */,
+				0AEE5CFA242D5CA5007A2D10 /* EventsCollectionNodeFlowLayout.swift in Sources */,
 				0A52F84F242AA3AC00CACEAF /* EventAuthorView.swift in Sources */,
 				0A4919A6241E9D030068BDFE /* StartView.swift in Sources */,
 				746697482326FDEE00406CD8 /* HomeFlow.swift in Sources */,
