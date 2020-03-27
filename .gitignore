@@ -13,6 +13,7 @@ iOSInjectionProject/
 ## User settings
 xcuserdata/
 
+**/.idea/*
 .DS_Store
 .AppleDouble
 .LSOverride

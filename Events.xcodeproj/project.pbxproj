@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A16310C242EB72E00936EB0 /* environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A16310B242EB72E00936EB0 /* environment.swift */; };
+		0A163111242F842200936EB0 /* environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A163110242F842200936EB0 /* environment.swift */; };
 		0A48948C23F9C10C0035A4A4 /* UnsplashResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948B23F9C10C0035A4A4 /* UnsplashResponse.swift */; };
 		0A48948E23F9C2370035A4A4 /* UnspashAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948D23F9C2370035A4A4 /* UnspashAPI.swift */; };
 		0A48949023F9C9050035A4A4 /* InternalImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948F23F9C9050035A4A4 /* InternalImageCache.swift */; };
@@ -183,7 +183,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0A16310B242EB72E00936EB0 /* environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = environment.swift; sourceTree = "<group>"; };
+		0A163110242F842200936EB0 /* environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = environment.swift; sourceTree = "<group>"; };
+		0A163114242F859A00936EB0 /* addEnvironment.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = addEnvironment.sh; path = BuildPhases/addEnvironment.sh; sourceTree = SOURCE_ROOT; };
 		0A48948B23F9C10C0035A4A4 /* UnsplashResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashResponse.swift; sourceTree = "<group>"; };
 		0A48948D23F9C2370035A4A4 /* UnspashAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnspashAPI.swift; sourceTree = "<group>"; };
 		0A48948F23F9C9050035A4A4 /* InternalImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalImageCache.swift; sourceTree = "<group>"; };
@@ -377,6 +378,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A163113242F857600936EB0 /* BuildPhases */ = {
+			isa = PBXGroup;
+			children = (
+				0A163114242F859A00936EB0 /* addEnvironment.sh */,
+			);
+			path = BuildPhases;
+			sourceTree = "<group>";
+		};
 		0A48948A23F9C0DE0035A4A4 /* unsplash */ = {
 			isa = PBXGroup;
 			children = (
@@ -510,6 +519,7 @@
 		7452439D22CE85BA00C930C8 = {
 			isa = PBXGroup;
 			children = (
+				0A163113242F857600936EB0 /* BuildPhases */,
 				7478F4F122F5FAB300A43F52 /* .gitignore */,
 				7481190922D7E6BA004FBE48 /* .swiftlint.yml */,
 				745243A822CE85BA00C930C8 /* Events */,
@@ -567,7 +577,7 @@
 				744921E523D39F1F00B5BB43 /* Localizable.strings */,
 				744921EB23D3B1C000B5BB43 /* Localizable.stringsdict */,
 				74E882DA2426069400DAF4B4 /* memoize.swift */,
-				0A16310B242EB72E00936EB0 /* environment.swift */,
+				0A163110242F842200936EB0 /* environment.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -863,6 +873,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 745243B822CE85BC00C930C8 /* Build configuration list for PBXNativeTarget "Events" */;
 			buildPhases = (
+				0A163112242F847800936EB0 /* Add Environment file */,
 				2DD5930B51999F3E84C14468 /* [CP] Check Pods Manifest.lock */,
 				745243A222CE85BA00C930C8 /* Sources */,
 				745243A322CE85BA00C930C8 /* Frameworks */,
@@ -938,6 +949,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0A163112242F847800936EB0 /* Add Environment file */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Add Environment file";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "$SRCROOT/BuildPhases/addEnvironment.sh\n\n";
+		};
 		2DD5930B51999F3E84C14468 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1101,8 +1130,8 @@
 				746697442326F90F00406CD8 /* EventStep.swift in Sources */,
 				74E5DAD4232999F500E1557D /* EventsFlow.swift in Sources */,
 				74E882EE2426BC5B00DAF4B4 /* EventViewModel.swift in Sources */,
-				0A16310C242EB72E00936EB0 /* environment.swift in Sources */,
 				748E0B2722DBBB2900B061C7 /* LocationSearchStackView.swift in Sources */,
+				0A163111242F842200936EB0 /* environment.swift in Sources */,
 				0AFA14AD2402BE4400F07E82 /* LoginView.swift in Sources */,
 				74D8DB3422DD37F800E70CB4 /* UserDetailsViewModel.swift in Sources */,
 				7408542123020C0700220B23 /* Tip.swift in Sources */,
