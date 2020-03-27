@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A16310C242EB72E00936EB0 /* environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A16310B242EB72E00936EB0 /* environment.swift */; };
 		0A48948C23F9C10C0035A4A4 /* UnsplashResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948B23F9C10C0035A4A4 /* UnsplashResponse.swift */; };
 		0A48948E23F9C2370035A4A4 /* UnspashAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948D23F9C2370035A4A4 /* UnspashAPI.swift */; };
 		0A48949023F9C9050035A4A4 /* InternalImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948F23F9C9050035A4A4 /* InternalImageCache.swift */; };
@@ -182,6 +183,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A16310B242EB72E00936EB0 /* environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = environment.swift; sourceTree = "<group>"; };
 		0A48948B23F9C10C0035A4A4 /* UnsplashResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashResponse.swift; sourceTree = "<group>"; };
 		0A48948D23F9C2370035A4A4 /* UnspashAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnspashAPI.swift; sourceTree = "<group>"; };
 		0A48948F23F9C9050035A4A4 /* InternalImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalImageCache.swift; sourceTree = "<group>"; };
@@ -565,6 +567,7 @@
 				744921E523D39F1F00B5BB43 /* Localizable.strings */,
 				744921EB23D3B1C000B5BB43 /* Localizable.stringsdict */,
 				74E882DA2426069400DAF4B4 /* memoize.swift */,
+				0A16310B242EB72E00936EB0 /* environment.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -1098,6 +1101,7 @@
 				746697442326F90F00406CD8 /* EventStep.swift in Sources */,
 				74E5DAD4232999F500E1557D /* EventsFlow.swift in Sources */,
 				74E882EE2426BC5B00DAF4B4 /* EventViewModel.swift in Sources */,
+				0A16310C242EB72E00936EB0 /* environment.swift in Sources */,
 				748E0B2722DBBB2900B061C7 /* LocationSearchStackView.swift in Sources */,
 				0AFA14AD2402BE4400F07E82 /* LoginView.swift in Sources */,
 				74D8DB3422DD37F800E70CB4 /* UserDetailsViewModel.swift in Sources */,

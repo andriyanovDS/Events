@@ -8,8 +8,6 @@
 
 import Foundation
 
-let GOOGLE_API_KEY = "AIzaSyDGC02immazUPTbJ89Ug5uBjHIONn0GJME"
-
 struct GetAddressByCoordinate: APIRequest {
   typealias Response = GeocodeResult
   let lng: Double
@@ -60,7 +58,7 @@ class GeolocationAPI: APIClientBase {
     completion: @escaping (Result<PredictionsResponse, GeocoderError>) -> Void
     ) {
     let params = [
-      "key": GOOGLE_API_KEY,
+      "key": Environment.googleApiKey,
       "input": input
     ]
     let endpoint = self.endpoint(for: "place/autocomplete/json", params: params)
@@ -86,7 +84,7 @@ class GeolocationAPI: APIClientBase {
     completion: @escaping (Result<GeocodeResult, GeocoderError>) -> Void
     ) {
     var requestParams = params
-    requestParams["key"] = GOOGLE_API_KEY
+		requestParams["key"] = Environment.googleApiKey
     requestParams["language"] = "en"
     let endpoint = self.endpoint(for: "geocode/json", params: requestParams)
     let task = session.dataTask(with: request(for: endpoint)) { data, _, error in
