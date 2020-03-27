@@ -83,7 +83,7 @@ func styleLayerBackedText(
   color: UIColor,
   style: FontStyle
 ) {
-//  textNode.isLayerBacked = false
+  textNode.isLayerBacked = false
   let textAttributes = [
     NSAttributedString.Key.font: style.font(size: size),
     NSAttributedString.Key.foregroundColor: color

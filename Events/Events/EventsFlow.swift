@@ -33,6 +33,8 @@ class EventsFlow: Flow {
 				author: author,
 				sharedImage: sharedImage
 			)
+		case .home:
+			return navigateToHomeScreen()
 		case .eventDidComplete:
 			rootNavigationController.dismiss(animated: true, completion: nil)
 			return .none
@@ -64,4 +66,11 @@ class EventsFlow: Flow {
       allowStepWhenNotPresented: false
       ))
   }
+	
+	private func navigateToHomeScreen() -> FlowContributors {
+		if let parentController = rootNavigationController.parent as? UITabBarController {
+			parentController.selectedIndex = 0
+		}
+		return .none
+	}
 }

@@ -28,6 +28,7 @@
 		0AEE5CF8242D4B37007A2D10 /* SectionHeaderCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE5CF7242D4B37007A2D10 /* SectionHeaderCellNode.swift */; };
 		0AEE5CFA242D5CA5007A2D10 /* EventsCollectionNodeFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE5CF9242D5CA4007A2D10 /* EventsCollectionNodeFlowLayout.swift */; };
 		0AEE5CFC242E73FE007A2D10 /* ASImageNode+loadImageFromExternalUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE5CFB242E73FE007A2D10 /* ASImageNode+loadImageFromExternalUrl.swift */; };
+		0AEE5CFE242E7CE3007A2D10 /* EventsEmptyListCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE5CFD242E7CE3007A2D10 /* EventsEmptyListCellNode.swift */; };
 		0AEF8D272413B14B00BBB45D /* CreateEventFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEF8D262413B14B00BBB45D /* CreateEventFlow.swift */; };
 		0AFA14AD2402BE4400F07E82 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFA14AC2402BE4400F07E82 /* LoginView.swift */; };
 		0AFA14AF240518CB00F07E82 /* ObservableType+Nwise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFA14AE240518CB00F07E82 /* ObservableType+Nwise.swift */; };
@@ -202,6 +203,7 @@
 		0AEE5CF7242D4B37007A2D10 /* SectionHeaderCellNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderCellNode.swift; sourceTree = "<group>"; };
 		0AEE5CF9242D5CA4007A2D10 /* EventsCollectionNodeFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCollectionNodeFlowLayout.swift; sourceTree = "<group>"; };
 		0AEE5CFB242E73FE007A2D10 /* ASImageNode+loadImageFromExternalUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ASImageNode+loadImageFromExternalUrl.swift"; sourceTree = "<group>"; };
+		0AEE5CFD242E7CE3007A2D10 /* EventsEmptyListCellNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsEmptyListCellNode.swift; sourceTree = "<group>"; };
 		0AEF8D262413B14B00BBB45D /* CreateEventFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventFlow.swift; sourceTree = "<group>"; };
 		0AFA14AC2402BE4400F07E82 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		0AFA14AE240518CB00F07E82 /* ObservableType+Nwise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ObservableType+Nwise.swift"; sourceTree = "<group>"; };
@@ -596,9 +598,10 @@
 				0AEE5CF3242D2337007A2D10 /* EventsViewModel.swift */,
 				0AE899DF242D194C00EF427E /* EventsNode.swift */,
 				0AEE5CF5242D2E82007A2D10 /* UserEventCellNode.swift */,
-				74E5DAD3232999F500E1557D /* EventsFlow.swift */,
 				0AEE5CF7242D4B37007A2D10 /* SectionHeaderCellNode.swift */,
+				0AEE5CFD242E7CE3007A2D10 /* EventsEmptyListCellNode.swift */,
 				0AEE5CF9242D5CA4007A2D10 /* EventsCollectionNodeFlowLayout.swift */,
+				74E5DAD3232999F500E1557D /* EventsFlow.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -1120,6 +1123,7 @@
 				74697FCA22D200A900D5B5F4 /* Month.swift in Sources */,
 				745243BF22CF965500C930C8 /* SearchBarUITextField.swift in Sources */,
 				0AEE5CF8242D4B37007A2D10 /* SectionHeaderCellNode.swift in Sources */,
+				0AEE5CFE242E7CE3007A2D10 /* EventsEmptyListCellNode.swift in Sources */,
 				74E882F42428C09300DAF4B4 /* EventInfoSection.swift in Sources */,
 				74DAFA452353701300331369 /* ImagePickerCollectionViewLayout.swift in Sources */,
 				748E0B1422DA26BC00B061C7 /* GeolocationAPI.swift in Sources */,
