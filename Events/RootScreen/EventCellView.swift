@@ -18,7 +18,6 @@ class EventCellNode: ASCellNode {
   private let event: Event
   private let author: User
   private let nameTextNode = ASTextNode()
-  private let imageBackgroundNode: ASDisplayNode
   private let locationTextNode = ASTextNode()
   private let locationIconImageNode = ASImageNode()
   private let locationBackgroundNode: ASDisplayNode
@@ -45,9 +44,6 @@ class EventCellNode: ASCellNode {
   init(event: Event, author: User) {
     self.event = event
     self.author = author
-    imageBackgroundNode = ASDisplayNode(viewBlock: {
-      RoundedView(cornerRadii: CGSize(width: 10, height: 10), backgroundColor: .gray100())
-    })
     authorAvatarBackgroundView = ASDisplayNode(viewBlock: {
       RoundedView(
         cornerRadii: Constants.authorImageSize.applying(
@@ -72,13 +68,9 @@ class EventCellNode: ASCellNode {
       color: .black,
       style: .bold
     )
-    eventImageNode.contentMode = .scaleAspectFill
-    eventImageNode.imageModificationBlock = { image in
-      return image.makeRoundedImage(
-        size: CGSize(width: Constants.imageWidth, height: Constants.imageHeight),
-        radius: 10
-      )
-    }
+		eventImageNode.backgroundColor = .gray100()
+		eventImageNode.cornerRadius = 10
+		eventImageNode.cornerRoundingType = .defaultSlowCALayer
     setupLocationSection()
     setupAuthorSection()
     setupDateSection()
@@ -86,10 +78,8 @@ class EventCellNode: ASCellNode {
 
   override func didLoad() {
     super.didLoad()
-		imageBackgroundNode.backgroundColor = .clear
 		locationBackgroundNode.backgroundColor = .clear
 		authorAvatarBackgroundView.backgroundColor = .clear
-    eventImageNode.isCropEnabled = false
     eventImageNode.view.hero.id = event.id
   }
 
@@ -99,13 +89,10 @@ class EventCellNode: ASCellNode {
   }
 
   override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-    let imageSize = CGSize(
-       width: constrainedSize.max.width,
-       height: Constants.imageHeight
-     )
-    imageBackgroundNode.style.preferredSize = imageSize
-    eventImageNode.style.preferredSize = imageSize
-    let overlaySpec = ASOverlayLayoutSpec(child: imageBackgroundNode, overlay: eventImageNode)
+    eventImageNode.style.preferredSize = CGSize(
+			width: constrainedSize.max.width,
+			height: Constants.imageHeight
+		)
     let locationStack = ASStackLayoutSpec(
       direction: .horizontal,
       spacing: 6,
@@ -121,7 +108,7 @@ class EventCellNode: ASCellNode {
       background: locationBackgroundNode
     )
     let eventImageAndLocationOverlaySpec = ASOverlayLayoutSpec(
-      child: overlaySpec,
+      child: eventImageNode,
       overlay: ASInsetLayoutSpec(
         insets: UIEdgeInsets(top: CGFloat.infinity, left: 0, bottom: 0, right: CGFloat.infinity),
         child: lockationWithBgSpec
@@ -160,7 +147,7 @@ class EventCellNode: ASCellNode {
     return contentIsetSpec
   }
 
-  override func didEnterVisibleState() {
+  override func didEnterDisplayState() {
     loadMainImage()
     guard let imageUrl = author.avatar else { return }
     delegate?.loadUserAvatar(imageUrl)
@@ -216,10 +203,10 @@ class EventCellNode: ASCellNode {
       DispatchQueue.main.async {
         UIView.transition(
           with: self.eventImageNode.view,
-          duration: 0.4,
+					duration: 0.5,
           options: [.curveEaseOut, .transitionCrossDissolve],
           animations: {
-            self.eventImageNode.image = image
+						self.eventImageNode.image = image
             self.setNeedsLayout()
           },
           completion: nil
@@ -236,6 +223,8 @@ class EventCellNode: ASCellNode {
     delegate
       .loadEventImage(url)
       .then {[weak self] image in
+				self?.eventImageNode.backgroundColor = .white
+				self?.eventImageNode.cornerRoundingType = .precomposited
         self?.setLoadedEventImage(image)
       }
   }

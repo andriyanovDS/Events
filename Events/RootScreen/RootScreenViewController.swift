@@ -38,7 +38,7 @@ class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased
 
     loadEventImage = memoize(callback: { (url: String) -> Promise<UIImage> in
       InternalImageCache.shared.loadImage(by: url)
-      .then(on: .global()) {image -> UIImage in
+      .then(on: .global()) { image -> UIImage in
         let imageSize = EventCellNode.Constants.eventImageSize
         let rect = AVMakeRect(aspectRatio: image.size, insideRect: CGRect(
           x: 0, y: 0, width: imageSize.width, height: imageSize.height
