@@ -117,7 +117,6 @@ class EventDescriptionView: UIStackView {
 					stackView.distribution = .fill
 					let size = imageSize(at: index + 1)
 					images.forEach { v in
-						v.backgroundColor = .red
 						v.height(size.height).width(size.width)
 						stackView.addArrangedSubview(v)
 					}
