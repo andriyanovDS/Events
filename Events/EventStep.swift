@@ -17,7 +17,7 @@ indirect enum EventStep: Step {
   case saved
   case events
 	case event(event: Event, author: User, sharedImage: UIImage?)
-  case eventDidComplete
+	case eventDidComplete(userEvent: UserEvent)
   case userDetails(user: User)
   case userDetailsDidComplete
   case createEvent

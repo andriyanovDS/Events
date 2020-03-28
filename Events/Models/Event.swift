@@ -34,11 +34,11 @@ struct DescriptionWithImageUrls: Codable, Equatable {
   }
 }
 
-struct EventUser: Codable {
+struct UserEvent: Codable {
 	let eventId: String
 	let userId: String
-	let isFollow: Bool
-	let isJoin: Bool
+	var isFollow: Bool
+	var isJoin: Bool
 }
 
 class MutableDescription {
@@ -78,7 +78,7 @@ struct EventLocation: Codable {
   let fullName: String
 }
 
-struct Event: Codable, Equatable {
+struct Event: Codable {
   let id: String
   let name: String
   let author: String
@@ -119,8 +119,10 @@ struct Event: Codable, Equatable {
     }
     return "\(labelWithOptionYear(firstDate)) \(startTime)"
   }
+}
 
-  static func == (lhs: Self, rhs: Self) -> Bool {
-    return lhs.id == rhs.id
-  }
+extension Event: Equatable {
+	static func == (lhs: Self, rhs: Self) -> Bool {
+		 return lhs.id == rhs.id
+	 }
 }

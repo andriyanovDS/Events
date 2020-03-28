@@ -46,17 +46,17 @@ class EventsViewController: ASViewController<EventsNode>, ViewModelBased {
 extension EventsViewController: ASCollectionDataSource {
 	
 	func numberOfSections(in collectionNode: ASCollectionNode) -> Int {
-		if viewModel.isListEmpty { return 1 }
-		return viewModel.events.isEmpty
-			? 0
-			: Int(ceil(Float(viewModel.events.count) / Float(Constants.columnsCount)))
+		return max(
+			1,
+			Int(ceil(Float(viewModel.events.count) / Float(Constants.columnsCount)))
+		)
 	}
 	
 	func collectionNode(
 		_ collectionNode: ASCollectionNode,
 		numberOfItemsInSection section: Int
 	) -> Int {
-		if viewModel.isListEmpty { return 1 }
+		if viewModel.events.isEmpty { return 1 }
 		let restItemsCount = viewModel.events.count - section * Constants.columnsCount
 		return restItemsCount >= Constants.columnsCount
 			? Constants.columnsCount
@@ -67,7 +67,7 @@ extension EventsViewController: ASCollectionDataSource {
 		_ collectionNode: ASCollectionNode,
 		nodeBlockForItemAt indexPath: IndexPath
 	) -> ASCellNodeBlock {
-		if viewModel.isListEmpty {
+		if viewModel.isLoadedListEmpty {
 			return {[weak self] in
 				let cell = EventsEmptyListCellNode()
 				cell.delegate = self?.viewModel
@@ -78,6 +78,7 @@ extension EventsViewController: ASCollectionDataSource {
 				return cell
 			}
 		}
+		if viewModel.events.isEmpty { return { ASCellNode() } }
 		let index = indexPath.section * Constants.columnsCount + indexPath.item
 		let event = viewModel.events[index]
 		return {
@@ -120,7 +121,7 @@ extension EventsViewController: ASCollectionDelegateFlowLayout {
 
 extension EventsViewController: EventsViewModelDelegate {
 	
-	func listDidUpdate() {
+	func listDidUpdated() {
 		node.collectionNode.reloadData()
 	}
 }

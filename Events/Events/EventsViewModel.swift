@@ -16,7 +16,7 @@ import FirebaseFirestore
 class EventsViewModel: Stepper {
 	let steps = PublishRelay<Step>()
 	var events: [Event] { _events }
-	var isListEmpty: Bool = false
+	var isLoadedListEmpty: Bool = false
 	let db = Firestore.firestore()
 	weak var delegate: EventsViewModelDelegate?
 	private var _events: [Event] = []
@@ -24,7 +24,16 @@ class EventsViewModel: Stepper {
 	
 	func clearEvents() {
 		_events = []
-		isListEmpty = false
+		isLoadedListEmpty = false
+	}
+	
+	func removeEvent(with id: String) {
+		guard let index = _events.firstIndex(where: { $0.id == id }) else {
+			return
+		}
+		_events.remove(at: index)
+		isLoadedListEmpty = _events.isEmpty
+		delegate?.listDidUpdated()
 	}
 	
 	func openEvent(_ event: Event, sharedImage: UIImage?) {
@@ -59,8 +68,8 @@ class EventsViewModel: Stepper {
 		}
 		.then { events in
 			self._events = events.sorted(by: { $0.dates.first! > $1.dates.first! })
-			self.isListEmpty = events.isEmpty
-			self.delegate?.listDidUpdate()
+			self.isLoadedListEmpty = events.isEmpty
+			self.delegate?.listDidUpdated()
 		}
 	}
 	
@@ -87,7 +96,7 @@ class EventsViewModel: Stepper {
 					}
 					do {
 						let userEvents = try snapshot.documents.compactMap {
-              try $0.data(as: EventUser.self)
+              try $0.data(as: UserEvent.self)
             }
 						resolve(userEvents.map(\.eventId))
 					} catch let error {
@@ -133,5 +142,5 @@ extension EventsViewModel: EventsEmptyListCellNodeDelegate {
 }
 
 protocol EventsViewModelDelegate: class {
-	func listDidUpdate()
+	func listDidUpdated()
 }

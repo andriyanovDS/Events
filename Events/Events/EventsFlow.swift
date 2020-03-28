@@ -35,7 +35,16 @@ class EventsFlow: Flow {
 			)
 		case .home:
 			return navigateToHomeScreen()
-		case .eventDidComplete:
+		case .eventDidComplete(let userEvent):
+			let presentingVC = rootNavigationController.presentedViewController
+			let topVC = rootNavigationController.topViewController
+			if !userEvent.isJoin,
+				let eventVC = presentingVC as? EventViewController,
+				let eventListVC = topVC as? EventsViewController {
+				
+				eventVC.disableSharedAnimationOnViewDisappear()
+				eventListVC.viewModel?.removeEvent(with: userEvent.eventId)
+			}
 			rootNavigationController.dismiss(animated: true, completion: nil)
 			return .none
     default:

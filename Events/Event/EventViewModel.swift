@@ -25,6 +25,7 @@ class EventViewModel: Stepper, EventNodeDataSource {
 
   let event: Event
 	let author: User
+	var userEvent: UserEvent?
 	var isCloseAnimationInProgress: Bool = false
 	var userFollowEventState: EventViewController.FollowEventState = .inProgress
 
@@ -34,10 +35,11 @@ class EventViewModel: Stepper, EventNodeDataSource {
   }
 
   func onClose() {
-    steps.accept(EventStep.eventDidComplete)
+		guard let userEvent = userEvent else { return }
+		steps.accept(EventStep.eventDidComplete(userEvent: userEvent))
   }
 	
-	func userEvent() -> Promise<EventUser> {
+	func loadUserEvent() -> Promise<UserEvent> {
 		let reference = db
 			.collection("event-list")
 			.document(event.id)
@@ -45,8 +47,8 @@ class EventViewModel: Stepper, EventNodeDataSource {
 			.document(uid)
 		let eventId = event.id
 		let userId = uid
-		return Promise<EventUser> { resolve, _ in
-			let failedEventUser = EventUser(
+		return Promise<UserEvent> { resolve, _ in
+			let failedEventUser = UserEvent(
 				eventId: eventId,
 				userId: userId,
 				isFollow: false,
@@ -63,7 +65,7 @@ class EventViewModel: Stepper, EventNodeDataSource {
 					return
 				}
 				do {
-					let data = try snapshot.data(as: EventUser.self)
+					let data = try snapshot.data(as: UserEvent.self)
 					resolve(data ?? failedEventUser)
 				} catch let decodeError {
 					print("Failed to decode event user with error \(decodeError.localizedDescription)")
@@ -112,7 +114,7 @@ class EventViewModel: Stepper, EventNodeDataSource {
 				do {
 					let document = try transaction.getDocument(reference)
 					if !document.exists {
-						let user = EventUser(
+						let user = UserEvent(
 							eventId: eventId,
 							userId: userId,
 							isFollow: false,
