@@ -67,10 +67,9 @@ class HomeFlow: Flow {
   }
 
   private func openLocationSearch(onResult: @escaping (Geocode) -> Void) -> FlowContributors {
-    let searchBarViewController = SearchBarViewController(nibName: nil, bundle: nil)
-    let viewModel = LocationSearchViewModel(textField: searchBarViewController.textField)
-    let viewController = LocationSearchViewController(searchBar: searchBarViewController, viewModel: viewModel)
-    viewController.onResult = onResult
+    let viewModel = LocationSearchViewModel()
+		viewModel.onResult = onResult
+		let viewController = LocationSearchViewController.instantiate(with: viewModel)
     viewController.modalPresentationStyle = .overFullScreen
     viewController.modalTransitionStyle = .coverVertical
     rootViewController.present(viewController, animated: true, completion: nil)

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A163111242F842200936EB0 /* environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A163110242F842200936EB0 /* environment.swift */; };
+		0A163117242FDA9300936EB0 /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A163116242FDA9300936EB0 /* LocationSearchView.swift */; };
 		0A48948C23F9C10C0035A4A4 /* UnsplashResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948B23F9C10C0035A4A4 /* UnsplashResponse.swift */; };
 		0A48948E23F9C2370035A4A4 /* UnspashAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948D23F9C2370035A4A4 /* UnspashAPI.swift */; };
 		0A48949023F9C9050035A4A4 /* InternalImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948F23F9C9050035A4A4 /* InternalImageCache.swift */; };
@@ -128,8 +129,7 @@
 		748E0B1A22DB6B9200B061C7 /* LocationSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B1922DB6B9200B061C7 /* LocationSearchViewController.swift */; };
 		748E0B1F22DB7E2C00B061C7 /* SearchBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B1E22DB7E2C00B061C7 /* SearchBarDelegate.swift */; };
 		748E0B2122DB82A200B061C7 /* LocationSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B2022DB82A200B061C7 /* LocationSearchViewModel.swift */; };
-		748E0B2322DB87AA00B061C7 /* LocationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B2222DB87AA00B061C7 /* LocationItem.swift */; };
-		748E0B2722DBBB2900B061C7 /* LocationSearchStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B2622DBBB2900B061C7 /* LocationSearchStackView.swift */; };
+		748E0B2322DB87AA00B061C7 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B2222DB87AA00B061C7 /* LocationCell.swift */; };
 		749898B324008D2C007EF352 /* styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749898B224008D2C007EF352 /* styles.swift */; };
 		749898B524019E08007EF352 /* SelectedImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749898B424019E08007EF352 /* SelectedImageCell.swift */; };
 		74A1AE1F22D5D18800C39525 /* keyboardAttach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74A1AE1E22D5D18800C39525 /* keyboardAttach.swift */; };
@@ -185,6 +185,7 @@
 /* Begin PBXFileReference section */
 		0A163110242F842200936EB0 /* environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = environment.swift; sourceTree = "<group>"; };
 		0A163114242F859A00936EB0 /* addEnvironment.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = addEnvironment.sh; path = BuildPhases/addEnvironment.sh; sourceTree = SOURCE_ROOT; };
+		0A163116242FDA9300936EB0 /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
 		0A48948B23F9C10C0035A4A4 /* UnsplashResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashResponse.swift; sourceTree = "<group>"; };
 		0A48948D23F9C2370035A4A4 /* UnspashAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnspashAPI.swift; sourceTree = "<group>"; };
 		0A48948F23F9C9050035A4A4 /* InternalImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalImageCache.swift; sourceTree = "<group>"; };
@@ -310,8 +311,7 @@
 		748E0B1922DB6B9200B061C7 /* LocationSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewController.swift; sourceTree = "<group>"; };
 		748E0B1E22DB7E2C00B061C7 /* SearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarDelegate.swift; sourceTree = "<group>"; };
 		748E0B2022DB82A200B061C7 /* LocationSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewModel.swift; sourceTree = "<group>"; };
-		748E0B2222DB87AA00B061C7 /* LocationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationItem.swift; sourceTree = "<group>"; };
-		748E0B2622DBBB2900B061C7 /* LocationSearchStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchStackView.swift; sourceTree = "<group>"; };
+		748E0B2222DB87AA00B061C7 /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
 		749898B224008D2C007EF352 /* styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = styles.swift; sourceTree = "<group>"; };
 		749898B424019E08007EF352 /* SelectedImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedImageCell.swift; sourceTree = "<group>"; };
 		74A1AE1E22D5D18800C39525 /* keyboardAttach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = keyboardAttach.swift; sourceTree = "<group>"; };
@@ -750,8 +750,8 @@
 			children = (
 				748E0B1922DB6B9200B061C7 /* LocationSearchViewController.swift */,
 				748E0B2022DB82A200B061C7 /* LocationSearchViewModel.swift */,
-				748E0B2622DBBB2900B061C7 /* LocationSearchStackView.swift */,
-				748E0B2222DB87AA00B061C7 /* LocationItem.swift */,
+				0A163116242FDA9300936EB0 /* LocationSearchView.swift */,
+				748E0B2222DB87AA00B061C7 /* LocationCell.swift */,
 			);
 			path = LocationSearch;
 			sourceTree = "<group>";
@@ -1071,6 +1071,7 @@
 				74D3A42524239FFD00E6CDF4 /* UIView+shadow.swift in Sources */,
 				746F22E42332CC0D000713A0 /* PermissionModalFlow.swift in Sources */,
 				7478F50222F60CFD00A43F52 /* Location.swift in Sources */,
+				0A163117242FDA9300936EB0 /* LocationSearchView.swift in Sources */,
 				7478F4F722F6023F00A43F52 /* DateView.swift in Sources */,
 				6079371123225CBF003AAD2B /* PermissionModalViewModel.swift in Sources */,
 				74D3A41F2422A36300E6CDF4 /* text.swift in Sources */,
@@ -1107,7 +1108,7 @@
 				74F0F5652300438C00170C6C /* DescriptionView.swift in Sources */,
 				74278ACD23D4E57600B8A5BB /* CalendarFooterView.swift in Sources */,
 				74278AC923D4D7C600B8A5BB /* CalendarContentView.swift in Sources */,
-				748E0B2322DB87AA00B061C7 /* LocationItem.swift in Sources */,
+				748E0B2322DB87AA00B061C7 /* LocationCell.swift in Sources */,
 				74697FC822D11F7F00D5B5F4 /* UIViewExtension+addBorder.swift in Sources */,
 				74A1AE1F22D5D18800C39525 /* keyboardAttach.swift in Sources */,
 				0AEE5CF6242D2E82007A2D10 /* UserEventCellNode.swift in Sources */,
@@ -1130,7 +1131,6 @@
 				746697442326F90F00406CD8 /* EventStep.swift in Sources */,
 				74E5DAD4232999F500E1557D /* EventsFlow.swift in Sources */,
 				74E882EE2426BC5B00DAF4B4 /* EventViewModel.swift in Sources */,
-				748E0B2722DBBB2900B061C7 /* LocationSearchStackView.swift in Sources */,
 				0A163111242F842200936EB0 /* environment.swift in Sources */,
 				0AFA14AD2402BE4400F07E82 /* LoginView.swift in Sources */,
 				74D8DB3422DD37F800E70CB4 /* UserDetailsViewModel.swift in Sources */,

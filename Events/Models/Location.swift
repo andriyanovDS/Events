@@ -10,6 +10,7 @@ import Foundation
 
 enum AddressComponentType: String, Decodable {
   case streetAddress = "street_address"
+	case streetNumber = "street_number"
   case route
   case intersection
   case political
@@ -36,6 +37,8 @@ struct AddressComponent: Decodable {
   let long_name: String
   let short_name: String?
   let types: [String]
+	
+	var name: String { long_name }
 }
 
 struct Location: Codable {
@@ -62,47 +65,35 @@ struct Geocode: Decodable {
   let types: [String]
 
   var country: String {
-    let countryComponent = findComponent(for: .country)
-    guard let component = countryComponent else {
-      return ""
-    }
-    return componentName(component)
+		findComponent(for: .country).map(\.name).getOrElse(result: "")
   }
 
   var state: String? {
-    let stateComponent = findComponent(for: .administrativeAreaLevel1)
-    guard let component = stateComponent else {
-      return nil
-    }
-    return componentName(component)
+    findComponent(for: .administrativeAreaLevel1).map(\.name)
   }
-
-  var neighborhood: String? {
-    let neighborhoodComponent = findComponent(for: .neighborhood)
-    guard let component = neighborhoodComponent else {
-      return nil
-    }
-    return componentName(component)
+	
+	var nature: String? {
+    findComponent(for: .naturalFeature).map(\.name)
   }
-
-  var city: String? {
-    let cityComponent = findComponent(for: .locality)
-    guard let component = cityComponent else {
-      return nil
-    }
-    return componentName(component)
+	
+	var city: String? {
+    findComponent(for: .locality).map(\.name)
   }
-
-  var nature: String? {
-    let natureComponent = findComponent(for: .naturalFeature)
-    guard let component = natureComponent else {
-      return nil
-    }
-    return componentName(component)
-  }
+	
+	var route: String? {
+		findComponent(for: .route).map(\.name)
+	}
+	
+	var streetName: String? {
+		findComponent(for: .streetAddress).map(\.name)
+	}
+	
+	var streetNumber: String? {
+		findComponent(for: .streetNumber).map(\.name)
+	}
 
   func componentName(_ component: AddressComponent) -> String {
-    return component.short_name.getOrElse(result: component.long_name)
+		component.long_name
   }
 
   func findComponent(for type: AddressComponentType) -> AddressComponent? {
@@ -110,13 +101,9 @@ struct Geocode: Decodable {
   }
 
   func shortLocationName() -> String {
-    return neighborhood.getOrElseL({
-      city.getOrElseL({
-        nature.getOrElseL({
-          state.getOrElseL({ country })
-        })
-      })
-    })
+		[state,	city, route, streetName, streetNumber]
+			.compactMap { $0 }
+			.joined(separator: ", ")
   }
 
   func fullLocationName() -> String {

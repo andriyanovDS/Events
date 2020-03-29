@@ -58,7 +58,13 @@ class LocationView: UIView, CreateEventView {
       color: .gray600(),
       style: .medium
     )
-
+		locationButton.titleEdgeInsets = UIEdgeInsets(
+      top: 12,
+      left: 10,
+      bottom: 12,
+      right: 10
+    )
+		locationButton.titleLabel?.numberOfLines = 2
     titleLabel.numberOfLines = 2
 		sv(
 			contentView.sv(

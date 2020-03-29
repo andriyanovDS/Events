@@ -127,10 +127,9 @@ class CreateEventFlow: Flow {
   }
 	
 	private func navigateToLocationSearchBar(onResult: @escaping (Geocode) -> Void) -> FlowContributors {
-    let searchBar = SearchBarViewController(nibName: nil, bundle: nil)
-    let viewModel = LocationSearchViewModel(textField: searchBar.textField)
-    let viewController = LocationSearchViewController(searchBar: searchBar, viewModel: viewModel)
-    viewController.onResult = onResult
+    let viewModel = LocationSearchViewModel()
+		viewModel.onResult = onResult
+		let viewController = LocationSearchViewController.instantiate(with: viewModel)
     viewController.modalPresentationStyle = .overFullScreen
     viewController.modalTransitionStyle = .coverVertical
     rootNavigationController.present(viewController, animated: true, completion: nil)

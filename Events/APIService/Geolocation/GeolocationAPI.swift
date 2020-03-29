@@ -56,7 +56,7 @@ class GeolocationAPI: APIClientBase {
   func predictions(
     input: String,
     completion: @escaping (Result<PredictionsResponse, GeocoderError>) -> Void
-    ) {
+    ) -> () -> Void {
     let params = [
       "key": Environment.googleApiKey,
       "input": input
@@ -77,6 +77,7 @@ class GeolocationAPI: APIClientBase {
       }
     }
     task.resume()
+		return { task.cancel() }
   }
   
   private func reverseGeocode(
@@ -85,7 +86,7 @@ class GeolocationAPI: APIClientBase {
     ) {
     var requestParams = params
 		requestParams["key"] = Environment.googleApiKey
-    requestParams["language"] = "en"
+    requestParams["language"] = Locale.current.languageCode
     let endpoint = self.endpoint(for: "geocode/json", params: requestParams)
     let task = session.dataTask(with: request(for: endpoint)) { data, _, error in
       if let requestError = error {

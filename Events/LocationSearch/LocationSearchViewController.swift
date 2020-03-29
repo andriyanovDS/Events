@@ -11,26 +11,19 @@ import CoreLocation
 import RxSwift
 import RxCocoa
 
-class LocationSearchViewController: UIViewControllerWithActivityIndicator,
-  SearchBarDelegate,
-  ScreenWithResult,
-  LocationSearchViewModelDelegate,
-  LocationSearchStackViewDelegate {
-
-  var onResult: ((Geocode) -> Void)!
-  private let searchBar: SearchBarViewController
-  private let viewModel: LocationSearchViewModel
-  private let scrollView = UIScrollView()
-  private let locationStackView = LocationSearchStackView()
-
-  init(searchBar: SearchBarViewController, viewModel: LocationSearchViewModel) {
-    self.searchBar = searchBar
-    self.viewModel = viewModel
-    super.init(nibName: nil, bundle: nil)
-
-    searchBar.delegate = self
-    viewModel.delegate = self
-  }
+class LocationSearchViewController: UIViewControllerWithActivityIndicator, ViewModelBased {
+	var viewModel: LocationSearchViewModel! {
+		didSet {
+			viewModel.delegate = self
+		}
+	}
+	private let disposeBag = DisposeBag()
+	private var locationSearchView: LocationSearchView?
+	private var locationManager: CLLocationManager?
+	
+	init() {
+		super.init(nibName: nil, bundle: nil)
+	}
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
@@ -38,112 +31,100 @@ class LocationSearchViewController: UIViewControllerWithActivityIndicator,
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    locationStackView.delegate = self
-    viewModel.initializeUserLocation()
     setupView()
+		initializeUserLocation()
   }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    onFocusTextField()
+    setFocusOnTextField()
   }
   
   func searchBarDidCancel() {
     viewModel.cancelScreen()
   }
-  
-  @objc func onSelectLocationItem(_ button: LocationItem) {
-    if let geocode = button.geocode {
-      viewModel.onSelectLocation(geocode: geocode)
-    } else if let placeId = button.placeId {
-      viewModel.onSelectLocation(placeId: placeId)
-    }
+
+  private func setFocusOnTextField() {
+    locationSearchView?.textField.becomeFirstResponder()
   }
-  
-  func showPredictions(_ predictions: [Prediction]) {
-    locationStackView.predictions = predictions
-  }
-  
-  func showCurrentLocation(geocode: Geocode) {
-    locationStackView.currentLocation = geocode
-  }
-  
-  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    let coordinates: CLLocation = locations[0]
-    manager.stopUpdatingLocation()
-    viewModel.onReceiveCoordinates(coordinates.coordinate)
-  }
-  
-  func onResult(geocode: Geocode) {
-    onResult(geocode)
-  }
-  
-  private func onFocusTextField() {
-    searchBar.textField.becomeFirstResponder()
-  }
+	
+	private func setupView() {
+		let locationSearchView = LocationSearchView()
+		
+		hero.isEnabled = true
+		locationSearchView.hero.modifiers = [.fade, .translate(y: 100)]
+		
+		locationSearchView.predictionsTableView.register(
+			LocationCell.self,
+			forCellReuseIdentifier: LocationCell.reuseIdentifier
+		)
+		locationSearchView.predictionsTableView.delegate = self
+		locationSearchView.predictionsTableView.dataSource = self
+		
+		locationSearchView.closeButton.rx.tap
+			.subscribe(onNext: {[unowned self] _ in self.viewModel.cancelScreen() })
+			.disposed(by: disposeBag)
+		
+		viewModel.register(textField: locationSearchView.textField)
+		view = locationSearchView
+		self.locationSearchView = locationSearchView
+	}
+	
+	private func initializeUserLocation() {
+		let locationManager = CLLocationManager()
+		locationManager.requestWhenInUseAuthorization()
+
+		if CLLocationManager.locationServicesEnabled() {
+			self.locationManager = locationManager
+			locationManager.desiredAccuracy = kCLLocationAccuracyBest
+			locationManager.delegate = self
+			locationManager.startUpdatingLocation()
+		}
+	}
 }
 
-extension LocationSearchViewController {
-  
-  func setupView() {
-    guard let searchBar = searchBar.view else {
-      return
-    }
-    view.backgroundColor = .white
-    view.addSubview(searchBar)
-    setupSearchBarViewConstraints()
-    setupScrollView()
-  }
-  
-  func setupSearchBarViewConstraints() {
-    guard let searchBar = searchBar.view else {
-      return
-    }
-    
-    searchBar.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-      searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-      searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-      searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8)
-      ])
-  }
-  
-  func setupScrollView() {
-    scrollView.showsVerticalScrollIndicator = false
-    view.addSubview(scrollView)
-    setupScrollViewConstraints()
-    setupStackView()
-  }
-  
-  func setupStackView() {
-    locationStackView.axis = .vertical
-    locationStackView.alignment = .fill
-    locationStackView.distribution = .fillEqually
-    locationStackView.spacing = 10
-    scrollView.addSubview(locationStackView)
-    
-    setupStackViewConstraints()
-  }
-  
-  func setupScrollViewConstraints() {
-    scrollView.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-      scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-      scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-      scrollView.topAnchor.constraint(equalTo: searchBar.view.bottomAnchor),
-      scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-      ])
-  }
-  
-  func setupStackViewConstraints() {
-    locationStackView.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-      locationStackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-      locationStackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-      locationStackView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20),
-      locationStackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-      locationStackView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-      ])
+extension LocationSearchViewController: LocationSearchViewModelDelegate {
+	func predictionsDidUpdate() {
+		locationSearchView?.predictionsTableView.reloadData()
+	}
+}
+
+extension LocationSearchViewController: UITableViewDataSource {
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cellOption = tableView.dequeueReusableCell(withIdentifier: LocationCell.reuseIdentifier)
+		guard let cell = cellOption as? LocationCell else {
+			fatalError("Unexpected cell")
+		}
+		let prediction = viewModel.predictions[indexPath.item]
+		cell.prediction = prediction
+		return cell
+	}
+		
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		viewModel.predictions.count
+	}
+}
+
+extension LocationSearchViewController: UITableViewDelegate {
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		let prediction = viewModel.predictions[indexPath.item]
+		showActivityIndicator(for: nil)
+		viewModel.onSelectLocation(placeId: prediction.place_id, completion: {[weak self] in
+			self?.removeActivityIndicator()
+		})
+	}
+}
+
+extension LocationSearchViewController: CLLocationManagerDelegate {
+	func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    let coordinates: CLLocation = locations[0]
+    manager.stopUpdatingLocation()
+		viewModel.updateDeviceGecode(from: coordinates.coordinate, onSuccess: {[weak self] in
+			guard let self = self, let locationView = self.locationSearchView else { return }
+			let button = locationView.showDeviceLocationIcon()
+			button?.rx.tap
+				.subscribe(onNext: {[unowned self] _ in self.viewModel.onSelectDeviceLocation() })
+				.disposed(by: self.disposeBag)
+		})
   }
 }
