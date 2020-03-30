@@ -130,15 +130,26 @@ func styleText(
 func setStyledText(
   editableTextNode: ASEditableTextNode,
   text: String,
+	placeholderText: String? = nil,
   size: CGFloat,
   style: FontStyle
 ) {
+	let attributes = [
+		NSAttributedString.Key.font: style.font(size: size)
+	]
   editableTextNode.attributedText = NSAttributedString(
     string: text,
-    attributes: [
-      NSAttributedString.Key.font: style.font(size: size)
-    ]
+    attributes: attributes
   )
+	editableTextNode.typingAttributes = [
+		NSAttributedString.Key.font.rawValue: style.font(size: size)
+	]
+	if let placeholderText = placeholderText {
+		editableTextNode.attributedPlaceholderText = NSAttributedString(
+			string: placeholderText,
+			attributes: attributes
+		)
+	}
 }
 
 enum FontStyle {

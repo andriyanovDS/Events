@@ -47,6 +47,10 @@ class ProfileScreenViewModel: Stepper {
   func onCreateEvent() {
     steps.accept(EventStep.createEvent)
   }
+	
+	func openCreatedEvents() {
+		steps.accept(EventStep.createdEvents)
+	}
   
   func logout() {
     do {

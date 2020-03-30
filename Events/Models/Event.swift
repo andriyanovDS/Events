@@ -34,13 +34,6 @@ struct DescriptionWithImageUrls: Codable, Equatable {
   }
 }
 
-struct UserEvent: Codable {
-	let eventId: String
-	let userId: String
-	var isFollow: Bool
-	var isJoin: Bool
-}
-
 class MutableDescription {
   let isMain: Bool
   let id: String
@@ -85,6 +78,7 @@ struct Event: Codable {
   let isPublic: Bool
   let location: EventLocation
   let dates: [Date]
+	let isRemoved: Bool
   let duration: EventDurationRange
   let createDate: Date
   let categories: [CategoryId]
@@ -126,3 +120,12 @@ extension Event: Equatable {
 		 return lhs.id == rhs.id
 	 }
 }
+
+struct UserEvent: Codable {
+	let eventId: String
+	let userId: String
+	var isFollow: Bool
+	var isJoin: Bool
+	let isAuthor: Bool
+}
+

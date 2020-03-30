@@ -109,7 +109,10 @@ class EventsViewModel: Stepper {
 	private func loadEvents(ids: [String]) -> Promise<[Event]> {
 		guard ids.count > 0 else { return Promise([]) }
 		let db = Firestore.firestore()
-		let ref = db.collection("event-list").whereField("id", in: ids)
+		let ref = db
+			.collection("event-list")
+			.whereField("id", in: ids)
+			.whereField("isRemoved", isEqualTo: false)
 		return Promise(on: .global(qos: .background)) { resolve, _ in
 			ref.getDocuments(completion: { snapshot, error in
 				if let error = error {

@@ -75,6 +75,7 @@ class RootScreenViewModel: Stepper {
   private func loadEventList() {
     firestoreDb
       .collection("event-list")
+		  .whereField("isRemoved", isEqualTo: false)
       .getDocuments(completion: {[weak self] snapshot, error in
         guard let self = self else { return }
         if let error = error {

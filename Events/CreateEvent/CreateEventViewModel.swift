@@ -98,6 +98,38 @@ class CreateEventViewModel: Stepper {
 			})
     }
   }
+	
+	private func setUserEvent(id: String, uid: String, db: Firestore) {
+		let userEvent = UserEvent(
+			eventId: id,
+			userId: uid,
+			isFollow: false,
+			isJoin: false,
+			isAuthor: true
+		)
+		let refUserDetails = db
+			.collection("user_details")
+			.document(uid)
+			.collection("events")
+			.document(id)
+		
+		let refEvent = db
+			.collection("event-list")
+			.document(id)
+			.collection("users")
+			.document(uid)
+		
+		do {
+			try refUserDetails.setData(from: userEvent, completion: { error in
+				if let error = error { print(error) }
+			})
+			try refEvent.setData(from: refEvent, completion: { error in
+				if let error = error { print(error) }
+			})
+		} catch let error {
+			print("Failed to set user event with error \(error.localizedDescription)")
+		}
+	}
 
   private func descriptionWithImageUrls(
     from description: DescriptionWithAssets,
@@ -145,6 +177,7 @@ class CreateEventViewModel: Stepper {
           fullName: geocode.fullLocationName()
         ),
         dates: self.dates,
+				isRemoved: false,
         duration: duration,
         createDate: Date(),
         categories: [categoryId],
@@ -156,6 +189,7 @@ class CreateEventViewModel: Stepper {
           print("Error", error)
           return
         }
+				self.setUserEvent(id: document.documentID, uid: user.uid, db: db)
         self.eventDidCreated()
       })
     }

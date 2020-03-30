@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		0A163111242F842200936EB0 /* environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A163110242F842200936EB0 /* environment.swift */; };
 		0A163117242FDA9300936EB0 /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A163116242FDA9300936EB0 /* LocationSearchView.swift */; };
+		0A42AF312430E84F00902B35 /* CreatedEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */; };
+		0A42AF332430E85A00902B35 /* CreatedEventsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */; };
+		0A42AF352431048800902B35 /* CreatedEventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */; };
+		0A42AF37243133D600902B35 /* CreatedEventCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF36243133D600902B35 /* CreatedEventCellNode.swift */; };
 		0A48948C23F9C10C0035A4A4 /* UnsplashResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948B23F9C10C0035A4A4 /* UnsplashResponse.swift */; };
 		0A48948E23F9C2370035A4A4 /* UnspashAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948D23F9C2370035A4A4 /* UnspashAPI.swift */; };
 		0A48949023F9C9050035A4A4 /* InternalImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A48948F23F9C9050035A4A4 /* InternalImageCache.swift */; };
@@ -23,6 +27,7 @@
 		0A5CD06A2405DC9F00BC9B2C /* LoginTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5CD0692405DC9F00BC9B2C /* LoginTextField.swift */; };
 		0AA421812415A74400554121 /* DateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421802415A74400554121 /* DateViewModel.swift */; };
 		0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421842416351000554121 /* DescriptionCellButton.swift */; };
+		0AB8DC2424324F2100C5C1CC /* CreatedEventsFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8DC2324324F2100C5C1CC /* CreatedEventsFlow.swift */; };
 		0AE899DE242CE63800EF427E /* UIImageView+fromExternalUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE899DD242CE63800EF427E /* UIImageView+fromExternalUrl.swift */; };
 		0AE899E0242D194C00EF427E /* EventsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE899DF242D194C00EF427E /* EventsNode.swift */; };
 		0AEE5CF4242D2337007A2D10 /* EventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE5CF3242D2337007A2D10 /* EventsViewModel.swift */; };
@@ -75,8 +80,6 @@
 		745243AC22CE85BA00C930C8 /* RootScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */; };
 		745243B122CE85BC00C930C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 745243B022CE85BC00C930C8 /* Assets.xcassets */; };
 		745243B422CE85BC00C930C8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 745243B222CE85BC00C930C8 /* LaunchScreen.storyboard */; };
-		745243BD22CF7B5A00C930C8 /* SearchBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243BC22CF7B5A00C930C8 /* SearchBarViewController.swift */; };
-		745243BF22CF965500C930C8 /* SearchBarUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243BE22CF965500C930C8 /* SearchBarUITextField.swift */; };
 		745243C122CFE2B400C930C8 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243C022CFE2B400C930C8 /* UIColorExtension.swift */; };
 		7453637C22EE4940004C9717 /* ProfileActionSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7453637B22EE4940004C9717 /* ProfileActionSection.swift */; };
 		7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */; };
@@ -127,7 +130,6 @@
 		748E0B1422DA26BC00B061C7 /* GeolocationAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B1322DA26BC00B061C7 /* GeolocationAPI.swift */; };
 		748E0B1722DA289800B061C7 /* Geocode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B1622DA289800B061C7 /* Geocode.swift */; };
 		748E0B1A22DB6B9200B061C7 /* LocationSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B1922DB6B9200B061C7 /* LocationSearchViewController.swift */; };
-		748E0B1F22DB7E2C00B061C7 /* SearchBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B1E22DB7E2C00B061C7 /* SearchBarDelegate.swift */; };
 		748E0B2122DB82A200B061C7 /* LocationSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B2022DB82A200B061C7 /* LocationSearchViewModel.swift */; };
 		748E0B2322DB87AA00B061C7 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748E0B2222DB87AA00B061C7 /* LocationCell.swift */; };
 		749898B324008D2C007EF352 /* styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749898B224008D2C007EF352 /* styles.swift */; };
@@ -186,6 +188,10 @@
 		0A163110242F842200936EB0 /* environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = environment.swift; sourceTree = "<group>"; };
 		0A163114242F859A00936EB0 /* addEnvironment.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = addEnvironment.sh; path = BuildPhases/addEnvironment.sh; sourceTree = SOURCE_ROOT; };
 		0A163116242FDA9300936EB0 /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
+		0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsViewController.swift; sourceTree = "<group>"; };
+		0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsNode.swift; sourceTree = "<group>"; };
+		0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsViewModel.swift; sourceTree = "<group>"; };
+		0A42AF36243133D600902B35 /* CreatedEventCellNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventCellNode.swift; sourceTree = "<group>"; };
 		0A48948B23F9C10C0035A4A4 /* UnsplashResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashResponse.swift; sourceTree = "<group>"; };
 		0A48948D23F9C2370035A4A4 /* UnspashAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnspashAPI.swift; sourceTree = "<group>"; };
 		0A48948F23F9C9050035A4A4 /* InternalImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalImageCache.swift; sourceTree = "<group>"; };
@@ -200,6 +206,7 @@
 		0A5CD0692405DC9F00BC9B2C /* LoginTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextField.swift; sourceTree = "<group>"; };
 		0AA421802415A74400554121 /* DateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewModel.swift; sourceTree = "<group>"; };
 		0AA421842416351000554121 /* DescriptionCellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCellButton.swift; sourceTree = "<group>"; };
+		0AB8DC2324324F2100C5C1CC /* CreatedEventsFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsFlow.swift; sourceTree = "<group>"; };
 		0AE899DD242CE63800EF427E /* UIImageView+fromExternalUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+fromExternalUrl.swift"; sourceTree = "<group>"; };
 		0AE899DF242D194C00EF427E /* EventsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsNode.swift; sourceTree = "<group>"; };
 		0AEE5CF3242D2337007A2D10 /* EventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewModel.swift; sourceTree = "<group>"; };
@@ -257,8 +264,6 @@
 		745243B022CE85BC00C930C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		745243B322CE85BC00C930C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		745243B522CE85BC00C930C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		745243BC22CF7B5A00C930C8 /* SearchBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarViewController.swift; sourceTree = "<group>"; };
-		745243BE22CF965500C930C8 /* SearchBarUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarUITextField.swift; sourceTree = "<group>"; };
 		745243C022CFE2B400C930C8 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		7453637B22EE4940004C9717 /* ProfileActionSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionSection.swift; sourceTree = "<group>"; };
 		7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsSection.swift; sourceTree = "<group>"; };
@@ -309,7 +314,6 @@
 		748E0B1322DA26BC00B061C7 /* GeolocationAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeolocationAPI.swift; sourceTree = "<group>"; };
 		748E0B1622DA289800B061C7 /* Geocode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geocode.swift; sourceTree = "<group>"; };
 		748E0B1922DB6B9200B061C7 /* LocationSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewController.swift; sourceTree = "<group>"; };
-		748E0B1E22DB7E2C00B061C7 /* SearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarDelegate.swift; sourceTree = "<group>"; };
 		748E0B2022DB82A200B061C7 /* LocationSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewModel.swift; sourceTree = "<group>"; };
 		748E0B2222DB87AA00B061C7 /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
 		749898B224008D2C007EF352 /* styles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = styles.swift; sourceTree = "<group>"; };
@@ -386,6 +390,18 @@
 			path = BuildPhases;
 			sourceTree = "<group>";
 		};
+		0A42AF2F2430E82F00902B35 /* CreatedEvents */ = {
+			isa = PBXGroup;
+			children = (
+				0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */,
+				0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */,
+				0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */,
+				0A42AF36243133D600902B35 /* CreatedEventCellNode.swift */,
+				0AB8DC2324324F2100C5C1CC /* CreatedEventsFlow.swift */,
+			);
+			path = CreatedEvents;
+			sourceTree = "<group>";
+		};
 		0A48948A23F9C0DE0035A4A4 /* unsplash */ = {
 			isa = PBXGroup;
 			children = (
@@ -450,6 +466,7 @@
 		741DCF9E22D3E3C8005783A3 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				0A42AF2F2430E82F00902B35 /* CreatedEvents */,
 				74D8DB2C22DD264600E70CB4 /* UserDetails */,
 				741DCF9F22D3E3E1005783A3 /* ProfileScreenViewController.swift */,
 				748E0AFD22D8E2D000B061C7 /* ProfileScreenViewModel.swift */,
@@ -550,7 +567,6 @@
 				7478F4FC22F60BCF00A43F52 /* Models */,
 				7478F4F322F601FD00A43F52 /* CreateEvent */,
 				7463A49C22DE6EB9009171E1 /* CommonUIComponents */,
-				745243BB22CF7B3000C930C8 /* SearchBar */,
 				748E0B1D22DB725700B061C7 /* Extensions */,
 				748E0B1C22DB721E00B061C7 /* RootScreen */,
 				748E0B1822DB6B0B00B061C7 /* LocationSearch */,
@@ -580,16 +596,6 @@
 				0A163110242F842200936EB0 /* environment.swift */,
 			);
 			path = Events;
-			sourceTree = "<group>";
-		};
-		745243BB22CF7B3000C930C8 /* SearchBar */ = {
-			isa = PBXGroup;
-			children = (
-				745243BC22CF7B5A00C930C8 /* SearchBarViewController.swift */,
-				745243BE22CF965500C930C8 /* SearchBarUITextField.swift */,
-				748E0B1E22DB7E2C00B061C7 /* SearchBarDelegate.swift */,
-			);
-			path = SearchBar;
 			sourceTree = "<group>";
 		};
 		7463A49C22DE6EB9009171E1 /* CommonUIComponents */ = {
@@ -1062,12 +1068,12 @@
 				74F0F5692300A3C800170C6C /* shadow.swift in Sources */,
 				746E10652310A03B00B5B19D /* ImagePickerViewModel.swift in Sources */,
 				748E0B0E22DA24C000B061C7 /* APIRequest.swift in Sources */,
-				748E0B1F22DB7E2C00B061C7 /* SearchBarDelegate.swift in Sources */,
 				6079370F23225BEB003AAD2B /* PermissionModalViewController.swift in Sources */,
 				74F6F210233178ED00A69F61 /* ScreenWithResult.swift in Sources */,
 				743816A422E8F74400AA4960 /* DayButton.swift in Sources */,
 				747961EA240DB120006B8EB0 /* DescriptionCellView.swift in Sources */,
 				74D3A4272423A80B00E6CDF4 /* RoundedView.swift in Sources */,
+				0A42AF332430E85A00902B35 /* CreatedEventsNode.swift in Sources */,
 				74D3A42524239FFD00E6CDF4 /* UIView+shadow.swift in Sources */,
 				746F22E42332CC0D000713A0 /* PermissionModalFlow.swift in Sources */,
 				7478F50222F60CFD00A43F52 /* Location.swift in Sources */,
@@ -1094,6 +1100,7 @@
 				0A48948E23F9C2370035A4A4 /* UnspashAPI.swift in Sources */,
 				746697422326F85300406CD8 /* MainFlow.swift in Sources */,
 				742A99C322EDC77500A3A703 /* Result.swift in Sources */,
+				0A42AF312430E84F00902B35 /* CreatedEventsViewController.swift in Sources */,
 				0A48948C23F9C10C0035A4A4 /* UnsplashResponse.swift in Sources */,
 				74278ACB23D4D88900B8A5BB /* CalendarHeaderView.swift in Sources */,
 				741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */,
@@ -1102,6 +1109,7 @@
 				7434FDDD2402D684003E376F /* loginStyles.swift in Sources */,
 				74D7E9F2234A6BF00022BAC1 /* SelectImageButton.swift in Sources */,
 				6079371323225D5B003AAD2B /* PermissionModalView.swift in Sources */,
+				0A42AF352431048800902B35 /* CreatedEventsViewModel.swift in Sources */,
 				0AEF8D272413B14B00BBB45D /* CreateEventFlow.swift in Sources */,
 				0AA421812415A74400554121 /* DateViewModel.swift in Sources */,
 				74F0F55F22FF6F5500170C6C /* CategoryView.swift in Sources */,
@@ -1116,6 +1124,7 @@
 				742334652415627300B46037 /* CategoryViewModel.swift in Sources */,
 				0A4919A2241E9CEC0068BDFE /* StartViewController.swift in Sources */,
 				74D8DB2E22DD265500E70CB4 /* UserDetailsViewController.swift in Sources */,
+				0AB8DC2424324F2100C5C1CC /* CreatedEventsFlow.swift in Sources */,
 				740C352023DC700600F00714 /* CalendarCloseByGestureRecognizer.swift in Sources */,
 				7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */,
 				7478F4F922F6033C00A43F52 /* CreateEventViewModel.swift in Sources */,
@@ -1137,11 +1146,11 @@
 				7408542123020C0700220B23 /* Tip.swift in Sources */,
 				74E882EC2426BBFF00DAF4B4 /* EventViewController.swift in Sources */,
 				74AD9F5A23DDD10400F07871 /* RootScreenView.swift in Sources */,
-				745243BD22CF7B5A00C930C8 /* SearchBarViewController.swift in Sources */,
 				74F0F56122FF7E8800170C6C /* CategoryButton.swift in Sources */,
 				748E0B1222DA24DD00B061C7 /* APIClient.swift in Sources */,
 				742EF13F231F1850002092CA /* ImagesPreviewViewModel.swift in Sources */,
 				748E0B1A22DB6B9200B061C7 /* LocationSearchViewController.swift in Sources */,
+				0A42AF37243133D600902B35 /* CreatedEventCellNode.swift in Sources */,
 				74F0F5752300B5BF00170C6C /* HintPopupView.swift in Sources */,
 				7423346A2415666300B46037 /* DescriptionViewController.swift in Sources */,
 				7478F4FE22F60CB900A43F52 /* Event.swift in Sources */,
@@ -1154,7 +1163,6 @@
 				0AFA14AF240518CB00F07E82 /* ObservableType+Nwise.swift in Sources */,
 				74F0F56723008BAC00170C6C /* HintView.swift in Sources */,
 				74697FCA22D200A900D5B5F4 /* Month.swift in Sources */,
-				745243BF22CF965500C930C8 /* SearchBarUITextField.swift in Sources */,
 				0AEE5CF8242D4B37007A2D10 /* SectionHeaderCellNode.swift in Sources */,
 				0AEE5CFE242E7CE3007A2D10 /* EventsEmptyListCellNode.swift in Sources */,
 				74E882F42428C09300DAF4B4 /* EventInfoSection.swift in Sources */,

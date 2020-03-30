@@ -52,7 +52,8 @@ class EventViewModel: Stepper, EventNodeDataSource {
 				eventId: eventId,
 				userId: userId,
 				isFollow: false,
-				isJoin: false
+				isJoin: false,
+				isAuthor: eventId == userId
 			)
 			reference.getDocument(completion: { snapshot, error in
 				if let error = error {
@@ -118,7 +119,8 @@ class EventViewModel: Stepper, EventNodeDataSource {
 							eventId: eventId,
 							userId: userId,
 							isFollow: false,
-							isJoin: true
+							isJoin: true,
+							isAuthor: eventId == userId
 						)
 						try reference.setData(from: user)
 						return nil

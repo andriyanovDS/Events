@@ -36,16 +36,18 @@ class ProfileFlow: Flow {
 		case .userDetailsDidComplete:
       rootNavigationController.dismiss(animated: true, completion: nil)
       return .none
-    case .permissionModalDidComplete:
+		case .permissionModalDidComplete:
       rootNavigationController.dismiss(animated: false, completion: nil)
       return .none
     case .permissionModal(let withType):
       return navigateToPermissionModal(with: withType)
     case .createEvent:
       return navigateToCreateEventScreen()
-    case .createEventDidComplete:
+		case .createEventDidComplete, .createdEventsDidComplete:
       rootNavigationController.dismiss(animated: true, completion: nil)
       return .none
+		case .createdEvents:
+			return navigateToCreatedEvents()
     default:
       return .none
     }
@@ -109,5 +111,18 @@ class ProfileFlow: Flow {
     let viewController = ProfileScreenViewController.instantiate(with: viewModel)
     rootNavigationController.pushViewController(viewController, animated: true)
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
+  }
+	
+  func navigateToCreatedEvents() -> FlowContributors {
+		let createdEventsFlow = CreatedEventsFlow()
+    Flows.whenReady(flow1: createdEventsFlow, block: {[unowned self] root in
+      root.modalPresentationStyle = .fullScreen
+			root.modalTransitionStyle = .coverVertical
+      self.rootNavigationController.present(root, animated: true)
+    })
+    return .one(flowContributor: .contribute(
+      withNextPresentable: createdEventsFlow,
+      withNextStepper: OneStepper(withSingleStep: EventStep.createdEvents))
+    )
   }
 }

@@ -29,7 +29,7 @@ class TextFieldWithShadow: UITextField {
     layer.cornerRadius = 3
     backgroundColor = .white
     layer.borderColor = UIColor.clear.cgColor
-    addShadow(radius: 7, color: .black)
+		addShadow(view: self, radius: 7, color: .black)
   }
 
   required init?(coder aDecoder: NSCoder) {
