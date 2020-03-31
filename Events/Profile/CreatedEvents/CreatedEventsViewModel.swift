@@ -18,11 +18,18 @@ class CreatedEventsViewModel: Stepper {
 	}
 	var isListLoadedAndEmpty: Bool = false
 	let steps = PublishRelay<Step>()
+	private var searchQuery: String = ""
 	private var _events: [Event] = []
 	private var _filteredEvents: [Event] = []
 	private lazy var db = Firestore.firestore()
+	private var lastRemovedEvent: RemovedEvent?
 	
 	var events: [Event] { _filteredEvents }
+	
+	private struct RemovedEvent {
+		let event: Event
+		let position: Int
+	}
 	
 	@objc func closeScreen() {
 		steps.accept(EventStep.createdEventsDidComplete)
@@ -31,7 +38,7 @@ class CreatedEventsViewModel: Stepper {
 	func confirmEventDelete(at index: Int, completionHandler: @escaping (Bool) -> Void) {
 		let submitAction = UIAlertAction(
 			title: NSLocalizedString("Delete", comment: "Delete event"),
-			style: .default,
+			style: .destructive,
 			handler: {[weak self] _ in
 				self?.removeEvent(at: index)
 				completionHandler(true)
@@ -39,7 +46,7 @@ class CreatedEventsViewModel: Stepper {
 		)
 		let cancelAction = UIAlertAction(
 			title: NSLocalizedString("Cancel", comment: "Cancel alert"),
-			style: .destructive,
+			style: .default,
 			handler: { _ in completionHandler(false) }
 		)
 		steps.accept(EventStep.alert(
@@ -53,16 +60,32 @@ class CreatedEventsViewModel: Stepper {
 	}
 	
 	func filterEvents(whereEventName input: String) {
+		defer { searchQuery = input }
+		
 		if input.isEmpty {
 			let isArrayChanged = _events != _filteredEvents
 			_filteredEvents = _events
 			if isArrayChanged { delegate?.listDidUpdate() }
 			return
 		}
-		let newArray = _events.filter { $0.name.contains(input) }
-		let isArrayChanged = newArray != _filteredEvents
-		_filteredEvents = newArray
+		let eventsWithSuitableName = _events.filter { $0.name.contains(input) }
+		let isArrayChanged = eventsWithSuitableName != _filteredEvents
+		_filteredEvents = eventsWithSuitableName
 		if isArrayChanged { delegate?.listDidUpdate() }
+	}
+	
+	func undoEventDeletion() {
+		guard let removedEvent = lastRemovedEvent else { return }
+		let ref = db
+			.collection("event-list")
+			.document(removedEvent.event.id)
+		ref.updateData(["isRemoved": false])
+		
+		_events.insert(removedEvent.event, at: removedEvent.position)
+		_filteredEvents = searchQuery.isEmpty
+			? _events
+			: _events.filter { $0.name.contains(searchQuery) }
+		delegate?.listDidUpdate()
 	}
 	
 	private func removeEvent(at index: Int) {
@@ -75,6 +98,7 @@ class CreatedEventsViewModel: Stepper {
 		
 		let ref = db.collection("event-list").document(event.id)
 		ref.updateData(["isRemoved": true])
+		lastRemovedEvent = RemovedEvent(event: event, position: removeIndex)
 	}
 	
 	private func loadCreatedEventIds(uid: String) -> Promise<[String]> {
@@ -139,7 +163,7 @@ class CreatedEventsViewModel: Stepper {
 	}
 	
 	private func loadEvents() {
-		guard let uid = Auth.auth().currentUser?.uid else { return}
+		guard let uid = Auth.auth().currentUser?.uid else { return }
 		Promise<Void>(on: .global(qos: .background)) {[weak self] in
 			guard let self = self else { return }
 			let ids = try await(self.loadCreatedEventIds(uid: uid))

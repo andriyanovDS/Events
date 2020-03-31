@@ -13,7 +13,9 @@ class CreatedEventNode: ASDisplayNode {
 	let searchTextField = ASEditableTextNode()
 	let searchTextFieldBackgound = ASDisplayNode()
 	let closeButton = ButtonNodeScaleOnPress()
+	var undoActionNode = UndoActionNode()
 	private let searchIcon = ASTextNode()
+	private var isUndoActionRequired: Bool = false
 	
 	override init() {
 		super.init()
@@ -53,7 +55,63 @@ class CreatedEventNode: ASDisplayNode {
 		let verticalStack = ASStackLayoutSpec.vertical()
 		verticalStack.children = [insetSpec, tableNode]
 		tableNode.style.flexGrow = 1
+		
+		if isUndoActionRequired {
+			let undoSpec = ASInsetLayoutSpec(
+				insets: UIEdgeInsets(top: CGFloat.infinity, left: 20, bottom: 40, right: 20),
+				child: undoActionNode
+			)
+			return ASOverlayLayoutSpec(child: verticalStack, overlay: undoSpec)
+		}
+		
 		return verticalStack
+	}
+	
+	override func animateLayoutTransition(_ context: ASContextTransitioning) {
+		if isUndoActionRequired {
+			let finalUndoFrame = context.finalFrame(for: undoActionNode)
+			
+			undoActionNode.frame = CGRect(
+				x: finalUndoFrame.minX,
+				y: finalUndoFrame.minY + 100.0,
+				width: finalUndoFrame.width,
+				height: finalUndoFrame.height
+			)
+			undoActionNode.alpha = 0
+
+			UIView.animate(withDuration: 0.4, animations: {
+				self.undoActionNode.frame = finalUndoFrame
+				self.undoActionNode.alpha = 1
+			}, completion: { finished in
+				context.completeTransition(finished)
+			})
+		} else {
+			let initialUndoFrame = context.initialFrame(for: undoActionNode)
+
+			UIView.animate(withDuration: 0.4, animations: {
+				self.undoActionNode.frame = CGRect(
+					x: initialUndoFrame.minX,
+					y: initialUndoFrame.minY + 100.0,
+					width: initialUndoFrame.width,
+					height: initialUndoFrame.height
+				)
+				self.undoActionNode.alpha = 0
+			}, completion: { finished in
+				context.completeTransition(finished)
+			})
+		}
+	}
+	
+	func showUndoAction() {
+		guard !isUndoActionRequired else { return }
+		isUndoActionRequired = true
+		transitionLayout(withAnimation: true, shouldMeasureAsync: false)
+	}
+	
+	func hideUndoAction() {
+		guard isUndoActionRequired else { return }
+		isUndoActionRequired = false
+		transitionLayout(withAnimation: true, shouldMeasureAsync: false)
 	}
 	
 	private func setupNode() {

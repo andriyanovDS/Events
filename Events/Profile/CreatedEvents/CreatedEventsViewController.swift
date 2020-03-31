@@ -12,13 +12,18 @@ class CreatedEventsViewController: ASViewController<CreatedEventNode>, ViewModel
 	var viewModel: CreatedEventsViewModel! {
 		didSet { viewModel.delegate = self }
 	}
-	
+	private var undoEventDeletionTask: DispatchWorkItem?
+
 	init() {
 		super.init(node: CreatedEventNode())
 	}
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
+	}
+	
+	struct Constants {
+		static let undoActionTimeoutInSeconds: Int = 5
 	}
 	
 	override func viewDidLoad() {
@@ -28,11 +33,25 @@ class CreatedEventsViewController: ASViewController<CreatedEventNode>, ViewModel
 		node.tableNode.dataSource = self
 		node.tableNode.delegate = self
 		node.searchTextField.becomeFirstResponder()
+		node.undoActionNode.undoButtonNode.addTarget(
+			self,
+			action: #selector(undoEventDeletion),
+			forControlEvents: .touchUpInside
+		)
 		node.closeButton.addTarget(
 			viewModel,
 			action: #selector(viewModel.closeScreen),
 			forControlEvents: .touchUpInside
 		)
+	}
+	
+	@objc private func undoEventDeletion() {
+		if let task = undoEventDeletionTask {
+			task.cancel()
+			undoEventDeletionTask = nil
+		}
+		viewModel.undoEventDeletion()
+		node.hideUndoAction()
 	}
 }
 
@@ -62,6 +81,15 @@ extension CreatedEventsViewController: ASTableDataSource {
 
 extension CreatedEventsViewController: ASTableDelegate, UITableViewDelegate {
 	private func removeEvent(at indexPath: IndexPath) {
+		node.showUndoAction()
+		undoEventDeletionTask = DispatchWorkItem {[weak self] in
+			self?.node.hideUndoAction()
+			self?.undoEventDeletionTask = nil
+		}
+		DispatchQueue.main.asyncAfter(
+			deadline: DispatchTime.now() + .seconds(Constants.undoActionTimeoutInSeconds),
+			execute: undoEventDeletionTask!
+		)
 		node.tableNode.performBatchUpdates({
 			self.node.tableNode.deleteRows(at: [indexPath], with: .left)
 		}, completion: nil)

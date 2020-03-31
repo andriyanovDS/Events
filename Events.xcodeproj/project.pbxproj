@@ -28,6 +28,9 @@
 		0AA421812415A74400554121 /* DateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421802415A74400554121 /* DateViewModel.swift */; };
 		0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421842416351000554121 /* DescriptionCellButton.swift */; };
 		0AB8DC2424324F2100C5C1CC /* CreatedEventsFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8DC2324324F2100C5C1CC /* CreatedEventsFlow.swift */; };
+		0AB8DC2624334FCF00C5C1CC /* UndoActionNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8DC2524334FCF00C5C1CC /* UndoActionNode.swift */; };
+		0AB8DC282433919000C5C1CC /* UndoActionCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8DC272433919000C5C1CC /* UndoActionCounterView.swift */; };
+		0AB8DC2A2433C00100C5C1CC /* CounterCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8DC292433C00100C5C1CC /* CounterCircleView.swift */; };
 		0AE899DE242CE63800EF427E /* UIImageView+fromExternalUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE899DD242CE63800EF427E /* UIImageView+fromExternalUrl.swift */; };
 		0AE899E0242D194C00EF427E /* EventsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE899DF242D194C00EF427E /* EventsNode.swift */; };
 		0AEE5CF4242D2337007A2D10 /* EventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE5CF3242D2337007A2D10 /* EventsViewModel.swift */; };
@@ -207,6 +210,9 @@
 		0AA421802415A74400554121 /* DateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewModel.swift; sourceTree = "<group>"; };
 		0AA421842416351000554121 /* DescriptionCellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCellButton.swift; sourceTree = "<group>"; };
 		0AB8DC2324324F2100C5C1CC /* CreatedEventsFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsFlow.swift; sourceTree = "<group>"; };
+		0AB8DC2524334FCF00C5C1CC /* UndoActionNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoActionNode.swift; sourceTree = "<group>"; };
+		0AB8DC272433919000C5C1CC /* UndoActionCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoActionCounterView.swift; sourceTree = "<group>"; };
+		0AB8DC292433C00100C5C1CC /* CounterCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterCircleView.swift; sourceTree = "<group>"; };
 		0AE899DD242CE63800EF427E /* UIImageView+fromExternalUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+fromExternalUrl.swift"; sourceTree = "<group>"; };
 		0AE899DF242D194C00EF427E /* EventsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsNode.swift; sourceTree = "<group>"; };
 		0AEE5CF3242D2337007A2D10 /* EventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewModel.swift; sourceTree = "<group>"; };
@@ -396,6 +402,9 @@
 				0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */,
 				0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */,
 				0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */,
+				0AB8DC2524334FCF00C5C1CC /* UndoActionNode.swift */,
+				0AB8DC272433919000C5C1CC /* UndoActionCounterView.swift */,
+				0AB8DC292433C00100C5C1CC /* CounterCircleView.swift */,
 				0A42AF36243133D600902B35 /* CreatedEventCellNode.swift */,
 				0AB8DC2324324F2100C5C1CC /* CreatedEventsFlow.swift */,
 			);
@@ -1063,6 +1072,7 @@
 				74697FC022D0E69B00D5B5F4 /* CalendarViewController.swift in Sources */,
 				745243AC22CE85BA00C930C8 /* RootScreenViewController.swift in Sources */,
 				742EF141231F1879002092CA /* ImagesPreviewView.swift in Sources */,
+				0AB8DC2A2433C00100C5C1CC /* CounterCircleView.swift in Sources */,
 				74E882F82428E5FE00DAF4B4 /* EventDescriptionView.swift in Sources */,
 				748E0B0022D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift in Sources */,
 				74F0F5692300A3C800170C6C /* shadow.swift in Sources */,
@@ -1093,6 +1103,7 @@
 				7430406B2420EE7F007F50A2 /* EventCellView.swift in Sources */,
 				741CECB123D6EDF900BE6BA3 /* dateHelpers.swift in Sources */,
 				7467B6ED22D510AA00A1BFE9 /* LoginViewController.swift in Sources */,
+				0AB8DC282433919000C5C1CC /* UndoActionCounterView.swift in Sources */,
 				7467B6EA22D5107400A1BFE9 /* UserObservers.swift in Sources */,
 				74D7E9F02348E5A90022BAC1 /* ImageViewCell.swift in Sources */,
 				7463A49E22DE6EED009171E1 /* TextFieldWithShadow.swift in Sources */,
@@ -1184,6 +1195,7 @@
 				74E5DAD22329974D00E1557D /* ViewModelBased.swift in Sources */,
 				0AE899DE242CE63800EF427E /* UIImageView+fromExternalUrl.swift in Sources */,
 				7430406D24211010007F50A2 /* ImageCache.swift in Sources */,
+				0AB8DC2624334FCF00C5C1CC /* UndoActionNode.swift in Sources */,
 				742334632415626800B46037 /* CategoryViewController.swift in Sources */,
 				7478F50422F60D2700A43F52 /* Prediction.swift in Sources */,
 				7453637C22EE4940004C9717 /* ProfileActionSection.swift in Sources */,
