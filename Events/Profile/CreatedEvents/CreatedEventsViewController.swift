@@ -60,6 +60,10 @@ extension CreatedEventsViewController: CreatedEventsViewModelDelegate {
 	func listDidUpdate() {
 		node.tableNode.reloadData()
 	}
+	
+	func didFinishLoading() {
+		node.hideLoadingNode()
+	}
 }
 
 extension CreatedEventsViewController: ASTableDataSource {

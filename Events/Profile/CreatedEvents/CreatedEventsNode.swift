@@ -14,10 +14,13 @@ class CreatedEventNode: ASDisplayNode {
 	let searchTextFieldBackgound = ASDisplayNode()
 	let closeButton = ButtonNodeScaleOnPress()
 	var undoActionNode = UndoActionNode()
+	private var isLoadingInProgress: Bool = true
+	private let loadingNode: ASDisplayNode
 	private let searchIcon = ASTextNode()
 	private var isUndoActionRequired: Bool = false
 	
 	override init() {
+		loadingNode = ASDisplayNode(viewBlock: { LoadingView() })
 		super.init()
 		setupNode()
 	}
@@ -52,9 +55,10 @@ class CreatedEventNode: ASDisplayNode {
 			insets: UIEdgeInsets(top: safeAreaInsets.top + 5.0, left: 10, bottom: 10, right: 10),
 			child: horizontalSpec
 		)
+		
+		let tableSpec = tableLayoutSpec()
 		let verticalStack = ASStackLayoutSpec.vertical()
-		verticalStack.children = [insetSpec, tableNode]
-		tableNode.style.flexGrow = 1
+		verticalStack.children = [insetSpec, tableSpec]
 		
 		if isUndoActionRequired {
 			let undoSpec = ASInsetLayoutSpec(
@@ -63,7 +67,6 @@ class CreatedEventNode: ASDisplayNode {
 			)
 			return ASOverlayLayoutSpec(child: verticalStack, overlay: undoSpec)
 		}
-		
 		return verticalStack
 	}
 	
@@ -102,6 +105,11 @@ class CreatedEventNode: ASDisplayNode {
 		}
 	}
 	
+	func hideLoadingNode() {
+		isLoadingInProgress = false
+		setNeedsLayout()
+	}
+	
 	func showUndoAction() {
 		guard !isUndoActionRequired else { return }
 		isUndoActionRequired = true
@@ -114,9 +122,31 @@ class CreatedEventNode: ASDisplayNode {
 		transitionLayout(withAnimation: true, shouldMeasureAsync: false)
 	}
 	
+	private func tableLayoutSpec() -> ASLayoutSpec {
+		if isLoadingInProgress {
+			let loadingNodeSpec = ASInsetLayoutSpec(
+				insets: UIEdgeInsets(
+					top: 40,
+					left: CGFloat.infinity,
+					bottom: CGFloat.infinity,
+					right: CGFloat.infinity
+				),
+				child: loadingNode
+			)
+			let overlaySpec = ASOverlayLayoutSpec(child: tableNode, overlay: loadingNodeSpec)
+			overlaySpec.style.flexGrow = 1
+			return overlaySpec
+		}
+		let wrapperSpec = ASWrapperLayoutSpec(layoutElement: tableNode)
+		wrapperSpec.style.flexGrow = 1
+		return wrapperSpec
+	}
+	
 	private func setupNode() {
 		automaticallyManagesSubnodes = true
 		automaticallyRelayoutOnSafeAreaChanges = true
+		loadingNode.isUserInteractionEnabled = false
+		undoActionNode.isUserInteractionEnabled = false
 		setStyledText(
 			editableTextNode: searchTextField,
 			text: "",

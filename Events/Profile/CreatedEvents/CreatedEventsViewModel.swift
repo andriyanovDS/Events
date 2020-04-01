@@ -176,6 +176,7 @@ class CreatedEventsViewModel: Stepper {
 			self._events = events
 			self._filteredEvents = events
 			DispatchQueue.main.async {
+				self.delegate?.didFinishLoading()
 				self.delegate?.listDidUpdate()
 			}
 		}
@@ -184,5 +185,6 @@ class CreatedEventsViewModel: Stepper {
 }
 
 protocol CreatedEventsViewModelDelegate: class {
+	func didFinishLoading()
 	func listDidUpdate()
 }

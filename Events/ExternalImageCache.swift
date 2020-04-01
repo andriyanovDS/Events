@@ -113,7 +113,7 @@ class ExternalImageCache {
 			}
 			URLSession.shared.dataTask(with: imageURL) {[weak self] data, _, error in
 				if let error = error {
-					reject(FailedToLoadExternalImage.badRequest)
+					reject(error)
 					return
 				}
 				guard let data = data else {
