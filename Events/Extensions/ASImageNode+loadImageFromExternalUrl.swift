@@ -19,7 +19,7 @@ extension ASImageNode {
 		loadOn queue: DispatchQueue = .global(qos: .utility),
 		transitionConfig: UIImageView.TransitionConfig? = nil
 	) {
-		InternalImageCache.shared.loadImage(by: url, queue: queue)
+		ExternalImageCache.shared.loadImage(by: url, queue: queue)
 			.then(on: .global(qos: .userInitiated)) {[weak self] originImage in
 				guard let self = self else { return }
 				let newImage = resize(image: originImage, expectedSize: size)
@@ -48,7 +48,7 @@ extension ASImageNode {
 	) {
 		Promise<UIImage?>(on: queue) { () -> UIImage? in
 			semaphore.wait()
-			let originImage = try await(InternalImageCache.shared.loadImage(by: url, queue: queue))
+			let originImage = try await(ExternalImageCache.shared.loadImage(by: url, queue: queue))
 			return resize(image: originImage, expectedSize: size)
 		}
 		.then(on: .main) {[weak self] image in

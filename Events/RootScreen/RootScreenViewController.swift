@@ -25,7 +25,7 @@ class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased
 
   init() {
     loadUserAvatar = memoize(callback: { (v: String) -> Promise<UIImage> in
-      InternalImageCache.shared.loadImage(by: v)
+      ExternalImageCache.shared.loadImage(by: v)
         .then(on: .global()) { image -> UIImage in
           let size = EventCellNode.Constants.authorImageSize
           let renderer = UIGraphicsImageRenderer(size: size)
@@ -37,7 +37,7 @@ class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased
     })
 
     loadEventImage = memoize(callback: { (url: String) -> Promise<UIImage> in
-      InternalImageCache.shared.loadImage(by: url)
+      ExternalImageCache.shared.loadImage(by: url)
       .then(on: .global()) { image -> UIImage in
         let imageSize = EventCellNode.Constants.eventImageSize
         let rect = AVMakeRect(aspectRatio: image.size, insideRect: CGRect(
