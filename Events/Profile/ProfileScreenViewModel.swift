@@ -15,27 +15,17 @@ import FirebaseAuth
 
 class ProfileScreenViewModel: Stepper {
   let steps = PublishRelay<Step>()
-
   var user: User?
-  var userDisposable: Disposable?
   weak var delegate: ProfileScreenViewModelDelegate?
-  
-  func attemptToOpenUserDetails() {
-    userDisposable = currentUserObserver
-      .subscribe(onNext: {[weak self] user in
-        self?.user = user
-        self?.delegate?.onUserDidChange(user: user)
-        if user.firstName.isEmpty {
-          self?.openUserDetails()
-        }
-      })
-  }
-  
-  deinit {
-    if userDisposable != nil {
-      userDisposable = nil
-    }
-  }
+	private let disposeBag = DisposeBag()
+	
+	func onLoad() {
+		currentUserObserver
+		.subscribe(onNext: {[weak self] user in
+			self?.onUserDidChange(user)
+		})
+		.disposed(by: disposeBag)
+	}
   
   func openUserDetails() {
     guard let user = self.user else {
@@ -56,13 +46,25 @@ class ProfileScreenViewModel: Stepper {
     do {
       try Auth.auth().signOut()
       steps.accept(EventStep.login)
-    } catch {
+		} catch let error {
+			print(error)
       return
     }
-    
   }
+	
+	private func onUserDidChange(_ user: User) {
+		let isAvatarImageChanged = user.avatar != self.user?.avatar
+		self.user = user
+		self.delegate?.onUserDidChange(
+			user: user,
+			isAvatarImageChanged: isAvatarImageChanged
+		)
+		if user.firstName.isEmpty {
+			self.openUserDetails()
+		}
+	}
 }
 
 protocol ProfileScreenViewModelDelegate: class {
-  func onUserDidChange(user: User)
+	func onUserDidChange(user: User, isAvatarImageChanged: Bool)
 }

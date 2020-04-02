@@ -44,16 +44,24 @@ class ProfileScreenViewController: UIViewController, ViewModelBased {
 		]
     viewModel.delegate = self
 		setupView()
-    viewModel.attemptToOpenUserDetails()
+    viewModel.onLoad()
   }
 
 	private func setupView() {
     profileScreenView = ProfileScreenView()
     view = profileScreenView
     setupButtons()
-    profileScreenView.editButton.addTarget(self, action: #selector(editProfile), for: .touchUpInside)
-    profileScreenView.avatarViewButton.addTarget(self, action: #selector(editProfile), for: .touchUpInside)
-    profileScreenView.logoutButton.addTarget(self, action: #selector(onLogout), for: .touchUpInside)
+		profileScreenView.editButton.rx.tap
+			.subscribe(onNext: {[weak self] _ in self?.viewModel.openUserDetails() })
+			.disposed(by: disposeBag)
+		
+		profileScreenView.avatarViewButton.rx.tap
+		.subscribe(onNext: {[weak self] _ in self?.viewModel.openUserDetails() })
+		.disposed(by: disposeBag)
+		
+    profileScreenView.logoutButton.rx.tap
+		.subscribe(onNext: {[weak self] _ in self?.viewModel.logout() })
+		.disposed(by: disposeBag)
   }
   
   @objc func onLogout() {
@@ -70,22 +78,6 @@ class ProfileScreenViewController: UIViewController, ViewModelBased {
   
   @objc func openSettings() {
     
-  }
-  
-  private func loadAvatarImage(_ avatarExternalUrl: String) {
-    let url = URL(string: avatarExternalUrl, relativeTo: nil)
-    guard let imageUrl = url else {
-      return
-    }
-    DispatchQueue.global(qos: .background).async {
-      let data = try? Data(contentsOf: imageUrl)
-      guard let imageData = data else {
-        return
-      }
-      DispatchQueue.main.async {
-        self.profileScreenView.avatarImageView.image = UIImage(data: imageData)
-      }
-    }
   }
   
   private func setupButtons() {
@@ -105,16 +97,10 @@ class ProfileScreenViewController: UIViewController, ViewModelBased {
 }
 
 extension ProfileScreenViewController: ProfileScreenViewModelDelegate {
-  func onUserDidChange(user: User) {
+	func onUserDidChange(user: User, isAvatarImageChanged: Bool) {
     profileScreenView.userNameLabel.text = user.firstName
-    if let avatarUrl = user.avatar {
-      loadAvatarImage(avatarUrl)
+		if isAvatarImageChanged, let imageUrl = user.avatar {
+			profileScreenView?.updateAvatar(imageUrl: imageUrl)
     }
-  }
-}
-
-extension ProfileScreenViewController: UIScrollViewDelegate {
-  func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    scrollView.contentOffset.x = 0
   }
 }

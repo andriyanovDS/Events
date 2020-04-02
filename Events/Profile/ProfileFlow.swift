@@ -54,8 +54,8 @@ class ProfileFlow: Flow {
   }
 
   func navigateToUserDetails(user: User) -> FlowContributors {
-    let viewModel = UserDetailsViewModel()
-    let viewController = UserDetailsViewController(user: user, viewModel: viewModel)
+		let viewModel = UserDetailsViewModel(user: user)
+		let viewController = UserDetailsViewController.instantiate(with: viewModel)
     viewController.modalTransitionStyle = .coverVertical
     viewController.modalPresentationStyle = .overFullScreen
     rootNavigationController.present(

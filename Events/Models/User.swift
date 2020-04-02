@@ -8,33 +8,22 @@
 
 import Foundation
 
-let fbDateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-
 struct User: Codable {
-  let id: String
-  let firstName: String
-  let lastName: String?
-  let description: String?
-  let gender: Gender?
-  let dateOfBirth: Date?
+ 	let id: String
+  var firstName: String
+  var lastName: String?
+  var description: String?
+  var gender: Gender?
+  var dateOfBirth: Date?
   let email: String
-  let location: Location?
-  let work: String?
-  let avatar: String?
+  var location: Location?
+  var work: String?
+  var avatar: String?
   var fullName: String {
     lastName
       .map { "\(firstName) \($0)" }
       .getOrElse(result: firstName)
-  }
-
-  private func dateOfBirthToString() -> String? {
-    guard let date = dateOfBirth else {
-      return nil
-    }
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = fbDateFormat
-    return dateFormatter.string(from: date)
-  }
+	}
 }
 
 extension User {

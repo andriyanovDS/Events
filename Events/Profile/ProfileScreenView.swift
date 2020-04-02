@@ -9,8 +9,6 @@
 import UIKit
 import Stevia
 
-private let AVATAR_VIEW_SIZE: CGFloat = 80
-
 class ProfileScreenView: UIView {
   
   let scrollView = UIScrollView()
@@ -30,23 +28,32 @@ class ProfileScreenView: UIView {
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+	
+	private struct Constants {
+		static let avatarImageSize = CGSize(
+			width: 80,
+			height: 80
+		)
+	}
+	
+	func updateAvatar(imageUrl: String) {
+		avatarImageView.fromExternalUrl(
+			imageUrl,
+			withResizeTo: Constants.avatarImageSize,
+			loadOn: .global(qos: .default),
+			transitionConfig: UIImageView.TransitionConfig(duration: 0.4)
+		)
+	}
   
   func setupButtons(_ buttons: [ProfileActionButton]) {
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.distribution = .fillProportionally
     stackView.alignment = .fill
-    
+    buttons.forEach { stackView.addArrangedSubview($0) }
     sv(stackView)
-    stackView
-      .left(25)
-      .right(25)
-    
+    stackView.left(25).right(25)
     stackView.Top == userInfoView.Bottom + 40
-    
-    buttons.forEach({ v in
-      stackView.addArrangedSubview(v)
-    })
   }
   
   private func setupView() {
@@ -70,10 +77,7 @@ class ProfileScreenView: UIView {
       v.showsHorizontalScrollIndicator = false
     })
     
-    scrollView
-      .left(25)
-      .right(25)
-    
+    scrollView.left(25).right(25)
     scrollView.Bottom == safeAreaLayoutGuide.Bottom
     scrollView.Top == safeAreaLayoutGuide.Top
   }
@@ -100,13 +104,12 @@ class ProfileScreenView: UIView {
     
     avatarViewButton.style({ v in
       v.backgroundColor = UIColor.gray200()
-      v.layer.cornerRadius = AVATAR_VIEW_SIZE/2
+			v.clipsToBounds = true
+			v.layer.cornerRadius = Constants.avatarImageSize.width / 2
     })
     
     avatarImageView.style({ v in
       v.contentMode = .scaleAspectFill
-      v.layer.cornerRadius = AVATAR_VIEW_SIZE/2
-      v.clipsToBounds = true
       v.image = UIImage(
         from: .materialIcon,
         code: "person",

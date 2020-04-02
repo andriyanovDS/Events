@@ -10,56 +10,18 @@ import UIKit
 import Stevia
 
 class UserDetailsSectionView: UIView {
-  private let label = UILabel()
-  private var childView: UIView?
+	private let childView: UIView
+	private let label = UILabel()
   
-  override init(frame: CGRect) {
-    super.init(frame: frame)
+	init(labelText: String, childView: UIView, initialTextValue: String?) {
+		self.childView = childView
+		super.init(frame: CGRect.zero)
+		sutupLabel(with: labelText)
+		setupChildView(initialTextValue: initialTextValue ?? "")
   }
   
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
-  
-  func setupView(with labelText: String, childView: UIView) {
-    self.childView = childView
-    sutupLabel(with: labelText)
-    setupChildView(childView)
-  }
-  
-  func isChildFirstResponder() -> Bool {
-    return childView?.isFirstResponder ?? false
-  }
-  
-  func getChildText() -> String? {
-    if let textField = childView as? UITextField {
-      guard let text = textField.text else {
-        return nil
-      }
-      return validateChildText(text)
-    }
-    
-    guard let textView = childView as? UITextView else {
-      return nil
-    }
-    return validateChildText(textView.text)
-  }
-  
-  private func validateChildText(_ text: String) -> String? {
-    if text.isEmpty {
-      return nil
-    }
-    return text
-  }
-  
-  func setChildText(_ text: String) {
-    if let textField = childView as? UITextField {
-      textField.text = text
-    }
-    
-    if let textView = childView as? UITextView {
-      textView.text = text
-    }
   }
   
   private func sutupLabel(with text: String) {
@@ -74,8 +36,28 @@ class UserDetailsSectionView: UIView {
     label.top(0).left(10).right(0).height(15)
   }
   
-  private func setupChildView(_ childView: UIView) {
-    sv(childView)
+	private func setupChildView(initialTextValue: String) {
+		sv(childView)
+		if let textField = childView as? UITextField {
+			styleText(
+				textField: textField,
+				text: initialTextValue,
+				size: 18,
+				color: .black,
+				style: .medium
+			)
+			childView.height(40)
+		}
+		if let textView = childView as? UITextView {
+			styleText(
+				textView: textView,
+				text: initialTextValue,
+				size: 18,
+				color: .black,
+				style: .medium
+			)
+		}
+		childView.height(40)
     childView.Top == label.Bottom + 7
     childView.bottom(0).left(0).right(0)
   }

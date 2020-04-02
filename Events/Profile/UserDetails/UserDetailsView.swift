@@ -10,34 +10,54 @@ import UIKit
 import Stevia
 
 class UserDetailsView: UIView {
-
   private let contentView = UIView()
   private let headerContainer = UIView()
   let closeButton = UIButton()
-  let avatarButton = UIButton()
   let datePicker = UIDatePicker()
   let scrollView = UIScrollView()
-  let descriptionTextView = UITextView()
   let submitButton = ButtonScale()
-  let genderTextField = TextFieldWithBottomLine()
-  let dateTextField = TextFieldWithBottomLine()
-  let firstNameSection = UserDetailsSectionView()
-  let lastNameSection = UserDetailsSectionView()
-  let dateSection = UserDetailsSectionView()
-  let genderSection = UserDetailsSectionView()
-  let workSection = UserDetailsSectionView()
-  let descriptionSection = UserDetailsSectionView()
-  
-  typealias Delegate = UserDetailsViewDelegate & UIPickerViewDelegate
-  
-  @objc weak var delegate: Delegate! {
-    didSet {
-      setupView()
-    }
-  }
-  
-  init() {
-    super.init(frame: CGRect.zero)
+	let genderPicker = UIPickerView()
+	let firstNameTextField = TextFieldWithBottomLine()
+	let lastNameTextField = TextFieldWithBottomLine()
+	let dateTextField = TextFieldWithBottomLine()
+	let genderTextField = TextFieldWithBottomLine()
+	let workTextField = TextFieldWithBottomLine()
+	let	descriptionTextView = UITextView()
+	let avatarImageView: AvatarImageView
+	private let nameSectionStackView = UIStackView()
+	private let otherSectionsStackView = UIStackView()
+	
+	struct Constants {
+		static let avatarImageSize = CGSize(
+			width: 120,
+			height: 120
+		)
+	}
+	
+	init(user: User) {
+		let defaultAvatarImage = UIImage(
+			from: .materialIcon,
+			code: "photo.camera",
+			textColor: .black,
+			backgroundColor: .clear,
+			size: CGSize(width: 50, height: 50)
+		)
+		avatarImageView = AvatarImageView(defaultImage: defaultAvatarImage)
+		
+		super.init(frame: CGRect.zero)
+		setupView(user: user)
+		
+		if let date = user.dateOfBirth {
+			datePicker.date = date
+		}
+		if let userAvatar = user.avatar {
+			avatarImageView.fromExternalUrl(
+				userAvatar,
+				withResizeTo: Constants.avatarImageSize,
+				loadOn: .global(qos: .background),
+				transitionConfig: UIImageView.TransitionConfig(duration: 0.3)
+			)
+		}
   }
   
   required init?(coder aDecoder: NSCoder) {
@@ -45,45 +65,84 @@ class UserDetailsView: UIView {
   }
 
   func setUserImage(_ image: UIImage) {
-    avatarButton.setImage(image, for: .normal)
-    avatarButton.imageView
-      .foldL(
-        none: {},
-        some: { v in
-          v.layer.cornerRadius = v.bounds.width / 2.0
-          v.contentMode = .scaleAspectFill
-        }
-      )
+		let newImage = resize(image: image, expectedSize: Constants.avatarImageSize)
+		avatarImageView.image = newImage
   }
+	
+	private func setupSections(user: User) -> [UserDetailsSectionView] {
+		let firstNameSection = UserDetailsSectionView(
+			labelText: NSLocalizedString("First name", comment: "User info: First name"),
+			childView: firstNameTextField,
+			initialTextValue: user.firstName
+		)
+		let lastNameSection = UserDetailsSectionView(
+			labelText: NSLocalizedString("Last name", comment: "User info: Last name"),
+			childView: lastNameTextField,
+			initialTextValue: user.lastName
+		)
+		let dateSection = UserDetailsSectionView(
+			labelText: NSLocalizedString("Date of birth", comment: "User info: Date of birth"),
+			childView: dateTextField,
+			initialTextValue: user.dateOfBirth.map(formatDate)
+		)
+		let genderSection = UserDetailsSectionView(
+			labelText: NSLocalizedString("Gender", comment: "User info: Gender"),
+			childView: genderTextField,
+			initialTextValue: user.gender?.translateValue()
+		)
+		let workSection = UserDetailsSectionView(
+			labelText: NSLocalizedString("Work", comment: "User info: Work"),
+			childView: workTextField,
+			initialTextValue: user.work
+		)
+		let descriptionSection = UserDetailsSectionView(
+			labelText: NSLocalizedString("Additional information", comment: "User info: Additional info"),
+			childView: descriptionTextView,
+			initialTextValue: user.description
+		)
+		return [
+			firstNameSection,
+			lastNameSection,
+			dateSection,
+			genderSection,
+			workSection,
+			descriptionSection
+		]
+	}
   
-  private func setupView() {
+	private func setupView(user: User) {
     backgroundColor = .white
     scrollView.showsVerticalScrollIndicator = false
+		
+		let sections = setupSections(user: user)
+		
+		nameSectionStackView.axis = .vertical
+		nameSectionStackView.spacing = 15
+		Array(sections[0...2])
+			.forEach { nameSectionStackView.addArrangedSubview($0) }
+		
+		otherSectionsStackView.axis = .vertical
+		otherSectionsStackView.spacing = 15
+		Array(sections[2...sections.count - 1])
+			.forEach { otherSectionsStackView.addArrangedSubview($0) }
+		
+		genderTextField.inputView = genderPicker
 
     setipHeader()
     setupAvatarButton()
     setupDateTextField()
-    setupGenderTextField()
     setupDescriptionTextView()
     setupSubmitButton()
 
+		contentView.sv([
+			headerContainer,
+			nameSectionStackView,
+			otherSectionsStackView,
+			avatarImageView,
+			submitButton
+		])
     sv(scrollView.sv(contentView))
-    
-    contentView.sv([
-      headerContainer,
-      firstNameSection,
-      lastNameSection,
-      avatarButton,
-      dateSection,
-      genderSection,
-      workSection,
-      descriptionSection,
-      submitButton
-      ])
-
-    setupSections()
-    setupViewsConstraints()
-    setupViewsSizes()
+		setupViewsConstraints()
   }
   
   private func setipHeader() {
@@ -118,56 +177,28 @@ class UserDetailsView: UIView {
     titleLabel.Right == closeButton.Left + 10
     closeButton.CenterY == titleLabel.CenterY
   }
-
-  private func setupSections() {
-    firstNameSection.setupView(
-      with: NSLocalizedString("First name", comment: "User info: First name"),
-      childView: TextFieldWithBottomLine()
-    )
-    lastNameSection.setupView(
-      with: NSLocalizedString("Last name", comment: "User info: Last name"),
-      childView: TextFieldWithBottomLine()
-    )
-    dateSection.setupView(
-      with: NSLocalizedString("Date of birth", comment: "User info: Date of birth"),
-      childView: dateTextField
-    )
-    genderSection.setupView(
-      with: NSLocalizedString("Gender", comment: "User info: Gender"),
-      childView: genderTextField
-    )
-    workSection.setupView(
-      with: NSLocalizedString("Work", comment: "User info: Work"),
-      childView: TextFieldWithBottomLine()
-    )
-    descriptionSection.setupView(
-      with: NSLocalizedString("Additional information", comment: "User info: Additional info"),
-      childView: descriptionTextView
-    )
-  }
   
   private func setupAvatarButton() {
-    avatarButton.style({ v in
-      v.layer.cornerRadius = 60
+    avatarImageView.style({ v in
+			v.layer.cornerRadius = Constants.avatarImageSize.width / 2
       v.backgroundColor = .blue100()
-      let image = UIImage(
-        from: .materialIcon,
-        code: "photo.camera",
-        textColor: .black,
-        backgroundColor: .clear,
-        size: CGSize(width: 50, height: 50)
-      )
-      v.setImage(image, for: .normal)
+			v.clipsToBounds = true
+			v.contentMode = .center
     })
   }
+	
+	@objc private func selectDate() {
+		dateTextField.text = formatDate(datePicker.date)
+    endEditing(true)
+	}
   
   private func setupDateTextField() {
     let toolBar = UIToolbar()
     let tabBarCloseButton = UIBarButtonItem(
       title: NSLocalizedString("Close", comment: "Date picker: close"),
       style: .done,
-      target: delegate,
-      action: #selector(delegate.endEditing)
+      target: self,
+      action: #selector(endEditing)
     )
     let spaceButton = UIBarButtonItem(
       barButtonSystemItem: .flexibleSpace,
@@ -177,20 +208,14 @@ class UserDetailsView: UIView {
     let tabBarDoneButton = UIBarButtonItem(
       title: NSLocalizedString("Select", comment: "Date picker: select date"),
       style: .done,
-      target: delegate,
-      action: #selector(delegate.selectDate)
+      target: self,
+      action: #selector(selectDate)
     )
     datePicker.datePickerMode = .date
     toolBar.sizeToFit()
     toolBar.setItems([tabBarCloseButton, spaceButton, tabBarDoneButton], animated: false)
     dateTextField.inputAccessoryView = toolBar
     dateTextField.inputView = datePicker
-  }
-  
-  private func setupGenderTextField() {
-    let picker = UIPickerView()
-    picker.delegate = delegate
-    genderTextField.inputView = picker
   }
   
   private func setupDescriptionTextView() {
@@ -223,49 +248,32 @@ class UserDetailsView: UIView {
     submitButton.backgroundColor = UIColor.blue()
   }
   
-  private func setupViewsSizes() {
-    firstNameSection.height(60)
-    submitButton.width(200)
-    equal(heights: [firstNameSection, lastNameSection, dateSection, genderSection, workSection])
-  }
-  
   private func setupViewsConstraints() {
     scrollView.left(0).right(0)
     scrollView.Bottom == safeAreaLayoutGuide.Bottom
     scrollView.Top == safeAreaLayoutGuide.Top
     contentView.fillContainer().centerInContainer()
-
     headerContainer.left(25).right(15).top(20)
-    firstNameSection.left(15)
-    firstNameSection.Top == headerContainer.Bottom + 50
-    avatarButton.CenterY == lastNameSection.Top
-    avatarButton
+		
+		nameSectionStackView.left(15)
+    nameSectionStackView.Top == headerContainer.Bottom + 50
+    avatarImageView.CenterY == nameSectionStackView.CenterY
+    avatarImageView
       .right(15)
-      .width(120)
-      .heightEqualsWidth()
-    [firstNameSection, lastNameSection].forEach { $0.Right == avatarButton.Left - 10 }
-
-    [
-      lastNameSection,
-      dateSection,
-      genderSection,
-      workSection,
-      descriptionSection
-    ]
-    .forEach { view in
-      let index = contentView.subviews.firstIndex(of: view)
-      index.foldL(none: {}, some: { v in
-        view.Top == contentView.subviews[v - 1].Bottom + 15
-      })
-      view.left(15).right(15)
-    }
-    descriptionSection.Bottom == submitButton.Top - 10
+			.width(Constants.avatarImageSize.width)
+			.height(Constants.avatarImageSize.height)
+    nameSectionStackView.Right == avatarImageView.Left - 10
+		otherSectionsStackView.left(15).right(15)
+		otherSectionsStackView.Top == nameSectionStackView.Bottom + 15
+		
     submitButton.CenterX == contentView.CenterX
-    submitButton.bottom(50)
+    submitButton.bottom(50).width(200)
   }
-}
-
-@objc protocol UserDetailsViewDelegate: class {
-  func endEditing()
-  func selectDate()
+	
+	private func formatDate(_ date: Date) -> String {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "dd LLLL YYYY"
+		dateFormatter.locale = Locale(identifier: "ru_RU")
+		return dateFormatter.string(from: date)
+	}
 }
