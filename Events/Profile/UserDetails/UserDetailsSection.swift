@@ -41,11 +41,12 @@ class UserDetailsSectionView: UIView {
 		if let textField = childView as? UITextField {
 			styleText(
 				textField: textField,
-				text: initialTextValue,
+				text: "",
 				size: 18,
 				color: .black,
 				style: .medium
 			)
+			textField.text = initialTextValue
 			childView.height(40)
 		}
 		if let textView = childView as? UITextView {
@@ -56,6 +57,7 @@ class UserDetailsSectionView: UIView {
 				color: .black,
 				style: .medium
 			)
+			textView.text = initialTextValue
 		}
 		childView.height(40)
     childView.Top == label.Bottom + 7
