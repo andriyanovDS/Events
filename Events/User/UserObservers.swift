@@ -75,24 +75,8 @@ let currentUserObserver: Observable<User> = Observable.merge(
   )
   .share(replay: 1, scope: .forever)
 
-func updateUserProfile(user: User, onComplete: @escaping (Result<Void, Error>) -> Void) {
-  do {
-    let db = Firestore.firestore()
-    let collectionRef = db.collection("user_details")
-    try collectionRef
-      .document(user.id)
-      .setData(from: user, completion: { error in
-        if let error = error {
-          onComplete(.failure(error))
-          return
-        }
-        changeUserS.onNext(user)
-        let result: Result<Void, Error> = .success
-        onComplete(result)
-      })
-  } catch {
-    onComplete(.failure(error))
-  }
+func updateUser(_ user: User) {
+  changeUserS.onNext(user)
 }
 
 func isStorageUrl(_ url: URL) -> Bool {
