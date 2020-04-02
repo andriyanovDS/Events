@@ -28,18 +28,18 @@ class LoadingView: UIView {
 		viewCenterX = rect.width / 2
 		let range = Array([Int](0...Constants.circlesCount - 1))
 		
-		let animation = CAKeyframeAnimation(keyPath: "position")
-		animation.keyTimes = [0, 0.5, 1]
+		let animation = CABasicAnimation(keyPath: "position")
+		animation.autoreverses = true
 		animation.duration = Constants.animationDuration / 1000
 		animation.repeatCount = Float.greatestFiniteMagnitude
-		animation.timingFunctions = [.linear]
+		animation.timingFunction = .linear
 		
 		range
 			.enumerated()
 			.forEach {(index, _) in drawCircle(at: index, withAnimation: animation)}
 	}
 
-	private func drawCircle(at index: Int, withAnimation animation: CAKeyframeAnimation) {
+	private func drawCircle(at index: Int, withAnimation animation: CABasicAnimation) {
 		let startPoint = CGPoint(
 			x: centerX(at: index),
 			y: Constants.circleRadius
@@ -50,7 +50,8 @@ class LoadingView: UIView {
 		)
 		let delayInMilliseconds = Int(Constants.animationDuration) / Constants.circlesCount * index
 		animation.timeOffset = Double(delayInMilliseconds) / 1000
-		animation.values = [startPoint, endPoint, startPoint]
+		animation.fromValue = startPoint
+		animation.toValue = endPoint
 		
 		let circleLayer = CAShapeLayer()
 		circleLayer.position = startPoint
