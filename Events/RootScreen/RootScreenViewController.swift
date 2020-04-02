@@ -20,37 +20,31 @@ class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased
     }
   }
   private let locationManager = CLLocationManager()
-  let loadUserAvatar: (_: String) -> Promise<UIImage>
-  let loadEventImage: (_: String) -> Promise<UIImage>
+	let loadImage: (_: LoadImageParams) -> Promise<UIImage>
+	
+	struct LoadImageParams {
+		let url: String
+		let size: CGSize
+	}
 
   init() {
-    loadUserAvatar = memoize(callback: { (v: String) -> Promise<UIImage> in
-      ExternalImageCache.shared.loadImage(by: v)
-        .then(on: .global()) { image -> UIImage in
-          let size = EventCellNode.Constants.authorImageSize
-          let renderer = UIGraphicsImageRenderer(size: size)
-          let resultImage = renderer.image { _ in
-            image.draw(in: CGRect(origin: .zero, size: size))
-          }
-          return resultImage.makeRoundedImage(size: size, radius: size.width / 2.0)
-        }
-    })
-
-    loadEventImage = memoize(callback: { (url: String) -> Promise<UIImage> in
-      ExternalImageCache.shared.loadImage(by: url)
-      .then(on: .global()) { image -> UIImage in
-        let imageSize = EventCellNode.Constants.eventImageSize
-        let rect = AVMakeRect(aspectRatio: image.size, insideRect: CGRect(
-          x: 0, y: 0, width: imageSize.width, height: imageSize.height
-        ))
-        let size = CGSize(width: rect.width, height: rect.height)
-        UIGraphicsBeginImageContextWithOptions(size, true, 0)
-        image.draw(in: CGRect(origin: CGPoint.zero, size: size))
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return newImage!
-      }
-    })
+		loadImage = memoizeWith(
+			callback: { (params: LoadImageParams) -> Promise<UIImage> in
+				ExternalImageCache.shared.loadImage(by: params.url)
+				.then(on: .global()) { image -> UIImage in
+					let rect = AVMakeRect(aspectRatio: image.size, insideRect: CGRect(
+						x: 0, y: 0, width: params.size.width, height: params.size.height
+					))
+					let size = CGSize(width: rect.width, height: rect.height)
+					UIGraphicsBeginImageContextWithOptions(size, true, 0)
+					image.draw(in: CGRect(origin: CGPoint.zero, size: size))
+					let newImage = UIGraphicsGetImageFromCurrentImageContext()
+					UIGraphicsEndImageContext()
+					return newImage!
+				}
+			},
+			key: (\.url)
+		)
 
     super.init(node: RootScreenNode())
   }

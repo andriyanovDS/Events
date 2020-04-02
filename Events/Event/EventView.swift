@@ -40,14 +40,10 @@ class EventView: UIView {
 	private let descriptionsStackView = UIStackView()
   private let descriptionViews: [EventDescriptionView]
 	private let animator = UIViewPropertyAnimator(duration: 1.0, curve: .linear)
-  private var imageSize: CGSize = {
-    let scaleFactor = UIScreen.main.scale
-    let scale = CGAffineTransform(scaleX: scaleFactor, y: scaleFactor)
-    return CGSize(
-      width: UIScreen.main.bounds.width,
-      height: Constants.eventImageHeight
-    ).applying(scale)
-  }()
+  private var imageSize: CGSize = CGSize(
+		width: UIScreen.main.bounds.width,
+		height: Constants.eventImageHeight
+	)
 	private var safeAreaTopPadding: CGFloat {
 		UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0
 	}

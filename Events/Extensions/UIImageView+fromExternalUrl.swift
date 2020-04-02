@@ -46,7 +46,7 @@ extension UIImageView {
 		transitionConfig: TransitionConfig? = nil
 	) {
 		ExternalImageCache.shared.loadImage(by: url, queue: queue)
-			.then(on: .global(qos: .userInitiated)) {[weak self] originImage in
+			.then(on: .global(qos: .background)) {[weak self] originImage in
 				guard let self = self else { return }
 				let newImage = resize(image: originImage, expectedSize: size)
 				DispatchQueue.main.async {

@@ -21,37 +21,23 @@ class EventCellNode: ASCellNode {
   private let locationTextNode = ASTextNode()
   private let locationIconImageNode = ASImageNode()
   private let locationBackgroundNode: ASDisplayNode
-  private let authorAvatarBackgroundView: ASDisplayNode
   private let authorAvatarImageNode = ASImageNode()
   private let authorNameTextNode = ASTextNode()
   private let dateTextNode = ASTextNode()
+	private var isEventImageLoaded: Bool = false
   
   struct Constants {
     static let authorImageSize = CGSize(width: 30, height: 30)
     static let cellPaddingHorizontal: CGFloat = 10
-    static let imageHeight: CGFloat = 250.0
-    static let imageWidth: CGFloat = UIScreen.main.bounds.width - (Constants.cellPaddingHorizontal * 2.0)
-    static var eventImageSize: CGSize = {
-      let scaleFactor = UIScreen.main.scale
-      let scale = CGAffineTransform(scaleX: scaleFactor, y: scaleFactor)
-      return CGSize(
-        width: UIScreen.main.bounds.width - Constants.cellPaddingHorizontal * 2,
-        height: Constants.imageHeight
-      ).applying(scale)
-    }()
+    static var eventImageSize: CGSize = CGSize(
+			width: UIScreen.main.bounds.width - (Constants.cellPaddingHorizontal * 2.0),
+			height: 250.0
+		)
   }
 
   init(event: Event, author: User) {
     self.event = event
     self.author = author
-    authorAvatarBackgroundView = ASDisplayNode(viewBlock: {
-      RoundedView(
-        cornerRadii: Constants.authorImageSize.applying(
-          CGAffineTransform(scaleX: 0.5, y: 0.5)
-        ),
-        backgroundColor: .gray100()
-      )
-    })
     locationBackgroundNode = ASDisplayNode(viewBlock: {
       RoundedView(
         cornerRadii: CGSize(width: 10, height: 10),
@@ -68,9 +54,11 @@ class EventCellNode: ASCellNode {
       color: .black,
       style: .bold
     )
-		eventImageNode.backgroundColor = .gray100()
-		eventImageNode.cornerRadius = 10
-		eventImageNode.cornerRoundingType = .defaultSlowCALayer
+		[eventImageNode, authorAvatarImageNode].forEach { v in
+			v.backgroundColor = .gray100()
+			v.cornerRadius = 10
+			v.cornerRoundingType = .defaultSlowCALayer
+		}
     setupLocationSection()
     setupAuthorSection()
     setupDateSection()
@@ -79,7 +67,6 @@ class EventCellNode: ASCellNode {
   override func didLoad() {
     super.didLoad()
 		locationBackgroundNode.backgroundColor = .clear
-		authorAvatarBackgroundView.backgroundColor = .clear
     eventImageNode.view.hero.id = event.id
   }
 
@@ -91,7 +78,7 @@ class EventCellNode: ASCellNode {
   override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
     eventImageNode.style.preferredSize = CGSize(
 			width: constrainedSize.max.width,
-			height: Constants.imageHeight
+			height: Constants.eventImageSize.height
 		)
     let locationStack = ASStackLayoutSpec(
       direction: .horizontal,
@@ -116,17 +103,12 @@ class EventCellNode: ASCellNode {
     )
 
     authorAvatarImageNode.style.preferredSize = Constants.authorImageSize
-    authorAvatarBackgroundView.style.preferredSize = Constants.authorImageSize
-    let authorAvatarOverlaySpec = ASOverlayLayoutSpec(
-      child: authorAvatarBackgroundView,
-      overlay: authorAvatarImageNode
-    )
     let authorStack = ASStackLayoutSpec(
       direction: .horizontal,
       spacing: 6,
       justifyContent: .start,
       alignItems: .center,
-      children: [authorAvatarOverlaySpec, authorNameTextNode]
+      children: [authorAvatarImageNode, authorNameTextNode]
     )
 
     locationIconImageNode.style.preferredSize = CGSize(width: 30, height: 30)
@@ -147,14 +129,14 @@ class EventCellNode: ASCellNode {
     return contentIsetSpec
   }
 
-  override func didEnterDisplayState() {
+  override func didEnterVisibleState() {
     loadMainImage()
-    guard let imageUrl = author.avatar else { return }
-    delegate?.loadUserAvatar(imageUrl)
-      .then(on: .main) {[weak self] image in
-        self?.authorAvatarImageNode.image = image
-    }
+		loadAvatarImage()
   }
+	
+	override func didExitVisibleState() {
+		eventImageNode.image = nil
+	}
 
   private func setupLocationSection() {
     styleLayerBackedText(
@@ -199,38 +181,58 @@ class EventCellNode: ASCellNode {
   }
 
   private func setLoadedEventImage(_ image: UIImage) {
-    if isInDisplayState {
-      DispatchQueue.main.async {
-        UIView.transition(
-          with: self.eventImageNode.view,
-					duration: 0.5,
-          options: [.curveEaseOut, .transitionCrossDissolve],
-          animations: {
-						self.eventImageNode.image = image
-            self.setNeedsLayout()
-          },
-          completion: nil
-        )
-      }
-    } else {
-      eventImageNode.image = image
-      setNeedsLayout()
-    }
+		if isEventImageLoaded {
+			eventImageNode.image = image
+			return
+		}
+		isEventImageLoaded = true
+		eventImageNode.backgroundColor = .white
+		eventImageNode.cornerRoundingType = .precomposited
+    DispatchQueue.main.async {
+			UIView.transition(
+				with: self.eventImageNode.view,
+				duration: 0.5,
+				options: [.curveEaseOut, .transitionCrossDissolve],
+				animations: {
+					self.eventImageNode.image = image
+					self.setNeedsLayout()
+				},
+				completion: nil
+			)
+		}
   }
+	
+	private func setLoadedAvatarImage(_ image: UIImage) {
+		authorAvatarImageNode.backgroundColor = .white
+		authorAvatarImageNode.cornerRoundingType = .precomposited
+		authorAvatarImageNode.image = image
+	}
 
   private func loadMainImage() {
     guard let url = event.mainImageUrl, let delegate = delegate else { return }
     delegate
-      .loadEventImage(url)
+			.loadImage(RootScreenViewController.LoadImageParams(
+				url: url,
+				size: Constants.eventImageSize
+			))
       .then {[weak self] image in
-				self?.eventImageNode.backgroundColor = .white
-				self?.eventImageNode.cornerRoundingType = .precomposited
         self?.setLoadedEventImage(image)
       }
   }
+	
+	private func loadAvatarImage() {
+		guard let url = author.avatar, let delegate = delegate else { return }
+		delegate
+			.loadImage(RootScreenViewController.LoadImageParams(
+				url: url,
+				size: Constants.authorImageSize
+			))
+			.then {[weak self] image in
+				self?.setLoadedAvatarImage(image)
+			}
+	}
 }
 
 protocol EventCellNodeDelegate: class {
-  var loadUserAvatar: (_: String) -> Promise<UIImage> { get }
-  var loadEventImage: (_: String) -> Promise<UIImage> { get }
+	var loadImage: (_: RootScreenViewController.LoadImageParams) -> Promise<UIImage> { get }
 }
