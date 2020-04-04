@@ -133,6 +133,11 @@ extension CreatedEventsViewController: ASTableDelegate, UITableViewDelegate {
 		let configuration = UISwipeActionsConfiguration(actions: [action])
 		return configuration
 	}
+	
+	func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
+		let event = viewModel.events[indexPath.item]
+		viewModel.onEditEvent(event)
+	}
 }
 
 extension CreatedEventsViewController: ASEditableTextNodeDelegate {

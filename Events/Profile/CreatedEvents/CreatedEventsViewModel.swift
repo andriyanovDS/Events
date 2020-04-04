@@ -35,6 +35,10 @@ class CreatedEventsViewModel: Stepper {
 		steps.accept(EventStep.createdEventsDidComplete)
 	}
 	
+	func onEditEvent(_ event: Event) {
+		steps.accept(EventStep.editEvent(event: event))
+	}
+	
 	func confirmEventDelete(at index: Int, completionHandler: @escaping (Bool) -> Void) {
 		let submitAction = UIAlertAction(
 			title: NSLocalizedString("Delete", comment: "Delete event"),

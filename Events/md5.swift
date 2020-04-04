@@ -14,7 +14,7 @@ import typealias CommonCrypto.CC_LONG
 // https://stackoverflow.com/a/32166735
 func md5Hex(string: String) -> String {
 	let length = Int(CC_MD5_DIGEST_LENGTH)
-	let messageData = string.data(using:.utf8)!
+	let messageData = string.data(using: .utf8)!
 	var digestData = Data(count: length)
 
 	_ = digestData.withUnsafeMutableBytes { digestBytes -> UInt8 in

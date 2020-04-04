@@ -98,6 +98,29 @@ struct SelectedDates {
     }
     return "\(dateFromFormatted) - \(dateFormatter.string(from: dateTo))"
   }
+
+  var dateRange: [Date] {
+    let dateRangeOption = to
+      .map { dateRangeCurried(end: $0) }
+      .orElse { [$0] }
+
+    return from
+      .ap(dateRangeOption)
+      .getOrElse(result: [])
+  }
+
+  private func dateRangeCurried(end: Date) -> (Date) -> [Date] {
+    return { start in
+      var dates: [Date] = []
+      var date = start
+
+      while date <= end {
+        dates.append(date)
+        date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
+      }
+      return dates
+    }
+  }
 }
 
 protocol CalendarViewModelDelegate: class {

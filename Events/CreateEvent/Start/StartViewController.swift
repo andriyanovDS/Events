@@ -24,7 +24,7 @@ class StartViewController: UIViewController, ViewModelBased, ScreenWithResult, S
 		super.viewDidLoad()
 		setupView()
 		
-		keyboardAttach$.subscribe(
+		keyboardAttachWithDebounce$.subscribe(
 		 onNext: {[weak self] info in
 			 self?.startView?.keyboardHeightDidChange(info)
 			}

@@ -34,13 +34,10 @@ class DateViewModel: Stepper {
 					 .foldL(
 						 none: {},
 						 some: { dates in
-							 let dateRangeFnOption = dates.to
-								 .map { dateRange(end: $0) }
-								 .orElse { [$0] }
-
-							 self.dates = dates.from
-								 .ap(dateRangeFnOption)
-								 .getOrElseL(generateInitialDates)
+              let range = dates.dateRange
+              self.dates = range.isEmpty
+                ? generateInitialDates()
+                : range
 
 							 if let foramttedDate = dates.localizedLabel {
 								 let daysDiff = daysCount(selectedDates: dates)
@@ -80,19 +77,6 @@ private func generateInitialDates() -> [Date] {
   return [Calendar.current.date(bySettingHour: 10, minute: 0, second: 0, of: tomorrow)!]
 }
 
-private func dateRange(end: Date) -> (Date) -> [Date] {
-  return { start in
-    var dates: [Date] = []
-    var date = start
-
-    while date <= end {
-      dates.append(date)
-      date = Calendar.current.date(byAdding: .day, value: 1, to: date)!
-    }
-    return dates
-  }
-}
-
 private func daysCount(selectedDates: SelectedDates) -> Int {
   guard let dateFrom = selectedDates.from else {
     return 0
@@ -112,4 +96,3 @@ protocol DateViewModelDelegate: class {
 	var onResult: ((DateScreenResult) -> Void)! { get }
 	func onDatesDidSelected(formattedDate: String, daysCount: Int)
 }
-

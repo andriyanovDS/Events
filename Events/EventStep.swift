@@ -20,6 +20,8 @@ indirect enum EventStep: Step {
 	case eventDidComplete(userEvent: UserEvent)
 	case createdEvents
 	case createdEventsDidComplete
+	case editEvent(event: Event)
+	case editEventDidComplete
   case userDetails(user: User)
   case userDetailsDidComplete
   case createEvent
@@ -52,4 +54,10 @@ indirect enum EventStep: Step {
 		message: String,
 		actions: [UIAlertAction]
 	)
+  case listModal(
+    title: String,
+    buttons: [ListModalButton],
+    onComplete: (ListModalButton) -> Void
+  )
+  case listModalDidComplete
 }

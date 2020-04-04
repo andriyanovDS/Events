@@ -24,7 +24,7 @@ class LoginView: UIView {
 	init() {
 		super.init(frame: CGRect.zero)
 		setupView()
-		keyboardAttach$
+		keyboardAttachWithDebounce$
 			.subscribe(onNext: {[weak self] info in
 				self?.onKeyboardHeightDidChange(info: info)
 			})

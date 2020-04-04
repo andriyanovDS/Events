@@ -23,7 +23,7 @@ class UserDetailsViewController: UIViewControllerWithActivityIndicator, ViewMode
     super.viewDidLoad()
     setupView()
 
-    keyboardAttach$
+    keyboardAttachWithDebounce$
       .subscribe(onNext: {[weak self] info in
         self?.onKeyboardHeightDidChange(info: info)
       })

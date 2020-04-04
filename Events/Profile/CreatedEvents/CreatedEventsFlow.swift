@@ -30,6 +30,11 @@ class CreatedEventsFlow: Flow {
       return navigateToCreatedEvents()
     case .createdEventsDidComplete:
       return .end(forwardToParentFlowWithStep: EventStep.createdEventsDidComplete)
+		case .editEvent(let event):
+			return navigateToEditEvent(event: event)
+		case .editEventDidComplete:
+			rootNavigationController.dismiss(animated: true, completion: nil)
+			return .none
 		case .alert(let title, let message, let actions):
 			return navigateToAlert(title: title, message: message, actions: actions)
     default:
@@ -57,5 +62,18 @@ class CreatedEventsFlow: Flow {
 		actions.forEach { alertViewController.addAction($0) }
 		rootNavigationController.present(alertViewController, animated: false, completion: nil)
 		return .none
+	}
+	
+	private func navigateToEditEvent(event: Event) -> FlowContributors {
+		let flow = EditEventFlow()
+		Flows.whenReady(flow1: flow, block: {[unowned self] root in
+      root.modalPresentationStyle = .fullScreen
+			root.modalTransitionStyle = .coverVertical
+      self.rootNavigationController.present(root, animated: true)
+    })
+    return .one(flowContributor: .contribute(
+      withNextPresentable: flow,
+			withNextStepper: OneStepper(withSingleStep: EventStep.editEvent(event: event)))
+    )
 	}
 }

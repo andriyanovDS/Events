@@ -27,7 +27,7 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
     super.viewDidLoad()
 	
     setupView()
-    keyboardAttach$.subscribe(
+    keyboardAttachWithDebounce$.subscribe(
       onNext: {[weak self] info in
         self?.descriptionView?.keyboardHeightDidChange(info)
        }

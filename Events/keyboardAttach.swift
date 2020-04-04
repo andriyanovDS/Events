@@ -37,5 +37,7 @@ private let keyboardWillHide$ = NotificationCenter.default.rx
   .map { _ -> KeyboardAttachInfo? in nil }
 
 let keyboardAttach$: Observable<KeyboardAttachInfo?> = Observable
-	.merge(keyboardWillHide$, keyboardWillShow$)
+.merge(keyboardWillHide$, keyboardWillShow$)
+
+let keyboardAttachWithDebounce$: Observable<KeyboardAttachInfo?> = keyboardAttach$
 	.debounce(.milliseconds(50), scheduler: MainScheduler.instance)

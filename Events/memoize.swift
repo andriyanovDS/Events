@@ -9,7 +9,7 @@
 func memoize<U: Hashable, R>(
   callback: @escaping (U) -> R
 ) -> (U) -> R {
-  var map = Dictionary<U, R>()
+  var map = [U: R]()
 
   return { v in
     let cached = map[v]
@@ -26,7 +26,7 @@ func memoizeWith<U, R>(
   callback: @escaping (U) -> R,
   key: @escaping (U) -> String
 ) -> (U) -> R {
-  var map = Dictionary<String, R>()
+  var map = [String: R]()
 
   return { v in
     let cacheKey = key(v)

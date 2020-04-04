@@ -73,16 +73,16 @@ struct EventLocation: Codable {
 
 struct Event: Codable {
   let id: String
-  let name: String
+  var name: String
   let author: String
-  let isPublic: Bool
-  let location: EventLocation
-  let dates: [Date]
+  var isPublic: Bool
+  var location: EventLocation
+  var dates: [Date]
 	let isRemoved: Bool
-  let duration: EventDurationRange
+  var duration: EventDurationRange
   let createDate: Date
-  let categories: [CategoryId]
-  let description: [DescriptionWithImageUrls]
+  var categories: [CategoryId]
+  var description: [DescriptionWithImageUrls]
   var mainImageUrl: String? {
     description
       .first(where: { !$0.imageUrls.isEmpty })

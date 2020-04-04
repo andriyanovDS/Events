@@ -108,6 +108,28 @@ func styleText(
   )
 }
 
+func styleIcon(
+	label: UILabel,
+	iconCode: String,
+	size: CGFloat,
+	color: UIColor
+) {
+	label.text = String.fontMaterialIcon(iconCode)
+	label.font = UIFont.icon(from: .materialIcon, ofSize: size)
+	label.textColor = color
+}
+
+func styleIcon(
+	button: UIButton,
+	iconCode: String,
+	size: CGFloat,
+	color: UIColor
+) {
+	button.setTitle(String.fontMaterialIcon(iconCode), for: .normal)
+	button.titleLabel?.font = UIFont.icon(from: .materialIcon, ofSize: size)
+	button.setTitleColor(color, for: .normal)
+}
+
 func styleText(
   editableTextNode: ASEditableTextNode,
   placeholderText: String,

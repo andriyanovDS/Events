@@ -16,7 +16,6 @@ import FirebaseAuth
 import FirebaseStorage
 import Photos.PHAsset
 import Promises
-import FirebaseFirestore
 
 class CreateEventViewModel: Stepper {
   let steps = PublishRelay<Step>()
