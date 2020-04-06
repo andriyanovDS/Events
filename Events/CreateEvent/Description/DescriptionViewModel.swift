@@ -14,8 +14,8 @@ import Promises
 class DescriptionViewModel: Stepper {
   weak var delegate: DescriptionViewModelDelegate?
   let steps = PublishRelay<Step>()
-  var descriptions: [MutableDescription] = [
-    MutableDescription(isMain: true, title: nil, assets: [], text: "Test text")
+  var descriptions: [DescriptionWithAssets] = [
+    DescriptionWithAssets(isMain: true, title: nil, assets: [], text: "Test text")
   ]
   private let imageCacheManager: ImageCacheManager
 	private lazy var imageLoadingOptions: PHContentEditingInputRequestOptions = {
@@ -36,12 +36,12 @@ class DescriptionViewModel: Stepper {
   }
 
   func openNextScreen() {
-    delegate?.onResult(descriptions.map { $0.immutable() })
+    delegate?.onResult(descriptions)
     steps.accept(CreateEventStep.descriptionDidComplete)
   }
 
   func addDescription() {
-     descriptions.append(MutableDescription(isMain: false))
+     descriptions.append(DescriptionWithAssets(isMain: false))
    }
 
   func remove(descriptionAtIndex: Int) {

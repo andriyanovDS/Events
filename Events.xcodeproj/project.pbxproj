@@ -33,11 +33,19 @@
 		0AA421812415A74400554121 /* DateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421802415A74400554121 /* DateViewModel.swift */; };
 		0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421842416351000554121 /* DescriptionCellButton.swift */; };
 		0AB2C4872438CF0C001FB3EB /* EditButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB2C4862438CF0C001FB3EB /* EditButton.swift */; };
+		0AB8553A243B8C5E00E209AD /* EventNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85539243B8C5E00E209AD /* EventNameViewController.swift */; };
+		0AB8553C243B8C6500E209AD /* EventNameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8553B243B8C6500E209AD /* EventNameViewModel.swift */; };
+		0AB8553E243B8C6D00E209AD /* EventNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8553D243B8C6D00E209AD /* EventNameView.swift */; };
 		0AB8DC2424324F2100C5C1CC /* CreatedEventsFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8DC2324324F2100C5C1CC /* CreatedEventsFlow.swift */; };
 		0AB8DC2624334FCF00C5C1CC /* UndoActionNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8DC2524334FCF00C5C1CC /* UndoActionNode.swift */; };
 		0AB8DC282433919000C5C1CC /* UndoActionCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8DC272433919000C5C1CC /* UndoActionCounterView.swift */; };
 		0AB8DC2A2433C00100C5C1CC /* CounterCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8DC292433C00100C5C1CC /* CounterCircleView.swift */; };
 		0ACFF2AA243695CA00E045F8 /* AvatarImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACFF2A9243695CA00E045F8 /* AvatarImageView.swift */; };
+		0AD3284C243B4C550099CC13 /* DatePickerModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD3284B243B4C550099CC13 /* DatePickerModalViewController.swift */; };
+		0AD3284E243B4C630099CC13 /* DatePickerModalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD3284D243B4C630099CC13 /* DatePickerModalViewModel.swift */; };
+		0AD32850243B4C6D0099CC13 /* DatePickerModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD3284F243B4C6D0099CC13 /* DatePickerModalView.swift */; };
+		0AD32853243B4FE90099CC13 /* BottomModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD32852243B4FE90099CC13 /* BottomModalViewController.swift */; };
+		0AD32855243B4FF40099CC13 /* BottomModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD32854243B4FF40099CC13 /* BottomModalView.swift */; };
 		0AE899DE242CE63800EF427E /* UIImageView+fromExternalUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE899DD242CE63800EF427E /* UIImageView+fromExternalUrl.swift */; };
 		0AE899E0242D194C00EF427E /* EventsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AE899DF242D194C00EF427E /* EventsNode.swift */; };
 		0AEE5CF4242D2337007A2D10 /* EventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEE5CF3242D2337007A2D10 /* EventsViewModel.swift */; };
@@ -228,11 +236,19 @@
 		0AA421802415A74400554121 /* DateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewModel.swift; sourceTree = "<group>"; };
 		0AA421842416351000554121 /* DescriptionCellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCellButton.swift; sourceTree = "<group>"; };
 		0AB2C4862438CF0C001FB3EB /* EditButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditButton.swift; sourceTree = "<group>"; };
+		0AB85539243B8C5E00E209AD /* EventNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNameViewController.swift; sourceTree = "<group>"; };
+		0AB8553B243B8C6500E209AD /* EventNameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNameViewModel.swift; sourceTree = "<group>"; };
+		0AB8553D243B8C6D00E209AD /* EventNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNameView.swift; sourceTree = "<group>"; };
 		0AB8DC2324324F2100C5C1CC /* CreatedEventsFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsFlow.swift; sourceTree = "<group>"; };
 		0AB8DC2524334FCF00C5C1CC /* UndoActionNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoActionNode.swift; sourceTree = "<group>"; };
 		0AB8DC272433919000C5C1CC /* UndoActionCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndoActionCounterView.swift; sourceTree = "<group>"; };
 		0AB8DC292433C00100C5C1CC /* CounterCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterCircleView.swift; sourceTree = "<group>"; };
 		0ACFF2A9243695CA00E045F8 /* AvatarImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarImageView.swift; sourceTree = "<group>"; };
+		0AD3284B243B4C550099CC13 /* DatePickerModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerModalViewController.swift; sourceTree = "<group>"; };
+		0AD3284D243B4C630099CC13 /* DatePickerModalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerModalViewModel.swift; sourceTree = "<group>"; };
+		0AD3284F243B4C6D0099CC13 /* DatePickerModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerModalView.swift; sourceTree = "<group>"; };
+		0AD32852243B4FE90099CC13 /* BottomModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomModalViewController.swift; sourceTree = "<group>"; };
+		0AD32854243B4FF40099CC13 /* BottomModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomModalView.swift; sourceTree = "<group>"; };
 		0AE899DD242CE63800EF427E /* UIImageView+fromExternalUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+fromExternalUrl.swift"; sourceTree = "<group>"; };
 		0AE899DF242D194C00EF427E /* EventsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsNode.swift; sourceTree = "<group>"; };
 		0AEE5CF3242D2337007A2D10 /* EventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewModel.swift; sourceTree = "<group>"; };
@@ -460,6 +476,9 @@
 		0A5519B324375F6F00CC308C /* EditEvent */ = {
 			isa = PBXGroup;
 			children = (
+				0AB85538243B8C4200E209AD /* EventName */,
+				0AD32851243B4FCE0099CC13 /* BottomModal */,
+				0AD3284A243B4C390099CC13 /* DatePickerModal */,
 				7470AEA5243917D000A9C59F /* ListModal */,
 				0A5519B424375F8E00CC308C /* EditEventViewController.swift */,
 				0A5519B624375FA400CC308C /* EditEventViewModel.swift */,
@@ -470,6 +489,35 @@
 				0A5519BA243762E800CC308C /* EventEventFlow.swift */,
 			);
 			path = EditEvent;
+			sourceTree = "<group>";
+		};
+		0AB85538243B8C4200E209AD /* EventName */ = {
+			isa = PBXGroup;
+			children = (
+				0AB85539243B8C5E00E209AD /* EventNameViewController.swift */,
+				0AB8553B243B8C6500E209AD /* EventNameViewModel.swift */,
+				0AB8553D243B8C6D00E209AD /* EventNameView.swift */,
+			);
+			path = EventName;
+			sourceTree = "<group>";
+		};
+		0AD3284A243B4C390099CC13 /* DatePickerModal */ = {
+			isa = PBXGroup;
+			children = (
+				0AD3284B243B4C550099CC13 /* DatePickerModalViewController.swift */,
+				0AD3284D243B4C630099CC13 /* DatePickerModalViewModel.swift */,
+				0AD3284F243B4C6D0099CC13 /* DatePickerModalView.swift */,
+			);
+			path = DatePickerModal;
+			sourceTree = "<group>";
+		};
+		0AD32851243B4FCE0099CC13 /* BottomModal */ = {
+			isa = PBXGroup;
+			children = (
+				0AD32852243B4FE90099CC13 /* BottomModalViewController.swift */,
+				0AD32854243B4FF40099CC13 /* BottomModalView.swift */,
+			);
+			path = BottomModal;
 			sourceTree = "<group>";
 		};
 		6079370D23225BB9003AAD2B /* PermissionModal */ = {
@@ -1121,7 +1169,9 @@
 				7466974A2326FF4C00406CD8 /* TabBarFlow.swift in Sources */,
 				742334542413C7A100B46037 /* CreateEventStep.swift in Sources */,
 				74D5A2112302AA6500806695 /* TextFormattingsTextStorage.swift in Sources */,
+				0AB8553E243B8C6D00E209AD /* EventNameView.swift in Sources */,
 				74E882DB2426069400DAF4B4 /* memoize.swift in Sources */,
+				0AB8553C243B8C6500E209AD /* EventNameViewModel.swift in Sources */,
 				7478F50022F60CC900A43F52 /* User.swift in Sources */,
 				74155CA923F8114B00E6A66C /* ImageCacheManager.swift in Sources */,
 				742EF13D231F1822002092CA /* ImagesPreviewVC.swift in Sources */,
@@ -1137,6 +1187,7 @@
 				745DAFC2243A494A00BFBADA /* EditEventFooterView.swift in Sources */,
 				748E0B0E22DA24C000B061C7 /* APIRequest.swift in Sources */,
 				6079370F23225BEB003AAD2B /* PermissionModalViewController.swift in Sources */,
+				0AD32855243B4FF40099CC13 /* BottomModalView.swift in Sources */,
 				74F6F210233178ED00A69F61 /* ScreenWithResult.swift in Sources */,
 				743816A422E8F74400AA4960 /* DayButton.swift in Sources */,
 				747961EA240DB120006B8EB0 /* DescriptionCellView.swift in Sources */,
@@ -1162,6 +1213,7 @@
 				0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */,
 				741DCF9022D3AA81005783A3 /* Category.swift in Sources */,
 				7430406B2420EE7F007F50A2 /* EventCellView.swift in Sources */,
+				0AB8553A243B8C5E00E209AD /* EventNameViewController.swift in Sources */,
 				741CECB123D6EDF900BE6BA3 /* dateHelpers.swift in Sources */,
 				7467B6ED22D510AA00A1BFE9 /* LoginViewController.swift in Sources */,
 				0AB8DC282433919000C5C1CC /* UndoActionCounterView.swift in Sources */,
@@ -1180,6 +1232,7 @@
 				744B7C9222E3C6DF00A839A6 /* ButtonScale.swift in Sources */,
 				7434FDDD2402D684003E376F /* loginStyles.swift in Sources */,
 				74D7E9F2234A6BF00022BAC1 /* SelectImageButton.swift in Sources */,
+				0AD32853243B4FE90099CC13 /* BottomModalViewController.swift in Sources */,
 				6079371323225D5B003AAD2B /* PermissionModalView.swift in Sources */,
 				0A42AF352431048800902B35 /* CreatedEventsViewModel.swift in Sources */,
 				0AEF8D272413B14B00BBB45D /* CreateEventFlow.swift in Sources */,
@@ -1201,6 +1254,7 @@
 				7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */,
 				7478F4F922F6033C00A43F52 /* CreateEventViewModel.swift in Sources */,
 				74F6F21223318C8700A69F61 /* ProfileFlow.swift in Sources */,
+				0AD32850243B4C6D0099CC13 /* DatePickerModalView.swift in Sources */,
 				74F0F5792300C5B700170C6C /* HintPopup.swift in Sources */,
 				74F0F56C2300A79000170C6C /* TextFormattingTipsVC.swift in Sources */,
 				7408541F2302030900220B23 /* TipSectionView.swift in Sources */,
@@ -1246,6 +1300,7 @@
 				74F0F5702300A80F00170C6C /* TextFormattingTipsViewModel.swift in Sources */,
 				748E0B2122DB82A200B061C7 /* LocationSearchViewModel.swift in Sources */,
 				7470AEA72439181300A9C59F /* ListModalViewController.swift in Sources */,
+				0AD3284C243B4C550099CC13 /* DatePickerModalViewController.swift in Sources */,
 				6079371523225DA5003AAD2B /* PermissionModal.swift in Sources */,
 				7463A4A222DE88AC009171E1 /* UIButtonScaleOnPress.swift in Sources */,
 				7423346C2415666B00B46037 /* DescriptionViewModel.swift in Sources */,
@@ -1254,6 +1309,7 @@
 				748E0B1722DA289800B061C7 /* Geocode.swift in Sources */,
 				746697462326FBDE00406CD8 /* LoginFlow.swift in Sources */,
 				74697FCC22D200DF00D5B5F4 /* Day.swift in Sources */,
+				0AD3284E243B4C630099CC13 /* DatePickerModalViewModel.swift in Sources */,
 				74E882F62428E13900DAF4B4 /* ButtonNodeScaledOnPress.swift in Sources */,
 				0A5519BB243762E800CC308C /* EventEventFlow.swift in Sources */,
 				74D48E6D232994FB00FB3012 /* SavedFlow.swift in Sources */,

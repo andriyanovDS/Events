@@ -10,7 +10,8 @@ import UIKit
 import Stevia
 
 class EditEventView: UIView {
-	let titleTextField = UITextField()
+	let titleButton = UIButtonScaleOnPress()
+	let titleTextView = UITextView()
 	let mainDescriptionTextView = UITextView()
 	private let contentView = UIView()
 	private let editButtonsStackView = UIStackView()
@@ -50,11 +51,19 @@ class EditEventView: UIView {
 	private func setupView() {
 		backgroundColor = .white
 		styleText(
-			textField: selectTextFieldStyle(titleTextField),
+			button: titleButton,
 			text: NSLocalizedString("Enter title..", comment: "Edit event: title placeholder"),
 			size: 20,
 			color: .black,
 			style: .bold
+		)
+		titleButton.layer.cornerRadius = 15
+    titleButton.backgroundColor = .gray100()
+		titleButton.titleEdgeInsets = UIEdgeInsets(
+			top: 0,
+			left: 10,
+			bottom: 0,
+			right: 10
 		)
 		styleText(
 			textView: mainDescriptionTextView,
@@ -82,7 +91,7 @@ class EditEventView: UIView {
     editButtonsScrollView.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 
 		sv(contentView.sv([
-			titleTextField,
+			titleButton,
 			descripitionScrollView,
       footerView
 		]))
@@ -92,17 +101,15 @@ class EditEventView: UIView {
 		contentView.Top == safeAreaLayoutGuide.Top
 		contentView.Bottom == safeAreaLayoutGuide.Bottom
 		contentView.left(0).right(0)
-		titleTextField.top(10).left(10).right(10).height(40)
-
+		titleButton.top(10).left(10).right(10).height(40)
+		descripitionScrollView.Top == titleButton.Bottom + 15
     descripitionScrollView.left(0).right(0).bottom(40)
-    descripitionScrollView.Top == titleTextField.Bottom + 10
     mainDescriptionTextView.Width == descripitionScrollView.Width - 20
     mainDescriptionTextView.top(10).right(10).left(10)
     editButtonsScrollView.left(0).right(0).bottom(15)
     mainDescriptionTextView.Bottom == editButtonsScrollView.Top - 10
     editButtonsStackView.top(0).bottom(0).left(0).right(0)
     editButtonsStackView.Height == editButtonsScrollView.Height
-
     footerView.left(0).right(0).bottom(0).height(40)
 	}
 }

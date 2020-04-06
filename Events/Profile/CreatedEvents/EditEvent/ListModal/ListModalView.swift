@@ -9,36 +9,26 @@
 import UIKit
 import Stevia
 
-class ListModalView: UIView {
-  let backgroundView = UIView()
+class ListModalView: BottomModalView {
   let listView = UITableView()
   let closeButton = UIButton()
   let submitButton = ButtonScale()
-  let contentView = UIView()
   
   private let titleLabel = UILabel()
 
   init(titleText: String) {
-    super.init(frame: CGRect.zero)
-    setupView(titleText: titleText)
-    setupConstraints()
+		super.init(frame: CGRect.zero)
+		titleLabel.text = titleText
   }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  private func setupView(titleText: String) {
-    isOpaque = false
-    backgroundColor = .clear
-    backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-
-    contentView.backgroundColor = .white
-    contentView.layer.cornerRadius = 15
-    contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+	
+	required init?(coder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	override func setupView() {
     styleText(
       label: titleLabel,
-      text: titleText,
+			text: titleLabel.text ?? "",
       size: 22,
       color: .black,
       style: .bold
@@ -65,12 +55,11 @@ class ListModalView: UIView {
     listView.separatorStyle = .none
     listView.showsVerticalScrollIndicator = false
     contentView.sv([titleLabel, closeButton, listView, submitButton])
-    sv([backgroundView, contentView])
+		super.setupView()
   }
 
-  private func setupConstraints() {
-    backgroundView.fillContainer()
-    contentView.left(0).right(0).bottom(0)
+  override func setupConstraints() {
+		super.setupConstraints()
     titleLabel.top(10).centerHorizontally()
     closeButton.CenterY == titleLabel.CenterY
     closeButton.right(10).size(30)

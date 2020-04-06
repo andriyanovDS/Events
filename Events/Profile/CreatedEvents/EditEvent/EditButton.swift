@@ -40,17 +40,15 @@ class EditButton: UIButtonScaleOnPress {
 	enum EditButtonType {
 		case
 			access(isPrivate: Bool),
-			date(date: Date),
+			date(dateLabelText: String),
 			category(categoryId: CategoryId)
 		
 		var labelText: String {
 			switch self {
 			case .access(let isPublic):
 				return isPublic ? "Public" : "Private"
-			case .date(let date):
-				let dateFormatter = DateFormatter()
-				dateFormatter.dateFormat = "dd MMM"
-				return dateFormatter.string(from: date)
+			case .date(let dateLabelText):
+				return dateLabelText
 			case .category(let categoryId):
 				return categoryId.translatedLabel()
 			}

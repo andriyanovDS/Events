@@ -16,7 +16,7 @@ class DescriptionCellView: UICollectionViewCell, DescriptionCellButtonDataSource
     static let addButtonSize: CGFloat = 27
   }
 
-  var eventDescription: MutableDescription?
+  var eventDescription: DescriptionWithAssets?
 
   var selectAnimation: UIViewPropertyAnimator {
     let scaleAnimator = UIViewPropertyAnimator(

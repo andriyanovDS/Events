@@ -60,4 +60,12 @@ indirect enum EventStep: Step {
     onComplete: (ListModalButton) -> Void
   )
   case listModalDidComplete
+	case datePickerModal(
+		initialDate: Date,
+		mode: UIDatePicker.Mode,
+		onComplete: (Date) -> Void
+	)
+	case datePickerModalDidComplete
+	case eventName(initialName: String?, onComplete: (String?) -> Void)
+	case eventNameDidComplete
 }

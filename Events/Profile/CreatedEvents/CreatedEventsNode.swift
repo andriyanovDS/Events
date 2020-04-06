@@ -106,6 +106,7 @@ class CreatedEventNode: ASDisplayNode {
 	}
 	
 	func hideLoadingNode() {
+		guard isLoadingInProgress else { return }
 		isLoadingInProgress = false
 		setNeedsLayout()
 	}

@@ -11,7 +11,7 @@ import UIKit
 class DescriptionCellButton: UIButton {
   weak var dataSource: DescriptionCellButtonDataSource?
 
-  var eventDescription: MutableDescription? {
+  var eventDescription: DescriptionWithAssets? {
     dataSource?.eventDescription
   }
 
@@ -87,5 +87,5 @@ class DescriptionCellButton: UIButton {
 }
 
 protocol DescriptionCellButtonDataSource: class {
-  var eventDescription: MutableDescription? { get }
+  var eventDescription: DescriptionWithAssets? { get }
 }

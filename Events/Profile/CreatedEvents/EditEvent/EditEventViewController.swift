@@ -32,7 +32,7 @@ class EditEventViewController: UIViewController, ViewModelBased {
 		let event = viewModel.event
 		
 		let accessButton = EditButton(type: .access(isPrivate: event.isPublic))
-		let dateButton = EditButton(type: .date(date: event.dates.first!))
+		let dateButton = EditButton(type: .date(dateLabelText: event.dateLabelText))
     dateButton.hero.id = CALENDAR_SHARED_ID
 		let categoryButton = EditButton(type: .category(categoryId: event.categories.first!))
 		let editButtons = [accessButton, dateButton, categoryButton]
@@ -45,12 +45,24 @@ class EditEventViewController: UIViewController, ViewModelBased {
     ]
 
 		let view = EditEventView(editButtons: editButtons, footerButtons: footerButtons)
-		view.titleTextField.text = viewModel.event.name
+		view.titleButton.setTitle(viewModel.event.name, for: .normal)
 		if let mainDescription = viewModel.event.description.first {
 			view.mainDescriptionTextView.text = mainDescription.text
 		}
 		self.view = view
 		editEventView = view
+		
+		view.titleButton.rx.tap
+			.subscribe(onNext: {[unowned self] _ in
+        self.viewModel.openEventNameModal()
+					.then { view.titleButton.setTitle($0, for: .normal) }
+      })
+			.disposed(by: disposeBag)
+		view.mainDescriptionTextView.rx.text.orEmpty
+			.subscribe(onNext: {[unowned self] text in
+				self.viewModel.event.description[0].text = text
+			})
+			.disposed(by: disposeBag)
 		
 		accessButton.rx.tap
 			.subscribe(onNext: {[unowned self] _ in
@@ -61,7 +73,7 @@ class EditEventViewController: UIViewController, ViewModelBased {
 		dateButton.rx.tap
 			.subscribe(onNext: {[unowned self] _ in
         self.viewModel.openCalendar()
-          .then { dateButton.type = .date(date: $0) }
+          .then { dateButton.type = .date(dateLabelText: $0) }
       })
 			.disposed(by: disposeBag)
 		categoryButton.rx.tap
@@ -73,15 +85,21 @@ class EditEventViewController: UIViewController, ViewModelBased {
     locationButton.rx.tap
       .subscribe(onNext: {[weak self] in self?.viewModel.openLocationSearch() })
       .disposed(by: disposeBag)
+		
+		timeButton.rx.tap
+			.subscribe(onNext: {[weak self] in
+				guard let self = self else { return }
+				self.viewModel.openDatePicker()
+					.then { dateButton.type = .date(dateLabelText: $0) }
+			})
+			.disposed(by: disposeBag)
 	}
 
   private func categoryButtonDidPress(_ sender: EditButton) {
     guard let view = editEventView else { return }
-    if view.titleTextField.isFirstResponder {
-      resignedView = view.titleTextField
-    } else if view.mainDescriptionTextView.isFirstResponder {
-      resignedView = view.mainDescriptionTextView
-    }
+     if view.mainDescriptionTextView.isFirstResponder {
+			 resignedView = view.mainDescriptionTextView
+		 }
     resignedView?.resignFirstResponder()
     viewModel.openCategoryListModal()
       .then {[weak self] result in
@@ -119,5 +137,8 @@ class EditEventViewController: UIViewController, ViewModelBased {
 		let sendButton = SendButtonView(cornerRadius: 15)
 		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: sendButton)
 		sendButton.width(30).height(30)
+		sendButton.rx.tap
+			.subscribe(onNext: {[weak self] _ in  self?.viewModel.editEvent()})
+			.disposed(by: disposeBag)
 	}
 }

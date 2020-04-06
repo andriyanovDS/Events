@@ -14,34 +14,27 @@ struct DescriptionAsset {
 	let localUrl: URL
 }
 
-struct DescriptionWithAssets {
-  let isMain: Bool
-  let id: String
-  let title: String?
-  let assets: [DescriptionAsset]
-  let text: String
+protocol Description: Equatable {
+	var isMain: Bool { get }
+	var id: String { get }
+	var title: String? { get set }
+	var text: String { get set }
 }
 
-struct DescriptionWithImageUrls: Codable, Equatable {
-  let isMain: Bool
-  let id: String
-  let title: String?
-  let imageUrls: [String]
-  let text: String
-
-  static func == (lhs: DescriptionWithImageUrls, rhs: DescriptionWithImageUrls) -> Bool {
+extension Description {
+	static func == (lhs: Self, rhs: Self) -> Bool {
     return lhs.id == rhs.id
   }
 }
 
-class MutableDescription {
+struct DescriptionWithAssets: Description, Equatable {
   let isMain: Bool
   let id: String
   var title: String?
   var assets: [DescriptionAsset]
   var text: String
-
-  init(
+	
+	init(
     isMain: Bool,
     title: String? = nil,
     assets: [DescriptionAsset] = [],
@@ -53,16 +46,14 @@ class MutableDescription {
     self.text = text
     id = UUID().uuidString
   }
-
-  func immutable() -> DescriptionWithAssets {
-    DescriptionWithAssets(isMain: isMain, id: id, title: title, assets: assets, text: text)
-  }
 }
 
-extension MutableDescription: Equatable {
-  static func == (lhs: MutableDescription, rhs: MutableDescription) -> Bool {
-    return lhs.id == rhs.id
-  }
+struct DescriptionWithImageUrls: Description, Codable, Equatable {
+  let isMain: Bool
+  let id: String
+  var title: String?
+  var imageUrls: [String]
+  var text: String
 }
 
 struct EventLocation: Codable {
@@ -81,6 +72,7 @@ struct Event: Codable {
 	let isRemoved: Bool
   var duration: EventDurationRange
   let createDate: Date
+	var lastUpdateAt: Date?
   var categories: [CategoryId]
   var description: [DescriptionWithImageUrls]
   var mainImageUrl: String? {

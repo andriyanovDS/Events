@@ -78,7 +78,7 @@ class DescriptionView: UIView, CreateEventView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func onChange(description: MutableDescription) {
+	func onChange(description: DescriptionWithAssets) {
     textView.text = description.text
     attemptToAnimateSelectedImagesCollectionView(nextAssetsCount: description.assets.count)
     if description.isMain {

@@ -23,12 +23,17 @@ class CreatedEventsViewModel: Stepper {
 	private var _filteredEvents: [Event] = []
 	private lazy var db = Firestore.firestore()
 	private var lastRemovedEvent: RemovedEvent?
+	private var eventsListener: ListenerRegistration?
 	
 	var events: [Event] { _filteredEvents }
 	
 	private struct RemovedEvent {
 		let event: Event
 		let position: Int
+	}
+	
+	deinit {
+		eventsListener?.remove()
 	}
 	
 	@objc func closeScreen() {
@@ -136,55 +141,64 @@ class CreatedEventsViewModel: Stepper {
 		}
 	}
 	
-	private func loadCreatedEvents(by ids: [String]) -> Promise<[Event]> {
+	private func subscribeCreatedEvents(
+		by ids: [String],
+		onReceive: @escaping ([Event]) -> Void
+	) {
 		let ref = db
 			.collection("event-list")
 			.whereField("id", in: ids)
 			.whereField("isRemoved", isEqualTo: false)
-		
-		return Promise(on: .global(qos: .background)) { resolve, _ in
-			ref.getDocuments(completion: { snapshots, error in
+
+		eventsListener = ref.addSnapshotListener(
+			includeMetadataChanges: false,
+			listener: { snapshots, error in
 				if let error = error {
 					print("Failed to load events", error)
-					resolve([])
+					onReceive([])
 					return
 				}
 				guard let documents = snapshots?.documents else {
-					resolve([])
+					onReceive([])
 					return
 				}
 				do {
 					let events = try documents.compactMap {
 						try $0.data(as: Event.self)
 					}
-					resolve(events)
+					onReceive(events)
 				} catch let error {
 					print(error)
-					resolve([])
+					onReceive([])
 				}
-			})
+			}
+		)
+	}
+	
+	private func handleReceivedEvents(_ events: [Event]) {
+		isListLoadedAndEmpty = events.isEmpty
+		_events = events
+		filterEvents(whereEventName: searchQuery)
+		DispatchQueue.main.async {
+			self.delegate?.didFinishLoading()
+			self.delegate?.listDidUpdate()
 		}
 	}
 	
 	private func loadEvents() {
 		guard let uid = Auth.auth().currentUser?.uid else { return }
-		Promise<Void>(on: .global(qos: .background)) {[weak self] in
-			guard let self = self else { return }
-			let ids = try await(self.loadCreatedEventIds(uid: uid))
-			guard !ids.isEmpty else {
-				self.isListLoadedAndEmpty = true
-				return
+		loadCreatedEventIds(uid: uid)
+			.then(on: .global()) {[weak self] ids in
+				guard let self = self else { return }
+				guard !ids.isEmpty else {
+					self.isListLoadedAndEmpty = true
+					return
+				}
+				self.subscribeCreatedEvents(by: ids, onReceive: {[weak self] events in
+					self?.handleReceivedEvents(events)
+				})
 			}
-			let events = try await(self.loadCreatedEvents(by: ids))
-			self.isListLoadedAndEmpty = events.isEmpty
-			self._events = events
-			self._filteredEvents = events
-			DispatchQueue.main.async {
-				self.delegate?.didFinishLoading()
-				self.delegate?.listDidUpdate()
-			}
-		}
-		.catch { print($0.localizedDescription) }
+			.catch { print($0.localizedDescription) }
 	}
 }
 
