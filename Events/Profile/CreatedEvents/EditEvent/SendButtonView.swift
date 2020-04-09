@@ -27,30 +27,39 @@ class SendButtonView: UIButtonScaleOnPress {
 	override func draw(_ rect: CGRect) {
 		guard let context = UIGraphicsGetCurrentContext() else { return }
 		context.saveGState()
-		let path = UIBezierPath(
-			roundedRect: rect,
-			byRoundingCorners: .allCorners,
-			cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)
-		)
-		UIColor.blue().setFill()
-		path.fill()
-		
 		let centerX = rect.width / 2
+		
+		context.addArc(
+			center: CGPoint(
+				x: centerX,
+				y: rect.height / 2
+			),
+			radius: rect.width / 2,
+			startAngle: 0,
+			endAngle: .pi * 2,
+			clockwise: true
+		)
+		context.setFillColor(UIColor.blue().cgColor)
+		context.fillPath()
+		
 		let initialPoint = CGPoint(x: centerX, y: Constants.padding)
 		let headHeight = centerX - Constants.padding
 
 		context.setLineWidth(3)
 		context.setLineCap(.round)
 		context.setStrokeColor(UIColor.white.cgColor)
+		
 		context.move(to: initialPoint)
 		context.addLine(to: CGPoint(x: centerX, y: rect.height - Constants.padding))
 
-		context.move(to: initialPoint)
-		context.addLine(to: CGPoint(x: centerX - headHeight, y: Constants.padding + headHeight))
-
-		context.move(to: initialPoint)
-		context.addLine(to: CGPoint(x: centerX + headHeight, y: Constants.padding + headHeight))
+		context.setLineJoin(.round)
+		context.addLines(between: [
+			CGPoint(x: centerX - headHeight, y: Constants.padding + headHeight),
+			initialPoint,
+			CGPoint(x: centerX + headHeight, y: Constants.padding + headHeight)
+		])
 		
 		context.strokePath()
+		context.closePath()
 	}
 }
