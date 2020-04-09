@@ -105,6 +105,7 @@ class EditEventView: UIView {
 		descripitionScrollView.Top == titleButton.Bottom + 15
     descripitionScrollView.left(0).right(0).bottom(40)
     mainDescriptionTextView.Width == descripitionScrollView.Width - 20
+		mainDescriptionTextView.Height >= descripitionScrollView.Height - 70
     mainDescriptionTextView.top(10).right(10).left(10)
     editButtonsScrollView.left(0).right(0).bottom(15)
     mainDescriptionTextView.Bottom == editButtonsScrollView.Top - 10
