@@ -130,21 +130,21 @@ class CreateEventViewModel: Stepper {
 		}
 	}
 
-  private func descriptionWithImageUrls(
-    from description: DescriptionWithAssets,
+	private func descriptionWithImageUrls(
+		from description: DescriptionWithAssets,
 		userId: String
-  ) -> Promise<DescriptionWithImageUrls> {
+	) -> Promise<DescriptionWithImageUrls> {
 		let imageUrls = all(description.assets.map { upload(fileUrl: $0.localUrl, userId: userId) })
-    return imageUrls
-      .then { imageUrls -> DescriptionWithImageUrls in
-        return DescriptionWithImageUrls(
-        isMain: description.isMain,
-        id: description.id,
-        title: description.title,
-        imageUrls: imageUrls,
-        text: description.text
-        )}
-  }
+		return imageUrls
+			.then { imageUrls -> DescriptionWithImageUrls in
+				return DescriptionWithImageUrls(
+					isMain: description.isMain,
+					id: description.id,
+					title: description.title,
+					imageUrls: imageUrls,
+					text: description.text
+				)}
+	}
 
   private func createEvent() {
     guard let user = Auth.auth().currentUser else { return }

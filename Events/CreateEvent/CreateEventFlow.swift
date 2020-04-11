@@ -28,67 +28,67 @@ class CreateEventFlow: Flow {
     }
 	}
 
-  private func handleCreateEventStep(_ step: CreateEventStep) -> FlowContributors {
-    switch step {
-    case
-      .dateDidComplete,
-      .categoryDidComplete,
-			.locationDidComplete,
-      .descriptionDidComplete:
-      return .none
+	private func handleCreateEventStep(_ step: CreateEventStep) -> FlowContributors {
+		switch step {
+		case
+		.dateDidComplete,
+		.categoryDidComplete,
+		.locationDidComplete,
+		.descriptionDidComplete:
+			return .none
 		case .location(let onResult):
 			return navigateToLocationScreen(onResult: onResult)
-    case .date(let onResult):
-      return navigateToDateScreen(onResult: onResult)
-    case .category(let onResult):
-      return navigateToCategoryScreen(onResult: onResult)
-    case .description(let onResult):
-      return navigateToDescriptionScreen(onResult: onResult)
-    }
-  }
-
-  private func handleEventStep(_ step: EventStep) -> FlowContributors {
-    switch step {
-    case .createEvent:
-      return navigateToCreateEventScreen()
-    case .locationSearch(let onResult):
-      return navigateToLocationSearchBar(onResult: onResult)
-    case .calendar(let withSelectedDates, let onComplete):
-      return openCalendarScreen(withSelectedDates: withSelectedDates, onComplete: onComplete)
-    case .imagePickerDidComplete:
-      self.rootNavigationController.tabBarController?.tabBar.isHidden = false
-      rootNavigationController.dismiss(animated: false, completion: nil)
-      return .none
-    case .locationSearchDidCompete, .calendarDidComplete:
-      rootNavigationController.presentedViewController?.dismiss(animated: true, completion: nil)
-      return .none
-    case .hintPopupDidComplete(let nextStep):
-      rootNavigationController.dismiss(animated: false, completion: nil)
-      if nextStep != nil {
-        return navigateToTextFormattingTips()
-      }
-      return .none
-    case .permissionModalDidComplete, .textFormattingTipsDidComplete:
-      rootNavigationController.dismiss(animated: false, completion: nil)
-      return .none
-    case .imagePicker(let selectedAssets, let onComplete):
-      self.rootNavigationController.tabBarController?.tabBar.isHidden = true
-      return navigateToImagePicker(
-        selectedAssets: selectedAssets,
-        onComplete: onComplete
-      )
-    case .permissionModal(let withType):
-      return navigateToPermissionModal(with: withType)
-    case .hintPopup(let popup):
-      return navigateToHintPopup(hintPopup: popup)
-    case .textFormattingTips:
-      return navigateToTextFormattingTips()
-    case .createEventDidComplete:
-      return .end(forwardToParentFlowWithStep: EventStep.createEventDidComplete)
-    default:
-      return .none
-    }
-  }
+		case .date(let onResult):
+			return navigateToDateScreen(onResult: onResult)
+		case .category(let onResult):
+			return navigateToCategoryScreen(onResult: onResult)
+		case .description(let onResult):
+			return navigateToDescriptionScreen(onResult: onResult)
+		}
+	}
+	
+	private func handleEventStep(_ step: EventStep) -> FlowContributors {
+		switch step {
+		case .createEvent:
+			return navigateToCreateEventScreen()
+		case .locationSearch(let onResult):
+			return navigateToLocationSearchBar(onResult: onResult)
+		case .calendar(let withSelectedDates, let onComplete):
+			return openCalendarScreen(withSelectedDates: withSelectedDates, onComplete: onComplete)
+		case .imagePickerDidComplete:
+			self.rootNavigationController.tabBarController?.tabBar.isHidden = false
+			rootNavigationController.dismiss(animated: false, completion: nil)
+			return .none
+		case .locationSearchDidCompete, .calendarDidComplete:
+			rootNavigationController.presentedViewController?.dismiss(animated: true, completion: nil)
+			return .none
+		case .hintPopupDidComplete(let nextStep):
+			rootNavigationController.dismiss(animated: false, completion: nil)
+			if nextStep != nil {
+				return navigateToTextFormattingTips()
+			}
+			return .none
+		case .permissionModalDidComplete, .textFormattingTipsDidComplete:
+			rootNavigationController.dismiss(animated: false, completion: nil)
+			return .none
+		case .imagePicker(let selectedAssets, let onComplete):
+			self.rootNavigationController.tabBarController?.tabBar.isHidden = true
+			return navigateToImagePicker(
+				selectedAssets: selectedAssets,
+				onComplete: onComplete
+			)
+		case .permissionModal(let withType):
+			return navigateToPermissionModal(with: withType)
+		case .hintPopup(let popup):
+			return navigateToHintPopup(hintPopup: popup)
+		case .textFormattingTips:
+			return navigateToTextFormattingTips()
+		case .createEventDidComplete:
+			return .end(forwardToParentFlowWithStep: EventStep.createEventDidComplete)
+		default:
+			return .none
+		}
+	}
 	
 	private func navigateToImagePicker(
     selectedAssets: [PHAsset],

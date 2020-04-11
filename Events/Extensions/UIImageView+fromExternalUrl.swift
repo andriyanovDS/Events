@@ -10,18 +10,6 @@ import UIKit
 import Promises
 import AVFoundation
 
-func resize(image originImage: UIImage, expectedSize: CGSize) -> UIImage? {
-	let rect = AVMakeRect(aspectRatio: originImage.size, insideRect: CGRect(
-		x: 0, y: 0, width: expectedSize.width, height: expectedSize.height
-	))
-	let aspectSize = CGSize(width: rect.width, height: rect.height)
-	UIGraphicsBeginImageContextWithOptions(aspectSize, true, 0)
-	originImage.draw(in: CGRect(origin: CGPoint.zero, size: aspectSize))
-	let newImage = UIGraphicsGetImageFromCurrentImageContext()
-	UIGraphicsEndImageContext()
-	return newImage
-}
-
 extension UIImageView {
 	
 	struct TransitionConfig {
@@ -48,7 +36,7 @@ extension UIImageView {
 		ExternalImageCache.shared.loadImage(by: url, queue: queue)
 			.then(on: .global(qos: .background)) {[weak self] originImage in
 				guard let self = self else { return }
-				let newImage = resize(image: originImage, expectedSize: size)
+				let newImage = UIImage.resize(originImage, expectedSize: size)
 				DispatchQueue.main.async {
 					if let config = transitionConfig {
 						UIView.transition(
@@ -75,7 +63,7 @@ extension UIImageView {
 		Promise<UIImage?>(on: queue) { () -> UIImage? in
 			semaphore.wait()
 			let originImage = try await(ExternalImageCache.shared.loadImage(by: url, queue: queue))
-			return resize(image: originImage, expectedSize: size)
+			return UIImage.resize(originImage, expectedSize: size)
 		}
 		.then(on: .main) {[weak self] image in
 			self?.image = image

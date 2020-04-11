@@ -21,7 +21,7 @@ class EventView: UIView {
 	let footerView: EventFooterView
 	let loadImageQueue = DispatchQueue(
     label: "com.event.eventImageLoad",
-    qos: .default,
+		qos: .default,
     attributes: [.concurrent],
     autoreleaseFrequency: .inherit,
     target: nil
@@ -47,6 +47,10 @@ class EventView: UIView {
 	private var safeAreaTopPadding: CGFloat {
 		UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0
 	}
+	private lazy var locationView: EventLocationView = {
+		let location = dataSource!.event.location
+		return EventLocationView(location: location)
+	}()
 
   init(sharedImage: UIImage?, dataSource: EventNodeDataSource) {
     self.dataSource = dataSource
@@ -75,8 +79,10 @@ class EventView: UIView {
   }
 	
 	deinit {
-		animator.stopAnimation(true)
-		animator.finishAnimation(at: .current)
+		animator.stopAnimation(false)
+		if animator.state == .stopped {
+			animator.finishAnimation(at: .current)
+		}
 	}
 
   struct Constants {
@@ -91,6 +97,8 @@ class EventView: UIView {
 		isOpaque = false
 		layer.cornerRadius = 15
 		clipsToBounds = true
+		scrollView.contentInsetAdjustmentBehavior = .never
+		scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 60, right: 0)
     infoBackgroundView.backgroundColor = .black
 		actionsBackgroundView.backgroundColor = .clear
     eventImageView.image = sharedImage
@@ -98,12 +106,9 @@ class EventView: UIView {
 		eventImageView.contentMode = .scaleAspectFill
     
 		setupAnimations()
-    setupActionButtons()
 		setupInfoStackView()
 		setupDescriptionsStackView()
 		setupAuthorView()
-		setupLocationView()
-		setupActionsStackView()
 		
     sv([
 			scrollView.sv(
@@ -112,12 +117,14 @@ class EventView: UIView {
 					infoBackgroundView.sv(infoStackView),
 					descriptionsStackView
 				])
-			),
-			actionsBackgroundView,
-			actionsStackView,
-			footerView
+			)
 		])
     setupConstraints()
+		
+		if let dataSource = dataSource, !dataSource.isInsideContextMenu {
+			setupActions()
+			descriptionsStackView.addArrangedSubview(locationView)
+		}
 
     descriptionViews
       .filter { !$0.eventDescription.isMain }
@@ -135,8 +142,19 @@ class EventView: UIView {
     }
   }
 	
+	private func setupActions() {
+		setupActionButtons()
+		setupActionsStackView()
+		sv([
+			actionsBackgroundView,
+			actionsStackView,
+			footerView
+		])
+		setupActionsConstraints()
+	}
+	
 	private func setupAnimations() {
-		animator.addAnimations({
+		animator.addAnimations({[unowned self] in
 			self.actionsBackgroundView.backgroundColor = .white
 		}, delayFactor: Constants.actionStackAnimationDelayFactor)
 	}
@@ -147,7 +165,7 @@ class EventView: UIView {
 		actionsStackView.distribution = .equalSpacing
 		actionsStackView.isLayoutMarginsRelativeArrangement = true
 		actionsStackView.layoutMargins = UIEdgeInsets(
-			top: safeAreaTopPadding,
+			top: safeAreaTopPadding + 10,
 			left: 20,
 			bottom: 0,
 			right: 20
@@ -192,15 +210,21 @@ class EventView: UIView {
 		descriptionsStackView.addArrangedSubview(view)
 	}
 	
-	private func setupLocationView() {
-		guard let location = dataSource?.event.location else { return }
-		let view = EventLocationView(location: location)
-		descriptionsStackView.addArrangedSubview(view)
+	private func setupActionsConstraints() {
+		actionsStackView
+			.top(-safeAreaTopPadding)
+			.left(0)
+			.right(0)
+			.height(Constants.actionsStackHeight)
+		actionsBackgroundView.Top == actionsStackView.Top
+		actionsBackgroundView.Bottom == actionsStackView.Bottom
+		actionsBackgroundView.left(0).right(0)
+		footerView.left(0).right(0).bottom(0)
 	}
 
   private func setupConstraints() {
 		scrollView
-			.top(-safeAreaTopPadding)
+			.top(0)
 		  .left(0)
 			.right(0)
 			.bottom(0)
@@ -211,21 +235,13 @@ class EventView: UIView {
       .left(0)
       .width(UIScreen.main.bounds.width)
       .height(Constants.eventImageHeight)
-		actionsStackView
-			.top(-safeAreaTopPadding)
-			.left(0)
-			.right(0)
-			.height(Constants.actionsStackHeight)
-		actionsBackgroundView.Top == actionsStackView.Top
-		actionsBackgroundView.Bottom == actionsStackView.Bottom
-		actionsBackgroundView.left(0).right(0)
+		
 		separatorView.translatesAutoresizingMaskIntoConstraints = false
     separatorView.left(10).right(10).height(2)
 		infoBackgroundView.left(0).right(0).Top == eventImageView.Bottom
 		infoStackView.left(20).right(20).top(10).bottom(15)
 		descriptionsStackView.Top == infoBackgroundView.Bottom + 15
 		descriptionsStackView.left(20).right(20).bottom(60)
-		footerView.left(0).right(0).bottom(0)
   }
 
   @objc private func onPressDescriptionTitle(_ sender: ButtonNodeScaleOnPress) {
@@ -332,6 +348,7 @@ extension EventView: UIScrollViewDelegate {
 protocol EventNodeDataSource: class {
   var event: Event { get }
 	var author: User { get }
+	var isInsideContextMenu: Bool { get }
 	var isCloseAnimationInProgress: Bool { get }
 	var userFollowEventState: EventViewController.FollowEventState { get }
 }

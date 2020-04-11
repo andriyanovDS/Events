@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0A163111242F842200936EB0 /* environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A163110242F842200936EB0 /* environment.swift */; };
 		0A163117242FDA9300936EB0 /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A163116242FDA9300936EB0 /* LocationSearchView.swift */; };
+		0A201D80244250230060C828 /* UIImage+resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A201D7F244250230060C828 /* UIImage+resize.swift */; };
 		0A42AF312430E84F00902B35 /* CreatedEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */; };
 		0A42AF332430E85A00902B35 /* CreatedEventsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */; };
 		0A42AF352431048800902B35 /* CreatedEventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */; };
@@ -89,7 +90,6 @@
 		742EF13F231F1850002092CA /* ImagesPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742EF13E231F1850002092CA /* ImagesPreviewViewModel.swift */; };
 		742EF141231F1879002092CA /* ImagesPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742EF140231F1879002092CA /* ImagesPreviewView.swift */; };
 		7430406B2420EE7F007F50A2 /* EventCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7430406A2420EE7F007F50A2 /* EventCellView.swift */; };
-		7430406D24211010007F50A2 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7430406C24211010007F50A2 /* ImageCache.swift */; };
 		7434FDDD2402D684003E376F /* loginStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7434FDDC2402D684003E376F /* loginStyles.swift */; };
 		743816A422E8F74400AA4960 /* DayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 743816A322E8F74400AA4960 /* DayButton.swift */; };
 		744921E323D39F1F00B5BB43 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 744921E523D39F1F00B5BB43 /* Localizable.strings */; };
@@ -212,6 +212,7 @@
 		0A163110242F842200936EB0 /* environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = environment.swift; sourceTree = "<group>"; };
 		0A163114242F859A00936EB0 /* addEnvironment.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = addEnvironment.sh; path = BuildPhases/addEnvironment.sh; sourceTree = SOURCE_ROOT; };
 		0A163116242FDA9300936EB0 /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
+		0A201D7F244250230060C828 /* UIImage+resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+resize.swift"; sourceTree = "<group>"; };
 		0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsViewController.swift; sourceTree = "<group>"; };
 		0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsNode.swift; sourceTree = "<group>"; };
 		0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsViewModel.swift; sourceTree = "<group>"; };
@@ -292,7 +293,6 @@
 		742EF13E231F1850002092CA /* ImagesPreviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesPreviewViewModel.swift; sourceTree = "<group>"; };
 		742EF140231F1879002092CA /* ImagesPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesPreviewView.swift; sourceTree = "<group>"; };
 		7430406A2420EE7F007F50A2 /* EventCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCellView.swift; sourceTree = "<group>"; };
-		7430406C24211010007F50A2 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		7434FDDC2402D684003E376F /* loginStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginStyles.swift; sourceTree = "<group>"; };
 		743816A322E8F74400AA4960 /* DayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayButton.swift; sourceTree = "<group>"; };
 		744921E023D39E7F00B5BB43 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -882,7 +882,6 @@
 				7430406A2420EE7F007F50A2 /* EventCellView.swift */,
 				74D3A4262423A80B00E6CDF4 /* RoundedView.swift */,
 				746697472326FDEE00406CD8 /* HomeFlow.swift */,
-				7430406C24211010007F50A2 /* ImageCache.swift */,
 			);
 			path = RootScreen;
 			sourceTree = "<group>";
@@ -902,6 +901,7 @@
 				74D3A42424239FFD00E6CDF4 /* UIView+shadow.swift */,
 				0AE899DD242CE63800EF427E /* UIImageView+fromExternalUrl.swift */,
 				0AEE5CFB242E73FE007A2D10 /* ASImageNode+loadImageFromExternalUrl.swift */,
+				0A201D7F244250230060C828 /* UIImage+resize.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1282,6 +1282,7 @@
 				7423346A2415666300B46037 /* DescriptionViewController.swift in Sources */,
 				7478F4FE22F60CB900A43F52 /* Event.swift in Sources */,
 				74D3A42324239A6600E6CDF4 /* UIImage+makeRoundedImage.swift in Sources */,
+				0A201D80244250230060C828 /* UIImage+resize.swift in Sources */,
 				0A4919A4241E9CF80068BDFE /* StartViewModel.swift in Sources */,
 				74D9655F22F2272D00D828C1 /* UserDetailsView.swift in Sources */,
 				74F0F5632300168900170C6C /* Array.swift in Sources */,
@@ -1315,7 +1316,6 @@
 				74D48E6D232994FB00FB3012 /* SavedFlow.swift in Sources */,
 				74E5DAD22329974D00E1557D /* ViewModelBased.swift in Sources */,
 				0AE899DE242CE63800EF427E /* UIImageView+fromExternalUrl.swift in Sources */,
-				7430406D24211010007F50A2 /* ImageCache.swift in Sources */,
 				0AF5A4662434DEB50044D558 /* LoadingView.swift in Sources */,
 				0A5519B524375F8E00CC308C /* EditEventViewController.swift in Sources */,
 				0AB8DC2624334FCF00C5C1CC /* UndoActionNode.swift in Sources */,

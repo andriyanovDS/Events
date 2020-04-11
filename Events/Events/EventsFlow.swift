@@ -20,13 +20,13 @@ class EventsFlow: Flow {
     return controller
   }()
 
-  func navigate(to step: Step) -> FlowContributors {
-    guard let step = step as? EventStep else {
-      return .none
-    }
-    switch step {
-    case .events:
-      return navigateToEventsScreen()
+	func navigate(to step: Step) -> FlowContributors {
+		guard let step = step as? EventStep else {
+			return .none
+		}
+		switch step {
+		case .events:
+			return navigateToEventsScreen()
 		case .event(let event, let author, let sharedImage):
 			return navigateToEvent(
 				event,
@@ -47,10 +47,10 @@ class EventsFlow: Flow {
 			}
 			rootNavigationController.dismiss(animated: true, completion: nil)
 			return .none
-    default:
-      return .none
-    }
-  }
+		default:
+			return .none
+		}
+	}
 
   private func navigateToEventsScreen() -> FlowContributors {
 		let viewModel = EventsViewModel()
@@ -64,9 +64,12 @@ class EventsFlow: Flow {
 	
 	private func navigateToEvent(_ event: Event, author: User, sharedImage: UIImage?) -> FlowContributors {
 		let viewModel = EventViewModel(event: event, author: author)
-    let viewController = EventViewController(viewModel: viewModel, sharedImage: sharedImage)
+    let viewController = EventViewController(
+			viewModel: viewModel,
+			sharedImage: sharedImage,
+			isInsideContextMenu: false
+		)
     viewController.modalPresentationStyle = .overFullScreen
-		viewController.isModalInPopover = true
     viewController.hero.isEnabled = true
     rootNavigationController.present(viewController, animated: true)
     return .one(flowContributor: .contribute(

@@ -16,20 +16,21 @@ class CreatedEventsFlow: Flow {
   }
 	
 	private lazy var rootNavigationController: UINavigationController = {
-    let controller = UINavigationController()
+		let controller = UINavigationController()
     controller.setNavigationBarHidden(true, animated: false)
-    return controller
+		return controller
   }()
-
+	
 	func navigate(to step: Step) -> FlowContributors {
 		guard let step = step as? EventStep else {
 			return .none
 		}
-    switch step {
+		
+		switch step {
 		case .createdEvents:
-      return navigateToCreatedEvents()
-    case .createdEventsDidComplete:
-      return .end(forwardToParentFlowWithStep: EventStep.createdEventsDidComplete)
+			return navigateToCreatedEvents()
+		case .createdEventsDidComplete:
+			return .end(forwardToParentFlowWithStep: EventStep.createdEventsDidComplete)
 		case .editEvent(let event):
 			return navigateToEditEvent(event: event)
 		case .editEventDidComplete:
@@ -37,10 +38,15 @@ class CreatedEventsFlow: Flow {
 			return .none
 		case .alert(let title, let message, let actions):
 			return navigateToAlert(title: title, message: message, actions: actions)
-    default:
-      return .none
-    }
-  }
+		case .event(let event, let author, let sharedImage):
+			return navigateToEvent(event, author: author, sharedImage: sharedImage)
+		case .eventDidComplete:
+			rootNavigationController.dismiss(animated: true, completion: nil)
+			return .none
+		default:
+			return .none
+		}
+	}
 	
 	private func navigateToCreatedEvents() -> FlowContributors {
 		let viewModel = CreatedEventsViewModel()
@@ -76,4 +82,19 @@ class CreatedEventsFlow: Flow {
 			withNextStepper: OneStepper(withSingleStep: EventStep.editEvent(event: event)))
     )
 	}
+	
+	private func navigateToEvent(_ event: Event, author: User, sharedImage: UIImage?) -> FlowContributors {
+		let viewModel = EventViewModel(event: event, author: author)
+    let viewController = EventViewController(
+			viewModel: viewModel,
+			sharedImage: sharedImage,
+			isInsideContextMenu: false
+		)
+		viewController.modalPresentationStyle = .overFullScreen
+		rootNavigationController.present(viewController, animated: true)
+		return .one(flowContributor: .contribute(
+			withNextPresentable: viewController,
+			withNextStepper: viewModel
+			))
+  }
 }

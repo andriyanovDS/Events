@@ -17,6 +17,7 @@ indirect enum EventStep: Step {
   case saved
   case events
 	case event(event: Event, author: User, sharedImage: UIImage?)
+	case eventFromContextMenu(viewController: EventViewController)
 	case eventDidComplete(userEvent: UserEvent)
 	case createdEvents
 	case createdEventsDidComplete

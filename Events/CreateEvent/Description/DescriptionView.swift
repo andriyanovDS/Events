@@ -320,15 +320,14 @@ extension DescriptionView: ViewWithKeyboard {
   }
 }
 
-protocol DescriptionViewDelegate:
-	CreateEventViewDelegate,
-  UICollectionViewDataSource,
-  UICollectionViewDelegate,
+protocol DescriptionViewDelegate: CreateEventViewDelegate,
+	UICollectionViewDataSource,
+	UICollectionViewDelegate,
 	UICollectionViewDragDelegate,
 	UICollectionViewDropDelegate {
-
-  func description(titleDidChange title: String)
-  func description(textDidChange text: String)
+	
+	func description(titleDidChange title: String)
+	func description(textDidChange text: String)
 }
 
 class DescriptionsCollectionView: UICollectionView {}

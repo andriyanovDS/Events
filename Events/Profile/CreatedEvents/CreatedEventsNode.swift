@@ -11,13 +11,17 @@ import AsyncDisplayKit
 class CreatedEventNode: ASDisplayNode {
 	let tableNode = ASTableNode()
 	let searchTextField = ASEditableTextNode()
-	let searchTextFieldBackgound = ASDisplayNode()
+	let searchTextFieldBackground = ASDisplayNode()
 	let closeButton = ButtonNodeScaleOnPress()
 	var undoActionNode = UndoActionNode()
 	private var isLoadingInProgress: Bool = true
 	private let loadingNode: ASDisplayNode
 	private let searchIcon = ASTextNode()
-	private var isUndoActionRequired: Bool = false
+	private var isUndoActionRequired: Bool = false {
+		didSet {
+			undoActionNode.isUserInteractionEnabled = isUndoActionRequired
+		}
+	}
 	
 	override init() {
 		loadingNode = ASDisplayNode(viewBlock: { LoadingView() })
@@ -41,7 +45,7 @@ class CreatedEventNode: ASDisplayNode {
 				insets: UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10),
 				child: searchFieldWithIcon
 			),
-			background: searchTextFieldBackgound
+			background: searchTextFieldBackground
 		)
 		let horizontalSpec = ASStackLayoutSpec(
 			direction: .horizontal,
@@ -159,9 +163,9 @@ class CreatedEventNode: ASDisplayNode {
 			style: .medium
 		)
 		searchTextField.textContainerInset = UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5)
-		searchTextFieldBackgound.backgroundColor = .gray100()
-		searchTextFieldBackgound.cornerRadius = 15
-		searchTextFieldBackgound.cornerRoundingType = .defaultSlowCALayer
+		searchTextFieldBackground.backgroundColor = .gray100()
+		searchTextFieldBackground.cornerRadius = 15
+		searchTextFieldBackground.cornerRoundingType = .defaultSlowCALayer
 		styleText(
 			buttonNode: closeButton,
 			text: NSLocalizedString(

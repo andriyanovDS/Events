@@ -79,7 +79,7 @@ class RootScreenViewModel: Stepper {
       .getDocuments(completion: {[weak self] snapshot, error in
         guard let self = self else { return }
         if let error = error {
-          // TODO: handle erorr on UI
+          // TODO: handle error on UI
           print("error", error.localizedDescription)
           return
         }

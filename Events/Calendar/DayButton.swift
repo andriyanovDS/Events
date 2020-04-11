@@ -52,9 +52,7 @@ class DayButton: UIButton {
     return layer
   }()
 
-  private var gradientLayer: CAGradientLayer = {
-    CAGradientLayer()
-  }()
+  private var gradientLayer: CAGradientLayer = CAGradientLayer()
 
   private lazy var borderLayer: CAShapeLayer = {
     let layer = CAShapeLayer()

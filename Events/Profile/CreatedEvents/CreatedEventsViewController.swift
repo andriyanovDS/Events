@@ -56,6 +56,20 @@ class CreatedEventsViewController: ASViewController<CreatedEventNode>, ViewModel
 }
 
 extension CreatedEventsViewController: CreatedEventsViewModelDelegate {
+	func removeCellWithUndoAction(at indexPath: IndexPath) {
+		node.showUndoAction()
+		undoEventDeletionTask = DispatchWorkItem {[weak self] in
+			self?.node.hideUndoAction()
+			self?.undoEventDeletionTask = nil
+		}
+		DispatchQueue.main.asyncAfter(
+			deadline: DispatchTime.now() + .seconds(Constants.undoActionTimeoutInSeconds),
+			execute: undoEventDeletionTask!
+		)
+		node.tableNode.performBatchUpdates({
+			self.node.tableNode.deleteRows(at: [indexPath], with: .left)
+		}, completion: nil)
+	}
 	
 	func listDidUpdate() {
 		node.tableNode.reloadData()
@@ -67,7 +81,6 @@ extension CreatedEventsViewController: CreatedEventsViewModelDelegate {
 }
 
 extension CreatedEventsViewController: ASTableDataSource {
-	
 	func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
 		viewModel.events.count
 	}
@@ -84,21 +97,6 @@ extension CreatedEventsViewController: ASTableDataSource {
 }
 
 extension CreatedEventsViewController: ASTableDelegate, UITableViewDelegate {
-	private func removeEvent(at indexPath: IndexPath) {
-		node.showUndoAction()
-		undoEventDeletionTask = DispatchWorkItem {[weak self] in
-			self?.node.hideUndoAction()
-			self?.undoEventDeletionTask = nil
-		}
-		DispatchQueue.main.asyncAfter(
-			deadline: DispatchTime.now() + .seconds(Constants.undoActionTimeoutInSeconds),
-			execute: undoEventDeletionTask!
-		)
-		node.tableNode.performBatchUpdates({
-			self.node.tableNode.deleteRows(at: [indexPath], with: .left)
-		}, completion: nil)
-	}
-	
 	func tableView(
 		_ tableView: UITableView,
 		trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
@@ -115,7 +113,7 @@ extension CreatedEventsViewController: ASTableDelegate, UITableViewDelegate {
 				self.viewModel.confirmEventDelete(
 					at: indexPath.item,
 					completionHandler: { isSucceed in
-						if isSucceed { self.removeEvent(at: indexPath) }
+						if isSucceed { self.removeCellWithUndoAction(at: indexPath) }
 						completionHandler(isSucceed)
 					}
 				)
@@ -137,6 +135,15 @@ extension CreatedEventsViewController: ASTableDelegate, UITableViewDelegate {
 	func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
 		let event = viewModel.events[indexPath.item]
 		viewModel.onEditEvent(event)
+	}
+	
+	@available(iOS 13, *)
+	func tableView(
+		_ tableView: UITableView,
+		contextMenuConfigurationForRowAt indexPath: IndexPath,
+		point: CGPoint
+	) -> UIContextMenuConfiguration? {
+		return viewModel.contextMenuConfigurationForEvent(at: indexPath.item)
 	}
 }
 

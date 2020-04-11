@@ -20,13 +20,13 @@ class EditEventFlow: Flow {
 		guard let step = step as? EventStep else {
 			return .none
 		}
-    switch step {
+		switch step {
 		case .editEvent(let event):
 			return navigateToEditEvent(event: event)
-    case .editEventDidComplete:
-      return .end(forwardToParentFlowWithStep: EventStep.editEventDidComplete)
-    case .listModal(let title, let buttons, let onComplete):
-      return navigateToListModal(title: title, buttons: buttons, onComplete: onComplete)
+		case .editEventDidComplete:
+			return .end(forwardToParentFlowWithStep: EventStep.editEventDidComplete)
+		case .listModal(let title, let buttons, let onComplete):
+			return navigateToListModal(title: title, buttons: buttons, onComplete: onComplete)
 		case .datePickerModal(let initialDate, let mode, let onComplete):
 			return navigateToDatePickerModal(
 				initialDate: initialDate,
@@ -34,24 +34,24 @@ class EditEventFlow: Flow {
 				onComplete: onComplete
 			)
 		case .listModalDidComplete, .datePickerModalDidComplete:
-      rootNavigationController.dismiss(animated: false, completion: nil)
-      return .none
-    case .calendar(let withSelectedDates, let onComplete):
-      return navigateToCalendarScreen(
-        withSelectedDates: withSelectedDates,
-        onComplete: onComplete
-      )
+			rootNavigationController.dismiss(animated: false, completion: nil)
+			return .none
+		case .calendar(let withSelectedDates, let onComplete):
+			return navigateToCalendarScreen(
+				withSelectedDates: withSelectedDates,
+				onComplete: onComplete
+			)
 		case .calendarDidComplete, .locationSearchDidCompete, .eventNameDidComplete:
-      rootNavigationController.dismiss(animated: true, completion: nil)
-      return .none
+			rootNavigationController.dismiss(animated: true, completion: nil)
+			return .none
 		case .eventName(let initialName, let onComplete):
 			return navigateToEventNameModal(initialName: initialName, onComplete: onComplete)
-    case .locationSearch(let onResult):
-      return navigateToLocationSearchBar(onResult: onResult)
-    default:
-      return .none
-    }
-  }
+		case .locationSearch(let onResult):
+			return navigateToLocationSearchBar(onResult: onResult)
+		default:
+			return .none
+		}
+	}
 	
 	private func navigateToEditEvent(event: Event) -> FlowContributors {
 		let viewModel = EditEventViewModel(event: event)
@@ -78,17 +78,17 @@ class EditEventFlow: Flow {
 	private func navigateToDatePickerModal(
 		initialDate: Date,
 		mode: UIDatePicker.Mode,
-    onComplete: @escaping (Date) -> Void
-  ) -> FlowContributors {
+		onComplete: @escaping (Date) -> Void
+	) -> FlowContributors {
 		let viewModel = DatePickerModalViewModel(initialDate: initialDate, mode: mode)
-    viewModel.onResult = onComplete
+		viewModel.onResult = onComplete
 		let view = DatePickerModalView()
-    let viewController = DatePickerModalViewController.instantiate(with: viewModel)
+		let viewController = DatePickerModalViewController.instantiate(with: viewModel)
 		viewController.modalView = view
-    viewController.modalPresentationStyle = .overFullScreen
-    rootNavigationController.present(viewController, animated: false)
-    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
-  }
+		viewController.modalPresentationStyle = .overFullScreen
+		rootNavigationController.present(viewController, animated: false)
+		return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
+	}
 
   private func navigateToCalendarScreen(
     withSelectedDates: SelectedDates,

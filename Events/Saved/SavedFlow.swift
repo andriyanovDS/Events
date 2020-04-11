@@ -11,10 +11,10 @@ import RxFlow
 
 class SavedFlow: Flow {
   var root: Presentable {
-    return rootViewContoller
+    return rootViewController
   }
 
-  private var rootViewContoller = UINavigationController()
+  private var rootViewController = UINavigationController()
 
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? EventStep else {
@@ -30,8 +30,7 @@ class SavedFlow: Flow {
 
   private func navigateToSavedScreen() -> FlowContributors {
     let viewController = SavedViewController()
-    rootViewContoller.pushViewController(viewController, animated: false)
+    rootViewController.pushViewController(viewController, animated: false)
     return .none
   }
-
 }

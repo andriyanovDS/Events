@@ -120,4 +120,3 @@ struct UserEvent: Codable {
 	var isJoin: Bool
 	let isAuthor: Bool
 }
-

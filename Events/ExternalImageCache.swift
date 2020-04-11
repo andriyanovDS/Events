@@ -18,6 +18,10 @@ class ExternalImageCache {
 		return cache
 	}()
 	private let imageLoadingPromiseCache = NSCache<AnyObject, AnyObject>()
+	private static let savedImageSize = CGSize(
+		width: UIScreen.main.bounds.width,
+		height: UIScreen.main.bounds.height
+	)
 	
 	private init(config: Config = Config.defaultConfig) {
 		self.config = config
@@ -81,14 +85,26 @@ class ExternalImageCache {
 		}
 	}
 	
-	private func saveImage(data: Data, hex: String) -> Promise<Void> {
-		Promise(on: .global(qos: .utility)) { _, _ in
+	private func saveImage(data: Data, hex: String) -> Promise<UIImage> {
+		Promise(on: .global(qos: .default)) { resolve, reject in
 			let documentDirectory = try FileManager.default.url(
 				for: .documentDirectory,
 				in: .userDomainMask,
 				appropriateFor: nil,
 				create: false
 			)
+			let image = UIImage(data: data)
+			guard
+				let imageToSave = image,
+				let resizedImage = UIImage.resize(imageToSave, expectedSize: ExternalImageCache.savedImageSize)
+				else {
+				reject(FailedToLoadExternalImage.incorrectData)
+				return
+			}
+			guard let resizedImageData = resizedImage.jpegData(compressionQuality: 0.85) else {
+				reject(FailedToLoadExternalImage.incorrectData)
+				return
+			}
 			let fileDirectory = documentDirectory.appendingPathComponent(Constants.imageFolderName)
 			if !FileManager.default.fileExists(atPath: fileDirectory.path) {
 				try FileManager.default.createDirectory(
@@ -97,7 +113,8 @@ class ExternalImageCache {
 				)
 			}
 			let fileURL = fileDirectory.appendingPathComponent(hex)
-			try data.write(to: fileURL)
+			try resizedImageData.write(to: fileURL)
+			resolve(resizedImage)
 		}
 	}
 
@@ -120,16 +137,12 @@ class ExternalImageCache {
 					reject(FailedToLoadExternalImage.badRequest)
 					return
 				}
-				_ = self?.saveImage(data: data, hex: hex)
-					.catch { error in
-						print(error.localizedDescription)
+				self?.saveImage(data: data, hex: hex)
+					.then {[weak self] image in
+						self?.imageCache.setObject(image, forKey: hex  as AnyObject)
+						resolve(image)
 					}
-				guard let image = UIImage(data: data) else {
-					reject(FailedToLoadExternalImage.incorrectData)
-					return
-				}
-				self?.imageCache.setObject(image, forKey: hex  as AnyObject)
-				resolve(image)
+					.catch { reject($0) }
 			}.resume()
 		}
 		.always {[weak self] in

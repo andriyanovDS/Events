@@ -21,36 +21,36 @@ class ProfileFlow: Flow {
     controller.setNavigationBarHidden(true, animated: false)
     return controller
   }()
-
-  func navigate(to step: Step) -> FlowContributors {
-    guard let step = step as? EventStep else {
-      return .none
-    }
-    switch step {
-    case .profile:
-      return navigateToProfileScreen()
-    case .login:
-      return navigateToLoginScreen()
-    case .userDetails(let user):
-      return navigateToUserDetails(user: user)
+	
+	func navigate(to step: Step) -> FlowContributors {
+		guard let step = step as? EventStep else {
+			return .none
+		}
+		switch step {
+		case .profile:
+			return navigateToProfileScreen()
+		case .login:
+			return navigateToLoginScreen()
+		case .userDetails(let user):
+			return navigateToUserDetails(user: user)
 		case .userDetailsDidComplete:
-      rootNavigationController.dismiss(animated: true, completion: nil)
-      return .none
+			rootNavigationController.dismiss(animated: true, completion: nil)
+			return .none
 		case .permissionModalDidComplete:
-      rootNavigationController.dismiss(animated: false, completion: nil)
-      return .none
-    case .permissionModal(let withType):
-      return navigateToPermissionModal(with: withType)
-    case .createEvent:
-      return navigateToCreateEventScreen()
+			rootNavigationController.dismiss(animated: false, completion: nil)
+			return .none
+		case .permissionModal(let withType):
+			return navigateToPermissionModal(with: withType)
+		case .createEvent:
+			return navigateToCreateEventScreen()
 		case .createEventDidComplete, .createdEventsDidComplete:
-      rootNavigationController.dismiss(animated: true, completion: nil)
-      return .none
+			rootNavigationController.dismiss(animated: true, completion: nil)
+			return .none
 		case .createdEvents:
 			return navigateToCreatedEvents()
-    default:
-      return .none
-    }
+		default:
+			return .none
+		}
   }
 
   func navigateToUserDetails(user: User) -> FlowContributors {

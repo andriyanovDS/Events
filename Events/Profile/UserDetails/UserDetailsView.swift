@@ -65,7 +65,7 @@ class UserDetailsView: UIView {
   }
 
   func setUserImage(_ image: UIImage) {
-		let newImage = resize(image: image, expectedSize: Constants.avatarImageSize)
+		let newImage = UIImage.resize(image, expectedSize: Constants.avatarImageSize)
 		avatarImageView.image = newImage
   }
 	

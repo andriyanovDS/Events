@@ -50,6 +50,7 @@ class EventAuthorView: UIStackView {
 		)
 		avatarImageView.style { v in
 			v.clipsToBounds = true
+			v.backgroundColor = .gray100()
 			v.contentMode = .scaleAspectFill
 			v.layer.cornerRadius = Constants.avatarImageSize / 2.0
 			v.width(Constants.avatarImageSize).height(Constants.avatarImageSize)
@@ -74,7 +75,8 @@ class EventAuthorView: UIStackView {
 		avatarImageView.fromExternalUrl(
 			url,
 			withResizeTo: size,
-			loadOn: delegate.loadImageQueue
+			loadOn: delegate.loadImageQueue,
+			transitionConfig: UIImageView.TransitionConfig(duration: 0.3)
 		)
 	}
 }

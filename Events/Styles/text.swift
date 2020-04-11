@@ -150,19 +150,19 @@ func styleText(
 }
 
 func setStyledText(
-  editableTextNode: ASEditableTextNode,
-  text: String,
+	editableTextNode: ASEditableTextNode,
+	text: String,
 	placeholderText: String? = nil,
-  size: CGFloat,
-  style: FontStyle
+	size: CGFloat,
+	style: FontStyle
 ) {
 	let attributes = [
 		NSAttributedString.Key.font: style.font(size: size)
 	]
-  editableTextNode.attributedText = NSAttributedString(
-    string: text,
-    attributes: attributes
-  )
+	editableTextNode.attributedText = NSAttributedString(
+		string: text,
+		attributes: attributes
+	)
 	editableTextNode.typingAttributes = [
 		NSAttributedString.Key.font.rawValue: style.font(size: size)
 	]

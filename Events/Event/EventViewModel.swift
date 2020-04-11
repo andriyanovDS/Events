@@ -13,7 +13,7 @@ import Promises
 import FirebaseAuth
 import FirebaseFirestore
 
-class EventViewModel: Stepper, EventNodeDataSource {
+class EventViewModel: Stepper {
   let steps = PublishRelay<Step>()
 	lazy private var db = Firestore.firestore()
 	lazy private var uid: String = {
@@ -26,8 +26,6 @@ class EventViewModel: Stepper, EventNodeDataSource {
   let event: Event
 	let author: User
 	var userEvent: UserEvent?
-	var isCloseAnimationInProgress: Bool = false
-	var userFollowEventState: EventViewController.FollowEventState = .inProgress
 
 	init(event: Event, author: User) {
     self.event = event
@@ -109,18 +107,17 @@ class EventViewModel: Stepper, EventNodeDataSource {
 		eventId: String,
 		reference: DocumentReference
 	) -> Promise<Any?> {
-		let userId = self.uid
 		return wrap(on: .global(qos: .default)) { handler in
-			self.db.runTransaction({(transaction, errorPointer) in
+			self.db.runTransaction({[unowned self] (transaction, errorPointer) in
 				do {
 					let document = try transaction.getDocument(reference)
 					if !document.exists {
 						let user = UserEvent(
 							eventId: eventId,
-							userId: userId,
+							userId: self.uid,
 							isFollow: false,
 							isJoin: true,
-							isAuthor: eventId == userId
+							isAuthor: eventId == self.uid
 						)
 						try reference.setData(from: user)
 						return nil
