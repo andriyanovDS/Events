@@ -7,12 +7,12 @@
 //
 
 import UIKit
-import MapKit
+import MapKit.MKMapSnapshotter
 
 class EventLocationView: UIStackView {
 	private let location: CLLocation
 	private let titleLabel = UILabel()
-	private let mapView = MKMapView()
+	private let mapSnapshotImageView = UIImageView()
 	
 	init(location: EventLocation) {
 		self.location = CLLocation(
@@ -27,6 +27,13 @@ class EventLocationView: UIStackView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	private struct Constants {
+		static let mapSnapshotSize = CGSize(
+			width: UIScreen.main.bounds.width - 40,
+			height: 200
+		)
+	}
+	
 	private func setupView() {
 		styleText(
 			label: titleLabel,
@@ -36,25 +43,56 @@ class EventLocationView: UIStackView {
 			style: .bold
 		)
 		titleLabel.numberOfLines = 2
-		setupMap()
+		mapSnapshotImageView.contentMode = .scaleAspectFill
+		mapSnapshotImageView.layer.cornerRadius = 6
+		mapSnapshotImageView.translatesAutoresizingMaskIntoConstraints = false
+		mapSnapshotImageView
+			.width(Constants.mapSnapshotSize.width)
+			.height(Constants.mapSnapshotSize.height)
+		
+		setupMapSnapshot()
 		axis = .vertical
 		alignment = .leading
 		spacing = 10
 		addArrangedSubview(titleLabel)
-		addArrangedSubview(mapView)
+		addArrangedSubview(mapSnapshotImageView)
 	}
 	
-	private func setupMap() {
+	private func setupMapSnapshot() {
 		let coordinateRegion = MKCoordinateRegion(
 			center: location.coordinate,
 			latitudinalMeters: 500,
 			longitudinalMeters: 500
 		)
-		mapView.layer.cornerRadius = 6
-		mapView.isUserInteractionEnabled = false
-		mapView.setRegion(coordinateRegion, animated: false)
-		mapView.addAnnotation(Annotation(coordinate: location.coordinate))
-		mapView.width(UIScreen.main.bounds.width - 40).height(200)
+		
+		let snapshotOptions = MKMapSnapshotter.Options()
+		snapshotOptions.region = coordinateRegion
+		snapshotOptions.showsBuildings = true
+		snapshotOptions.scale = UIScreen.main.scale
+		snapshotOptions.size = Constants.mapSnapshotSize
+		
+		DispatchQueue.global(qos: .userInteractive).async {
+			let snapshot = MKMapSnapshotter(options: snapshotOptions)
+			
+			snapshot.start { snapshot, error in
+				guard let snapshot = snapshot, error == nil else {
+					print(error ?? "Unknown error")
+					return
+				}
+				
+				let image = UIGraphicsImageRenderer(size: Constants.mapSnapshotSize).image {[unowned self] _ in
+					snapshot.image.draw(at: .zero)
+					
+					let pinView = MKPinAnnotationView(annotation: nil, reuseIdentifier: nil)
+					let point = snapshot.point(for: self.location.coordinate)
+					pinView.image?.draw(at: point)
+				}
+				
+				DispatchQueue.main.async {
+					self.mapSnapshotImageView.image = image
+				}
+			}
+		}
 	}
 }
 
