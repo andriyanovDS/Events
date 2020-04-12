@@ -10,7 +10,6 @@ import UIKit
 import Hero
 import Stevia
 import Promises
-import CoreLocation
 import AsyncDisplayKit
 
 class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased, EventCellNodeDelegate {
@@ -19,7 +18,6 @@ class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased
       viewModel.delegate = self
     }
   }
-  private let locationManager = CLLocationManager()
 	let loadImage: (_: LoadImageParams) -> Promise<UIImage>
 	
 	struct LoadImageParams {
@@ -55,12 +53,8 @@ class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
-    locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-    locationManager.delegate = self
     node.eventTableNode.dataSource = self
     node.eventTableNode.delegate = self
-    initializeUserLocation()
   }
   
   override func viewWillAppear(_ animated: Bool) {
@@ -70,36 +64,6 @@ class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased
 
   private func setupView() {
     node.eventTableNode.dataSource = self
-  }
-}
-
-extension RootScreenViewController: CLLocationManagerDelegate {
-  func initializeUserLocation() {
-    let status = CLLocationManager.authorizationStatus()
-    switch status {
-    case .authorizedAlways, .authorizedWhenInUse:
-      locationManager.startUpdatingLocation()
-    case .notDetermined:
-      locationManager.requestWhenInUseAuthorization()
-    default:
-      return
-    }
-  }
-
-  func locationManager(
-    _ manager: CLLocationManager,
-    didChangeAuthorization status: CLAuthorizationStatus
-  ) {
-    if status == .denied || status == .restricted {
-      return
-    }
-    manager.startUpdatingLocation()
-  }
-
-  func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    let coordinates: CLLocation = locations[0]
-    manager.stopUpdatingLocation()
-    onChangeUserLocation(coordinate: coordinates.coordinate)
   }
 }
 

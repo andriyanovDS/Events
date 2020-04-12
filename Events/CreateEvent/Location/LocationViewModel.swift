@@ -18,7 +18,7 @@ class LocationViewModel: Stepper {
   private let disposeBag = DisposeBag()
 
   init() {
-    geocodeObserver
+		UserLocation.shared.geocode$
       .take(1)
       .subscribe(onNext: {[weak self] geocode in
         self?.geocode = geocode

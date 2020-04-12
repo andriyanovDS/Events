@@ -119,7 +119,7 @@ extension LocationSearchViewController: CLLocationManagerDelegate {
 	func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     let coordinates: CLLocation = locations[0]
     manager.stopUpdatingLocation()
-		viewModel.updateDeviceGecode(from: coordinates.coordinate, onSuccess: {[weak self] in
+		viewModel.updateDeviceGeocode(from: coordinates.coordinate, onSuccess: {[weak self] in
 			guard let self = self, let locationView = self.locationSearchView else { return }
 			let button = locationView.showDeviceLocationIcon()
 			button?.rx.tap

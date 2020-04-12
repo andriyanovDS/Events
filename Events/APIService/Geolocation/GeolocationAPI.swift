@@ -7,72 +7,47 @@
 //
 
 import Foundation
-
-struct GetAddressByCoordinate: APIRequest {
-  typealias Response = GeocodeResult
-  let lng: Double
-  let lat: Double
-}
-
-struct GetAddressByPlaceId: APIRequest {
-  typealias Response = GeocodeResult
-  let placeId: String
-}
-
-struct GetPredictions: APIRequest {
-  typealias Response = GeocodeResult
-  let input: String
-}
-
-enum GeocoderError: Error {
-  case badRequest(String)
-}
+import Promises
+import CoreLocation
 
 class GeolocationAPI: APIClientBase {
+	
+	private init() {
+		 super.init(baseURL: "https://maps.googleapis.com/maps/api/")!
+	 }
 
   static let shared = GeolocationAPI()
   
-  private init() {
-    super.init(baseURL: "https://maps.googleapis.com/maps/api/")!
+	func reverseGeocode(byCoordinate coordinate: CLLocationCoordinate2D) -> Promise<Geocode> {
+    return reverseGeocode(with: [
+			"latlng": "\(coordinate.latitude),\(coordinate.longitude)"
+		])
   }
   
-  func reverseGeocodeByCoordinate(
-    coordinate: GetAddressByCoordinate,
-    completion: @escaping (Result<GetAddressByCoordinate.Response, GeocoderError>) -> Void
-    ) {
-    let params: [String: String] = [
-      "latlng": "\(coordinate.lat),\(coordinate.lng)"
-    ]
-    reverseGeocode(params: params, completion: completion)
-  }
-  
-  func reverseGeocodeByPlaceId(
-    params: GetAddressByPlaceId,
-    completion: @escaping (Result<GetAddressByCoordinate.Response, GeocoderError>) -> Void
-    ) {
-    reverseGeocode(params: ["place_id": params.placeId], completion: completion)
+  func reverseGeocode(byPlaceId placeId: String) -> Promise<Geocode> {
+		reverseGeocode(with: ["place_id": placeId])
   }
   
   func predictions(
     input: String,
-    completion: @escaping (Result<PredictionsResponse, GeocoderError>) -> Void
+    completion: @escaping (Result<[Prediction], Error>) -> Void
     ) -> () -> Void {
     let params = [
       "key": Environment.googleApiKey,
       "input": input
     ]
-    let endpoint = self.endpoint(for: "place/autocomplete/json", params: params)
-    let task = session.dataTask(with: request(for: endpoint)) { data, _, error in
+		let endpoint = self.url(for: "place/autocomplete/json", with: params)
+    let task = session.dataTask(with: request(url: endpoint)) { data, _, error in
       if let requestError = error {
-        completion(.failure(.badRequest(requestError.localizedDescription)))
+        completion(.failure(requestError))
         return
       }
-      if let geoData = data {
+			if let geoData = data {
         do {
-          let geocoder = try JSONDecoder().decode(PredictionsResponse.self, from: geoData)
-          completion(.success(geocoder))
-        } catch {
-          completion(.failure(.badRequest(error.localizedDescription)))
+          let response = try JSONDecoder().decode(PredictionsResponse.self, from: geoData)
+					completion(.success(response.predictions))
+        } catch let error {
+          completion(.failure(error))
         }
       }
     }
@@ -80,36 +55,58 @@ class GeolocationAPI: APIClientBase {
 		return { task.cancel() }
   }
   
-  private func reverseGeocode(
-    params: [String: String],
-    completion: @escaping (Result<GeocodeResult, GeocoderError>) -> Void
-    ) {
+  private func reverseGeocode(with params: [String: String]) -> Promise<Geocode> {
     var requestParams = params
 		requestParams["key"] = Environment.googleApiKey
     requestParams["language"] = Locale.current.languageCode
-    let endpoint = self.endpoint(for: "geocode/json", params: requestParams)
-    let task = session.dataTask(with: request(for: endpoint)) { data, _, error in
-      if let requestError = error {
-        completion(.failure(.badRequest(requestError.localizedDescription)))
-        return
-      }
-      if let geoData = data {
-        do {
-          let geocoder = try JSONDecoder().decode(GeocodeResult.self, from: geoData)
-          completion(.success(geocoder))
-        } catch {
-          completion(.failure(.badRequest(error.localizedDescription)))
-        }
-      }
-    }
-    task.resume()
+    let url = self.url(for: "geocode/json", with: requestParams)
+		let request = self.request(url: url)
+		return Promise { resolve, reject in
+			let task = URLSession.shared.dataTask(with: request) { data, _, error in
+				if let requestError = error {
+					reject(requestError)
+					return
+				}
+				if let geoData = data {
+					do {
+						let result = try JSONDecoder().decode(GeocodeResult.self, from: geoData)
+						guard let geocode = result.mainGeocode() else {
+							reject(GeocodeError.emptyGeocodes)
+							return
+						}
+						resolve(geocode)
+					} catch let error {
+						reject(error)
+					}
+				}
+			}
+			task.resume()
+		}
   }
 	
-	private func request(for url: URL) -> URLRequest {
+	private func request(url: URL) -> URLRequest {
 		var request = URLRequest(url: url)
 		if let identifier = Bundle.main.bundleIdentifier {
 			request.addValue(identifier, forHTTPHeaderField: "X-Ios-Bundle-Identifier")
 		}
 		return request
+	}
+}
+
+extension GeolocationAPI {
+	
+	enum GeocodeError: Error {
+		case emptyGeocodes
+	}
+	
+	struct GeocodeResult: Decodable {
+		let status: String
+		let results: [Geocode]
+
+		func mainGeocode() -> Geocode? {
+			return results
+				.sorted(by: { $0.address_components.count > $1.address_components.count })
+				.first
+		}
 	}
 }

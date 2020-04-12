@@ -34,7 +34,7 @@ class LocationSearchViewModel: Stepper, ScreenWithResult {
 						completion: { result in
 							switch result {
 							case .success(let result):
-								observer.on(.next(result.predictions))
+								observer.on(.next(result))
 								observer.on(.completed)
 							case .failure:
 								observer.on(.error(PredictionsError.apiFailure))
@@ -54,30 +54,17 @@ class LocationSearchViewModel: Stepper, ScreenWithResult {
 		
 	}
 				
-	func updateDeviceGecode(
+	func updateDeviceGeocode(
 		from coordinate: CLLocationCoordinate2D,
 		onSuccess: @escaping () -> Void
 	) {
-		let location = GetAddressByCoordinate(
-			lng: coordinate.longitude,
-			lat: coordinate.latitude
-		)
-		GeolocationAPI.shared.reverseGeocodeByCoordinate(
-			coordinate: location,
-			completion: {[weak self] result in
-				switch result {
-				case .success(let geocodes):
-					guard let geocode = geocodes.mainGeocode() else {
-						return
-					}
-					self?.deviceGeocode = geocode
-					DispatchQueue.main.async {
-						onSuccess()
-					}
-				case .failure(let error):
-					print(error.localizedDescription)
-				}
-		})
+		GeolocationAPI.shared.reverseGeocode(byCoordinate: coordinate)
+			.then {[weak self] geocode in
+				guard let self = self else { return }
+				self.deviceGeocode = geocode
+				onSuccess()
+			}
+			.catch { print($0.localizedDescription) }
 	}
   
   func onSelectDeviceLocation() {
@@ -87,24 +74,13 @@ class LocationSearchViewModel: Stepper, ScreenWithResult {
   }
   
 	func onSelectLocation(placeId: String, completion: @escaping () -> Void) {
-    GeolocationAPI.shared.reverseGeocodeByPlaceId(
-      params: GetAddressByPlaceId(placeId: placeId),
-      completion: { [weak self] result in
-        switch result {
-        case .success(let geocodes):
-          guard let geocode = geocodes.mainGeocode() else {
-            return
-          }
-          DispatchQueue.main.async {
-            self?.onResult(geocode)
-            self?.cancelScreen()
-						completion()
-          }
-        case .failure:
-          print("Failure", result)
-        }
-      }
-    )
+		GeolocationAPI.shared.reverseGeocode(byPlaceId: placeId)
+			.then {[weak self] geocode in
+				guard let self = self else { return }
+				self.onResult(geocode)
+				self.cancelScreen()
+			}
+			.always { completion() }
   }
   
 	func cancelScreen() {

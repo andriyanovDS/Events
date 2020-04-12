@@ -34,7 +34,7 @@ class UnsplashAPI: APIClientBase {
 		params["client_id"] = UNSPLASH_ACCESS_KEY
 		params["query"] = query
 		params["page"] = "1"
-		let endpoint = self.endpoint(for: "search/photos", params: params)
+		let endpoint = self.url(for: "search/photos", with: params)
 		return Promise { resolve, reject in
 			let task = self.session.dataTask(with: URLRequest(url: endpoint)) { data, _, error in
 				if let requestError = error {

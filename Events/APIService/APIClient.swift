@@ -22,21 +22,17 @@ class APIClientBase {
     self.baseURL = url
   }
 
-  func endpoint(for path: String?, params: [String: String]) -> URL {
-
+  func url(for path: String?, with params: [String: String]) -> URL {
+	
     let optionalUrl = path.foldL(
       none: { baseURL },
       some: { path in URL(string: path, relativeTo: baseURL) }
     )
 
-    guard let url = optionalUrl else {
-      fatalError("Wrong url")
-    }
+		guard let url = optionalUrl else { fatalError("Wrong url") }
     
     var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
-    components.queryItems = params.map { v in
-      return URLQueryItem(name: v.key, value: v.value)
-    }
+		components.queryItems = params.map { URLQueryItem(name: $0.key, value: $0.value) }
     return components.url!
   }
 }

@@ -8,11 +8,13 @@
 
 import Foundation
 
-struct Prediction: Decodable, Equatable {
+struct Prediction: Decodable {
   let description: String
   let place_id: String
+}
 
-  static func == (lhs: Prediction, rhs: Prediction) -> Bool {
+extension Prediction: Equatable {
+	static func == (lhs: Prediction, rhs: Prediction) -> Bool {
     return lhs.place_id == rhs.place_id
   }
 }
