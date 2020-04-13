@@ -42,7 +42,7 @@ class EventNameView: UIView {
 	}
 	
 	private func setupView() {
-		backgroundColor = .white
+		backgroundColor = .background
 		styleText(
 			label: titleLabel,
 			text: NSLocalizedString(
@@ -50,7 +50,7 @@ class EventNameView: UIView {
 				comment: "Event name: title"
 			),
 			size: 24,
-			color: .black,
+			color: .fontLabel,
 			style: .bold
 		)
 		
@@ -58,22 +58,22 @@ class EventNameView: UIView {
 			button: submitButton,
 			text: NSLocalizedString("Done", comment: "Event name: submit button label"),
 			size: 18,
-			color: .white,
+			color: .blueButtonFont,
 			style: .medium
 		)
-		submitButton.backgroundColor = .blue()
+    submitButton.backgroundColor = .blueButtonBackground
 		
 		styleText(
 			textView: nameTextView,
 			text: "",
 			size: 22,
-			color: .black,
+			color: .fontLabel,
 			style: .regular
 		)
 		
 		closeButton.style { v in
-			styleIcon(button: v, iconCode: "close", size: 20.0, color: .gray600())
-			v.backgroundColor = .gray200()
+			styleIcon(button: v, iconCode: "close", size: 20.0, color: .grayButtonDarkFont)
+			v.backgroundColor = .grayButtonBackground
 			v.layer.cornerRadius = 15
 		}
 		contentView.sv([titleLabel, closeButton, nameTextView, submitButton])

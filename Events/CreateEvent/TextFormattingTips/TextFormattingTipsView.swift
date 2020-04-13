@@ -27,7 +27,7 @@ class TextFormattingTipsView: UIView {
   }
 
   private func setupView() {
-    backgroundColor = .white
+    backgroundColor = .background
 
     sv(contentView)
     contentView.Top == safeAreaLayoutGuide.Top
@@ -47,13 +47,13 @@ class TextFormattingTipsView: UIView {
       label: titleLabel,
       text: "Орформите \nсвой текст",
       size: 24,
-      color: .gray900(),
+      color: .fontLabel,
       style: .bold
     )
     let image = UIImage(
       from: .materialIcon,
       code: "cancel",
-      textColor: .gray900(),
+      textColor: .fontLabel,
       backgroundColor: .clear,
       size: CGSize(width: 30, height: 30)
     )

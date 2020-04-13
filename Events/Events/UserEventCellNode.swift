@@ -30,7 +30,7 @@ class UserEventCellNode: ASCellNode {
 		eventImageNode.cornerRoundingType = .defaultSlowCALayer
 		eventImageNode.cornerRadius = 10
 		eventImageNode.clipsToBounds = true
-		eventImageNode.backgroundColor = .gray100()
+		eventImageNode.backgroundColor = .skeletonBackground
 		eventImageNode.contentMode = .scaleAspectFill
 		eventNameTextNode.maximumNumberOfLines = 4
 	
@@ -38,21 +38,21 @@ class UserEventCellNode: ASCellNode {
 			textNode: dateTextNode,
 			text: event.dateLabelText,
 			size: 12,
-			color: .black,
+			color: .fontLabel,
 			style: .medium
 		)
 		styleLayerBackedText(
 			textNode: eventNameTextNode,
 			text: event.name,
 			size: 16,
-			color: .black,
+			color: .fontLabel,
 			style: .bold
 		)
 	}
 	
 	override func didLoad() {
 		super.didLoad()
-		backgroundColor = .white
+		backgroundColor = .background
 		eventImageNode.view.hero.id = event.id
 		if let url = event.mainImageUrl {
 			eventImageNode.loadImageFromExternalUrl(

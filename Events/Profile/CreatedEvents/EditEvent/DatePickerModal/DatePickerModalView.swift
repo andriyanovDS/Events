@@ -20,10 +20,10 @@ class DatePickerModalView: BottomModalView {
       button: submitButton,
       text: "Done",
       size: 18,
-      color: .white,
+      color: .blueButtonFont,
       style: .medium
     )
-    submitButton.backgroundColor = .blue()
+    submitButton.backgroundColor = .blueButtonBackground
 		contentView.sv([datePicker, submitButton])
 	}
 	

@@ -33,7 +33,7 @@ class RootScreenNode: ASDisplayNode {
       label: titleLabel,
       text: NSLocalizedString("Choose your next experience", comment: "Home screen title"),
       size: 24,
-      color: .black,
+      color: .fontLabel,
       style: .bold
     )
     titleLabel.numberOfLines = 0
@@ -47,7 +47,7 @@ class RootScreenNode: ASDisplayNode {
 
   override func layout() {
     super.layout()
-    backgroundColor = .white
+    backgroundColor = .background
   }
 
   override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

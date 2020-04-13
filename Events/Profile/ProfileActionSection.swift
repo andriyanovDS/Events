@@ -24,7 +24,7 @@ class ProfileActionButton: UIButton {
     didSet {
       _ = addBorder(
         toSide: .bottom,
-        withColor: UIColor.gray200().cgColor,
+        withColor: UIColor.border.cgColor,
         andThickness: 1.0
       )
     }
@@ -59,7 +59,7 @@ class ProfileActionButton: UIButton {
       label: label,
       text: labelText,
       size: 18,
-      color: .black,
+      color: .fontLabel,
       style: .medium
     )
     label.left(0).centerVertically(0)
@@ -70,7 +70,7 @@ class ProfileActionButton: UIButton {
       label: subtitleLabel,
       text: text,
       size: 18,
-      color: .black,
+      color: .fontLabel,
       style: .medium
     )
     label.sv(subtitleLabel)
@@ -83,7 +83,7 @@ class ProfileActionButton: UIButton {
     let image = UIImage(
       from: .materialIcon,
       code: iconName,
-      textColor: UIColor.gray800(),
+      textColor: UIColor.fontLabel,
       backgroundColor: .clear,
       size: CGSize(width: 35, height: 35)
     )

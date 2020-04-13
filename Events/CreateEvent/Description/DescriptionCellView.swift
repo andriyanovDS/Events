@@ -40,7 +40,7 @@ class DescriptionCellView: UICollectionViewCell, DescriptionCellButtonDataSource
 	var isActive: Bool = false {
 		didSet {
 			if isActive {
-        addShadow(view: self, radius: 7, color: UIColor.blue(), opacity: 0.5)
+        addShadow(view: self, radius: 7, color: UIColor.blueButtonBackground, opacity: 0.5)
 			} else {
 				addShadow(view: self, radius: 1.8)
 			}
@@ -99,7 +99,7 @@ class DescriptionCellView: UICollectionViewCell, DescriptionCellButtonDataSource
   }
 
   private func setupView() {
-		buttonContentView.backgroundColor = .white
+		buttonContentView.backgroundColor = .background
 		buttonContentView.layer.cornerRadius = 10
 
     titleLabel.textAlignment = .center
@@ -109,11 +109,11 @@ class DescriptionCellView: UICollectionViewCell, DescriptionCellButtonDataSource
       label: titleLabel,
       text: "",
       size: 16,
-      color: .black,
+      color: .fontLabel,
       style: .bold
     )
     let skeletonView = SkeletonView()
-		skeletonView.backgroundColor = .white
+		skeletonView.backgroundColor = .background
 		sv(buttonContentView.sv([titleLabel, skeletonView]))
 		
 		buttonContentView
@@ -144,7 +144,7 @@ class DescriptionCellView: UICollectionViewCell, DescriptionCellButtonDataSource
 	}
 
   private func setupAddButton() {
-		let button = DescriptionCellButton(backgroundColor: .blue200())
+		let button = DescriptionCellButton(backgroundColor: .blueButtonBackground)
     sv(button)
     button
       .right(0)

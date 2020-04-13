@@ -33,7 +33,7 @@ class ImagesPreviewView: UIView {
 
   private func setupView() {
     isOpaque = false
-    backgroundColor = .black
+    backgroundColor = .backgroundInverted
     collectionView.style { v in
       v.showsVerticalScrollIndicator = false
       v.showsHorizontalScrollIndicator = false
@@ -51,11 +51,11 @@ class ImagesPreviewView: UIView {
     backButton.style { v in
       v.layer.cornerRadius = 17
       v.layer.borderWidth = 2
-      v.layer.borderColor = UIColor.white.cgColor
+      v.layer.borderColor = UIColor.background.cgColor
       let image = UIImage(
         from: .materialIcon,
         code: "chevron.left",
-        textColor: .white,
+        textColor: .background,
         backgroundColor: .clear,
         size: CGSize(width: 30, height: 30)
       )

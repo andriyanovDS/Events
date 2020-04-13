@@ -35,22 +35,22 @@ private func isDateInSelectedRangeFn(selectedDates: SelectedDates) -> (Date) -> 
   return { isBetween($0) }
 }
 
-func dateToButtonHighlightStateFn(selectedDates: SelectedDates) -> (Date) -> ButtonHiglightState {
+func dateToButtonHighlightStateFn(selectedDates: SelectedDates) -> (Date) -> ButtonHighlightState {
   let isSelectedDateFrom = isSelectedDateFromFn(selectedDateFrom: selectedDates.from)
   let isSelectedDateTo = isSelectedDateToFn(selectedDateTo: selectedDates.to)
   let isDateInSelectedRange = isDateInSelectedRangeFn(selectedDates: selectedDates)
   return { date in
     if selectedDates.from != nil && selectedDates.to == nil {
       return isSelectedDateFrom(date)
-        ? ButtonHiglightState.single
-        : ButtonHiglightState.notSelected
+        ? ButtonHighlightState.single
+        : ButtonHighlightState.notSelected
     }
     if isDateInSelectedRange(date) {
       return isSelectedDateFrom(date)
-        ? ButtonHiglightState.from
+        ? ButtonHighlightState.from
         : isSelectedDateTo(date)
-          ? ButtonHiglightState.to
-          : ButtonHiglightState.inRange
+          ? ButtonHighlightState.to
+          : ButtonHighlightState.inRange
     }
     return .notSelected
   }

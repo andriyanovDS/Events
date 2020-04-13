@@ -18,7 +18,7 @@ func selectButtonStyle(_ view: UIButton) -> UIButton {
     )
     v.contentHorizontalAlignment = .left
     v.layer.cornerRadius = 15
-    v.backgroundColor = UIColor.gray100()
+    v.backgroundColor = .textField
   }
   return view
 }
@@ -28,7 +28,7 @@ func selectTextFieldStyle(_ view: UITextField) -> UITextField {
     v.setupLeftView(width: 15)
     v.contentHorizontalAlignment = .left
     v.layer.cornerRadius = 15
-    v.backgroundColor = UIColor.gray100()
+    v.backgroundColor = .textField
   }
   return view
 }

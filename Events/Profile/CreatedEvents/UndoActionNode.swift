@@ -39,21 +39,21 @@ class UndoActionNode: ASDisplayNode {
 	
 	private func setupNode() {
 		automaticallyManagesSubnodes = true
-		backgroundColor = UIColor.black.withAlphaComponent(0.4)
+		backgroundColor = UIColor.backgroundInverted.withAlphaComponent(0.4)
 		cornerRadius = 10
 		cornerRoundingType = .defaultSlowCALayer
 		styleLayerBackedText(
 			textNode: descriptionTextNode,
 			text: NSLocalizedString("Event deleted", comment: "Action description: Event deleted"),
 			size: 16,
-			color: .white,
+			color: .fontLabel,
 			style: .medium
 		)
 		styleText(
 			buttonNode: undoButtonNode,
 			text: NSLocalizedString("Undo", comment: "Undo action"),
 			size: 17,
-			color: .lightBlue(),
+      color: UIColor.valueButton.withAlphaComponent(0.7),
 			style: .medium
 		)
 	}

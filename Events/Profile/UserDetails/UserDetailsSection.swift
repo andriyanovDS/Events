@@ -16,7 +16,7 @@ class UserDetailsSectionView: UIView {
 	init(labelText: String, childView: UIView, initialTextValue: String?) {
 		self.childView = childView
 		super.init(frame: CGRect.zero)
-		sutupLabel(with: labelText)
+		setupLabel(with: labelText)
 		setupChildView(initialTextValue: initialTextValue ?? "")
   }
   
@@ -24,12 +24,12 @@ class UserDetailsSectionView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
-  private func sutupLabel(with text: String) {
+  private func setupLabel(with text: String) {
     styleText(
       label: label,
       text: text,
       size: 16,
-      color: .gray800(),
+      color: .fontLabelDescription,
       style: .medium
     )
     sv(label)
@@ -43,7 +43,7 @@ class UserDetailsSectionView: UIView {
 				textField: textField,
 				text: "",
 				size: 18,
-				color: .black,
+				color: .fontLabel,
 				style: .medium
 			)
 			textField.text = initialTextValue
@@ -54,7 +54,7 @@ class UserDetailsSectionView: UIView {
 				textView: textView,
 				text: initialTextValue,
 				size: 18,
-				color: .black,
+				color: .fontLabel,
 				style: .medium
 			)
 			textView.text = initialTextValue

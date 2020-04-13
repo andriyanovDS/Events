@@ -40,8 +40,8 @@ class LoginTextField: UITextField {
       }
 			UIView.animate(withDuration: 0.2, animations: {
 				self.backgroundColor = nextValue
-					? UIColor.gray200()
-					: UIColor.lightRed(alpha: 0.5)
+					? UIColor.textField
+          : UIColor.destructive.withAlphaComponent(0.5)
 			})
     }
   }

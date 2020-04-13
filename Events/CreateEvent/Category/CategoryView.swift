@@ -31,13 +31,13 @@ class CategoriesView: UIView, CreateEventView {
   }
 
   private func setupView() {
-    backgroundColor = .white
+    backgroundColor = .background
 
     styleText(
       label: titleLabel,
       text: NSLocalizedString("Category", comment: "Create event: category section title"),
       size: 26,
-      color: .gray900(),
+      color: .fontLabel,
       style: .bold
     )
 
@@ -48,7 +48,7 @@ class CategoriesView: UIView, CreateEventView {
         comment: "Create event: category section description"
       ),
       size: 18,
-      color: .gray400(),
+      color: .fontLabelDescription,
       style: .regular
     )
     descriptionLabel.numberOfLines = 2
@@ -66,18 +66,18 @@ class CategoriesView: UIView, CreateEventView {
     stackView.spacing = 10
     let chunks = categoryButtons.chunks(columnsCount)
     chunks.forEach({ chunk in
-      let chunckStackView = UIStackView()
-      chunckStackView.axis = .horizontal
-      chunckStackView.alignment = .fill
-      chunckStackView.distribution = .fill
-      chunckStackView.spacing = 10
+      let chunkStackView = UIStackView()
+      chunkStackView.axis = .horizontal
+      chunkStackView.alignment = .fill
+      chunkStackView.distribution = .fill
+      chunkStackView.spacing = 10
 
       chunk.forEach { button in
         let width = (UIScreen.main.bounds.width - contentViewPadding * 2 - 10) / 2
         button.width(width).height(110)
-        chunckStackView.addArrangedSubview(button)
+        chunkStackView.addArrangedSubview(button)
       }
-      stackView.addArrangedSubview(chunckStackView)
+      stackView.addArrangedSubview(chunkStackView)
     })
     categoryButtons.forEach { $0.addTarget(
       self,

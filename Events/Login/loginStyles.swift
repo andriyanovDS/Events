@@ -13,6 +13,6 @@ func loginTextFieldStyle(_ view: UITextField) {
     v.setupLeftView(width: 15)
     v.contentHorizontalAlignment = .left
     v.layer.cornerRadius = 15
-    v.backgroundColor = UIColor.gray200()
+    v.backgroundColor = UIColor.textField
   })
 }

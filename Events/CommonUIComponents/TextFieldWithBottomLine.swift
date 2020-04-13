@@ -11,7 +11,7 @@ import UIKit
 class TextFieldWithBottomLine: UITextField {
   var bottomBorder: CALayer!
 
-  var defaultBottomLineColor: CGColor = UIColor.gray200().cgColor {
+  var defaultBottomLineColor: CGColor = UIColor.border.cgColor {
     didSet {
       bottomBorder.backgroundColor = defaultBottomLineColor
     }
@@ -41,7 +41,7 @@ class TextFieldWithBottomLine: UITextField {
 
   override init(frame: CGRect) {
     super.init(frame: frame)
-    backgroundColor = .white
+    backgroundColor = .background
 
     autocorrectionType = .no
     autocapitalizationType = .none
@@ -59,7 +59,7 @@ class TextFieldWithBottomLine: UITextField {
   }
 
   override func becomeFirstResponder() -> Bool {
-    bottomBorder.backgroundColor = UIColor.blue().cgColor
+    bottomBorder.backgroundColor = UIColor.highlightBlue.cgColor
     return super.becomeFirstResponder()
   }
 

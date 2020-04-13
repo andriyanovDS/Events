@@ -18,7 +18,7 @@ class MainFlow: Flow {
 
   private lazy var rootViewController: UINavigationController = {
     let viewController = UINavigationController()
-		viewController.view.backgroundColor = .white
+		viewController.view.backgroundColor = .background
     viewController.setNavigationBarHidden(true, animated: false)
     return viewController
   }()

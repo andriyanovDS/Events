@@ -41,7 +41,7 @@ class EventCellNode: ASCellNode {
     locationBackgroundNode = ASDisplayNode(viewBlock: {
       RoundedView(
         cornerRadii: CGSize(width: 10, height: 10),
-        backgroundColor: UIColor.white.withAlphaComponent(0.6)
+        backgroundColor: UIColor.background.withAlphaComponent(0.6)
       )
     })
     super.init()
@@ -51,11 +51,11 @@ class EventCellNode: ASCellNode {
       textNode: nameTextNode,
       text: event.name,
       size: 22,
-      color: .black,
+      color: .fontLabel,
       style: .bold
     )
 		[eventImageNode, authorAvatarImageNode].forEach { v in
-			v.backgroundColor = .gray100()
+			v.backgroundColor = .skeletonBackground
 			v.cornerRadius = 10
 			v.cornerRoundingType = .defaultSlowCALayer
 		}
@@ -72,7 +72,7 @@ class EventCellNode: ASCellNode {
 
   override func layout() {
     super.layout()
-    backgroundColor = .white
+    backgroundColor = .background
   }
 
   override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
@@ -87,7 +87,7 @@ class EventCellNode: ASCellNode {
       alignItems: .center,
       children: [locationIconImageNode, locationTextNode]
     )
-    let lockationWithBgSpec = ASBackgroundLayoutSpec(
+    let locationWithBgSpec = ASBackgroundLayoutSpec(
       child: ASInsetLayoutSpec(
         insets: UIEdgeInsets(top: 7, left: 7, bottom: 5, right: 12),
         child: locationStack
@@ -98,7 +98,7 @@ class EventCellNode: ASCellNode {
       child: eventImageNode,
       overlay: ASInsetLayoutSpec(
         insets: UIEdgeInsets(top: CGFloat.infinity, left: 0, bottom: 0, right: CGFloat.infinity),
-        child: lockationWithBgSpec
+        child: locationWithBgSpec
       )
     )
 
@@ -122,11 +122,11 @@ class EventCellNode: ASCellNode {
 
     let verticalStack = ASStackLayoutSpec.vertical()
     verticalStack.children = [eventImageAndLocationOverlaySpec, insetSpec]
-    let contentIsetSpec = ASInsetLayoutSpec(
+    let contentInsetSpec = ASInsetLayoutSpec(
       insets: UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0),
       child: verticalStack
     )
-    return contentIsetSpec
+    return contentInsetSpec
   }
 
   override func didEnterVisibleState() {
@@ -143,14 +143,14 @@ class EventCellNode: ASCellNode {
       textNode: locationTextNode,
       text: event.location.fullName,
       size: 18,
-      color: .black,
+      color: .fontLabel,
       style: .medium
     )
     locationTextNode.maximumNumberOfLines = 1
     locationIconImageNode.image = UIImage(
       from: .materialIcon,
       code: "location.on",
-      textColor: .blue(),
+      textColor: .accent,
       backgroundColor: .clear,
       size: CGSize(width: 30, height: 30)
     )
@@ -162,7 +162,7 @@ class EventCellNode: ASCellNode {
       textNode: authorNameTextNode,
       text: author.fullName,
       size: 18,
-      color: .black,
+      color: .fontLabel,
       style: .medium
     )
     authorNameTextNode.maximumNumberOfLines = 1
@@ -175,7 +175,7 @@ class EventCellNode: ASCellNode {
       textNode: dateTextNode,
       text: event.dateLabelText,
       size: 18,
-      color: .black,
+      color: .fontLabel,
       style: .medium
     )
   }
@@ -186,7 +186,7 @@ class EventCellNode: ASCellNode {
 			return
 		}
 		isEventImageLoaded = true
-		eventImageNode.backgroundColor = .white
+		eventImageNode.backgroundColor = .background
 		eventImageNode.cornerRoundingType = .precomposited
     DispatchQueue.main.async {
 			UIView.transition(
@@ -203,7 +203,7 @@ class EventCellNode: ASCellNode {
   }
 	
 	private func setLoadedAvatarImage(_ image: UIImage) {
-		authorAvatarImageNode.backgroundColor = .white
+		authorAvatarImageNode.backgroundColor = .background
 		authorAvatarImageNode.cornerRoundingType = .precomposited
 		authorAvatarImageNode.image = image
 	}

@@ -22,8 +22,8 @@ class StartView: UIView {
 	private let publicLabel = UILabel()
 	private var publicLabelColor: UIColor {
 		isPublic
-			? .gray400()
-			: .black
+      ? UIColor.fontLabel.withAlphaComponent(0.6)
+			: .fontLabel
 	}
 	
 	init() {
@@ -36,16 +36,16 @@ class StartView: UIView {
 	}
 	
 	private func setupView() {
-		backgroundColor = .white
+		backgroundColor = .background
 		styleText(
       button: submitButton,
       text: NSLocalizedString("Next step", comment: "Create event: next step"),
       size: 20,
-      color: .white,
+      color: .blueButtonFont,
       style: .medium
     )
 		submitButton.isEnabled = false
-    submitButton.backgroundColor = UIColor.blue()
+    submitButton.backgroundColor = .blueButtonBackground
 		sv(submitButton)
 		
 		setupTitleSection()
@@ -61,7 +61,7 @@ class StartView: UIView {
         comment: "Create event: event title label"
       ),
 			size: 26,
-			color: .black,
+			color: .fontLabel,
 			style: .bold
 		)
 		titleLabel.numberOfLines = 2
@@ -72,7 +72,7 @@ class StartView: UIView {
         comment: "Create event: event title text field placeholder"
       ),
       size: 22,
-      color: .black,
+      color: .fontLabel,
       style: .bold
     )
 		sv([titleLabel, titleTextField])

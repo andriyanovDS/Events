@@ -18,7 +18,7 @@ class SectionHeaderCellNode: ASCellNode {
 			textNode: titleTextNode,
 			text: NSLocalizedString("Events", comment: "User events list: title"),
 			size: 24,
-			color: .black,
+			color: .fontLabel,
 			style: .bold
 		)
 		addSubnode(titleTextNode)

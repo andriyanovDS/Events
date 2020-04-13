@@ -39,10 +39,10 @@ class TipSectionView: UIView {
       label: titleLabel,
       text: tip.title,
       size: 18,
-      color: .gray900(),
+      color: .fontLabel,
       style: .bold
     )
-    borderView.backgroundColor = .gray200()
+    borderView.backgroundColor = .border
     sv(titleView.sv(titleLabel, borderView))
     titleView.top(0).width(100%)
     borderView.bottom(0).width(100%).height(1)
@@ -89,7 +89,7 @@ class TipSectionView: UIView {
       label: descriptionLabel,
       text: tip.description,
       size: 16,
-      color: .gray900(),
+      color: .fontLabel,
       style: .regular
     )
     descriptionLabel.style({ v in

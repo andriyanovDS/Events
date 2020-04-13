@@ -74,14 +74,14 @@ class EventDescriptionView: UIStackView {
       button: titleButton,
       text: eventDescription.title ?? NSLocalizedString("What you'll do", comment: "Event description title"),
       size: 24,
-      color: .black,
+      color: .fontLabel,
       style: .bold
     )
     styleText(
       label: descriptionLabel,
       text: eventDescription.text,
       size: 18,
-      color: .black,
+      color: .fontLabel,
       style: .medium
     )
 		descriptionLabel.numberOfLines = 0

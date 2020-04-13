@@ -63,7 +63,7 @@ class LoadingView: UIView {
 			clockwise: true
 		)
 		circleLayer.path = path.cgPath
-		circleLayer.fillColor = UIColor.black.cgColor
+		circleLayer.fillColor = UIColor.backgroundInverted.cgColor
 		circleLayer.position = startPoint
 		self.layer.addSublayer(circleLayer)
 		circleLayer.add(animation, forKey: nil)

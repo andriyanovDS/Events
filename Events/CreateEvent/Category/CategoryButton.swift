@@ -30,7 +30,7 @@ class CategoryButton: UIButtonScaleOnPress {
   private func setupView() {
     layer.borderWidth = 3
     layer.cornerRadius = 7
-    layer.borderColor = UIColor.gray200().cgColor
+    layer.borderColor = UIColor.border.cgColor
     contentHorizontalAlignment = .left
     contentVerticalAlignment = .bottom
 
@@ -46,7 +46,7 @@ class CategoryButton: UIButtonScaleOnPress {
       label: label,
       text: category.translatedLabel(),
       size: 16,
-      color: .gray900(),
+      color: .fontLabel,
       style: .bold
     )
     label.textAlignment = .center

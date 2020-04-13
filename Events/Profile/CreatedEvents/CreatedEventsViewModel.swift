@@ -304,7 +304,7 @@ extension CreatedEventsViewModel {
 				let actionImage = UIImage(
 					from: .materialIcon,
 					code: menuAction.iconCode,
-					textColor: .black,
+					textColor: .fontLabel,
 					backgroundColor: .clear,
 					size: CGSize(width: 30, height: 30)
 				)

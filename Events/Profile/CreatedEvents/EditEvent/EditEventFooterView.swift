@@ -40,7 +40,7 @@ class EditEventFooterView: UIView {
       sublayers.contains(borderLayer) { return }
     
     let borderLayer = CALayer()
-    borderLayer.backgroundColor = UIColor.gray200().cgColor
+    borderLayer.backgroundColor = UIColor.border.cgColor
     borderLayer.frame = CGRect(
       x: bounds.minX + 10,
       y: bounds.minY,
@@ -52,12 +52,12 @@ class EditEventFooterView: UIView {
   }
 
   private func setupView() {
-    backgroundColor = .white
+    backgroundColor = .background
     buttonsStackView.axis = .horizontal
     buttonsStackView.spacing = 5
     buttonsStackView.alignment = .center
     buttons.forEach { v in
-      styleIcon(button: v.button, iconCode: v.iconCode, size: 24, color: .gray600())
+      styleIcon(button: v.button, iconCode: v.iconCode, size: 24, color: .grayButtonDarkFont)
       v.button.translatesAutoresizingMaskIntoConstraints = false
       v.button.width(40).height(40)
       buttonsStackView.addArrangedSubview(v.button)

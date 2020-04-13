@@ -27,7 +27,7 @@ class PermissionModalView: UIView {
   }
   
   private func setupView() {
-    backgroundColor = .white
+    backgroundColor = .background
     setupPopupView()
     sv(
       titleLabel,
@@ -60,7 +60,7 @@ class PermissionModalView: UIView {
       label: titleLabel,
       text: viewData.title,
       size: 26,
-      color: .gray900(),
+      color: .fontLabel,
       style: .bold
     )
     titleLabel.style({ v in
@@ -71,7 +71,7 @@ class PermissionModalView: UIView {
       let image = UIImage(
         from: .materialIcon,
         code: "cancel",
-        textColor: UIColor.gray900(),
+        textColor: .fontLabel,
         backgroundColor: .clear,
         size: CGSize(width: 35, height: 35)
       )
@@ -82,7 +82,7 @@ class PermissionModalView: UIView {
       label: descriptionLabel,
       text: viewData.description,
       size: 26,
-      color: .gray900(),
+      color: .fontLabel,
       style: .regular
     )
     descriptionLabel.style({ v in
@@ -103,9 +103,9 @@ class PermissionModalView: UIView {
       button: submitButton,
       text: viewData.buttonLabelText,
       size: 20,
-      color: .white,
+      color: .blueButtonFont,
       style: .medium
     )
-    submitButton.backgroundColor = UIColor.blue()
+    submitButton.backgroundColor = .blueButtonBackground
   }
 }

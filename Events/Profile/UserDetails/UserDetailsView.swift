@@ -38,7 +38,7 @@ class UserDetailsView: UIView {
 		let defaultAvatarImage = UIImage(
 			from: .materialIcon,
 			code: "photo.camera",
-			textColor: .black,
+			textColor: .fontLabel,
 			backgroundColor: .clear,
 			size: CGSize(width: 50, height: 50)
 		)
@@ -111,7 +111,7 @@ class UserDetailsView: UIView {
 	}
   
 	private func setupView(user: User) {
-    backgroundColor = .white
+    backgroundColor = .background
     scrollView.showsVerticalScrollIndicator = false
 		
 		let sections = setupSections(user: user)
@@ -128,7 +128,7 @@ class UserDetailsView: UIView {
 		
 		genderTextField.inputView = genderPicker
 
-    setipHeader()
+    setupHeader()
     setupAvatarButton()
     setupDateTextField()
     setupDescriptionTextView()
@@ -145,7 +145,7 @@ class UserDetailsView: UIView {
 		setupViewsConstraints()
   }
   
-  private func setipHeader() {
+  private func setupHeader() {
     let titleLabel = UILabel()
     styleText(
       label: titleLabel,
@@ -154,7 +154,7 @@ class UserDetailsView: UIView {
         comment: "Textfield to write about yourself"
       ),
       size: 26,
-      color: .gray900(),
+      color: .fontLabel,
       style: .medium
     )
     titleLabel.style { v in
@@ -165,7 +165,7 @@ class UserDetailsView: UIView {
       let image = UIImage(
         from: .materialIcon,
         code: "cancel",
-        textColor: UIColor.gray900(),
+        textColor: .fontLabel,
         backgroundColor: .clear,
         size: CGSize(width: 35, height: 35)
       )
@@ -181,7 +181,7 @@ class UserDetailsView: UIView {
   private func setupAvatarButton() {
     avatarImageView.style({ v in
 			v.layer.cornerRadius = Constants.avatarImageSize.width / 2
-      v.backgroundColor = .blue100()
+      v.backgroundColor = .highlightBlue
 			v.clipsToBounds = true
 			v.contentMode = .center
     })
@@ -223,7 +223,7 @@ class UserDetailsView: UIView {
       textView: descriptionTextView,
       text: "",
       size: 16,
-      color: .gray900(),
+      color: .fontLabel,
       style: .medium
     )
     descriptionTextView.style({ v in
@@ -242,10 +242,10 @@ class UserDetailsView: UIView {
       button: submitButton,
       text: NSLocalizedString("Save", comment: "User info: Save"),
       size: 20,
-      color: .white,
+      color: .blueButtonFont,
       style: .medium
     )
-    submitButton.backgroundColor = UIColor.blue()
+    submitButton.backgroundColor = .blueButtonBackground
   }
   
   private func setupViewsConstraints() {

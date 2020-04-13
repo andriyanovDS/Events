@@ -11,7 +11,7 @@ import UIKit
 class CounterCircleView: UIView {
 	private var shapeLayer: CAShapeLayer = {
 		let shapeLayer = CAShapeLayer()
-		shapeLayer.strokeColor = UIColor.white.cgColor
+		shapeLayer.strokeColor = UIColor.fontLabelInverted.cgColor
 		shapeLayer.fillColor = UIColor.clear.cgColor
 		shapeLayer.lineWidth = 3
 		shapeLayer.lineCap = .round

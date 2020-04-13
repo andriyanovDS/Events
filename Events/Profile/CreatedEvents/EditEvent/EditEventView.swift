@@ -15,7 +15,7 @@ class EditEventView: UIView {
 	let mainDescriptionTextView = UITextView()
 	private let contentView = UIView()
 	private let editButtonsStackView = UIStackView()
-  private let descripitionScrollView = UIScrollView()
+  private let descriptionScrollView = UIScrollView()
   private let editButtonsScrollView = UIScrollView()
   private let footerView: EditEventFooterView
 	private let editButtons: [EditButton]
@@ -49,16 +49,16 @@ class EditEventView: UIView {
 	}
 		
 	private func setupView() {
-		backgroundColor = .white
+		backgroundColor = .background
 		styleText(
 			button: titleButton,
 			text: NSLocalizedString("Enter title..", comment: "Edit event: title placeholder"),
 			size: 20,
-			color: .black,
+			color: .fontLabel,
 			style: .bold
 		)
 		titleButton.layer.cornerRadius = 15
-    titleButton.backgroundColor = .gray100()
+    titleButton.backgroundColor = .textField
 		titleButton.titleEdgeInsets = UIEdgeInsets(
 			top: 0,
 			left: 10,
@@ -69,7 +69,7 @@ class EditEventView: UIView {
 			textView: mainDescriptionTextView,
 			text: "",
 			size: 16,
-			color: .black,
+			color: .fontLabel,
 			style: .medium
 		)
 		mainDescriptionTextView.contentInset = UIEdgeInsets(
@@ -80,19 +80,19 @@ class EditEventView: UIView {
 		)
     mainDescriptionTextView.isScrollEnabled = false
 
-    descripitionScrollView.isDirectionalLockEnabled = true
+    descriptionScrollView.isDirectionalLockEnabled = true
     editButtonsScrollView.showsHorizontalScrollIndicator = false
 		editButtonsStackView.axis = .horizontal
 		editButtonsStackView.spacing = 10
 		editButtonsStackView.distribution = .equalSpacing
 		editButtons.forEach { editButtonsStackView.addArrangedSubview($0) }
     editButtonsScrollView.sv(editButtonsStackView)
-    descripitionScrollView.sv(mainDescriptionTextView, editButtonsScrollView)
+    descriptionScrollView.sv(mainDescriptionTextView, editButtonsScrollView)
     editButtonsScrollView.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 
 		sv(contentView.sv([
 			titleButton,
-			descripitionScrollView,
+			descriptionScrollView,
       footerView
 		]))
 	}
@@ -102,10 +102,10 @@ class EditEventView: UIView {
 		contentView.Bottom == safeAreaLayoutGuide.Bottom
 		contentView.left(0).right(0)
 		titleButton.top(10).left(10).right(10).height(40)
-		descripitionScrollView.Top == titleButton.Bottom + 15
-    descripitionScrollView.left(0).right(0).bottom(40)
-    mainDescriptionTextView.Width == descripitionScrollView.Width - 20
-		mainDescriptionTextView.Height >= descripitionScrollView.Height - 70
+		descriptionScrollView.Top == titleButton.Bottom + 15
+    descriptionScrollView.left(0).right(0).bottom(40)
+    mainDescriptionTextView.Width == descriptionScrollView.Width - 20
+		mainDescriptionTextView.Height >= descriptionScrollView.Height - 70
     mainDescriptionTextView.top(10).right(10).left(10)
     editButtonsScrollView.left(0).right(0).bottom(15)
     mainDescriptionTextView.Bottom == editButtonsScrollView.Top - 10

@@ -10,7 +10,7 @@ import UIKit
 import Stevia
 import Hero
 
-let CALENDAR_SHARED_ID = "CALENDAR_SHARED_ID"
+let calendarSharedElementId = "CALENDAR_SHARED_ID"
 
 class CalendarContentView: UIView {
   let backgroundView = UIView()
@@ -46,13 +46,13 @@ class CalendarContentView: UIView {
     days
       .values
       .forEach { v in
-        v.higlightState = v.date
+        v.highlightState = v.date
           .map(dateToButtonHighlightState)
           .getOrElse(result: .notSelected)
       }
   }
 
-  func sctollTo(selectedMonth index: Int) {
+  func scrollTo(selectedMonth index: Int) {
     let monthHeight = datesScrollView.contentSize.height / CGFloat(months.count)
     let offsetPoint = CGPoint(
       x: 0,
@@ -114,10 +114,10 @@ class CalendarContentView: UIView {
     backgroundColor = .clear
     backgroundView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.6)
 
-    contentView.hero.id = CALENDAR_SHARED_ID
+    contentView.hero.id = calendarSharedElementId
     let datesView = setupDates()
     contentView.style { v in
-      v.backgroundColor = .white
+      v.backgroundColor = .background
       v.layer.cornerRadius = 10
     }
 

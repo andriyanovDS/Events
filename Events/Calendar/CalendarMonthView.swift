@@ -40,11 +40,11 @@ class CalendarMonthView: UIView {
           text: String(v.dayOfMonth),
           size: 16,
           color: v.isInPast
-            ? UIColor.gray600()
-            : .black,
+            ? UIColor.fontLabelDescription
+            : .fontLabel,
           style: .regular
         )
-        button.higlightState = .notSelected
+        button.highlightState = .notSelected
         return button
       }
     .alt { DayButton(day: nil) }
@@ -74,7 +74,7 @@ class CalendarMonthView: UIView {
       label: monthLabel,
       text: monthName,
       size: 18,
-      color: .black,
+      color: .fontLabel,
       style: .medium
     )
 

@@ -27,7 +27,7 @@ class HintView: UIView {
   }
 
   private func setupView() {
-    backgroundColor = .white
+    backgroundColor = .background
     layer.cornerRadius = 10
     addShadow(view: self, radius: 3)
 
@@ -35,21 +35,21 @@ class HintView: UIView {
       label: label,
       text: popup.title,
       size: 18,
-      color: UIColor.gray900(),
+      color: .fontLabel,
       style: .bold
     )
     styleText(
       label: descriptionLabel,
       text: popup.description,
       size: 16,
-      color: .gray600(),
+      color: .fontLabelDescription,
       style: .medium
     )
     styleText(
       label: linkLabel,
       text: popup.link,
       size: 14,
-      color: .lightBlue(),
+      color: .blueButtonBackground,
       style: .medium
     )
     descriptionLabel.style({ v in

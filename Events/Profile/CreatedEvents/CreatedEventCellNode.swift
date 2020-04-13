@@ -58,8 +58,8 @@ class CreatedEventCellNode: ASCellNode {
 	
 	private func setupNode() {
 		automaticallyManagesSubnodes = true
-		backgroundColor = .white
-		eventImageNode.backgroundColor = .white
+		backgroundColor = .background
+		eventImageNode.backgroundColor = .background
 		eventImageNode.cornerRadius = Constants.imageSize.width / 2.0
 		eventImageNode.cornerRoundingType = .precomposited
 		
@@ -67,7 +67,7 @@ class CreatedEventCellNode: ASCellNode {
 			textNode: eventNameTextNode,
 			text: event.name,
 			size: 18,
-			color: .black,
+			color: .fontLabel,
 			style: .bold
 		)
 		eventNameTextNode.maximumNumberOfLines = 3
@@ -75,7 +75,7 @@ class CreatedEventCellNode: ASCellNode {
 			textNode: eventDateTextNode,
 			text: event.dateLabelText,
 			size: 15,
-			color: .gray600(),
+			color: .fontLabelDescription,
 			style: .medium
 		)
 	}

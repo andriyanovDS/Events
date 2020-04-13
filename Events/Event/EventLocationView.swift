@@ -39,7 +39,7 @@ class EventLocationView: UIStackView {
 			label: titleLabel,
 			text: NSLocalizedString("Place of meeting", comment: "Event location section title"),
 			size: 22,
-			color: .black,
+			color: .fontLabel,
 			style: .bold
 		)
 		titleLabel.numberOfLines = 2

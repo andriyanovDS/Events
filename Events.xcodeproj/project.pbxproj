@@ -101,7 +101,7 @@
 		745243AC22CE85BA00C930C8 /* RootScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */; };
 		745243B122CE85BC00C930C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 745243B022CE85BC00C930C8 /* Assets.xcassets */; };
 		745243B422CE85BC00C930C8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 745243B222CE85BC00C930C8 /* LaunchScreen.storyboard */; };
-		745243C122CFE2B400C930C8 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243C022CFE2B400C930C8 /* UIColorExtension.swift */; };
+		745243C122CFE2B400C930C8 /* UIColor+AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745243C022CFE2B400C930C8 /* UIColor+AppColors.swift */; };
 		7453637C22EE4940004C9717 /* ProfileActionSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7453637B22EE4940004C9717 /* ProfileActionSection.swift */; };
 		745DAFC2243A494A00BFBADA /* EditEventFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745DAFC1243A494A00BFBADA /* EditEventFooterView.swift */; };
 		7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */; };
@@ -308,7 +308,7 @@
 		745243B022CE85BC00C930C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		745243B322CE85BC00C930C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		745243B522CE85BC00C930C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		745243C022CFE2B400C930C8 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		745243C022CFE2B400C930C8 /* UIColor+AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+AppColors.swift"; sourceTree = "<group>"; };
 		7453637B22EE4940004C9717 /* ProfileActionSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionSection.swift; sourceTree = "<group>"; };
 		745DAFC1243A494A00BFBADA /* EditEventFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEventFooterView.swift; sourceTree = "<group>"; };
 		7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsSection.swift; sourceTree = "<group>"; };
@@ -884,7 +884,7 @@
 		748E0B1D22DB725700B061C7 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				745243C022CFE2B400C930C8 /* UIColorExtension.swift */,
+				745243C022CFE2B400C930C8 /* UIColor+AppColors.swift */,
 				74697FC722D11F7F00D5B5F4 /* UIViewExtension+addBorder.swift */,
 				74A1AE2022D5DF0300C39525 /* OptionalExtension.swift */,
 				742A99C222EDC77500A3A703 /* Result.swift */,
@@ -1205,7 +1205,7 @@
 				7465235822EFA0320027FB22 /* ProfileScreenView.swift in Sources */,
 				746E106923113E3600B5B19D /* ImagePickerItem.swift in Sources */,
 				74A1AE2322D64BFB00C39525 /* LoginViewModel.swift in Sources */,
-				745243C122CFE2B400C930C8 /* UIColorExtension.swift in Sources */,
+				745243C122CFE2B400C930C8 /* UIColor+AppColors.swift in Sources */,
 				0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */,
 				741DCF9022D3AA81005783A3 /* Category.swift in Sources */,
 				7430406B2420EE7F007F50A2 /* EventCellView.swift in Sources */,

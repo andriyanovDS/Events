@@ -165,7 +165,7 @@ class ImagePickerActionsView: UIView {
       )
       v.showsVerticalScrollIndicator = false
       v.showsHorizontalScrollIndicator = false
-      v.backgroundColor = .white
+      v.backgroundColor = .background
       v.collectionViewLayout = layout
       v.register(ImagePreviewCell.self, forCellWithReuseIdentifier: "ImagePreviewCell")
       

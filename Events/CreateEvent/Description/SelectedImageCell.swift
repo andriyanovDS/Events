@@ -44,13 +44,13 @@ class SelectedImageCell: UICollectionViewCell {
     imageView.contentMode = .scaleAspectFill
     removeButton.style { v in
       v.layer.cornerRadius = 10
-      v.layer.borderColor = UIColor.white.cgColor
+      v.layer.borderColor = UIColor.blueButtonFont.cgColor
       v.layer.borderWidth = 2
-      v.backgroundColor = .blue()
+      v.backgroundColor = .blueButtonBackground
       let image = UIImage(
         from: .materialIcon,
         code: "close",
-        textColor: .white,
+        textColor: .blueButtonFont,
         backgroundColor: .clear,
         size: CGSize(width: 16, height: 16)
       )

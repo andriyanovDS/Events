@@ -66,7 +66,7 @@ class UndoActionCounterView: UIView {
 			label: counterLabel,
 			text: String(secondsLeft),
 			size: 14,
-			color: .white,
+			color: .fontLabelInverted,
 			style: .medium
 		)
 		circleView.transform = CGAffineTransform(rotationAngle: -(.pi / 2))

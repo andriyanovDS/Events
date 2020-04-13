@@ -42,10 +42,10 @@ class LocationCell: UITableViewCell {
 		super.setSelected(selected, animated: animated)
 
 		if selected {
-			contentView.backgroundColor = .gray100()
+			contentView.backgroundColor = .selectionGray
 			contentView.layer.cornerRadius = 15
 		} else {
-			contentView.backgroundColor = .white
+			contentView.backgroundColor = .background
 			contentView.layer.cornerRadius = 0
 		}
 	}
@@ -55,13 +55,13 @@ class LocationCell: UITableViewCell {
 		selectionStyle = .none
 		iconLabel.font = UIFont.icon(from: .materialIcon, ofSize: 30.0)
 		iconLabel.text = String.fontMaterialIcon("location.on")
-		iconLabel.textColor = .black
+		iconLabel.textColor = .fontLabel
 		
 		styleText(
 			label: nameLabel,
 			text: "",
 			size: 18,
-			color: .black,
+			color: .fontLabel,
 			style: .medium
 		)
 		nameLabel.textAlignment = .left

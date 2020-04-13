@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum ButtonHiglightState {
+enum ButtonHighlightState {
   case from, to, inRange, single, notSelected
 }
 
@@ -48,7 +48,7 @@ class DayButton: UIButton {
 
   private var backgroundLayer: CAShapeLayer = {
     let layer = CAShapeLayer()
-    layer.fillColor = UIColor.lightBlue().cgColor
+    layer.fillColor = UIColor.selectionBlue.cgColor
     return layer
   }()
 
@@ -70,8 +70,8 @@ class DayButton: UIButton {
 
   override var bounds: CGRect {
     didSet {
-      if higlightState != ButtonHiglightState.notSelected {
-        drawHighlightFor(state: higlightState)
+      if highlightState != ButtonHighlightState.notSelected {
+        drawHighlightFor(state: highlightState)
       }
       if isToday {
         drawSelectionToday()
@@ -79,9 +79,9 @@ class DayButton: UIButton {
     }
   }
 
-  var higlightState: ButtonHiglightState = .notSelected {
+  var highlightState: ButtonHighlightState = .notSelected {
     willSet (nextState) {
-      if higlightState == nextState || bounds.height == 0 {
+      if highlightState == nextState || bounds.height == 0 {
         return
       }
       drawHighlightFor(state: nextState)
@@ -112,7 +112,7 @@ class DayButton: UIButton {
       clockwise: true
     )
     path.lineWidth = 1
-    borderLayer.strokeColor = UIColor.gray400().cgColor
+    borderLayer.strokeColor = UIColor.border.cgColor
     borderLayer.path = path.cgPath
     self.layer.insertSublayer(borderLayer, at: 0)
   }
@@ -131,7 +131,7 @@ class DayButton: UIButton {
 
   private func drawSelectionInRangeFirstDayOfMonth() {
     gradientLayer.frame = bounds
-    gradientLayer.colors = [UIColor.lightBlue().cgColor, UIColor.white.cgColor]
+    gradientLayer.colors = [UIColor.selectionBlue.cgColor, UIColor.background.cgColor]
     gradientLayer.startPoint = CGPoint(x: 0.6, y: 0)
     gradientLayer.endPoint = CGPoint(x: 0, y: 0)
     gradientLayer.mask = nil
@@ -147,7 +147,7 @@ class DayButton: UIButton {
 
   private func drawSelectionInRangeLastDayOfMonth() {
     gradientLayer.frame = bounds
-    gradientLayer.colors = [UIColor.lightBlue().cgColor, UIColor.white.cgColor]
+    gradientLayer.colors = [UIColor.selectionBlue.cgColor, UIColor.background.cgColor]
     gradientLayer.startPoint = CGPoint(x: 0.4, y: 0)
     gradientLayer.endPoint = CGPoint(x: 1, y: 0)
     gradientLayer.mask = nil
@@ -211,7 +211,7 @@ class DayButton: UIButton {
 
     gradientLayer.frame = bounds
     gradientLayer.mask = gradientMask
-    gradientLayer.colors = [UIColor.lightBlue().cgColor, UIColor.white.cgColor]
+    gradientLayer.colors = [UIColor.selectionBlue.cgColor, UIColor.background.cgColor]
     gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
     gradientLayer.endPoint = endPoint
     backgroundLayer.addSublayer(gradientLayer)
@@ -273,7 +273,7 @@ class DayButton: UIButton {
     self.layer.insertSublayer(backgroundLayer, at: 0)
   }
 
-  private func drawHighlightFor(state: ButtonHiglightState) {
+  private func drawHighlightFor(state: ButtonHighlightState) {
     if !isEnabled { return }
     switch state {
     case .single:
@@ -296,8 +296,8 @@ class DayButton: UIButton {
     }
     setTitleColor(
       state == .notSelected
-        ? .black
-        : .white,
+        ? .fontLabel
+        : .fontLabelInverted,
       for: .normal
     )
   }

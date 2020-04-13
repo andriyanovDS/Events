@@ -14,7 +14,7 @@ class SavedViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    view.backgroundColor = .gray200()
+    view.backgroundColor = .background
   }
   
 }

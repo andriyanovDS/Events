@@ -39,7 +39,7 @@ class SendButtonView: UIButtonScaleOnPress {
 			endAngle: .pi * 2,
 			clockwise: true
 		)
-		context.setFillColor(UIColor.blue().cgColor)
+		context.setFillColor(UIColor.blueButtonBackground.cgColor)
 		context.fillPath()
 		
 		let initialPoint = CGPoint(x: centerX, y: Constants.padding)
@@ -47,7 +47,7 @@ class SendButtonView: UIButtonScaleOnPress {
 
 		context.setLineWidth(3)
 		context.setLineCap(.round)
-		context.setStrokeColor(UIColor.white.cgColor)
+		context.setStrokeColor(UIColor.blueButtonFont.cgColor)
 		
 		context.move(to: initialPoint)
 		context.addLine(to: CGPoint(x: centerX, y: rect.height - Constants.padding))

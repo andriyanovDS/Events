@@ -33,7 +33,7 @@ class EditEventViewController: UIViewController, ViewModelBased {
 		
 		let accessButton = EditButton(type: .access(isPrivate: event.isPublic))
 		let dateButton = EditButton(type: .date(dateLabelText: event.dateLabelText))
-    dateButton.hero.id = CALENDAR_SHARED_ID
+    dateButton.hero.id = calendarSharedElementId
 		let categoryButton = EditButton(type: .category(categoryId: event.categories.first!))
 		let editButtons = [accessButton, dateButton, categoryButton]
 
@@ -116,16 +116,16 @@ class EditEventViewController: UIViewController, ViewModelBased {
 		guard let navigationBar = navigationController?.navigationBar else {
 			return
 		}
-		navigationBar.backgroundColor = .white
+		navigationBar.backgroundColor = .background
 		navigationBar.isOpaque = true
 		navigationBar.titleTextAttributes = [
 			NSAttributedString.Key.font: FontStyle.bold.font(size: 22),
-			NSAttributedString.Key.foregroundColor: UIColor.black
+			NSAttributedString.Key.foregroundColor: UIColor.fontLabel
 		]
 		let backButton = UIButtonScaleOnPress()
 		backButton.style { v in
-			styleIcon(button: v, iconCode: "close", size: 20.0, color: .gray600())
-			v.backgroundColor = .gray200()
+			styleIcon(button: v, iconCode: "close", size: 20.0, color: .grayButtonDarkFont)
+			v.backgroundColor = .grayButtonBackground
 			v.layer.cornerRadius = 15
 		}
 		navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)

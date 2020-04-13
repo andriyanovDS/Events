@@ -27,11 +27,11 @@ class EventsEmptyListCellNode: ASCellNode {
 				comment: "Event list empty: explore button"
 			),
 			size: 17,
-			color: .white,
+			color: .blueButtonFont,
 			style: .medium
 		)
 		
-		searchButton.backgroundColor = .blue()
+		searchButton.backgroundColor = .blueButtonBackground
 		searchButton.cornerRoundingType = .defaultSlowCALayer
 		searchButton.cornerRadius = 8
 		searchButton.contentEdgeInsets = UIEdgeInsets(
@@ -81,7 +81,7 @@ class EventsEmptyListCellNode: ASCellNode {
 		labelTextNode.isLayerBacked = false
 		let textAttributes = [
 			NSAttributedString.Key.font: FontStyle.bold.font(size: 22),
-			NSAttributedString.Key.foregroundColor: UIColor.black,
+			NSAttributedString.Key.foregroundColor: UIColor.fontLabel,
 			NSAttributedString.Key.paragraphStyle: paragraphStyle
 		]
 		labelTextNode.attributedText = NSAttributedString(string: text, attributes: textAttributes)

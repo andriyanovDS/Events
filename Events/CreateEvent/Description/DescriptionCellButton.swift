@@ -35,7 +35,7 @@ class DescriptionCellButton: UIButton {
 	}
 	
   override func draw(_ rect: CGRect) {
-    drawCircle(rect: rect, color: .black)
+    drawCircle(rect: rect, color: .fontLabel)
     drawCircle(
       rect: CGRect(
         x: 1,
@@ -45,8 +45,8 @@ class DescriptionCellButton: UIButton {
       ),
       color: _backgroundColor
     )
-    drawPlus(lineWidth: 3, scale: 0.65, color: .black)
-    drawPlus(lineWidth: 2, scale: 0.6, color: .white)
+    drawPlus(lineWidth: 3, scale: 0.65, color: .fontLabel)
+    drawPlus(lineWidth: 2, scale: 0.6, color: .fontLabelInverted)
   }
 
   private func drawCircle(

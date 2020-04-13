@@ -41,7 +41,7 @@ class CalendarHeaderView: UIView {
           label: label,
           text: v,
           size: 19,
-          color: UIColor.gray600(),
+          color: .fontLabelDescription,
           style: .regular
         )
         return label
@@ -59,13 +59,13 @@ class CalendarHeaderView: UIView {
       label: titleLabel,
       text: unselectedDatesTitle,
       size: 16,
-      color: .black,
+      color: .fontLabel,
       style: .medium
     )
     let image = UIImage(
       from: .fontAwesome,
       code: "times",
-      textColor: .black,
+      textColor: .fontLabel,
       backgroundColor: .clear,
       size: CGSize(width: 30, height: 30)
     )

@@ -71,7 +71,7 @@ class TabBarFlow: Flow {
       tabBarItem.icon(
         from: .materialIcon,
         code: "home",
-        iconColor: UIColor.gray800(),
+        iconColor: .fontLabel,
         imageSize: CGSize(width: 30, height: 30),
         ofSize: 30
       )
@@ -79,7 +79,7 @@ class TabBarFlow: Flow {
       tabBarItem.icon(
         from: .materialIcon,
         code: "person.outline",
-        iconColor: UIColor.gray800(),
+        iconColor: .fontLabel,
         imageSize: CGSize(width: 30, height: 30),
         ofSize: 30
       )
@@ -87,7 +87,7 @@ class TabBarFlow: Flow {
       tabBarItem.icon(
         from: .materialIcon,
         code: "favorite.border",
-        iconColor: UIColor.gray800(),
+        iconColor: .fontLabel,
         imageSize: CGSize(width: 30, height: 30),
         ofSize: 30
       )
@@ -95,7 +95,7 @@ class TabBarFlow: Flow {
       tabBarItem.icon(
         from: .materialIcon,
         code: "event",
-        iconColor: UIColor.gray800(),
+        iconColor: .fontLabel,
         imageSize: CGSize(width: 30, height: 30),
         ofSize: 30
       )
@@ -105,10 +105,10 @@ class TabBarFlow: Flow {
 
   private func setupTabBar() {
     rootViewController.tabBar.style({ v in
-      v.barTintColor = .white
-      _ = v.addBorder(toSide: .top, withColor: UIColor.gray800().cgColor, andThickness: 1)
-      v.tintColor = UIColor.blue()
-      v.unselectedItemTintColor = UIColor.gray800()
+      v.barTintColor = .background
+      _ = v.addBorder(toSide: .top, withColor: UIColor.fontLabel.cgColor, andThickness: 1)
+      v.tintColor = .blueButtonBackground
+      v.unselectedItemTintColor = .fontLabel
     })
   }
 }

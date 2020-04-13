@@ -20,7 +20,7 @@ class EventFooterView: UIView {
 	private let pricePerPerson: Float?
 	lazy var activityIndicatorView: UIView = {
 		let activityIndicatorView = UIView()
-		activityIndicatorView.backgroundColor = UIColor.white.withAlphaComponent(0.6)
+		activityIndicatorView.backgroundColor = UIColor.background.withAlphaComponent(0.6)
     let activityIndicator = UIActivityIndicatorView.init(style: .gray)
     activityIndicator.startAnimating()
     activityIndicatorView.sv(activityIndicator)
@@ -56,9 +56,9 @@ class EventFooterView: UIView {
 		var backgroundColor: UIColor {
 			switch self {
 			case .joined:
-			return .lightRed()
+			return .destructive
 			case .notJoined:
-			return .blue()
+			return .blueButtonBackground
 			default:
 			return .clear
 			}
@@ -66,21 +66,21 @@ class EventFooterView: UIView {
 	}
 	
 	private func setupView() {
-		backgroundColor = .white
+		backgroundColor = .background
 		styleText(
 			label: priceLabel,
 			text: pricePerPerson
 				.map { v in "\(v) рублей" }
 				.getOrElse(result: "Бесплатно"),
 			size: 18,
-			color: .black,
+			color: .fontLabel,
 			style: .medium
 		)
 		styleText(
 			button: joinEventButton,
 			text: joinButtonState.labelText,
 			size: 16,
-			color: .white,
+			color: .blueButtonFont,
 			style: .medium
 		)
 		joinEventButton.backgroundColor = joinButtonState.backgroundColor

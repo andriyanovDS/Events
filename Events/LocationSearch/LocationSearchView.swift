@@ -19,7 +19,7 @@ class LocationSearchView: UIView {
 		super.init(frame: CGRect.zero)
 		
 		setupView()
-		setupContraints()
+		setupConstraints()
 	}
 	
 	required init?(coder: NSCoder) {
@@ -31,9 +31,7 @@ class LocationSearchView: UIView {
 			return nil
 		}
 		let button = UIButtonScaleOnPress()
-		button.setTitle(String.fontMaterialIcon("gps.fixed"), for: .normal)
-		button.setTitleColor(.black, for: .normal)
-		button.titleLabel?.font = UIFont.icon(from: .materialIcon, ofSize: 26.0)
+    styleIcon(button: button, iconCode: "gps.fixed", size: 26, color: .fontLabel)
 		textField.sv(button)
 		button.right(10).centerVertically()
 		deviceLocationButton = button
@@ -41,7 +39,7 @@ class LocationSearchView: UIView {
 	}
 	
 	private func setupView() {
-		backgroundColor = .white
+		backgroundColor = .background
 		styleText(
 			textField: selectTextFieldStyle(textField),
 			text: NSLocalizedString(
@@ -49,7 +47,7 @@ class LocationSearchView: UIView {
 				comment: "Search location modal: input placeholder"
 			),
 			size: 18,
-			color: .black,
+			color: .fontLabel,
 			style: .medium
 		)
 		let insetView = UIView(frame: CGRect(x: 0, y: 0, width: 35, height: 10))
@@ -59,7 +57,7 @@ class LocationSearchView: UIView {
 			button: closeButton,
 			text: NSLocalizedString("Cancel", comment: "Search bar: close"),
 			size: 17,
-			color: .black,
+			color: .fontLabel,
 			style: .medium
 		)
 		closeButton.sizeToFit()
@@ -71,7 +69,7 @@ class LocationSearchView: UIView {
 		sv(textField, closeButton, predictionsTableView)
 	}
 	
-	private func setupContraints() {
+	private func setupConstraints() {
 		layout(
 			5,
 			|-10-textField.height(50)-5-closeButton.width(100)-5-|,

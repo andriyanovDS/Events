@@ -31,7 +31,7 @@ class ListModalTableViewCell: UITableViewCell {
       label: label,
       text: "",
       size: 18,
-      color: .black,
+      color: .fontLabel,
       style: .medium
     )
     sv(label)

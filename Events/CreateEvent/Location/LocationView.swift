@@ -36,7 +36,7 @@ class LocationView: UIView, CreateEventView {
       label: titleLabel,
       text: NSLocalizedString("Place of meeting", comment: "Create event: location section title"),
       size: 26,
-      color: .gray900(),
+      color: .fontLabel,
       style: .bold
     )
 
@@ -47,7 +47,7 @@ class LocationView: UIView, CreateEventView {
         comment: "Create event: location section description"
       ),
       size: 18,
-      color: .gray400(),
+      color: .fontLabelDescription,
       style: .regular
     )
 
@@ -55,7 +55,7 @@ class LocationView: UIView, CreateEventView {
       button: selectButtonStyle(locationButton),
       text: "",
       size: 18,
-      color: .gray600(),
+      color: .grayButtonDarkFont,
       style: .medium
     )
 		locationButton.titleEdgeInsets = UIEdgeInsets(
@@ -94,7 +94,7 @@ class LocationView: UIView, CreateEventView {
       button: submitButton,
       text: NSLocalizedString("Next step", comment: "Create event: next step"),
       size: 20,
-      color: .white,
+      color: .blueButtonFont,
       style: .medium
       )
     submitButton.contentEdgeInsets = UIEdgeInsets(
@@ -104,7 +104,7 @@ class LocationView: UIView, CreateEventView {
       right: 15
     )
     submitButton.layer.cornerRadius = 8
-    submitButton.backgroundColor = .blue()
+    submitButton.backgroundColor = .blueButtonBackground
   }
 
   private func setupConstraints() {

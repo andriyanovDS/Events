@@ -45,7 +45,7 @@ class SkeletonView: UIView {
 			byRoundingCorners: .allCorners,
 			cornerRadii: CGSize(width: 2.0, height: 2.0)
 		)
-		UIColor.gray200().setFill()
+		UIColor.skeletonBackground.setFill()
     rectPath.fill()
 		path.append(rectPath)
 	}

@@ -94,14 +94,14 @@ class DateView: UIView, CreateEventView {
   }
 
   private func setupView() {
-    backgroundColor = .white
+    backgroundColor = .background
     scrollView.showsVerticalScrollIndicator = false
 
     styleText(
       label: titleLabel,
       text: NSLocalizedString("Date of event", comment: "Create event: date section title"),
       size: 26,
-      color: .gray900(),
+      color: .fontLabel,
       style: .bold
     )
     setupSection(
@@ -119,7 +119,7 @@ class DateView: UIView, CreateEventView {
       v.fillContainer()
       v.isUserInteractionEnabled = false
       v.isExclusiveTouch = false
-      v.hero.id = CALENDAR_SHARED_ID
+      v.hero.id = calendarSharedElementId
       v.hero.modifiers = [.duration(0.2)]
     }
     titleLabel.numberOfLines = 2
@@ -147,12 +147,12 @@ class DateView: UIView, CreateEventView {
       label: label,
       text: labelText,
       size: 17,
-      color: .gray400(),
+      color: .fontLabelDescription,
       style: .regular
     )
     button.style({ v in
       v.contentHorizontalAlignment = .left
-      v.layer.borderColor = UIColor.gray200().cgColor
+      v.layer.borderColor = UIColor.grayButtonBackground.cgColor
       v.contentEdgeInsets = UIEdgeInsets(
         top: 15,
         left: 15,
@@ -164,7 +164,7 @@ class DateView: UIView, CreateEventView {
       button: selectButtonStyle(button),
       text: buttonLabelText,
       size: 20,
-      color: .gray600(),
+      color: .grayButtonDarkFont,
       style: .medium
     )
   }
@@ -178,14 +178,14 @@ class DateView: UIView, CreateEventView {
       label: label,
       text: labelText,
       size: 17,
-      color: .gray400(),
+      color: .fontLabelDescription,
       style: .regular
     )
     styleText(
       textField: selectTextFieldStyle(textField),
       text: "",
       size: 20,
-      color: .gray600(),
+      color: .grayButtonDarkFont,
       style: .medium
     )
   }
@@ -247,10 +247,10 @@ class DateView: UIView, CreateEventView {
       button: submitButton,
       text: NSLocalizedString("Next step", comment: "Create event: next step"),
       size: 20,
-      color: .white,
+      color: .blueButtonFont,
       style: .medium
     )
-    submitButton.backgroundColor = UIColor.blue()
+    submitButton.backgroundColor = .blueButtonBackground
     guard let delegate = self.delegate else { return }
     submitButton.addTarget(delegate, action: #selector(delegate.openNextScreen), for: .touchUpInside)
   }

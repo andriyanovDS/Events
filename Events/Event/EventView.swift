@@ -93,16 +93,16 @@ class EventView: UIView {
   }
 
   private func setupView(sharedImage: UIImage?) {
-		backgroundColor = .white
+		backgroundColor = .background
 		isOpaque = false
 		layer.cornerRadius = 15
 		clipsToBounds = true
 		scrollView.contentInsetAdjustmentBehavior = .never
 		scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 60, right: 0)
-    infoBackgroundView.backgroundColor = .black
+    infoBackgroundView.backgroundColor = .backgroundInverted
 		actionsBackgroundView.backgroundColor = .clear
     eventImageView.image = sharedImage
-		separatorView.backgroundColor = .white
+		separatorView.backgroundColor = .fontLabelInverted
 		eventImageView.contentMode = .scaleAspectFill
     
 		setupAnimations()
@@ -155,7 +155,7 @@ class EventView: UIView {
 	
 	private func setupAnimations() {
 		animator.addAnimations({[unowned self] in
-			self.actionsBackgroundView.backgroundColor = .white
+			self.actionsBackgroundView.backgroundColor = .background
 		}, delayFactor: Constants.actionStackAnimationDelayFactor)
 	}
 	
@@ -258,14 +258,14 @@ class EventView: UIView {
         .map { $0.translatedLabel() }
         .joined(separator: ", "),
       size: 16,
-      color: .white,
+      color: .fontLabelInverted,
       style: .medium
     )
     styleText(
       label: eventNameLabel,
       text: event.name,
       size: 24,
-      color: .white,
+      color: .fontLabelInverted,
       style: .bold
     )
     eventNameLabel.numberOfLines = 0
@@ -273,7 +273,7 @@ class EventView: UIView {
       label: locationNameLabel,
       text: event.location.fullName,
       size: 18,
-      color: .white,
+      color: .fontLabelInverted,
       style: .medium
     )
   }
@@ -281,11 +281,11 @@ class EventView: UIView {
   private func setupActionButtons() {
 		closeButtonView.setTitle(String.fontMaterialIcon("close"), for: .normal)
 		closeButtonView.titleLabel?.font = UIFont.icon(from: .materialIcon, ofSize: 30.0)
-		closeButtonView.setTitleColor(.white, for: .normal)
+		closeButtonView.setTitleColor(.fontLabelInverted, for: .normal)
 		
 		followButtonView.setTitle(String.fontMaterialIcon("favorite.border"), for: .normal)
 		followButtonView.titleLabel?.font = UIFont.icon(from: .materialIcon, ofSize: 30.0)
-		followButtonView.setTitleColor(.white, for: .normal)
+		followButtonView.setTitleColor(.fontLabelInverted, for: .normal)
   }
 
   private func loadEventImage(url: String) {
@@ -325,14 +325,14 @@ extension EventView: UIScrollViewDelegate {
 		if animator.fractionComplete == fractionComplete { return }
 		if animator.fractionComplete < Constants.actionStackAnimationDelayFactor,
 			fractionComplete >= Constants.actionStackAnimationDelayFactor {
-			closeButtonView.setTitleColor(.black, for: .normal)
+			closeButtonView.setTitleColor(.fontLabel, for: .normal)
 			if let dataSource = dataSource,
 				dataSource.userFollowEventState == .notFollowed {
-				followButtonView.setTitleColor(.black, for: .normal)
+				followButtonView.setTitleColor(.fontLabel, for: .normal)
 			}
 		} else if animator.fractionComplete > Constants.actionStackAnimationDelayFactor,
 			fractionComplete <= Constants.actionStackAnimationDelayFactor {
-			closeButtonView.setTitleColor(.white, for: .normal)
+			closeButtonView.setTitleColor(.fontLabelInverted, for: .normal)
 			if let dataSource = dataSource,
 				dataSource.userFollowEventState == .notFollowed {
 				followButtonView.setTitleColor(

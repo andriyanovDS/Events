@@ -123,11 +123,11 @@ extension CreatedEventsViewController: ASTableDelegate, UITableViewDelegate {
 		action.image = UIImage(
 			from: .materialIcon,
 			code: "delete",
-			textColor: .white,
+			textColor: .fontLabel,
 			backgroundColor: .clear,
 			size: CGSize(width: 35, height: 35)
 		)
-		action.backgroundColor = .lightRed()
+		action.backgroundColor = .destructive
 		let configuration = UISwipeActionsConfiguration(actions: [action])
 		return configuration
 	}

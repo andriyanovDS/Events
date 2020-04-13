@@ -16,7 +16,7 @@ class LoginFlow: Flow {
 
 	private var rootViewController: UINavigationController = {
 		let controller = UINavigationController()
-		controller.view.backgroundColor = .white
+		controller.view.backgroundColor = .background
 		return controller
 	}()
 

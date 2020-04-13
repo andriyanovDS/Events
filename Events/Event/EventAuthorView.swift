@@ -38,19 +38,19 @@ class EventAuthorView: UIStackView {
 			label: titleLabel,
 			text: NSLocalizedString("Organizator", comment: "Event user section title"),
 			size: 20,
-			color: .black,
+			color: .fontLabel,
 			style: .bold
 		)
 		styleText(
 			label: nameLabel,
 			text: author.fullName,
 			size: 16,
-			color: .black,
+			color: .fontLabel,
 			style: .medium
 		)
 		avatarImageView.style { v in
 			v.clipsToBounds = true
-			v.backgroundColor = .gray100()
+			v.backgroundColor = .skeletonBackground
 			v.contentMode = .scaleAspectFill
 			v.layer.cornerRadius = Constants.avatarImageSize / 2.0
 			v.width(Constants.avatarImageSize).height(Constants.avatarImageSize)

@@ -166,7 +166,7 @@ class DescriptionView: UIView, CreateEventView {
         comment: "Create event: description title text field placeholder"
       ),
       size: 22,
-      color: .black,
+      color: .fontLabel,
       style: .bold
     )
     textField.alpha = 0
@@ -187,7 +187,7 @@ class DescriptionView: UIView, CreateEventView {
 
   private func setupSelectedImagesCollectionView() {
     selectedImagesCollectionView.style { v in
-      v.backgroundColor = .white
+      v.backgroundColor = .background
       v.showsHorizontalScrollIndicator = false
       v.register(
         SelectedImageCell.self,
@@ -214,7 +214,7 @@ class DescriptionView: UIView, CreateEventView {
   }
 
   private func setupView() {
-    backgroundColor = .white
+    backgroundColor = .background
 
     styleText(
       label: titleLabel,
@@ -223,7 +223,7 @@ class DescriptionView: UIView, CreateEventView {
         comment: "Create event: description section title"
       ),
       size: 26,
-      color: .gray900(),
+      color: .fontLabel,
       style: .bold
     )
     titleLabel.numberOfLines = 2
@@ -231,25 +231,25 @@ class DescriptionView: UIView, CreateEventView {
       textView: textView,
       text: "",
       size: 16,
-      color: .gray800(),
+      color: .fontLabel,
       style: .medium
     )
     styleText(
       button: submitButton,
       text: NSLocalizedString("Next step", comment: "Create event: next step"),
       size: 20,
-      color: .white,
+      color: .blueButtonFont,
       style: .medium
     )
 
     textView.style({ v in
       v.layer.cornerRadius = 10
-      v.backgroundColor = .gray100()
+      v.backgroundColor = .textField
     })
 
     submitButton.style({ v in
       v.isEnabled = false
-      v.backgroundColor = .blue()
+      v.backgroundColor = .blueButtonBackground
     })
     submitButton.addTarget(self, action: #selector(onPressSubmitButton), for: .touchUpInside)
     sv([titleLabel, textView, selectedImagesCollectionView, submitButton, descriptionsCollectionView])

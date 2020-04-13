@@ -21,9 +21,9 @@ class BottomModalView: UIView, ModalView {
 	func setupView() {
     isOpaque = false
     backgroundColor = .clear
-    backgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+    backgroundView.backgroundColor = UIColor.backgroundInverted.withAlphaComponent(0.4)
 
-    contentView.backgroundColor = .white
+    contentView.backgroundColor = .background
     contentView.layer.cornerRadius = 15
     contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
 		

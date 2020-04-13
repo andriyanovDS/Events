@@ -127,7 +127,7 @@ class ImagePickerView: UIView, ImagePickerActionsViewDelegate {
   }
 
   private func setupView() {
-    backgroundColor = .gray900(alpha: 0.4)
+    backgroundColor = UIColor.backgroundInverted.withAlphaComponent(0.4)
     closeButton.layer.cornerRadius = 10
     actionsView = ImagePickerActionsView()
     actionsView.delegate = self

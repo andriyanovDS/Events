@@ -31,7 +31,7 @@ class CreatedEventNode: ASDisplayNode {
 	
 	override func didLoad() {
 		super.didLoad()
-		backgroundColor = .white
+		backgroundColor = .background
 		tableNode.view.separatorStyle = .none
 	}
 	
@@ -163,7 +163,7 @@ class CreatedEventNode: ASDisplayNode {
 			style: .medium
 		)
 		searchTextField.textContainerInset = UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5)
-		searchTextFieldBackground.backgroundColor = .gray100()
+		searchTextFieldBackground.backgroundColor = .textField
 		searchTextFieldBackground.cornerRadius = 15
 		searchTextFieldBackground.cornerRoundingType = .defaultSlowCALayer
 		styleText(
@@ -173,14 +173,14 @@ class CreatedEventNode: ASDisplayNode {
 				comment: "Created events: cancel button label"
 			),
 			size: 16,
-			color: .black,
+			color: .fontLabel,
 			style: .medium
 		)
 		searchIcon.attributedText = NSAttributedString(
 			string: String.fontMaterialIcon("search")!,
 			attributes: [
 				NSAttributedString.Key.font: UIFont.icon(from: .materialIcon, ofSize: 26.0),
-				NSAttributedString.Key.foregroundColor: UIColor.black
+				NSAttributedString.Key.foregroundColor: UIColor.fontLabel
 			])
 	}
 }

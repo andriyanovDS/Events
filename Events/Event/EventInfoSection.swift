@@ -23,20 +23,20 @@ class EventInfoSection: UIStackView {
       label: titleLabel,
       text: title,
       size: 16,
-      color: .gray600(),
+      color: .fontLabelDescription,
       style: .bold
     )
     styleText(
       label: valueTextLabel,
       text: value,
       size: 18,
-      color: .white,
+      color: .fontLabelInverted,
       style: .medium
     )
     let iconImage = UIImage(
       from: .materialIcon,
       code: iconCode,
-      textColor: .gray600(),
+      textColor: .fontLabelDescription,
       backgroundColor: .clear,
       size: CGSize(width: 24, height: 24)
     )

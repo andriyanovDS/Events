@@ -40,9 +40,9 @@ class EventViewController: UIViewController, EventNodeDataSource {
 		var iconColor: UIColor {
 			switch self {
 			case .followed:
-				return .lightRed()
+				return .destructive
 			case .notFollowed:
-				return .white
+				return .fontLabelInverted
 			case .inProgress:
 				return .clear
 			}

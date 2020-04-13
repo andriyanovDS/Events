@@ -35,23 +35,23 @@ class SelectImageButton: UIButton {
       return
     }
     self.count = count
-    backgroundColor = .blue()
+    backgroundColor = .blueButtonBackground
     setTitle(count.description, for: .normal)
   }
 
   private func setupView(with size: CGSize) {
-    style({ v in
+    style { v in
 			v.height(size.height).width(size.width)
 			v.layer.cornerRadius = size.width / 2
       v.layer.borderWidth = 2
-      v.layer.borderColor = UIColor.white.cgColor
-		})
+      v.layer.borderColor = UIColor.background.cgColor
+		}
 
     styleText(
       button: self,
       text: "",
       size: 14,
-      color: .white,
+      color: .blueButtonFont,
       style: .bold
     )
   }

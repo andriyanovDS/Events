@@ -26,7 +26,7 @@ class ImagePickerItem: UIButton {
       }
       _ = addBorder(
         toSide: .bottom,
-        withColor: UIColor.gray100().cgColor,
+        withColor: UIColor.skeletonBackground.cgColor,
         andThickness: 1
       )
     }
@@ -56,13 +56,13 @@ class ImagePickerItem: UIButton {
       button: self,
       text: labelText,
       size: 20,
-      color: .blue(),
+      color: .blueButtonBackground,
       style: isBoldLabel
         ? .bold
         : .medium
     )
 
-    backgroundColor = .white
+    backgroundColor = .background
   }
 }
 

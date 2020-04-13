@@ -30,9 +30,9 @@ class EditButton: UIButtonScaleOnPress {
 		var color: UIColor {
 			switch self {
 			case .selected:
-				return .blue()
+				return .blueButtonBackground
 			case .notSelected:
-				return .gray600()
+				return .grayButtonBackground
 			}
 		}
 	}
@@ -95,7 +95,7 @@ class EditButton: UIButtonScaleOnPress {
 	}
 	
 	private func setupView() {
-		backgroundColor = .white
+		backgroundColor = .background
 		layer.borderWidth = 1
 		layer.cornerRadius = 17
 		

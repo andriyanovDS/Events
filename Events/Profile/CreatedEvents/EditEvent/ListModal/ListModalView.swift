@@ -30,7 +30,7 @@ class ListModalView: BottomModalView {
       label: titleLabel,
 			text: titleLabel.text ?? "",
       size: 22,
-      color: .black,
+      color: .fontLabel,
       style: .bold
     )
     titleLabel.textAlignment = .center
@@ -38,19 +38,19 @@ class ListModalView: BottomModalView {
       button: closeButton,
       iconCode: "close",
       size: 20,
-      color: .gray600()
+      color: .grayButtonDarkFont
     )
-    closeButton.backgroundColor = .gray200()
+    closeButton.backgroundColor = .grayButtonBackground
     closeButton.layer.cornerRadius = 15
 
     styleText(
       button: submitButton,
       text: "Done",
       size: 18,
-      color: .white,
+      color: .blueButtonFont,
       style: .medium
     )
-    submitButton.backgroundColor = .blue()
+    submitButton.backgroundColor = .blueButtonBackground
 
     listView.separatorStyle = .none
     listView.showsVerticalScrollIndicator = false

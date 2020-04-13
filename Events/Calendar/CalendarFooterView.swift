@@ -15,7 +15,7 @@ class CalendarFooterView: UIView {
 
   override var bounds: CGRect {
      didSet {
-      _ = addBorder(toSide: .top, withColor: UIColor.gray400().cgColor, andThickness: 1)
+      _ = addBorder(toSide: .top, withColor: UIColor.border.cgColor, andThickness: 1)
     }
   }
 
@@ -38,17 +38,17 @@ class CalendarFooterView: UIView {
       button: clearButton,
       text: NSLocalizedString("Clear", comment: "Calendar: clear dates"),
       size: 15,
-      color: .black,
+      color: .fontLabel,
       style: .medium
     )
 
-    clearButton.setTitleColor(UIColor.gray400(), for: .disabled)
+    clearButton.setTitleColor(UIColor.fontLabelDescription.withAlphaComponent(0.8), for: .disabled)
 
     styleText(
       button: saveButton,
       text: NSLocalizedString("Save", comment: "Calendar: save dates"),
       size: 14,
-      color: .white,
+      color: .blueButtonFont,
       style: .medium
     )
     let edgeInsets = UIEdgeInsets(
@@ -60,7 +60,7 @@ class CalendarFooterView: UIView {
     clearButton.contentEdgeInsets = edgeInsets
     saveButton.style { v in
       v.contentEdgeInsets = edgeInsets
-      v.backgroundColor = UIColor.lightBlue()
+      v.backgroundColor = .blueButtonBackground
       v.layer.cornerRadius = 5
     }
     sv(clearButton, saveButton)

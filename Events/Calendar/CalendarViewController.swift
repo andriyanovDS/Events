@@ -33,7 +33,7 @@ class CalendarViewController: UIViewController, UIGestureRecognizerDelegate, Vie
         return selectedMonth - currentMonth
       }
       .foldL(none: {}, some: { v in
-        viewContent?.sctollTo(selectedMonth: v)
+        viewContent?.scrollTo(selectedMonth: v)
       })
   }
 

@@ -57,7 +57,7 @@ class ProfileScreenView: UIView {
   }
   
   private func setupView() {
-    backgroundColor = .white
+    backgroundColor = .background
     
     sv(
       scrollView.sv(contentView.sv([userInfoView]))
@@ -87,7 +87,7 @@ class ProfileScreenView: UIView {
       label: userNameLabel,
       text: "",
       size: 32,
-      color: .black,
+      color: .fontLabel,
       style: .medium
     )
     
@@ -95,7 +95,7 @@ class ProfileScreenView: UIView {
       let icon = UIImage(
         from: .materialIcon,
         code: "create",
-        textColor: UIColor.gray400(),
+        textColor: .fontLabel,
         backgroundColor: .clear,
         size: CGSize(width: 25, height: 25)
       )
@@ -103,7 +103,7 @@ class ProfileScreenView: UIView {
     })
     
     avatarViewButton.style({ v in
-      v.backgroundColor = UIColor.gray200()
+      v.backgroundColor = UIColor.grayButtonBackground
 			v.clipsToBounds = true
 			v.layer.cornerRadius = Constants.avatarImageSize.width / 2
     })
@@ -113,7 +113,7 @@ class ProfileScreenView: UIView {
       v.image = UIImage(
         from: .materialIcon,
         code: "person",
-        textColor: UIColor.gray800(),
+        textColor: .fontLabel,
         backgroundColor: .clear,
         size: CGSize(width: 50, height: 50)
       )
@@ -158,10 +158,10 @@ class ProfileScreenView: UIView {
       button: logoutButton,
       text: "Выйти",
       size: 20,
-      color: .white,
+      color: .grayButtonLightFont,
       style: .medium
     )
-    logoutButton.backgroundColor = .gray400()
+    logoutButton.backgroundColor = .grayButtonBackground
     contentView.sv(logoutButton)
     
     logoutButton

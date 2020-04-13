@@ -64,7 +64,7 @@ class LoginView: UIView {
       UIImage(
         from: .materialIcon,
         code: "arrow.back",
-        textColor: .black,
+        textColor: .fontLabel,
         backgroundColor: .clear,
         size: CGSize(width: 40, height: 40)
       ),
@@ -158,12 +158,12 @@ class LoginView: UIView {
     guard let textFieldsWrapperView = textFieldsWrapperView else { return }
 		let messageView = UIView()
     messageView.layer.cornerRadius = 7
-    messageView.backgroundColor = UIColor.lightRed()
+    messageView.backgroundColor = .destructive
     addShadow(view: messageView, radius: 7, color: .black)
 			
     let label = UILabel()
     label.text = text
-    label.textColor = UIColor.gray900()
+    label.textColor = .fontLabel
     label.font = FontStyle.medium.font(size: 16)
     label.numberOfLines = 3
     label.lineBreakMode = .byWordWrapping
@@ -172,7 +172,7 @@ class LoginView: UIView {
     let image = UIImage(
       from: .materialIcon,
       code: "close",
-      textColor: UIColor.gray900(),
+      textColor: .fontLabel,
       backgroundColor: .clear,
       size: CGSize(width: 20, height: 20)
       )
@@ -191,19 +191,19 @@ class LoginView: UIView {
 	}
 	
 	private func setupView() {
-    backgroundColor = .white
+    backgroundColor = .background
 		styleText(
       button: loginButton,
       text: NSLocalizedString("Log in", comment: "Log in"),
       size: 20,
-      color: .white,
+      color: .blueButtonFont,
       style: .medium
 			)
 		styleText(
 			button: signInButton,
 			text: NSLocalizedString("Sign in", comment: "Sign in"),
 			size: 20,
-			color: .white,
+			color: .grayButtonLightFont,
 			style: .medium
 			)
 		let buttonEdgeInset = UIEdgeInsets(
@@ -212,9 +212,9 @@ class LoginView: UIView {
 			bottom: 12,
 			right: 12
 		)
-		signInButton.backgroundColor = .gray300()
+		signInButton.backgroundColor = .grayButtonBackground
 		signInButton.contentEdgeInsets = buttonEdgeInset
-    loginButton.backgroundColor = .blue()
+    loginButton.backgroundColor = .blueButtonBackground
 		loginButton.contentEdgeInsets = buttonEdgeInset
 		sv(buttonsContainer.sv(signInButton, loginButton))
     setupButtonsConstraints()
@@ -231,7 +231,7 @@ class LoginView: UIView {
 	}
 	
 	private func onKeyboardHeightDidChange(info: KeyboardAttachInfo?) {
-    let bottomConstaint = info
+    let bottomConstraint = info
       .map { v -> CGFloat in
 				if signInButton.alpha != 0 {
 					return v.height + 25.0
@@ -242,7 +242,7 @@ class LoginView: UIView {
 		UIView.animate(
       withDuration: info?.duration ?? 0.2,
       animations: {
-				self.buttonsContainer.bottomConstraint?.constant = -bottomConstaint
+				self.buttonsContainer.bottomConstraint?.constant = -bottomConstraint
 				self.layoutIfNeeded()
       })
   }
