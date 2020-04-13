@@ -118,12 +118,12 @@ class UserDetailsView: UIView {
 		
 		nameSectionStackView.axis = .vertical
 		nameSectionStackView.spacing = 15
-		Array(sections[0...2])
+    sections.prefix(2)
 			.forEach { nameSectionStackView.addArrangedSubview($0) }
 		
 		otherSectionsStackView.axis = .vertical
 		otherSectionsStackView.spacing = 15
-		Array(sections[2...sections.count - 1])
+    sections.dropFirst(2)
 			.forEach { otherSectionsStackView.addArrangedSubview($0) }
 		
 		genderTextField.inputView = genderPicker

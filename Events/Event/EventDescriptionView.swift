@@ -28,8 +28,8 @@ class EventDescriptionView: UIStackView {
     Constants.smallImageSize,
     Constants.mediumImageSize
   ]
-	private var arrangedSubviewsExceptTitle: [UIView] {
-		Array(arrangedSubviews[1...arrangedSubviews.count - 1])
+	private var arrangedSubviewsExceptTitle: ArraySlice<UIView> {
+    arrangedSubviews.dropFirst()
 	}
 
   private struct Constants {
