@@ -249,9 +249,9 @@ extension ImagesPreviewVC: UICollectionViewDataSource {
     }
 
     let asset = viewModel.asset(at: indexPath.item)
-    cell.assetIndentifier = asset.localIdentifier
+    cell.assetIdentifier = asset.localIdentifier
     viewModel.image(for: asset, onResult: { image in
-      guard cell.assetIndentifier == asset.localIdentifier else { return }
+      guard cell.assetIdentifier == asset.localIdentifier else { return }
       cell.setImage(image: image)
     })
     return cell
