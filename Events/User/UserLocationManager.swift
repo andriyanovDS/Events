@@ -33,7 +33,7 @@ class UserLocationManagerImpl: NSObject, UserLocationManager {
 		didSet { setupLocationManager() }
 	}
 	var geocode: Geocode?
-	fileprivate var locationManager = CLLocationManager()
+	fileprivate let locationManager = CLLocationManager()
 	
 	override init() {
 		super.init()
@@ -43,7 +43,7 @@ class UserLocationManagerImpl: NSObject, UserLocationManager {
 		locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
 	}
 	
-	subscript<T>(dynamicMember member: WritableKeyPath<CLLocationManager, T>) -> T {
+	subscript<T>(dynamicMember member: ReferenceWritableKeyPath<CLLocationManager, T>) -> T {
 		get { return locationManager[keyPath: member] }
 		set { locationManager[keyPath: member] = newValue }
 	}
