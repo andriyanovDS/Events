@@ -105,7 +105,6 @@
 		7453637C22EE4940004C9717 /* ProfileActionSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7453637B22EE4940004C9717 /* ProfileActionSection.swift */; };
 		745DAFC2243A494A00BFBADA /* EditEventFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745DAFC1243A494A00BFBADA /* EditEventFooterView.swift */; };
 		7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */; };
-		7463A49E22DE6EED009171E1 /* TextFieldWithShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49D22DE6EED009171E1 /* TextFieldWithShadow.swift */; };
 		7463A4A022DE7760009171E1 /* TextFieldWithBottomLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A49F22DE7760009171E1 /* TextFieldWithBottomLine.swift */; };
 		7463A4A222DE88AC009171E1 /* UIButtonScaleOnPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7463A4A122DE88AC009171E1 /* UIButtonScaleOnPress.swift */; };
 		7465235822EFA0320027FB22 /* ProfileScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7465235722EFA0320027FB22 /* ProfileScreenView.swift */; };
@@ -313,7 +312,6 @@
 		7453637B22EE4940004C9717 /* ProfileActionSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileActionSection.swift; sourceTree = "<group>"; };
 		745DAFC1243A494A00BFBADA /* EditEventFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEventFooterView.swift; sourceTree = "<group>"; };
 		7463A49A22DE6E47009171E1 /* UserDetailsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsSection.swift; sourceTree = "<group>"; };
-		7463A49D22DE6EED009171E1 /* TextFieldWithShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithShadow.swift; sourceTree = "<group>"; };
 		7463A49F22DE7760009171E1 /* TextFieldWithBottomLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldWithBottomLine.swift; sourceTree = "<group>"; };
 		7463A4A122DE88AC009171E1 /* UIButtonScaleOnPress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonScaleOnPress.swift; sourceTree = "<group>"; };
 		7465235722EFA0320027FB22 /* ProfileScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreenView.swift; sourceTree = "<group>"; };
@@ -700,7 +698,6 @@
 		7463A49C22DE6EB9009171E1 /* CommonUIComponents */ = {
 			isa = PBXGroup;
 			children = (
-				7463A49D22DE6EED009171E1 /* TextFieldWithShadow.swift */,
 				7463A49F22DE7760009171E1 /* TextFieldWithBottomLine.swift */,
 				7463A4A122DE88AC009171E1 /* UIButtonScaleOnPress.swift */,
 				744B7C9122E3C6DF00A839A6 /* ButtonScale.swift */,
@@ -1218,7 +1215,6 @@
 				0AB8DC282433919000C5C1CC /* UndoActionCounterView.swift in Sources */,
 				7467B6EA22D5107400A1BFE9 /* CurrentUser.swift in Sources */,
 				74D7E9F02348E5A90022BAC1 /* ImageViewCell.swift in Sources */,
-				7463A49E22DE6EED009171E1 /* TextFieldWithShadow.swift in Sources */,
 				741CECB323D6F72E00BE6BA3 /* Date.swift in Sources */,
 				0A48948E23F9C2370035A4A4 /* UnspashAPI.swift in Sources */,
 				746697422326F85300406CD8 /* MainFlow.swift in Sources */,

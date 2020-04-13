@@ -13,7 +13,7 @@ import AVFoundation
 
 class ImageViewCell: UICollectionViewCell {
   var selectedCount: Int?
-  var assetIndentifier: String?
+  var assetIdentifier: String?
   let previewImageView = UIImageView()
 
   override init(frame: CGRect) {
@@ -45,7 +45,7 @@ class ImageViewCell: UICollectionViewCell {
 
   override func prepareForReuse() {
     selectedCount = nil
-    assetIndentifier = nil
+    assetIdentifier = nil
     previewImageView.image = nil
   }
 }

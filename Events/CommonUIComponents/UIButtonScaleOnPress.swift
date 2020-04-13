@@ -19,14 +19,14 @@ class UIButtonScaleOnPress: UIButton {
         return
       }
       isAnimationInProgress = true
-      startAnimation(isHiglighted: true, onComplete: {
-        self.startAnimation(isHiglighted: false, onComplete: {
+      startAnimation(isHighlighted: true, onComplete: {
+        self.startAnimation(isHighlighted: false, onComplete: {
           self.isAnimationInProgress = false
         })
       })
     }
   }
-  private func startAnimation(isHiglighted: Bool, onComplete: @escaping () -> Void) {
+  private func startAnimation(isHighlighted: Bool, onComplete: @escaping () -> Void) {
     UIView.animate(
       withDuration: animationDuration,
       delay: 0,
@@ -34,7 +34,7 @@ class UIButtonScaleOnPress: UIButton {
       initialSpringVelocity: 0.75,
       options: .allowUserInteraction,
       animations: {
-        if isHiglighted {
+        if isHighlighted {
           self.alpha = 0.7
           self.transform = CGAffineTransform(scaleX: 0.97, y: 0.97)
         } else {
