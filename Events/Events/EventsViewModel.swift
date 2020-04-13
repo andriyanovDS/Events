@@ -45,7 +45,7 @@ class EventsViewModel: Stepper {
 			))
 			return
 		}
-		getUser(by: event.author, db: db)
+		User.load(by: event.author, from: db)
 			.then {[weak self] author in
 				guard let self = self else { return }
 				self.authors[author.id] = author

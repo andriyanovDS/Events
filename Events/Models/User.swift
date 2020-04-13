@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import FirebaseFirestore
+import Promises
 
 struct User: Codable {
  	let id: String
@@ -23,6 +25,33 @@ struct User: Codable {
     lastName
       .map { "\(firstName) \($0)" }
       .getOrElse(result: firstName)
+	}
+	
+	static func load(by id: String, from db: Firestore) -> Promise<Self> {
+		let ref = db
+			.collection("user_details")
+			.document(id)
+		return Promise(on: .global(qos: .userInitiated)) { resolve, reject in
+			ref.getDocument(completion: { snapshot, error in
+				if let error = error {
+					print(error.localizedDescription)
+					reject(GetFirestoreDocumentError.failToGetSnapshot)
+					return
+				}
+				guard let snapshot = snapshot else {
+					print("Empty user events snapshot")
+					reject(GetFirestoreDocumentError.emptySnapshot)
+					return
+				}
+				do {
+					let user = try snapshot.data(as: User.self)
+					resolve(user!)
+				} catch let error {
+					print("Failed to decode documents with error \(error)")
+					reject(error)
+				}
+			})
+		}
 	}
 }
 

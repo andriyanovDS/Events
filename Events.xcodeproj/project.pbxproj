@@ -33,6 +33,8 @@
 		0A5CD06A2405DC9F00BC9B2C /* LoginTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5CD0692405DC9F00BC9B2C /* LoginTextField.swift */; };
 		0AA421812415A74400554121 /* DateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421802415A74400554121 /* DateViewModel.swift */; };
 		0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421842416351000554121 /* DescriptionCellButton.swift */; };
+		0AB1DA112443B47900E33F41 /* Observable+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1DA102443B47900E33F41 /* Observable+Promise.swift */; };
+		0AB1DA132443C22300E33F41 /* Observable+Firestore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1DA122443C22300E33F41 /* Observable+Firestore.swift */; };
 		0AB2C4872438CF0C001FB3EB /* EditButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB2C4862438CF0C001FB3EB /* EditButton.swift */; };
 		0AB8553A243B8C5E00E209AD /* EventNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB85539243B8C5E00E209AD /* EventNameViewController.swift */; };
 		0AB8553C243B8C6500E209AD /* EventNameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB8553B243B8C6500E209AD /* EventNameViewModel.swift */; };
@@ -114,7 +116,7 @@
 		7466974A2326FF4C00406CD8 /* TabBarFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746697492326FF4C00406CD8 /* TabBarFlow.swift */; };
 		7467B6E222D50AEE00A1BFE9 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6E122D50AEE00A1BFE9 /* EventsViewController.swift */; };
 		7467B6E522D50B2100A1BFE9 /* SavedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6E422D50B2100A1BFE9 /* SavedViewController.swift */; };
-		7467B6EA22D5107400A1BFE9 /* UserObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6E922D5107400A1BFE9 /* UserObservers.swift */; };
+		7467B6EA22D5107400A1BFE9 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6E922D5107400A1BFE9 /* CurrentUser.swift */; };
 		7467B6ED22D510AA00A1BFE9 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7467B6EC22D510AA00A1BFE9 /* LoginViewController.swift */; };
 		7467B6EF22D514F500A1BFE9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7467B6EE22D514F500A1BFE9 /* GoogleService-Info.plist */; };
 		74697FC022D0E69B00D5B5F4 /* CalendarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74697FBF22D0E69B00D5B5F4 /* CalendarViewController.swift */; };
@@ -234,6 +236,8 @@
 		0A5CD0692405DC9F00BC9B2C /* LoginTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextField.swift; sourceTree = "<group>"; };
 		0AA421802415A74400554121 /* DateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewModel.swift; sourceTree = "<group>"; };
 		0AA421842416351000554121 /* DescriptionCellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCellButton.swift; sourceTree = "<group>"; };
+		0AB1DA102443B47900E33F41 /* Observable+Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Promise.swift"; sourceTree = "<group>"; };
+		0AB1DA122443C22300E33F41 /* Observable+Firestore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Firestore.swift"; sourceTree = "<group>"; };
 		0AB2C4862438CF0C001FB3EB /* EditButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditButton.swift; sourceTree = "<group>"; };
 		0AB85539243B8C5E00E209AD /* EventNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNameViewController.swift; sourceTree = "<group>"; };
 		0AB8553B243B8C6500E209AD /* EventNameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventNameViewModel.swift; sourceTree = "<group>"; };
@@ -320,7 +324,7 @@
 		746697492326FF4C00406CD8 /* TabBarFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarFlow.swift; sourceTree = "<group>"; };
 		7467B6E122D50AEE00A1BFE9 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		7467B6E422D50B2100A1BFE9 /* SavedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
-		7467B6E922D5107400A1BFE9 /* UserObservers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserObservers.swift; sourceTree = "<group>"; };
+		7467B6E922D5107400A1BFE9 /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 		7467B6EC22D510AA00A1BFE9 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		7467B6EE22D514F500A1BFE9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		74697FBF22D0E69B00D5B5F4 /* CalendarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewController.swift; sourceTree = "<group>"; };
@@ -733,7 +737,7 @@
 		7467B6E822D5105C00A1BFE9 /* User */ = {
 			isa = PBXGroup;
 			children = (
-				7467B6E922D5107400A1BFE9 /* UserObservers.swift */,
+				7467B6E922D5107400A1BFE9 /* CurrentUser.swift */,
 				748E0B0522DA132F00B061C7 /* UserLocation.swift */,
 			);
 			path = User;
@@ -896,6 +900,8 @@
 				0AE899DD242CE63800EF427E /* UIImageView+fromExternalUrl.swift */,
 				0AEE5CFB242E73FE007A2D10 /* ASImageNode+loadImageFromExternalUrl.swift */,
 				0A201D7F244250230060C828 /* UIImage+resize.swift */,
+				0AB1DA102443B47900E33F41 /* Observable+Promise.swift */,
+				0AB1DA122443C22300E33F41 /* Observable+Firestore.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1210,7 +1216,7 @@
 				741CECB123D6EDF900BE6BA3 /* dateHelpers.swift in Sources */,
 				7467B6ED22D510AA00A1BFE9 /* LoginViewController.swift in Sources */,
 				0AB8DC282433919000C5C1CC /* UndoActionCounterView.swift in Sources */,
-				7467B6EA22D5107400A1BFE9 /* UserObservers.swift in Sources */,
+				7467B6EA22D5107400A1BFE9 /* CurrentUser.swift in Sources */,
 				74D7E9F02348E5A90022BAC1 /* ImageViewCell.swift in Sources */,
 				7463A49E22DE6EED009171E1 /* TextFieldWithShadow.swift in Sources */,
 				741CECB323D6F72E00BE6BA3 /* Date.swift in Sources */,
@@ -1290,6 +1296,7 @@
 				74E882F42428C09300DAF4B4 /* EventInfoSection.swift in Sources */,
 				74DAFA452353701300331369 /* ImagePickerCollectionViewLayout.swift in Sources */,
 				748E0B1422DA26BC00B061C7 /* GeolocationAPI.swift in Sources */,
+				0AB1DA112443B47900E33F41 /* Observable+Promise.swift in Sources */,
 				741DCF8922D38264005783A3 /* RootScreenViewModel.swift in Sources */,
 				74F0F5702300A80F00170C6C /* TextFormattingTipsViewModel.swift in Sources */,
 				748E0B2122DB82A200B061C7 /* LocationSearchViewModel.swift in Sources */,
@@ -1310,6 +1317,7 @@
 				0AE899DE242CE63800EF427E /* UIImageView+fromExternalUrl.swift in Sources */,
 				0AF5A4662434DEB50044D558 /* LoadingView.swift in Sources */,
 				0A5519B524375F8E00CC308C /* EditEventViewController.swift in Sources */,
+				0AB1DA132443C22300E33F41 /* Observable+Firestore.swift in Sources */,
 				0AB8DC2624334FCF00C5C1CC /* UndoActionNode.swift in Sources */,
 				742334632415626800B46037 /* CategoryViewController.swift in Sources */,
 				7478F50422F60D2700A43F52 /* Prediction.swift in Sources */,

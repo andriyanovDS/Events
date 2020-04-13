@@ -20,11 +20,11 @@ class ProfileScreenViewModel: Stepper {
 	private let disposeBag = DisposeBag()
 	
 	func onLoad() {
-		currentUserObserver
-		.subscribe(onNext: {[weak self] user in
-			self?.onUserDidChange(user)
-		})
-		.disposed(by: disposeBag)
+		CurrentUser.shared.loggedUser$
+			.subscribe(onNext: {[weak self] user in
+				self?.onUserDidChange(user)
+			})
+			.disposed(by: disposeBag)
 	}
   
   func openUserDetails() {

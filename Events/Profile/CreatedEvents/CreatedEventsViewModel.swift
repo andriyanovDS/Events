@@ -137,7 +137,7 @@ class CreatedEventsViewModel: Stepper {
 	
 	private func loadUser() {
 		guard let uid = Auth.auth().currentUser?.uid else { return }
-		getUser(by: uid, db: db)
+		User.load(by: uid, from: db)
 			.then {[weak self] user in
 				self?.user = user
 			}

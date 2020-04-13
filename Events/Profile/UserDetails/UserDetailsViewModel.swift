@@ -64,7 +64,6 @@ class UserDetailsViewModel: Stepper {
 						print(error.localizedDescription)
 						return
 					}
-					updateUser(user)
 					self?.closeScreen()
 				})
 		} catch let error {

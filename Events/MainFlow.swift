@@ -67,16 +67,15 @@ class MainFlow: Flow {
 
 class MainStepper: Stepper {
   let steps = PublishRelay<Step>()
-  private let disposeBag = DisposeBag()
 
   func readyToEmitSteps() {
-    userObserver
-      .take(1)
-      .map { $0.fold(
-        none: EventStep.login,
-        some: { _ in EventStep.home }
-      )}
-      .bind(to: self.steps)
-      .disposed(by: self.disposeBag)
+		CurrentUser.shared.userOptionalPromise
+			.then {[weak self] user in
+				self?.steps.accept(user.fold(
+					none: EventStep.login,
+					some: { _ in EventStep.home }
+				))
+			}
+			.catch { print($0.localizedDescription) }
   }
 }
