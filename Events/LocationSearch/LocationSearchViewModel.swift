@@ -15,10 +15,12 @@ import CoreLocation
 class LocationSearchViewModel: Stepper, ScreenWithResult {
   let steps = PublishRelay<Step>()
 	var onResult: ((Geocode) -> Void)!
-	weak var delegate: LocationSearchViewModelDelegate?
+	weak var delegate: LocationSearchViewModelDelegate? {
+		didSet { locationManager.delegate = self }
+	}
 	var predictions: [Prediction] = []
 	private let disposeBag = DisposeBag()
-	private var deviceGeocode: Geocode?
+	private let locationManager = UserLocationManagerRequestOnce()
 
 	func register(textField: UITextField) {
 		let scheduler = SerialDispatchQueueScheduler(qos: .userInitiated)
@@ -51,24 +53,10 @@ class LocationSearchViewModel: Stepper, ScreenWithResult {
 				self?.delegate?.predictionsDidUpdate()
 			})
 			.disposed(by: disposeBag)
-		
-	}
-				
-	func updateDeviceGeocode(
-		from coordinate: CLLocationCoordinate2D,
-		onSuccess: @escaping () -> Void
-	) {
-		GeolocationAPI.shared.reverseGeocode(byCoordinate: coordinate)
-			.then {[weak self] geocode in
-				guard let self = self else { return }
-				self.deviceGeocode = geocode
-				onSuccess()
-			}
-			.catch { print($0.localizedDescription) }
 	}
   
   func onSelectDeviceLocation() {
-		guard let geocode = deviceGeocode else { return }
+		guard let geocode = locationManager.geocode else { return }
     onResult(geocode)
     cancelScreen()
   }
@@ -88,10 +76,17 @@ class LocationSearchViewModel: Stepper, ScreenWithResult {
   }
 }
 
+extension LocationSearchViewModel: UserLocationManagerDelegate {
+	func userLocationManager(_: UserLocationManager, didUpdateGeocode: Geocode) {
+		delegate?.deviceLocationReady()
+	}
+}
+
 enum PredictionsError: Error {
   case apiFailure
 }
 
 protocol LocationSearchViewModelDelegate: class {
   func predictionsDidUpdate()
+	func deviceLocationReady()
 }

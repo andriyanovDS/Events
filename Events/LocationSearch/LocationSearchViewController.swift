@@ -12,14 +12,9 @@ import RxSwift
 import RxCocoa
 
 class LocationSearchViewController: UIViewControllerWithActivityIndicator, ViewModelBased {
-	var viewModel: LocationSearchViewModel! {
-		didSet {
-			viewModel.delegate = self
-		}
-	}
+	var viewModel: LocationSearchViewModel!
 	private let disposeBag = DisposeBag()
 	private var locationSearchView: LocationSearchView?
-	private var locationManager: CLLocationManager?
 	
 	init() {
 		super.init(nibName: nil, bundle: nil)
@@ -31,8 +26,8 @@ class LocationSearchViewController: UIViewControllerWithActivityIndicator, ViewM
 
   override func viewDidLoad() {
     super.viewDidLoad()
+		viewModel.delegate = self
     setupView()
-		initializeUserLocation()
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -69,23 +64,19 @@ class LocationSearchViewController: UIViewControllerWithActivityIndicator, ViewM
 		view = locationSearchView
 		self.locationSearchView = locationSearchView
 	}
-	
-	private func initializeUserLocation() {
-		let locationManager = CLLocationManager()
-		locationManager.requestWhenInUseAuthorization()
-
-		if CLLocationManager.locationServicesEnabled() {
-			self.locationManager = locationManager
-			locationManager.desiredAccuracy = kCLLocationAccuracyBest
-			locationManager.delegate = self
-			locationManager.startUpdatingLocation()
-		}
-	}
 }
 
 extension LocationSearchViewController: LocationSearchViewModelDelegate {
 	func predictionsDidUpdate() {
 		locationSearchView?.predictionsTableView.reloadData()
+	}
+	
+	func deviceLocationReady() {
+		guard let locationView = self.locationSearchView else { return }
+		let button = locationView.showDeviceLocationIcon()
+		button?.rx.tap
+			.subscribe(onNext: {[unowned self] _ in self.viewModel.onSelectDeviceLocation() })
+			.disposed(by: self.disposeBag)
 	}
 }
 
@@ -113,18 +104,4 @@ extension LocationSearchViewController: UITableViewDelegate {
 			self?.removeActivityIndicator()
 		})
 	}
-}
-
-extension LocationSearchViewController: CLLocationManagerDelegate {
-	func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    let coordinates: CLLocation = locations[0]
-    manager.stopUpdatingLocation()
-		viewModel.updateDeviceGeocode(from: coordinates.coordinate, onSuccess: {[weak self] in
-			guard let self = self, let locationView = self.locationSearchView else { return }
-			let button = locationView.showDeviceLocationIcon()
-			button?.rx.tap
-				.subscribe(onNext: {[unowned self] _ in self.viewModel.onSelectDeviceLocation() })
-				.disposed(by: self.disposeBag)
-		})
-  }
 }

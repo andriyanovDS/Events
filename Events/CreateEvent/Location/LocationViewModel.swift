@@ -7,25 +7,20 @@
 //
 
 import Foundation
-import RxSwift
 import RxFlow
 import RxCocoa
+import CoreLocation
 
-class LocationViewModel: Stepper {
-  weak var delegate: LocationViewModelDelegate?
+class LocationViewModel: Stepper, ScreenWithResult {
+	var onResult: ((Geocode) -> Void)!
+	weak var delegate: LocationViewModelDelegate?
   let steps = PublishRelay<Step>()
   var geocode: Geocode?
-  private let disposeBag = DisposeBag()
-
-  init() {
-		UserLocation.shared.geocode$
-      .take(1)
-      .subscribe(onNext: {[weak self] geocode in
-        self?.geocode = geocode
-        self?.delegate?.onLocationNameDidChange(geocode.fullLocationName())
-      })
-      .disposed(by: disposeBag)
-  }
+	let locationManager = UserLocationManagerRequestOnce()
+	
+	init() {
+		locationManager.delegate = self
+	}
 
   func openLocationSearchBar() {
     steps.accept(EventStep.locationSearch(onResult: { geocode in
@@ -36,11 +31,17 @@ class LocationViewModel: Stepper {
 
   func openNextScreen() {
     guard let geocode = self.geocode else { return }
-    delegate?.onResult(geocode)
+		onResult(geocode)
   }
 }
 
+extension LocationViewModel: UserLocationManagerDelegate {
+	func userLocationManager(_: UserLocationManager, didUpdateGeocode geocode: Geocode) {
+		self.geocode = geocode
+		delegate?.onLocationNameDidChange(geocode.fullLocationName())
+	}
+}
+
 protocol LocationViewModelDelegate: class {
-  var onResult: ((Geocode) -> Void)! { get }
   func onLocationNameDidChange(_: String)
 }

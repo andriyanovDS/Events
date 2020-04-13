@@ -8,8 +8,7 @@
 
 import UIKit
 
-class LocationViewController: UIViewController, ViewModelBased, ScreenWithResult {
-  var onResult: ((Geocode) -> Void)!
+class LocationViewController: UIViewController, ViewModelBased {
   var viewModel: LocationViewModel! {
     didSet {
       viewModel.delegate = self

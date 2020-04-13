@@ -194,8 +194,8 @@ class CreateEventFlow: Flow {
 	
 	private func navigateToLocationScreen(onResult: @escaping (Geocode) -> Void) -> FlowContributors {
     let viewModel = LocationViewModel()
+		viewModel.onResult = onResult
     let viewController = LocationViewController.instantiate(with: viewModel)
-    viewController.onResult = onResult
     rootNavigationController.pushViewController(viewController, animated: true)
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
   }
