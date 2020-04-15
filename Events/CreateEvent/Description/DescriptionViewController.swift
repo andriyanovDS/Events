@@ -12,20 +12,16 @@ import Photos.PHAsset
 
 class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewModelBased, ScreenWithResult {
 	var onResult: (([DescriptionWithAssets]) -> Void)!
-  var viewModel: DescriptionViewModel! {
-    didSet {
-      viewModel.delegate = self
-    }
-  }
+  var viewModel: DescriptionViewModel!
   private let disposeBag = DisposeBag()
   private var descriptionView: DescriptionView?
-  private var activeDescriptionIndex: Int = 0
 	private var isDeleteMode: Bool = false
   private var feedbackGenerator: UIImpactFeedbackGenerator?
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
 	
+    viewModel.delegate = self
     setupView()
     keyboardAttachWithDebounce$.subscribe(
       onNext: {[weak self] info in
@@ -36,17 +32,60 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
   }
 
   private func setupView() {
-    let descriptionView = DescriptionView()
-    descriptionView.delegate = self
+    let view = DescriptionView(
+      state: .main(
+        isSelectedImagesEmpty: viewModel.storage.assets.isEmpty,
+        text: viewModel.storage.text
+      )
+    )
     setupOpenImagePickerButton()
-    view = descriptionView
-    self.descriptionView = descriptionView
-    let longPressGestureGecognizer = UILongPressGestureRecognizer(
+    view.selectedImagesCollectionView.delegate = self
+    view.selectedImagesCollectionView.dataSource = self
+    view.selectedImagesCollectionView.dragDelegate = self
+    view.selectedImagesCollectionView.dropDelegate = self
+    view.descriptionsCollectionView.dataSource = self
+    view.descriptionsCollectionView.delegate = self
+    view.textView.rx.text.orEmpty
+      .subscribe(onNext: {[unowned self] text in
+        self.descriptionTextDidChange(text)
+      })
+      .disposed(by: disposeBag)
+    
+    view.titleTextField.rx.text.orEmpty
+      .subscribe(onNext: {[unowned self] text in
+        self.descriptionTitleDidChange(text)
+      })
+      .disposed(by: disposeBag)
+    
+    view.submitButton.rx.tap
+      .subscribe(onNext: {[unowned self] in self.viewModel.openNextScreen() })
+      .disposed(by: disposeBag)
+    
+    let longPressGestureRecognizer = UILongPressGestureRecognizer(
       target: self,
       action: #selector(onDescriptionCollectionViewLongPress)
     )
-    longPressGestureGecognizer.minimumPressDuration = 1
-    descriptionView.descriptionsCollectionView.addGestureRecognizer(longPressGestureGecognizer)
+    longPressGestureRecognizer.minimumPressDuration = 1
+    view.descriptionsCollectionView.addGestureRecognizer(longPressGestureRecognizer)
+    self.view = view
+    self.descriptionView = view
+  }
+  
+  private func descriptionTextDidChange(_ text: String) {
+    viewModel.storage.text = text
+    guard let view = descriptionView else { return }
+    view.submitButton.isEnabled = !text.isEmpty
+  }
+  
+  func descriptionTitleDidChange(_ text: String) {
+    viewModel.storage.title = text
+    guard let view = descriptionView else { return }
+    let cellOption = view.descriptionsCollectionView.cellForItem(at: IndexPath(
+      item: viewModel.storage.activeIndex,
+      section: 0
+    ))
+    guard let cell = cellOption as? DescriptionCellView else { return }
+    cell.titleLabel.text = title
   }
 
   private func setupOpenImagePickerButton() {
@@ -62,7 +101,11 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
 
      navigationItem.rightBarButtonItem = UIBarButtonItem(customView: openImagePickerButton)
      openImagePickerButton.width(35).height(35)
-     openImagePickerButton.addTarget(self, action: #selector(openImagePicker), for: .touchUpInside)
+     openImagePickerButton.addTarget(
+       viewModel,
+       action: #selector(viewModel.openImagePicker),
+       for: .touchUpInside
+     )
    }
 	
 	private func setupCancelBarButton() {
@@ -73,10 +116,6 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
 			action: #selector(cancelDeleteMode)
 		)
 	}
-
-  @objc private func openImagePicker() {
-    viewModel.openImagePicker(activeDescription: activeDescriptionIndex)
-  }
 	
 	@objc private func cancelDeleteMode() {
 		if !isDeleteMode { return }
@@ -87,7 +126,130 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
 
   @objc private func onRemoveImage(_ sender: UIButtonScaleOnPress) {
     guard let asset = sender.uniqueData as? PHAsset else { return }
-    viewModel.remove(asset: asset, forDescriptionAtIndex: activeDescriptionIndex)
+    viewModel.removeAsset(asset)
+  }
+  
+  func configure(
+    selectedImageCell: SelectedImageCell,
+    at index: Int
+  ) {
+    let asset = viewModel.storage.assets[index].asset
+    viewModel.image(for: asset, onResult: { image in
+      selectedImageCell.setImage(image, asset: asset)
+    })
+    selectedImageCell.removeButton.addTarget(self, action: #selector(onRemoveImage(_:)), for: .touchUpInside)
+  }
+  
+  func configure(
+    descriptionCell: DescriptionCellView,
+    at index: Int
+  ) {
+    let description = viewModel.storage[dynamicMember: index]
+    descriptionCell.titleLabel.text = description.title
+    descriptionCell.isActive = viewModel.storage.activeIndex == index
+    descriptionCell.addButton?.id = description.id
+    if !isDeleteMode {
+      descriptionCell.isLastCell = index == viewModel.storage.count - 1
+      descriptionCell.addButton?.addTarget(self, action: #selector(addDescription), for: .touchUpInside)
+    } else if !description.isMain {
+      descriptionCell.isDeleteMode = isDeleteMode
+      descriptionCell.removeButton?.addTarget(self, action: #selector(removeDescription(_:)), for: .touchUpInside)
+    }
+  }
+  
+  private func updateViewState() {
+    guard let view = descriptionView else { return }
+    let storage = viewModel.storage
+    let isMain = storage[dynamicMember: storage.activeIndex].isMain
+    view.state = isMain
+      ? .main(isSelectedImagesEmpty: storage.assets.isEmpty, text: storage.text)
+      : .additional(isSelectedImagesEmpty: storage.assets.isEmpty, title: storage.title ?? "", text: storage.text)
+  }
+  
+  @objc private func addDescription() {
+    guard let descriptionView = self.descriptionView else { return }
+    viewModel.addDescription()
+    let collectionView = descriptionView.descriptionsCollectionView
+    let newCellIndexPath = IndexPath(
+      item: viewModel.storage.activeIndex,
+      section: 0
+    )
+    collectionView.visibleCells
+      .compactMap { $0 as? DescriptionCellView }
+      .forEach { v in
+        if v.isLastCell == true {
+          v.isLastCell = false
+        }
+        v.isActive = false
+    }
+    
+    collectionView.performBatchUpdates({
+      collectionView.insertItems(at: [newCellIndexPath])
+    }, completion: {[unowned self] _ in
+      self.updateViewState()
+      descriptionView.selectedImagesCollectionView.reloadData()
+      collectionView.scrollToItem(at: newCellIndexPath, at: .right, animated: true)
+    })
+  }
+  
+  private func changeDescription(afterRemoveAt index: Int) {
+    guard let collectionView = descriptionView?.descriptionsCollectionView else {
+      return
+    }
+    let cellOption = collectionView.cellForItem(at: IndexPath(
+      item: viewModel.storage.activeIndex,
+      section: 0
+    ))
+    guard let cell = cellOption as? DescriptionCellView else { return }
+    collectionView.visibleCells
+      .compactMap { $0 as? DescriptionCellView }
+      .forEach { $0.isActive = cell == $0 }
+    updateViewState()
+    descriptionView?.selectedImagesCollectionView.reloadData()
+    if viewModel.storage.values.count == 1 {
+      cancelDeleteMode()
+    }
+  }
+  
+  @objc private func removeDescription(_ sender: DescriptionCellButton) {
+    guard let descriptionView = self.descriptionView else { return }
+    let collectionView = descriptionView.descriptionsCollectionView
+    let cellIndexOption = viewModel.storage.values.firstIndex(where: {
+      $0.id == sender.id
+    })
+    guard let index = cellIndexOption else { return }
+    let isViewUpdateRequired = index == viewModel.storage.activeIndex
+    viewModel.removeDescription(at: index)
+    collectionView.performBatchUpdates({
+      collectionView.deleteItems(at: [IndexPath(
+        item: index,
+        section: 0
+        )])
+    }, completion: {[weak self] _ in
+      if isViewUpdateRequired {
+        self?.changeDescription(afterRemoveAt: index)
+      }
+    })
+  }
+  
+  @objc private func onDescriptionCollectionViewLongPress(
+    _ recognizer: UILongPressGestureRecognizer
+  ) {
+    switch recognizer.state {
+    case .began:
+      feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
+      feedbackGenerator?.prepare()
+    case .changed:
+      if isDeleteMode { return }
+      isDeleteMode = true
+      feedbackGenerator?.impactOccurred()
+      descriptionView?.descriptionsCollectionView.reloadData()
+      setupCancelBarButton()
+    case .ended:
+      feedbackGenerator = nil
+    default:
+      return
+    }
   }
 }
 
@@ -105,7 +267,7 @@ extension DescriptionViewController: DescriptionViewModelDelegate {
     let collectionView = descriptionView.selectedImagesCollectionView
 
     if collectionView.visibleCells.count == 0 && insertedIndexPaths.count > 0 {
-      descriptionView.showSelectedImagesCollectionView()
+      updateViewState()
     }
 
     collectionView.performBatchUpdates({
@@ -115,75 +277,101 @@ extension DescriptionViewController: DescriptionViewModelDelegate {
       if insertedIndexPaths.count > 0 {
         collectionView.insertItems(at: insertedIndexPaths)
       }
-    }, completion: { _ in
+    }, completion: {[weak self] _ in
       if collectionView.visibleCells.count == 0 {
-        descriptionView.hideSelectedImagesCollectionView()
+        self?.updateViewState()
       }
     })
   }
 }
 
-extension DescriptionViewController: DescriptionViewDelegate {
-  func openNextScreen() {
-    viewModel.openNextScreen()
+extension DescriptionViewController: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    itemsForBeginning session: UIDragSession,
+    at indexPath: IndexPath
+  ) -> [UIDragItem] {
+    let itemProvider = NSItemProvider(object: String(indexPath.item) as NSString)
+    let dragItem = UIDragItem(itemProvider: itemProvider)
+    return [dragItem]
   }
+  
+  func collectionView(
+    _ collectionView: UICollectionView,
+    dropSessionDidUpdate session: UIDropSession,
+    withDestinationIndexPath destinationIndexPath: IndexPath?
+  ) -> UICollectionViewDropProposal {
+    if collectionView.hasActiveDrag {
+      return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+    }
+    return UICollectionViewDropProposal(operation: .forbidden)
+  }
+  
+  func collectionView(
+    _ collectionView: UICollectionView,
+    performDropWith coordinator: UICollectionViewDropCoordinator
+  ) {
+    guard let item = coordinator.items.first else { return }
+    guard let sourceIndexPath = item.sourceIndexPath else { return }
+    let destinationIndexPath = coordinator
+      .destinationIndexPath
+      .getOrElse(result: IndexPath(
+        item: viewModel.storage.assets.count - 1,
+        section: 0
+      ))
+    
+    collectionView.performBatchUpdates({
+      viewModel.moveAsset(at: sourceIndexPath.item, to: destinationIndexPath.item)
+      collectionView.moveItem(at: sourceIndexPath, to: destinationIndexPath)
+    }, completion: nil)
+    coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+  }
+}
 
+extension DescriptionViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     if collectionView is DescriptionsCollectionView {
-      return viewModel.descriptions.count
+      return viewModel.storage.count
     }
-    return viewModel.descriptions[activeDescriptionIndex].assets.count
+    return viewModel.storage.assets.count
   }
-
+  
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
     if collectionView is DescriptionsCollectionView {
-      let cellIdentidier = String(describing: DescriptionCellView.self)
-      guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: cellIdentidier,
+      let cellOption = collectionView.dequeueReusableCell(
+        withReuseIdentifier: DescriptionCellView.reuseIdentifier,
         for: indexPath
-        ) as? DescriptionCellView else {
+      )
+      guard let cell = cellOption as? DescriptionCellView else {
         fatalError("Unexpected description cell on IndexPath \(indexPath.description)")
       }
-      let description = viewModel.descriptions[indexPath.item]
-      cell.eventDescription = description
-			cell.isActive = activeDescriptionIndex == indexPath.item
-
-			if !isDeleteMode {
-				cell.isLastCell = indexPath.item == viewModel.descriptions.count - 1
-				cell.addButton?.addTarget(self, action: #selector(addDescription), for: .touchUpInside)
-      } else if !description.isMain {
-        cell.isDeleteMode = isDeleteMode
-        cell.removeButton?.addTarget(self, action: #selector(removeDescription(_:)), for: .touchUpInside)
-      }
-      cell.setupCell()
+      configure(descriptionCell: cell, at: indexPath.item)
       return cell
     }
-
-    let cellIdentidier = String(describing: SelectedImageCell.self)
-    guard let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: cellIdentidier,
+    let cellOption = collectionView.dequeueReusableCell(
+      withReuseIdentifier: SelectedImageCell.reuseIdentifier,
       for: indexPath
-      ) as? SelectedImageCell else {
+    )
+    guard let cell = cellOption as? SelectedImageCell else {
       fatalError("Unexpected assets cell on IndexPath \(indexPath.description)")
     }
-    let asset = viewModel.asset(at: indexPath.item, forDescriptionAtIndex: activeDescriptionIndex)
-    viewModel.image(for: asset, onResult: { image in
-      cell.setImage(image, asset: asset)
-    })
-    cell.removeButton.addTarget(self, action: #selector(onRemoveImage(_:)), for: .touchUpInside)
+    configure(selectedImageCell: cell, at: indexPath.item)
     return cell
   }
+}
 
+extension DescriptionViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     guard collectionView is DescriptionsCollectionView else { return }
-    if indexPath.item == activeDescriptionIndex { return }
+    
+    if indexPath.item == viewModel.storage.activeIndex { return }
     guard let descriptionView = self.descriptionView else { return }
 
     let collectionView = descriptionView.descriptionsCollectionView
     guard let cell = collectionView.cellForItem(at: indexPath) as? DescriptionCellView else { return }
-    activeDescriptionIndex = indexPath.item
+    viewModel.descriptionDidSelected(at: indexPath.item)
     cell.selectAnimation.startAnimation()
-    descriptionView.onChange(description: cell.eventDescription!)
+    updateViewState()
     collectionView
       .visibleCells
       .compactMap { $0 as? DescriptionCellView }
@@ -197,164 +385,6 @@ extension DescriptionViewController: DescriptionViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     guard let collectionView = scrollView as? UICollectionView else { return }
     if collectionView is DescriptionsCollectionView { return }
-    viewModel.attemptToCacheAssets(collectionView, forDescriptionAtIndex: activeDescriptionIndex)
-  }
-
-  func collectionView(
-    _ collectionView: UICollectionView,
-    itemsForBeginning session: UIDragSession,
-    at indexPath: IndexPath
-  ) -> [UIDragItem] {
-    let itemProvider = NSItemProvider(object: String(indexPath.item) as NSString)
-    let dragItem = UIDragItem(itemProvider: itemProvider)
-    return [dragItem]
-  }
-
-  func collectionView(
-    _ collectionView: UICollectionView,
-    dropSessionDidUpdate session: UIDropSession,
-    withDestinationIndexPath destinationIndexPath: IndexPath?
-  ) -> UICollectionViewDropProposal {
-    if collectionView.hasActiveDrag {
-      return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-    }
-    return UICollectionViewDropProposal(operation: .forbidden)
-  }
-
-  func collectionView(
-    _ collectionView: UICollectionView,
-    performDropWith coordinator: UICollectionViewDropCoordinator
-  ) {
-    guard let item = coordinator.items.first else { return }
-    guard let sourceIndexPath = item.sourceIndexPath else { return }
-    let destinationIndexPath = coordinator
-      .destinationIndexPath
-      .getOrElse(result: IndexPath(
-				item: viewModel.descriptions[activeDescriptionIndex].assets.count - 1,
-				section: 0
-			))
-
-    collectionView.performBatchUpdates({
-			let asset = viewModel.descriptions[activeDescriptionIndex].assets[sourceIndexPath.item]
-      viewModel.descriptions[activeDescriptionIndex].assets.remove(at: sourceIndexPath.item)
-      viewModel.descriptions[activeDescriptionIndex].assets.insert(asset, at: destinationIndexPath.item)
-      collectionView.moveItem(at: sourceIndexPath, to: destinationIndexPath)
-    }, completion: nil)
-    coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
-  }
-
-  func description(titleDidChange title: String) {
-    viewModel.descriptions[activeDescriptionIndex].title = title
-		guard let view = descriptionView else { return }
-		let cellOption = view.descriptionsCollectionView.cellForItem(at: IndexPath(
-			item: activeDescriptionIndex,
-			section: 0
-		))
-		guard let cell = cellOption as? DescriptionCellView else { return }
-		cell.eventDescription = viewModel.descriptions[activeDescriptionIndex]
-		cell.change(labelText: title)
-  }
-
-  func description(textDidChange text: String) {
-    viewModel.descriptions[activeDescriptionIndex].text = text
-		guard let view = descriptionView else { return }
-		let cellOption = view.descriptionsCollectionView.cellForItem(at: IndexPath(
-			item: activeDescriptionIndex,
-			section: 0
-		))
-		guard let cell = cellOption as? DescriptionCellView else { return }
-		cell.eventDescription = viewModel.descriptions[activeDescriptionIndex]
-  }
-
-  @objc private func addDescription() {
-    guard let descriptionView = self.descriptionView else { return }
-    viewModel.addDescription()
-    let collectionView = descriptionView.descriptionsCollectionView
-    let newCellIndexPath = IndexPath(
-      item: viewModel.descriptions.count - 1,
-      section: 0
-      )
-    collectionView.visibleCells
-      .compactMap { $0 as? DescriptionCellView }
-      .forEach { v in
-        if v.isLastCell == true {
-          v.isLastCell = false
-        }
-        v.isActive = false
-      }
-
-    activeDescriptionIndex = newCellIndexPath.item
-
-    collectionView.performBatchUpdates({
-      collectionView.insertItems(at: [newCellIndexPath])
-    }, completion: {[unowned self] _ in
-      descriptionView.onChange(description: self.viewModel.descriptions[newCellIndexPath.item])
-      descriptionView.selectedImagesCollectionView.reloadData()
-      collectionView.scrollToItem(at: newCellIndexPath, at: .right, animated: true)
-    })
-  }
-
-  private func changeDescription(afterRemoveAt index: Int) {
-    guard activeDescriptionIndex == index else {
-      activeDescriptionIndex -= 1
-      return
-    }
-    activeDescriptionIndex = index - 1
-    guard let collectionView = descriptionView?.descriptionsCollectionView else {
-      return
-    }
-    let cellOption = collectionView.cellForItem(at: IndexPath(
-      item: activeDescriptionIndex,
-      section: 0
-    ))
-    guard let cell = cellOption as? DescriptionCellView else { return }
-    collectionView.visibleCells
-      .compactMap { $0 as? DescriptionCellView }
-      .forEach { $0.isActive = cell == $0 }
-    let description = viewModel.descriptions[activeDescriptionIndex]
-    descriptionView?.onChange(description: description)
-    descriptionView?.selectedImagesCollectionView.reloadData()
-    if viewModel.descriptions.count == 1 {
-      cancelDeleteMode()
-    }
-  }
-
-  @objc private func removeDescription(_ sender: DescriptionCellButton) {
-    guard let descriptionView = self.descriptionView else { return }
-    let collectionView = descriptionView.descriptionsCollectionView
-    let cellIndexOption = viewModel.descriptions.firstIndex(where: { v in
-      v == sender.dataSource?.eventDescription
-    })
-    guard let index = cellIndexOption else { return }
-    viewModel.remove(descriptionAtIndex: index)
-    collectionView.performBatchUpdates({
-      collectionView.deleteItems(at: [IndexPath(
-        item: index,
-        section: 0
-        )])
-    }, completion: {[weak self] _ in
-      self?.changeDescription(afterRemoveAt: index)
-    })
-  }
-
-  @objc private func onDescriptionCollectionViewLongPress(
-    _ recognizer: UILongPressGestureRecognizer
-  ) {
-    switch recognizer.state {
-    case .began:
-      feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
-      feedbackGenerator?.prepare()
-    case .changed:
-      if isDeleteMode { return }
-      isDeleteMode = true
-
-      feedbackGenerator?.impactOccurred()
-      descriptionView?.descriptionsCollectionView.reloadData()
-      setupCancelBarButton()
-    case .ended:
-      feedbackGenerator = nil
-    default:
-      return
-    }
+    viewModel.attemptToCacheAssets(collectionView)
   }
 }

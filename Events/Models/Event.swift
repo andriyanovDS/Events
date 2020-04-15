@@ -9,11 +9,6 @@
 import Foundation
 import Photos
 
-struct DescriptionAsset {
-	let asset: PHAsset
-	let localUrl: URL
-}
-
 protocol Description: Equatable {
 	var isMain: Bool { get }
 	var id: String { get }
@@ -31,13 +26,18 @@ struct DescriptionWithAssets: Description, Equatable {
   let isMain: Bool
   let id: String
   var title: String?
-  var assets: [DescriptionAsset]
+  var assets: [Asset]
   var text: String
-	
+  
+  struct Asset: Hashable {
+    let asset: PHAsset
+    let localUrl: URL
+  }
+  
 	init(
     isMain: Bool,
     title: String? = nil,
-    assets: [DescriptionAsset] = [],
+    assets: [Asset] = [],
     text: String = ""
   ) {
     self.isMain = isMain

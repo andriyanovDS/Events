@@ -10,25 +10,19 @@ import UIKit
 import Stevia
 import Photos
 
-class DescriptionView: UIView, CreateEventView {
+class DescriptionView: UIView {
   let selectedImagesCollectionView: UICollectionView
   let descriptionsCollectionView: DescriptionsCollectionView
-  private var titleTextField: UITextField?
-  private let textView = UITextView()
-  private let submitButton = ButtonScale()
-  private var titleLabel = UILabel()
-  weak var delegate: DescriptionViewDelegate? {
-    didSet {
-      self.selectedImagesCollectionView.delegate = self.delegate
-      self.selectedImagesCollectionView.dataSource = self.delegate
-      self.selectedImagesCollectionView.dragDelegate = self.delegate
-      self.selectedImagesCollectionView.dropDelegate = self.delegate
-      self.descriptionsCollectionView.dataSource = self.delegate
-      self.descriptionsCollectionView.delegate = self.delegate
-    }
+  var titleTextField = UITextField()
+  let textView = UITextView()
+  let submitButton = ButtonScale()
+  var state: State {
+    didSet { stateDidChange(from: oldValue) }
   }
+  private var titleLabel = UILabel()
 
-  init() {
+  init(state: State) {
+    self.state = state
     let selectedImagesLayout = UICollectionViewFlowLayout()
     selectedImagesLayout.scrollDirection = .horizontal
 		selectedImagesLayout.sectionInset = UIEdgeInsets(
@@ -37,7 +31,7 @@ class DescriptionView: UIView, CreateEventView {
 			bottom: 0,
 			right: 10
 		)
-    selectedImagesLayout.itemSize = SELECTED_IMAGE_SIZE
+    selectedImagesLayout.itemSize = SelectedImageCell.Constants.imageSize
     selectedImagesLayout.minimumLineSpacing = 10
     selectedImagesCollectionView = UICollectionView(
       frame: CGRect.zero,
@@ -67,7 +61,6 @@ class DescriptionView: UIView, CreateEventView {
     setupView()
     setupSelectedImagesCollectionView()
     setupDescriptionsCollectionView()
-    textView.delegate = self
 
     let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTap))
     tapRecognizer.cancelsTouchesInView = false
@@ -77,88 +70,68 @@ class DescriptionView: UIView, CreateEventView {
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
-	func onChange(description: DescriptionWithAssets) {
-    textView.text = description.text
-    attemptToAnimateSelectedImagesCollectionView(nextAssetsCount: description.assets.count)
-    if description.isMain {
-      animateTextFieldToLabel()
-    } else {
-      titleTextField.foldL(
-        none: {
-          setupTitleTextField(text: description.title)
-          animateLabelToTextField()
-        },
-        some: { v in
-          v.text = description.title
+  
+  private func stateDidChange(from oldState: State) {
+    switch state {
+    case .main(let isSelectedImagesEmpty, let text):
+      textView.text = text
+      if oldState.isEmptySelectedImages != isSelectedImagesEmpty {
+        animateSelectedImagesCollectionView(isNextCollectionEmpty: isSelectedImagesEmpty)
+      }
+      if state != oldState {
+        transition(from: titleTextField, to: titleLabel)
+      }
+    case .additional(let isSelectedImagesEmpty, let title, let text):
+      textView.text = text
+      titleTextField.text = title
+      if oldState.isEmptySelectedImages != isSelectedImagesEmpty {
+        animateSelectedImagesCollectionView(isNextCollectionEmpty: isSelectedImagesEmpty)
+      }
+      if state != oldState {
+        transition(from: titleLabel, to: titleTextField)
+      }
+    }
+  }
+  
+  private  func animateSelectedImagesCollectionView(isNextCollectionEmpty: Bool) {
+    if !isNextCollectionEmpty && (textView.isFirstResponder || titleTextField.isFirstResponder) {
+      return
+    }
+    UIView.animate(withDuration: 0.2, animations: {
+      self.selectedImagesCollectionView.heightConstraint?.constant = isNextCollectionEmpty
+        ? 0
+        : SelectedImageCell.Constants.imageSize.height + 10
+      self.layoutIfNeeded()
+    })
+  }
+  
+  private func transition(from currentView: UIView, to nextView: UIView) {
+    let animator = UIViewPropertyAnimator(
+      duration: 0.3,
+      curve: .linear,
+      animations: {
+        currentView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        currentView.alpha = 0
+      }
+    )
+    animator.addCompletion { _ in
+      UIView.animate(
+        withDuration: 0.2,
+        delay: 0,
+        options: .curveEaseIn,
+        animations: { nextView.alpha = 1 },
+        completion: { _ in
+          currentView.transform = .identity
+          nextView.isUserInteractionEnabled = true
         }
       )
     }
+    animator.startAnimation()
   }
 
-  func attemptToAnimateSelectedImagesCollectionView(nextAssetsCount: Int) {
-    let isCurrentAssetsEmpty = selectedImagesCollectionView.visibleCells.count == 0
-    let isNextAssetsEmpty = nextAssetsCount == 0
-    guard isCurrentAssetsEmpty != isNextAssetsEmpty else { return }
-    isNextAssetsEmpty
-      ? hideSelectedImagesCollectionView()
-      : showSelectedImagesCollectionView()
-  }
-
-  func hideSelectedImagesCollectionView() {
-    UIView.animate(withDuration: 0.2, animations: {
-      self.selectedImagesCollectionView.heightConstraint?.constant = 0
-      self.layoutIfNeeded()
-    })
-  }
-
-  func showSelectedImagesCollectionView() {
-		if textView.isFocused || (titleTextField?.isFocused ?? false) { return }
-    UIView.animate(withDuration: 0.2, animations: {
-      self.selectedImagesCollectionView.heightConstraint?.constant = SELECTED_IMAGE_SIZE.height + 10
-      self.layoutIfNeeded()
-    })
-  }
-
-  private func animateLabelToTextField() {
-    guard let textField = titleTextField else { return }
-    UIView.animate(withDuration: 0.3, animations: {[unowned self] in
-      self.titleLabel.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-      self.titleLabel.alpha = 0
-    })
-    UIView.animate(
-      withDuration: 0.2,
-      delay: 0.3,
-      options: .curveEaseIn,
-      animations: { textField.alpha = 1 },
-      completion: {[unowned self] _ in
-        self.titleLabel.transform = .identity
-      }
-    )
-  }
-
-  private func animateTextFieldToLabel() {
-    guard let textField = titleTextField else { return }
-    UIView.animate(withDuration: 0.3, animations: {
-      textField.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-      textField.alpha = 0
-    })
-    UIView.animate(
-      withDuration: 0.2,
-      delay: 0.3,
-      options: .curveEaseIn,
-      animations: {[unowned self] in
-        self.titleLabel.alpha = 1
-      },
-      completion: {[unowned self] _ in
-        self.titleTextField?.removeFromSuperview()
-        self.titleTextField = nil
-      }
-    )
-  }
-
-  private func setupTitleTextField(text: String?) {
+  private func setupTitleTextField() {
     let textField = selectTextFieldStyle(UITextField())
+    textField.isUserInteractionEnabled = false
     styleText(
       textField: textField,
       text: NSLocalizedString(
@@ -170,8 +143,6 @@ class DescriptionView: UIView, CreateEventView {
       style: .bold
     )
     textField.alpha = 0
-    textField.text = text
-    textField.addTarget(self, action: #selector(textFieldDidChangeText), for: .editingChanged)
     titleTextField = textField
     sv(textField)
     textField.Top == titleLabel.Top
@@ -181,17 +152,13 @@ class DescriptionView: UIView, CreateEventView {
       .height(50)
   }
 
-  @objc private func textFieldDidChangeText(_ textField: UITextField) {
-    delegate?.description(titleDidChange: textField.text ?? "")
-  }
-
   private func setupSelectedImagesCollectionView() {
     selectedImagesCollectionView.style { v in
       v.backgroundColor = .background
       v.showsHorizontalScrollIndicator = false
       v.register(
         SelectedImageCell.self,
-        forCellWithReuseIdentifier: String(describing: SelectedImageCell.self)
+        forCellWithReuseIdentifier: SelectedImageCell.reuseIdentifier
       )
     }
   }
@@ -204,7 +171,7 @@ class DescriptionView: UIView, CreateEventView {
       v.showsHorizontalScrollIndicator = false
       v.register(
         DescriptionCellView.self,
-        forCellWithReuseIdentifier: String(describing: DescriptionCellView.self)
+        forCellWithReuseIdentifier: DescriptionCellView.reuseIdentifier
       )
     }
   }
@@ -251,8 +218,8 @@ class DescriptionView: UIView, CreateEventView {
       v.isEnabled = false
       v.backgroundColor = .blueButtonBackground
     })
-    submitButton.addTarget(self, action: #selector(onPressSubmitButton), for: .touchUpInside)
     sv([titleLabel, textView, selectedImagesCollectionView, submitButton, descriptionsCollectionView])
+    setupTitleTextField()
     setupConstraints()
   }
 
@@ -282,17 +249,6 @@ class DescriptionView: UIView, CreateEventView {
       .Top == titleLabel.Bottom + 30
     textView.Bottom == selectedImagesCollectionView.Top - 10
   }
-
-  @objc private func onPressSubmitButton() {
-    delegate?.openNextScreen()
-  }
-}
-
-extension DescriptionView: UITextViewDelegate {
-  func textViewDidChange(_ textView: UITextView) {
-    delegate?.description(textDidChange: textView.text)
-    submitButton.isEnabled = textView.text.count > 0
-  }
 }
 
 extension DescriptionView: ViewWithKeyboard {
@@ -308,7 +264,9 @@ extension DescriptionView: ViewWithKeyboard {
               self.selectedImagesCollectionView,
               numberOfItemsInSection: 0
               ) {
-              if itemsCount > 0 { return SELECTED_IMAGE_SIZE.height + 10 }
+              if itemsCount > 0 {
+                return SelectedImageCell.Constants.imageSize.height + 10
+              }
             }
             return 0
           },
@@ -320,14 +278,30 @@ extension DescriptionView: ViewWithKeyboard {
   }
 }
 
-protocol DescriptionViewDelegate: CreateEventViewDelegate,
-	UICollectionViewDataSource,
-	UICollectionViewDelegate,
-	UICollectionViewDragDelegate,
-	UICollectionViewDropDelegate {
-	
-	func description(titleDidChange title: String)
-	func description(textDidChange text: String)
+extension DescriptionView {
+  enum State: Equatable {
+    case main(isSelectedImagesEmpty: Bool, text: String)
+    case additional(isSelectedImagesEmpty: Bool, title: String, text: String)
+    
+    var isEmptySelectedImages: Bool {
+      switch self {
+      case .additional(let isSelectedImagesEmpty, _, _):
+      return isSelectedImagesEmpty
+      case .main(let isSelectedImagesEmpty, _):
+      return isSelectedImagesEmpty
+      }
+    }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+      switch (lhs, rhs) {
+      case (.additional, .additional):
+        return true
+      case (.main, .main):
+        return true
+      default: return false
+      }
+    }
+  }
 }
 
 class DescriptionsCollectionView: UICollectionView {}

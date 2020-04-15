@@ -9,14 +9,14 @@
 import UIKit
 import Stevia
 
-class DescriptionCellView: UICollectionViewCell, DescriptionCellButtonDataSource {
-
+class DescriptionCellView: UICollectionViewCell {
+  
   private struct Constants {
     static let animationDuration: CGFloat = 0.3
     static let addButtonSize: CGFloat = 27
   }
-
-  var eventDescription: DescriptionWithAssets?
+  
+  static let reuseIdentifier = String(describing: SelectedImageCell.self)
 
   var selectAnimation: UIViewPropertyAnimator {
     let scaleAnimator = UIViewPropertyAnimator(
@@ -78,7 +78,7 @@ class DescriptionCellView: UICollectionViewCell, DescriptionCellButtonDataSource
   var addButton: DescriptionCellButton?
 	var removeButton: DescriptionCellButton?
 
-  private let titleLabel = UILabel()
+  let titleLabel = UILabel()
 	private let buttonContentView = UIView()
 
   override init(frame: CGRect) {
@@ -88,14 +88,6 @@ class DescriptionCellView: UICollectionViewCell, DescriptionCellButtonDataSource
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
-	
-	func change(labelText: String) {
-		titleLabel.text = labelText
-	}
-
-  func setupCell() {
-    titleLabel.text = eventDescription?.title
   }
 
   private func setupView() {
@@ -158,7 +150,6 @@ class DescriptionCellView: UICollectionViewCell, DescriptionCellButtonDataSource
 		let button = DescriptionCellButton(backgroundColor: .red)
 		button.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 4)
 		button.alpha = 0
-    button.dataSource = self
 		sv(button)
 		button
 			.right(0)
@@ -183,7 +174,6 @@ class DescriptionCellView: UICollectionViewCell, DescriptionCellButtonDataSource
 	}
 
   override func prepareForReuse() {
-    eventDescription = nil
     titleLabel.text = nil
 		removeAddButton()
 		removeRemoveButton()

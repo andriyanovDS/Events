@@ -9,12 +9,7 @@
 import UIKit
 
 class DescriptionCellButton: UIButton {
-  weak var dataSource: DescriptionCellButtonDataSource?
-
-  var eventDescription: DescriptionWithAssets? {
-    dataSource?.eventDescription
-  }
-
+  var id: String?
   private let _backgroundColor: UIColor
 	
 	private var halfWidth: CGFloat {

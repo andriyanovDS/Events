@@ -9,14 +9,18 @@
 import UIKit
 import Photos.PHAsset
 
-let SELECTED_IMAGE_SIZE = CGSize(
-  width: 100,
-  height: 80
-)
-
 class SelectedImageCell: UICollectionViewCell {
   let removeButton = UIButtonScaleOnPress()
   private let imageView = UIImageView()
+  
+  static let reuseIdentifier = String(describing: SelectedImageCell.self)
+  
+  struct Constants {
+    static let imageSize = CGSize(
+      width: 100,
+      height: 80
+    )
+  }
 
   override init(frame: CGRect) {
     super.init(frame: frame)
