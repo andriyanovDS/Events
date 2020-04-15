@@ -148,7 +148,7 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
     descriptionCell.titleLabel.text = description.title
     descriptionCell.isActive = viewModel.storage.activeIndex == index
     if !isDeleteMode {
-      descriptionCell.state = index == viewModel.storage.count - 1
+      descriptionCell.state = index == viewModel.storage.endIndex
         ? .add
         : .normal
       descriptionCell.closure = {[weak self] in
@@ -317,7 +317,7 @@ extension DescriptionViewController: UICollectionViewDragDelegate, UICollectionV
     let destinationIndexPath = coordinator
       .destinationIndexPath
       .getOrElse(result: IndexPath(
-        item: viewModel.storage.assets.count - 1,
+        item: viewModel.storage.assets.endIndex,
         section: 0
       ))
     

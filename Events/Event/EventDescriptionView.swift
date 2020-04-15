@@ -106,7 +106,7 @@ class EventDescriptionView: UIStackView {
 			.width(Constants.largeImageSize.width)
 		addArrangedSubview(firstImage)
 		if imageViews.count > 1 {
-			let restImages = Array(imageViews[1...imageViews.count - 1])
+      let restImages = Array(imageViews.dropFirst())
 			restImages
 				.chunks(2)
 				.enumerated()

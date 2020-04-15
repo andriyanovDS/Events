@@ -83,7 +83,7 @@ private func splitDaysByWeeks(days: [Day]) -> [[Day?]] {
     }
     let last = accumulated.reversed().last
     if last != nil {
-      accumulated[accumulated.count - 1].append(day)
+      accumulated[accumulated.endIndex].append(day)
       return accumulated
     }
     return [[day]]

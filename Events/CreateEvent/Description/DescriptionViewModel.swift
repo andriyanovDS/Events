@@ -52,7 +52,7 @@ class DescriptionViewModel: Stepper {
 
   func addDescription() {
     storage.add(DescriptionWithAssets(isMain: false))
-    storage.activeIndex = storage.count - 1
+    storage.activeIndex = storage.endIndex
    }
 
   func removeDescription(at index: Int) {
@@ -178,6 +178,7 @@ extension DescriptionViewModel {
   class Storage<T> {
     var activeIndex: Int = 0
     private var _values: [T]
+    var endIndex: Int { _values.endIndex }
     var count: Int { _values.count }
     var values: [T] { _values }
     
