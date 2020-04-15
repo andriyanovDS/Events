@@ -60,7 +60,7 @@ class DescriptionViewModel: Stepper {
     if storage.activeIndex == index {
       storage.activeIndex = index - 1
     } else {
-      storage.activeIndex -= 1
+      storage.activeIndex = max(0, storage.activeIndex - 1)
     }
   }
 

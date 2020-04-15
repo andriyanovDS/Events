@@ -23,7 +23,7 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
 	
     viewModel.delegate = self
     setupView()
-    keyboardAttachWithDebounce$.subscribe(
+    keyboardAttach$.subscribe(
       onNext: {[weak self] info in
         self?.descriptionView?.keyboardHeightDidChange(info)
        }
@@ -85,7 +85,7 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
       section: 0
     ))
     guard let cell = cellOption as? DescriptionCellView else { return }
-    cell.titleLabel.text = title
+    cell.titleLabel.text = text
   }
 
   private func setupOpenImagePickerButton() {
@@ -147,13 +147,19 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
     let description = viewModel.storage[dynamicMember: index]
     descriptionCell.titleLabel.text = description.title
     descriptionCell.isActive = viewModel.storage.activeIndex == index
-    descriptionCell.addButton?.id = description.id
     if !isDeleteMode {
-      descriptionCell.isLastCell = index == viewModel.storage.count - 1
-      descriptionCell.addButton?.addTarget(self, action: #selector(addDescription), for: .touchUpInside)
+      descriptionCell.state = index == viewModel.storage.count - 1
+        ? .add
+        : .normal
+      descriptionCell.closure = {[weak self] in
+        self?.addDescription()
+      }
     } else if !description.isMain {
-      descriptionCell.isDeleteMode = isDeleteMode
-      descriptionCell.removeButton?.addTarget(self, action: #selector(removeDescription(_:)), for: .touchUpInside)
+      descriptionCell.state = isDeleteMode ? .delete : .normal
+      let id = description.id
+      descriptionCell.closure = {[weak self] in
+        self?.removeDescription(with: id)
+      }
     }
   }
   
@@ -166,7 +172,7 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
       : .additional(isSelectedImagesEmpty: storage.assets.isEmpty, title: storage.title ?? "", text: storage.text)
   }
   
-  @objc private func addDescription() {
+  private func addDescription() {
     guard let descriptionView = self.descriptionView else { return }
     viewModel.addDescription()
     let collectionView = descriptionView.descriptionsCollectionView
@@ -177,9 +183,7 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
     collectionView.visibleCells
       .compactMap { $0 as? DescriptionCellView }
       .forEach { v in
-        if v.isLastCell == true {
-          v.isLastCell = false
-        }
+        v.state = .normal
         v.isActive = false
     }
     
@@ -192,7 +196,7 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
     })
   }
   
-  private func changeDescription(afterRemoveAt index: Int) {
+  private func updateActiveDescription() {
     guard let collectionView = descriptionView?.descriptionsCollectionView else {
       return
     }
@@ -201,22 +205,15 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
       section: 0
     ))
     guard let cell = cellOption as? DescriptionCellView else { return }
-    collectionView.visibleCells
-      .compactMap { $0 as? DescriptionCellView }
-      .forEach { $0.isActive = cell == $0 }
+    cell.isActive = true
     updateViewState()
     descriptionView?.selectedImagesCollectionView.reloadData()
-    if viewModel.storage.values.count == 1 {
-      cancelDeleteMode()
-    }
   }
   
-  @objc private func removeDescription(_ sender: DescriptionCellButton) {
+  private func removeDescription(with id: String) {
     guard let descriptionView = self.descriptionView else { return }
     let collectionView = descriptionView.descriptionsCollectionView
-    let cellIndexOption = viewModel.storage.values.firstIndex(where: {
-      $0.id == sender.id
-    })
+    let cellIndexOption = viewModel.storage.values.firstIndex(where: { $0.id == id })
     guard let index = cellIndexOption else { return }
     let isViewUpdateRequired = index == viewModel.storage.activeIndex
     viewModel.removeDescription(at: index)
@@ -226,8 +223,12 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
         section: 0
         )])
     }, completion: {[weak self] _ in
+      guard let self = self else { return }
       if isViewUpdateRequired {
-        self?.changeDescription(afterRemoveAt: index)
+        self.updateActiveDescription()
+      }
+      if self.viewModel.storage.values.count == 1 {
+        self.cancelDeleteMode()
       }
     })
   }

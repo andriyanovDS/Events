@@ -107,7 +107,7 @@ class DescriptionView: UIView {
   
   private func transition(from currentView: UIView, to nextView: UIView) {
     let animator = UIViewPropertyAnimator(
-      duration: 0.3,
+      duration: 0.2,
       curve: .linear,
       animations: {
         currentView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)

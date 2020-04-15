@@ -8,6 +8,7 @@
 
 import UIKit
 import Stevia
+import RxSwift
 
 class DescriptionCellView: UICollectionViewCell {
   
@@ -47,39 +48,16 @@ class DescriptionCellView: UICollectionViewCell {
 		}
 	}
 
-  var isLastCell: Bool = false {
-    willSet (nextValue) {
-      guard isLastCell != nextValue else { return }
-      if nextValue == true {
-        setupAddButton()
-        return
-      }
-			guard let button = addButton else { return }
-			animateButtonRemove(button, completion: {[unowned self] in
-				self.addButton = nil
-			})
+  var state: State = .empty {
+    didSet {
+      if state != oldValue { self.stateDidChange() }
     }
   }
-	
-	var isDeleteMode: Bool = false {
-		willSet (nextValue) {
-			guard nextValue != isDeleteMode else { return }
-			if nextValue {
-				setupRemoveButton()
-				return
-			}
-			guard let button = removeButton else { return }
-			animateButtonRemove(button, completion: {[unowned self] in
-				self.removeButton = nil
-			})
-		}
-	}
-
-  var addButton: DescriptionCellButton?
-	var removeButton: DescriptionCellButton?
-
+  var closure: (() -> Void)?
   let titleLabel = UILabel()
+  private var cornerButton: DescriptionCellButton?
 	private let buttonContentView = UIView()
+  private let disposeBag = DisposeBag()
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -88,6 +66,23 @@ class DescriptionCellView: UICollectionViewCell {
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  private func stateDidChange() {
+    switch state {
+    case .add:
+      let button = DescriptionCellButton(backgroundColor: .blueButtonBackground)
+      setupButton(button)
+      return
+    case .delete:
+      let button = DescriptionCellButton(backgroundColor: .red)
+      button.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 4)
+      setupButton(button)
+      return
+    case .normal, .empty:
+      attemptToRemoveButton()
+      return
+    }
   }
 
   private func setupView() {
@@ -134,50 +129,40 @@ class DescriptionCellView: UICollectionViewCell {
 		}
 		animator.startAnimation()
 	}
-
-  private func setupAddButton() {
-		let button = DescriptionCellButton(backgroundColor: .blueButtonBackground)
-    sv(button)
-    button
-      .right(0)
-      .top(0)
-      .width(Constants.addButtonSize)
-      .height(Constants.addButtonSize)
-    addButton = button
-  }
 	
-	private func setupRemoveButton() {
-		let button = DescriptionCellButton(backgroundColor: .red)
-		button.transform = CGAffineTransform(rotationAngle: -CGFloat.pi / 4)
-		button.alpha = 0
+  private func setupButton(_ button: DescriptionCellButton) {
 		sv(button)
 		button
 			.right(0)
 			.top(0)
 			.width(Constants.addButtonSize)
 			.height(Constants.addButtonSize)
-		removeButton = button
-		
-		UIView.animate(withDuration: 0.4, animations: {
-			button.alpha = 1
-		})
+		cornerButton = button
+    button.rx.tap.subscribe(onNext: {[unowned self] _ in
+      self.closure?()
+    })
+    .disposed(by: disposeBag)
 	 }
 	
-	private func removeAddButton() {
-		addButton?.removeFromSuperview()
-		addButton = nil
+	private func attemptToRemoveButton() {
+    guard let button = cornerButton else { return }
+		button.removeFromSuperview()
+    self.cornerButton = nil
 	}
-	
-	private func removeRemoveButton() {
-		removeButton?.removeFromSuperview()
-		removeButton = nil
-	}
-
+  
   override func prepareForReuse() {
     titleLabel.text = nil
-		removeAddButton()
-		removeRemoveButton()
-    isDeleteMode = false
-    isLastCell = false
+    closure = nil
+    state = .empty
+		attemptToRemoveButton()
+  }
+}
+
+extension DescriptionCellView {
+  enum State: Equatable {
+    case delete
+    case add
+    case normal
+    case empty
   }
 }

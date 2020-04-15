@@ -9,7 +9,6 @@
 import UIKit
 
 class DescriptionCellButton: UIButton {
-  var id: String?
   private let _backgroundColor: UIColor
 	
 	private var halfWidth: CGFloat {
