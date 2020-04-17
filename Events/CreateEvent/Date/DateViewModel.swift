@@ -21,6 +21,7 @@ class DateViewModel: Stepper {
     EventDurationRange(min: 5, max: 8)!,
     EventDurationRange(min: 8, max: nil)!
 	]
+  private var selectedDates = SelectedDates(from: nil, to: nil)
 	
 	init() {
 		duration = durations[0]
@@ -28,24 +29,20 @@ class DateViewModel: Stepper {
 	
 	func openCalendar() {
 		 steps.accept(EventStep.calendar(
-			 withSelectedDates: SelectedDates(from: nil, to: nil),
-			 onComplete: { selectedDates in
-				 selectedDates
-					 .foldL(
-						 none: {},
-						 some: { dates in
-              let range = dates.dateRange
-              self.dates = range.isEmpty
-                ? generateInitialDates()
-                : range
-
-							 if let foramttedDate = dates.localizedLabel {
-								 let daysDiff = daysCount(selectedDates: dates)
-								 self.delegate?.onDatesDidSelected(formattedDate: foramttedDate, daysCount: daysDiff)
-							 }
-						 }
-					 )
-			 }
+			 withSelectedDates: selectedDates,
+			 onComplete: {[weak self] selectedDates in
+        guard let self = self, let dates = selectedDates else { return }
+        self.selectedDates = dates
+        let range = dates.dateRange
+        self.dates = range.isEmpty
+          ? generateInitialDates()
+          : range
+        
+        if let formattedDate = dates.label {
+          let daysDiff = daysCount(selectedDates: dates)
+          self.delegate?.onDatesDidSelected(formattedDate: formattedDate, daysCount: daysDiff)
+        }
+     }
 		 ))
 	 }
 	

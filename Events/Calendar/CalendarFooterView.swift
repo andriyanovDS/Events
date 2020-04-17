@@ -30,6 +30,7 @@ class CalendarFooterView: UIView {
 
   func setIsClearButtonEnabled(_ isEnabled: Bool) {
     clearButton.isEnabled = isEnabled
+    clearButton.alpha = isEnabled ? 1 : 0.6
   }
 
   private func setupView() {

@@ -33,23 +33,27 @@ class CalendarHeaderView: UIView {
   }
 
   private func setupWeekDays() {
-    Calendar.current.weekdaySymbols
+    var symbols = Calendar.current.weekdaySymbols
+    let firstSymbol = symbols.remove(at: 0)
+    symbols.append(firstSymbol)
+    symbols
       .map { String($0.prefix(1)) }
       .map { v in
         let label = UILabel()
         styleText(
           label: label,
           text: v,
-          size: 19,
+          size: 20,
           color: .fontLabelDescription,
           style: .regular
         )
+        label.textAlignment = .center
         return label
       }
       .forEach { weekDaysStackView.addArrangedSubview($0) }
     weekDaysStackView.style { v in
       v.axis = .horizontal
-      v.distribution = .equalSpacing
+      v.distribution = .fillEqually
       v.alignment = .fill
     }
   }

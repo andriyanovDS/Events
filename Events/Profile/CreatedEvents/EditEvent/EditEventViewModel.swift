@@ -70,9 +70,6 @@ class EditEventViewModel: Stepper {
 					guard let self = self else { return }
           if let result = result, result.from != nil {
             self.event.dates = result.dateRange
-					} else {
-						let dateFrom = Date()
-						self.event.dates = [dateFrom]
 					}
           resolve(self.event.dateLabelText)
         }

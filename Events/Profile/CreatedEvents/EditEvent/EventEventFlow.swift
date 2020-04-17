@@ -94,11 +94,9 @@ class EditEventFlow: Flow {
     withSelectedDates: SelectedDates,
     onComplete: @escaping (SelectedDates?) -> Void
   ) -> FlowContributors {
-    let viewModel = CalendarViewModel(
-      selectedDateFrom: withSelectedDates.from,
-      selectedDateTo: withSelectedDates.to
-    )
-    let viewController = CalendarViewController.instantiate(with: viewModel)
+    let viewModel = CalendarViewModel()
+    let dataSource = CalendarDataSource(selectedDates: withSelectedDates)
+    let viewController = CalendarViewController(dataSource: dataSource, viewModel: viewModel)
     viewController.modalPresentationStyle = .overFullScreen
     viewController.hero.isEnabled = true
     viewController.onResult = onComplete

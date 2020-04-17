@@ -54,7 +54,7 @@ class CreateEventFlow: Flow {
 		case .locationSearch(let onResult):
 			return navigateToLocationSearchBar(onResult: onResult)
 		case .calendar(let withSelectedDates, let onComplete):
-			return openCalendarScreen(withSelectedDates: withSelectedDates, onComplete: onComplete)
+			return openCalendarScreen(with: withSelectedDates, onComplete: onComplete)
 		case .imagePickerDidComplete:
 			self.rootNavigationController.tabBarController?.tabBar.isHidden = false
 			rootNavigationController.dismiss(animated: false, completion: nil)
@@ -137,14 +137,12 @@ class CreateEventFlow: Flow {
   }
 
   private func openCalendarScreen(
-    withSelectedDates: SelectedDates,
+    with selectedDates: SelectedDates,
     onComplete: @escaping (SelectedDates?) -> Void
   ) -> FlowContributors {
-    let viewModel = CalendarViewModel(
-      selectedDateFrom: withSelectedDates.from,
-      selectedDateTo: withSelectedDates.to
-    )
-    let viewController = CalendarViewController.instantiate(with: viewModel)
+    let viewModel = CalendarViewModel()
+    let dataSource = CalendarDataSource(selectedDates: selectedDates)
+    let viewController = CalendarViewController(dataSource: dataSource, viewModel: viewModel)
     viewController.modalPresentationStyle = .overFullScreen
     viewController.hero.isEnabled = true
     viewController.onResult = onComplete

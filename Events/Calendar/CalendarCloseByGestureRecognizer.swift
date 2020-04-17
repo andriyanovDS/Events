@@ -55,7 +55,6 @@ class CalendarCloseByGestureRecognizer {
           x: self.originalViewCenter.x,
           y: self.originalViewCenter.y
         )
-        self.animatedView.layoutIfNeeded()
       }
     )
   }

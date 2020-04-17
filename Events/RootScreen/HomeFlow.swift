@@ -53,11 +53,9 @@ class HomeFlow: Flow {
     onComplete: @escaping (SelectedDates?) -> Void
     ) -> FlowContributors {
 
-    let viewModel = CalendarViewModel(
-      selectedDateFrom: selectedDates.from,
-      selectedDateTo: selectedDates.to
-    )
-    let viewController = CalendarViewController.instantiate(with: viewModel)
+    let viewModel = CalendarViewModel()
+    let dataSource = CalendarDataSource(selectedDates: selectedDates)
+    let viewController = CalendarViewController(dataSource: dataSource, viewModel: viewModel)
     viewController.modalPresentationStyle = .overFullScreen
     viewController.isModalInPopover = true
     viewController.onResult = onComplete
