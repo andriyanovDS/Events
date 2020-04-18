@@ -40,8 +40,14 @@ class EditEventViewController: UIViewController, ViewModelBased {
     let locationButton = UIButtonScaleOnPress()
     let timeButton = UIButtonScaleOnPress()
     let footerButtons = [
-      EditEventFooterButton(iconCode: "location.on", button: locationButton),
-      EditEventFooterButton(iconCode: "schedule", button: timeButton)
+      EditEventFooterButton(
+        icon: Icon(material: "location.on", sfSymbol: "location"),
+        button: locationButton
+      ),
+      EditEventFooterButton(
+        icon: Icon(material: "schedule", sfSymbol: "clock"),
+        button: timeButton
+      )
     ]
 
 		let view = EditEventView(editButtons: editButtons, footerButtons: footerButtons)
@@ -123,13 +129,13 @@ class EditEventViewController: UIViewController, ViewModelBased {
 			NSAttributedString.Key.foregroundColor: UIColor.fontLabel
 		]
 		let backButton = UIButtonScaleOnPress()
-		backButton.style { v in
-			styleIcon(button: v, iconCode: "close", size: 20.0, color: .grayButtonDarkFont)
-			v.backgroundColor = .grayButtonBackground
-			v.layer.cornerRadius = 15
-		}
+    backButton.setIcon(
+      Icon(material: "cancel", sfSymbol: "xmark.circle.fill"),
+      size: 30,
+      color: .grayButtonDarkFont
+    )
 		navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
-		backButton.width(30).height(30)
+		backButton.width(44).height(44)
 		backButton.rx.tap
 			.subscribe(onNext: {[weak self] _ in  self?.viewModel.closeScreen()})
 			.disposed(by: disposeBag)
@@ -138,7 +144,7 @@ class EditEventViewController: UIViewController, ViewModelBased {
 		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: sendButton)
 		sendButton.width(30).height(30)
 		sendButton.rx.tap
-			.subscribe(onNext: {[weak self] _ in  self?.viewModel.editEvent()})
+			.subscribe(onNext: {[weak self] _ in self?.viewModel.editEvent()})
 			.disposed(by: disposeBag)
 	}
 }

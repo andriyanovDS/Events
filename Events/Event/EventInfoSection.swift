@@ -15,7 +15,7 @@ class EventInfoSection: UIStackView {
 
   init(
     title: String,
-    iconCode: String,
+    iconCode: Icon,
     value: String
   ) {
     super.init(frame: CGRect.zero)
@@ -33,15 +33,8 @@ class EventInfoSection: UIStackView {
       color: .fontLabelInverted,
       style: .medium
     )
-    let iconImage = UIImage(
-      from: .materialIcon,
-      code: iconCode,
-      textColor: .fontLabelDescription,
-      backgroundColor: .clear,
-      size: CGSize(width: 24, height: 24)
-    )
+    iconImageView.setIcon(iconCode, size: 24, color: .fontLabelDescription)
     valueTextLabel.numberOfLines = 3
-    iconImageView.image = iconImage
     spacing = 6
 		axis = .vertical
 		alignment = .leading

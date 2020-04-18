@@ -27,32 +27,36 @@ extension UIImageView {
 		}
 	}
 	
-	func fromExternalUrl(
-		_ url: String,
-		withResizeTo size: CGSize,
-		loadOn queue: DispatchQueue = .global(qos: .utility),
-		transitionConfig: TransitionConfig? = nil
-	) {
-		ExternalImageCache.shared.loadImage(by: url, queue: queue)
-			.then(on: .global(qos: .background)) {[weak self] originImage in
-				guard let self = self else { return }
-				let newImage = UIImage.resize(originImage, expectedSize: size)
-				DispatchQueue.main.async {
-					if let config = transitionConfig {
-						UIView.transition(
-							with: self,
-							duration: config.duration,
-							options: config.options,
-							animations: {
-								self.image = newImage
-								self.layoutIfNeeded()
-						}, completion: nil)
-						return
-					}
-					self.image = newImage
-				}
-			}
-	}
+  func fromExternalUrl(
+    _ url: String,
+    withResizeTo size: CGSize,
+    loadOn queue: DispatchQueue = .global(qos: .utility),
+    transitionConfig: TransitionConfig? = nil,
+    setImageHandler: ((UIImage?) -> Void)? = nil
+  ) {
+    let setImageHandler = setImageHandler.getOrElse(result: {[weak self] image in
+      self?.image = image}
+    )
+    ExternalImageCache.shared.loadImage(by: url, queue: queue)
+      .then(on: .global(qos: .background)) {[weak self] originImage in
+        guard let self = self else { return }
+        let newImage = UIImage.resize(originImage, expectedSize: size)
+        DispatchQueue.main.async {
+          if let config = transitionConfig {
+            UIView.transition(
+              with: self,
+              duration: config.duration,
+              options: config.options,
+              animations: {
+                setImageHandler(newImage)
+                self.layoutIfNeeded()
+            }, completion: nil)
+            return
+          }
+           setImageHandler(newImage)
+        }
+    }
+  }
 	
 	func fromExternalUrl(
 		_ url: String,

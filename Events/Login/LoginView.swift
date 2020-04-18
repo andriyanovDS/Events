@@ -60,15 +60,12 @@ class LoginView: UIView {
 		let passwordTextField = LoginTextField(type: .password)
 
     let backButton = UIButton()
-    backButton.setImage(
-      UIImage(
-        from: .materialIcon,
-        code: "arrow.back",
-        textColor: .fontLabel,
-        backgroundColor: .clear,
-        size: CGSize(width: 40, height: 40)
+    backButton.setIcon(
+      Icon(
+        material: "arrow.back",
+        sfSymbol: "arrow.uturn.left.circle"
       ),
-      for: .normal
+      size: 40
     )
     textFieldsWrapperView.alpha = 0
     sv(textFieldsWrapperView.sv(backButton, emailTextField, passwordTextField))

@@ -16,7 +16,6 @@ class ProfileScreenView: UIView {
   let userInfoView = UIView()
   let userNameLabel = UILabel()
   let avatarViewButton = UIButton()
-  let avatarImageView = UIImageView()
   let editButton = UIButtonScaleOnPress()
   let logoutButton = ButtonScale()
   
@@ -37,11 +36,18 @@ class ProfileScreenView: UIView {
 	}
 	
 	func updateAvatar(imageUrl: String) {
-		avatarImageView.fromExternalUrl(
+    avatarViewButton.imageView?.fromExternalUrl(
 			imageUrl,
 			withResizeTo: Constants.avatarImageSize,
 			loadOn: .global(qos: .default),
-			transitionConfig: UIImageView.TransitionConfig(duration: 0.4)
+			transitionConfig: UIImageView.TransitionConfig(duration: 0.4),
+      setImageHandler: {[weak self] image in
+        guard let button =  self?.avatarViewButton else { return }
+        button.setImage(image, for: .normal)
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        button.imageView?.contentMode = .scaleAspectFill
+      }
 		)
 	}
   
@@ -90,39 +96,22 @@ class ProfileScreenView: UIView {
       color: .fontLabel,
       style: .medium
     )
-    
-    editButton.style({ v in
-      let icon = UIImage(
-        from: .materialIcon,
-        code: "create",
-        textColor: .fontLabel,
-        backgroundColor: .clear,
-        size: CGSize(width: 25, height: 25)
-      )
-      v.setImage(icon, for: .normal)
-    })
+    editButton.setIcon(
+      Icon(material: "create", sfSymbol: "pencil"),
+      size: 20
+    )
     
     avatarViewButton.style({ v in
       v.backgroundColor = UIColor.grayButtonBackground
 			v.clipsToBounds = true
 			v.layer.cornerRadius = Constants.avatarImageSize.width / 2
-    })
-    
-    avatarImageView.style({ v in
-      v.contentMode = .scaleAspectFill
-      v.image = UIImage(
-        from: .materialIcon,
-        code: "person",
-        textColor: .fontLabel,
-        backgroundColor: .clear,
-        size: CGSize(width: 50, height: 50)
-      )
+      v.setIcon(Icon(code: "person"), size: 50)
     })
     
     userInfoView.sv([
       userNameLabel,
       editButton,
-      avatarViewButton.sv([avatarImageView])
+      avatarViewButton
       ])
     setupUserInfoViewConstraints()
   }
@@ -138,19 +127,14 @@ class ProfileScreenView: UIView {
       .left(0)
       .centerVertically()
     
-    editButton.centerVertically()
     editButton.Left == userNameLabel.Right + 10
+    editButton.CenterY == userNameLabel.CenterY
     
     avatarViewButton
       .right(0)
       .top(0)
       .height(80)
       .heightEqualsWidth()
-    
-    avatarImageView
-      .centerInContainer()
-      .width(80)
-      .height(80)
   }
   
   private func setupLogoutButton() {

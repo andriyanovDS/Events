@@ -31,15 +31,21 @@ class CreatedEventsViewModel: Stepper {
 	
 	@available(iOS 13.0, *)
 	private lazy var contextMenuActions: [ContextMenuAction] = [
-		ContextMenuAction(iconCode: "visibility", title: "View") {[weak self] index in
+		ContextMenuAction(
+      iconCode: Icon(material: "visibility", sfSymbol: "eye"),
+      title: "View"
+    ) {[weak self] index in
 			self?.viewEvent(at: index)
 		},
-		ContextMenuAction(iconCode: "edit", title: "Edit") {[weak self] index in
+		ContextMenuAction(
+      iconCode: Icon(material: "edit", sfSymbol: "pencil"),
+      title: "Edit"
+    ) {[weak self] index in
 			guard let self = self else { return }
 			self.onEditEvent(self.events[index])
 		},
 		ContextMenuAction(
-			iconCode: "delete",
+			iconCode: Icon(material: "delete", sfSymbol: "trash"),
 			title: "Delete",
 			attributes: [.destructive]
 		) {[weak self] index in
@@ -255,13 +261,13 @@ extension CreatedEventsViewModel {
 extension CreatedEventsViewModel {
 	
 	private struct ContextMenuAction {
-		let iconCode: String
+		let iconCode: Icon
 		let title: String
 		let action: (Int) -> Void
 		let attributes: UIMenuElement.Attributes
 		
 		init(
-			iconCode: String,
+			iconCode: Icon,
 			title: String,
 			attributes: UIMenuElement.Attributes = [],
 			action: @escaping (Int) -> Void
@@ -301,16 +307,9 @@ extension CreatedEventsViewModel {
 	private func contextMenuActionsForEvent(at index: Int) -> ([UIMenuElement]) -> UIMenu {
 		return {[unowned self] (_ elements: [UIMenuElement]) -> UIMenu in
 			let children = self.contextMenuActions.map { menuAction -> UIAction in
-				let actionImage = UIImage(
-					from: .materialIcon,
-					code: menuAction.iconCode,
-					textColor: .fontLabel,
-					backgroundColor: .clear,
-					size: CGSize(width: 30, height: 30)
-				)
 				return UIAction(
 					title: menuAction.title,
-					image: actionImage,
+					image: menuAction.iconCode.image(withSize: 30, andColor: .fontLabel),
 					attributes: menuAction.attributes,
 					handler: { _ in menuAction.action(index) }
 				)

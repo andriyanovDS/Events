@@ -34,14 +34,10 @@ class ListModalView: BottomModalView {
       style: .bold
     )
     titleLabel.textAlignment = .center
-    styleIcon(
-      button: closeButton,
-      iconCode: "close",
-      size: 20,
-      color: .grayButtonDarkFont
+    closeButton.setIcon(
+      Icon(material: "cancel", sfSymbol: "xmark.circle.fill"),
+      size: 30.0
     )
-    closeButton.backgroundColor = .grayButtonBackground
-    closeButton.layer.cornerRadius = 15
 
     styleText(
       button: submitButton,
@@ -62,7 +58,7 @@ class ListModalView: BottomModalView {
 		super.setupConstraints()
     titleLabel.top(10).centerHorizontally()
     closeButton.CenterY == titleLabel.CenterY
-    closeButton.right(10).size(30)
+    closeButton.right(10).size(44)
     listView.Top == titleLabel.Bottom + 15
     listView.left(0).right(0)
     submitButton.left(10).right(10)

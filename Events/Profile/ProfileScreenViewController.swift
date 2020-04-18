@@ -17,7 +17,7 @@ class ProfileScreenViewController: UIViewController, ViewModelBased {
 	private let disposeBag = DisposeBag()
 	
 	private struct Action {
-		let iconName: String
+		let icon: Icon
 		let title: String
 		let action: () -> Void
 	}
@@ -27,17 +27,17 @@ class ProfileScreenViewController: UIViewController, ViewModelBased {
 		
 		actions = [
 			Action(
-				iconName: "event",
+				icon: Icon(material: "event", sfSymbol: "calendar"),
 				title: NSLocalizedString("Create event", comment: "Create an event"),
 				action: viewModel.onCreateEvent
 			),
 			Action(
-				iconName: "card.travel",
+				icon: Icon(material: "card.travel", sfSymbol: "briefcase"),
 				title: NSLocalizedString("Created events", comment: "Profile screen: created events"),
 				action: viewModel.openCreatedEvents
 			),
 			Action(
-				iconName: "settings",
+				icon: Icon(material: "settings", sfSymbol: "gear"),
 				title: NSLocalizedString("Settings", comment: "User settings"),
 				action: viewModel.openUserDetails
 			)
@@ -85,7 +85,7 @@ class ProfileScreenViewController: UIViewController, ViewModelBased {
 			let button = ProfileActionButton(
 				labelText: v.title,
 				subtitleText: nil,
-				iconName: v.iconName
+				icon: v.icon
 			)
 			button.rx.tap
 				.subscribe(onNext: { v.action() })

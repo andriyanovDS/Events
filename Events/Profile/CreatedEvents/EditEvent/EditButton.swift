@@ -18,64 +18,7 @@ class EditButton: UIButtonScaleOnPress {
   }
 	
 	private let valueLabel = UILabel()
-	private let iconLabel = UILabel()
-	
-	enum SelectedState {
-		case selected, notSelected
-		
-		static func fromBool(_ value: Bool) -> Self {
-			return value ? .selected : .notSelected
-		}
-		
-		var color: UIColor {
-			switch self {
-			case .selected:
-				return .blueButtonBackground
-			case .notSelected:
-				return .grayButtonBackground
-			}
-		}
-	}
-	
-	enum EditButtonType {
-		case
-			access(isPrivate: Bool),
-			date(dateLabelText: String),
-			category(categoryId: CategoryId)
-		
-		var labelText: String {
-			switch self {
-			case .access(let isPublic):
-				return isPublic ? "Public" : "Private"
-			case .date(let dateLabelText):
-				return dateLabelText
-			case .category(let categoryId):
-				return categoryId.translatedLabel()
-			}
-		}
-		
-		var iconCode: String? {
-			switch self {
-			case .access:
-				return "person"
-			case .date:
-				return "today"
-			case .category:
-				return nil
-			}
-		}
-		
-		var state: SelectedState {
-			switch self {
-			case .access(let isPublic):
-				return SelectedState.fromBool(!isPublic)
-			case .date:
-				return .selected
-			case .category:
-				return .selected
-			}
-		}
-	}
+	private lazy var iconImageView = UIImageView()
 	
 	init(type: EditButtonType) {
 		self.type = type
@@ -91,7 +34,7 @@ class EditButton: UIButtonScaleOnPress {
 		let stateColor = type.state.color
 		layer.borderColor = stateColor.cgColor
 		valueLabel.textColor = stateColor
-		iconLabel.textColor = stateColor
+    iconImageView.tintColor = stateColor
 	}
 	
 	private func setupView() {
@@ -112,19 +55,73 @@ class EditButton: UIButtonScaleOnPress {
     sv(valueLabel)
     valueLabel.right(10).top(6).bottom(6)
 
-		if let iconCode = type.iconCode {
-			styleIcon(
-				label: iconLabel,
-				iconCode: iconCode,
-				size: 14,
-				color: stateColor
-			)
-			sv(iconLabel)
-      iconLabel.size(14)
-      iconLabel.left(10).CenterY == valueLabel.CenterY
-      valueLabel.Left == iconLabel.Right + 6
+		if let icon = type.iconCode {
+      iconImageView.setIcon(icon, size: 14, color: stateColor)
+			sv(iconImageView)
+      iconImageView.size(14)
+      iconImageView.left(10).CenterY == valueLabel.CenterY
+      valueLabel.Left == iconImageView.Right + 6
     } else {
       valueLabel.left(10)
     }
 	}
+}
+
+extension EditButton {
+  enum SelectedState {
+    case selected, notSelected
+    
+    static func fromBool(_ value: Bool) -> Self {
+      return value ? .selected : .notSelected
+    }
+    
+    var color: UIColor {
+      switch self {
+      case .selected:
+        return .blueButtonBackground
+      case .notSelected:
+        return .grayButtonBackground
+      }
+    }
+  }
+  
+  enum EditButtonType {
+    case
+    access(isPrivate: Bool),
+    date(dateLabelText: String),
+    category(categoryId: CategoryId)
+    
+    var labelText: String {
+      switch self {
+      case .access(let isPublic):
+        return isPublic ? "Public" : "Private"
+      case .date(let dateLabelText):
+        return dateLabelText
+      case .category(let categoryId):
+        return categoryId.translatedLabel()
+      }
+    }
+    
+    var iconCode: Icon? {
+      switch self {
+      case .access:
+        return Icon(code: "person")
+      case .date:
+        return Icon(material: "today", sfSymbol: "calendar")
+      case .category:
+        return nil
+      }
+    }
+    
+    var state: SelectedState {
+      switch self {
+      case .access(let isPublic):
+        return SelectedState.fromBool(!isPublic)
+      case .date:
+        return .selected
+      case .category:
+        return .selected
+      }
+    }
+  }
 }

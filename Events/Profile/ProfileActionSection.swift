@@ -14,7 +14,7 @@ class ProfileActionButton: UIButton {
   
   let labelText: String
   let subtitleText: String?
-  let iconName: String
+  let icon: Icon
   
   let label = UILabel()
   let iconImageView = UIImageView()
@@ -30,10 +30,10 @@ class ProfileActionButton: UIButton {
     }
   }
   
-  init(labelText: String, subtitleText: String?, iconName: String) {
+  init(labelText: String, subtitleText: String?, icon: Icon) {
     self.labelText = labelText
     self.subtitleText = subtitleText
-    self.iconName = iconName
+    self.icon = icon
     super.init(frame: CGRect())
     setupView()
   }
@@ -80,14 +80,7 @@ class ProfileActionButton: UIButton {
   }
   
   private func setupIcon() {
-    let image = UIImage(
-      from: .materialIcon,
-      code: iconName,
-      textColor: UIColor.fontLabel,
-      backgroundColor: .clear,
-      size: CGSize(width: 35, height: 35)
-    )
-    iconImageView.image = image
+    iconImageView.setIcon(icon, size: 35)
     iconImageView
       .right(0)
       .centerVertically(0)

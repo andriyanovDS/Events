@@ -16,7 +16,7 @@ class CreatedEventNode: ASDisplayNode {
 	var undoActionNode = UndoActionNode()
 	private var isLoadingInProgress: Bool = true
 	private let loadingNode: ASDisplayNode
-	private let searchIcon = ASTextNode()
+	private let searchIconImageNode = ASImageNode()
 	private var isUndoActionRequired: Bool = false {
 		didSet {
 			undoActionNode.isUserInteractionEnabled = isUndoActionRequired
@@ -38,7 +38,8 @@ class CreatedEventNode: ASDisplayNode {
 	override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
 		let searchFieldWithIcon = ASStackLayoutSpec.horizontal()
 		searchFieldWithIcon.alignItems = .center
-		searchFieldWithIcon.children = [searchIcon, searchTextField]
+    searchIconImageNode.style.preferredSize = CGSize(width: 26, height: 26)
+		searchFieldWithIcon.children = [searchIconImageNode, searchTextField]
 		searchTextField.style.flexGrow = 1
 		let searchFieldSpec = ASBackgroundLayoutSpec(
 			child: ASInsetLayoutSpec(
@@ -176,11 +177,9 @@ class CreatedEventNode: ASDisplayNode {
 			color: .fontLabel,
 			style: .medium
 		)
-		searchIcon.attributedText = NSAttributedString(
-			string: String.fontMaterialIcon("search")!,
-			attributes: [
-				NSAttributedString.Key.font: UIFont.icon(from: .materialIcon, ofSize: 26.0),
-				NSAttributedString.Key.foregroundColor: UIColor.fontLabel
-			])
+    searchIconImageNode.contentMode = .center
+   
+    searchIconImageNode.image = Icon(material: "search", sfSymbol: "magnifyingglass")
+      .image(withSize: 26, andColor: .fontLabel)
 	}
 }

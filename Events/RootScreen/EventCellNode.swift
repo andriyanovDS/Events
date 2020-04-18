@@ -1,5 +1,5 @@
 //
-//  EventCellView.swift
+//  EventCellNode.swift
 //  Events
 //
 //  Created by Дмитрий Андриянов on 17/03/2020.
@@ -35,7 +35,7 @@ class EventCellNode: ASCellNode {
 		)
   }
 
-  init(event: Event, author: User) {
+  init(event: Event, author: User, reusablePinIcon: UIImage) {
     self.event = event
     self.author = author
     locationBackgroundNode = ASDisplayNode(viewBlock: {
@@ -54,6 +54,8 @@ class EventCellNode: ASCellNode {
       color: .fontLabel,
       style: .bold
     )
+    locationIconImageNode.tintColor = .highlightBlue
+    locationIconImageNode.image = reusablePinIcon
 		[eventImageNode, authorAvatarImageNode].forEach { v in
 			v.backgroundColor = .skeletonBackground
 			v.cornerRadius = 10
@@ -147,13 +149,7 @@ class EventCellNode: ASCellNode {
       style: .medium
     )
     locationTextNode.maximumNumberOfLines = 1
-    locationIconImageNode.image = UIImage(
-      from: .materialIcon,
-      code: "location.on",
-      textColor: .accent,
-      backgroundColor: .clear,
-      size: CGSize(width: 30, height: 30)
-    )
+    locationIconImageNode.contentMode = .center
     locationIconImageNode.isLayerBacked = true
   }
 

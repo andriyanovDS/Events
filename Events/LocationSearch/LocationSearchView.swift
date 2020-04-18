@@ -31,7 +31,10 @@ class LocationSearchView: UIView {
 			return nil
 		}
 		let button = UIButtonScaleOnPress()
-    styleIcon(button: button, iconCode: "gps.fixed", size: 26, color: .fontLabel)
+    button.setIcon(
+      Icon(material: "gps.fixed", sfSymbol: "location.circle"),
+      size: 26
+    )
 		textField.sv(button)
 		button.right(10).centerVertically()
 		deviceLocationButton = button

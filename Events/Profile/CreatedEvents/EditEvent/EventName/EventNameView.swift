@@ -70,12 +70,10 @@ class EventNameView: UIView {
 			color: .fontLabel,
 			style: .regular
 		)
-		
-		closeButton.style { v in
-			styleIcon(button: v, iconCode: "close", size: 20.0, color: .grayButtonDarkFont)
-			v.backgroundColor = .grayButtonBackground
-			v.layer.cornerRadius = 15
-		}
+    closeButton.setIcon(
+      Icon(material: "cancel", sfSymbol: "xmark.circle.fill"),
+      size: 30.0
+    )
 		contentView.sv([titleLabel, closeButton, nameTextView, submitButton])
 		sv(contentView)
 	}
@@ -87,8 +85,8 @@ class EventNameView: UIView {
 		titleLabel.top(20).centerHorizontally()
 		closeButton
 			.right(20)
-			.width(30)
-			.height(30)
+			.width(44)
+			.height(44)
 			.CenterY == titleLabel.CenterY
 		nameTextView.left(10).right(10).Top == titleLabel.Bottom + 20
 		nameTextView.Bottom == submitButton.Top - 15

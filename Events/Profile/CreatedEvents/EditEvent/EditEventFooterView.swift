@@ -10,7 +10,7 @@ import UIKit
 import Stevia
 
 struct EditEventFooterButton {
-  let iconCode: String
+  let icon: Icon
   let button: UIButton
 }
 
@@ -57,7 +57,7 @@ class EditEventFooterView: UIView {
     buttonsStackView.spacing = 5
     buttonsStackView.alignment = .center
     buttons.forEach { v in
-      styleIcon(button: v.button, iconCode: v.iconCode, size: 24, color: .grayButtonDarkFont)
+      v.button.setIcon(v.icon, size: 24, color: UIColor.grayButtonDarkFont)
       v.button.translatesAutoresizingMaskIntoConstraints = false
       v.button.width(40).height(40)
       buttonsStackView.addArrangedSubview(v.button)

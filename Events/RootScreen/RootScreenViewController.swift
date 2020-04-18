@@ -19,6 +19,7 @@ class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased
     }
   }
 	let loadImage: (_: LoadImageParams) -> Promise<UIImage>
+  private let reusablePinIcon: UIImage
 	
 	struct LoadImageParams {
 		let url: String
@@ -26,6 +27,8 @@ class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased
 	}
 
   init() {
+    reusablePinIcon = Icon(material: "location.on", sfSymbol: "mappin.and.ellipse")
+      .image(withSize: 30, andColor: .highlightBlue)!
 		loadImage = memoizeWith(
 			callback: { (params: LoadImageParams) -> Promise<UIImage> in
 				ExternalImageCache.shared.loadImage(by: params.url)
@@ -80,11 +83,12 @@ extension RootScreenViewController: ASTableDataSource {
 
   func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
     let event = viewModel.eventList[indexPath.item]
+    let pinIcon = reusablePinIcon
     guard let author = viewModel.author(id: event.author) else {
       fatalError("Event must have author")
     }
     let block = {() -> EventCellNode in
-      let cell = EventCellNode(event: event, author: author)
+      let cell = EventCellNode(event: event, author: author, reusablePinIcon: pinIcon)
       cell.delegate = self
       return cell
     }

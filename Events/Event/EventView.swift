@@ -57,12 +57,12 @@ class EventView: UIView {
     infoSections = [
       EventInfoSection(
         title: NSLocalizedString("When", comment: "Event info section title: date"),
-        iconCode: "today",
+        iconCode: Icon(material: "today", sfSymbol: "calendar"),
         value: dataSource.event.dateLabelText
       ),
       EventInfoSection(
         title: NSLocalizedString("Duration", comment: "Event info section title: time"),
-        iconCode: "schedule",
+        iconCode: Icon(material: "schedule", sfSymbol: "clock"),
         value: dataSource.event.duration.localizedLabel
       )
     ]
