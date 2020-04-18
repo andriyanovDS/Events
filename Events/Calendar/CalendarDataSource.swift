@@ -15,8 +15,9 @@ class CalendarDataSource: NSObject {
     didSet { isFromDateInPast = false }
   }
   private(set) var selectedDateTo: Date?
-  private let today = Date()
+  private let today: Date
   private(set) var months: [Month] = []
+  private let offsetTimeInterval: TimeInterval
   var activeMonthIndex: Int {
     guard let dateFrom = selectedDateFrom else {
       return months.firstIndex(where: {  $0.distanceFromCurrentMonth == 0 })!
@@ -30,6 +31,10 @@ class CalendarDataSource: NSObject {
   }
   
   init(selectedDates: SelectedDates, minMonthsToDisplay: Int = 5) {
+    today = Date()
+    offsetTimeInterval = TimeInterval(
+      TimeZone.current.secondsFromGMT(for: today)
+    )
     selectedDateFrom = selectedDates.from
     selectedDateTo = selectedDates.to
     super.init()
@@ -107,6 +112,7 @@ class CalendarDataSource: NSObject {
     for day in daysInMonth {
       let date = Calendar.current
         .date(byAdding: .day, value: day - 1, to: startOfMonth)!
+        .addingTimeInterval(offsetTimeInterval)
       let isToday = Calendar.current.isDateInToday(date)
       let day = Day(
         dayOfMonth: day,
