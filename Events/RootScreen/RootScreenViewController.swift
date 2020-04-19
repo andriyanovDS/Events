@@ -12,13 +12,9 @@ import Stevia
 import Promises
 import AsyncDisplayKit
 
-class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased, EventCellNodeDelegate {
-  var viewModel: RootScreenViewModel! {
-    didSet {
-      viewModel.delegate = self
-    }
-  }
-	let loadImage: (_: LoadImageParams) -> Promise<UIImage>
+class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased {
+  var viewModel: RootScreenViewModel!
+	private let loadImage: (_: LoadImageParams) -> Promise<UIImage>
   private let reusablePinIcon: UIImage
 	
 	struct LoadImageParams {
@@ -56,6 +52,8 @@ class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    viewModel.delegate = self
+    viewModel.loadEventList()
     node.eventTableNode.dataSource = self
     node.eventTableNode.delegate = self
   }
@@ -71,7 +69,7 @@ class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased
 }
 
 extension RootScreenViewController: RootScreenViewModelDelegate {
-  func onAppendEventList(_ newData: [Event]) {
+  func reloadList() {
     node.eventTableNode.reloadData()
   }
 }
@@ -84,12 +82,31 @@ extension RootScreenViewController: ASTableDataSource {
   func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
     let event = viewModel.eventList[indexPath.item]
     let pinIcon = reusablePinIcon
-    guard let author = viewModel.author(id: event.author) else {
-      fatalError("Event must have author")
-    }
-    let block = {() -> EventCellNode in
-      let cell = EventCellNode(event: event, author: author, reusablePinIcon: pinIcon)
-      cell.delegate = self
+    let authorOptional = viewModel.authors[event.author]
+    let block = {[unowned self] () -> EventCellNode in
+      let cell = EventCellNode(sharedId: event.id, reusablePinIcon: pinIcon)
+      cell.setNameNodeText(event.name)
+      cell.setLocationNodeText(event.location.fullName)
+      cell.setDateNodeText(event.dateLabelText)
+      if let author = authorOptional {
+        cell.setUserNameNodeText(author.fullName)
+      }
+      if let url = event.mainImageUrl {
+        cell.loadMainImage = {[unowned self] in
+          return self.loadImage(LoadImageParams(
+            url: url,
+            size: EventCellNode.Constants.eventImageSize
+          ))
+        }
+      }
+      if let avatarUrl = authorOptional?.avatar {
+        cell.loadAvatarImage = {[unowned self] in
+          self.loadImage(LoadImageParams(
+            url: avatarUrl,
+            size: EventCellNode.Constants.authorImageSize
+          ))
+        }
+      }
       return cell
     }
     return block

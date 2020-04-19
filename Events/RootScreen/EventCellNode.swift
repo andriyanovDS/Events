@@ -13,10 +13,12 @@ import AsyncDisplayKit
 import func AVFoundation.AVMakeRect
 
 class EventCellNode: ASCellNode {
-  weak var delegate: EventCellNodeDelegate?
+  typealias LoadImageCallback = () -> Promise<UIImage>
+  
+  let sharedId: String
   let eventImageNode = ASImageNode()
-  private let event: Event
-  private let author: User
+  var loadMainImage: LoadImageCallback?
+  var loadAvatarImage: LoadImageCallback?
   private let nameTextNode = ASTextNode()
   private let locationTextNode = ASTextNode()
   private let locationIconImageNode = ASImageNode()
@@ -35,9 +37,8 @@ class EventCellNode: ASCellNode {
 		)
   }
 
-  init(event: Event, author: User, reusablePinIcon: UIImage) {
-    self.event = event
-    self.author = author
+  init(sharedId: String, reusablePinIcon: UIImage) {
+    self.sharedId = sharedId
     locationBackgroundNode = ASDisplayNode(viewBlock: {
       RoundedView(
         cornerRadii: CGSize(width: 10, height: 10),
@@ -47,13 +48,6 @@ class EventCellNode: ASCellNode {
     super.init()
     automaticallyManagesSubnodes = true
 
-    styleLayerBackedText(
-      textNode: nameTextNode,
-      text: event.name,
-      size: 22,
-      color: .fontLabel,
-      style: .bold
-    )
     locationIconImageNode.tintColor = .highlightBlue
     locationIconImageNode.image = reusablePinIcon
 		[eventImageNode, authorAvatarImageNode].forEach { v in
@@ -63,18 +57,57 @@ class EventCellNode: ASCellNode {
 		}
     setupLocationSection()
     setupAuthorSection()
-    setupDateSection()
   }
 
   override func didLoad() {
     super.didLoad()
 		locationBackgroundNode.backgroundColor = .clear
-    eventImageNode.view.hero.id = event.id
+    eventImageNode.view.hero.id = sharedId
   }
 
   override func layout() {
     super.layout()
     backgroundColor = .background
+  }
+  
+  func setNameNodeText(_ text: String) {
+    styleLayerBackedText(
+      textNode: nameTextNode,
+      text: text,
+      size: 22,
+      color: .fontLabel,
+      style: .bold
+    )
+  }
+  
+  func setLocationNodeText(_ text: String) {
+    styleLayerBackedText(
+      textNode: locationTextNode,
+      text: text,
+      size: 18,
+      color: .fontLabel,
+      style: .medium
+    )
+  }
+  
+  func setUserNameNodeText(_ text: String) {
+    styleLayerBackedText(
+      textNode: authorNameTextNode,
+      text: text,
+      size: 18,
+      color: .fontLabel,
+      style: .medium
+    )
+  }
+  
+  func setDateNodeText(_ text: String) {
+    styleLayerBackedText(
+      textNode: dateTextNode,
+      text: text,
+      size: 18,
+      color: .fontLabel,
+      style: .medium
+    )
   }
 
   override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
@@ -132,8 +165,12 @@ class EventCellNode: ASCellNode {
   }
 
   override func didEnterVisibleState() {
-    loadMainImage()
-		loadAvatarImage()
+    loadMainImage?().then {[weak self] image in
+      self?.setLoadedEventImage(image)
+    }
+    loadAvatarImage?().then {[weak self] image in
+      self?.setLoadedAvatarImage(image)
+    }
   }
 	
 	override func didExitVisibleState() {
@@ -141,39 +178,15 @@ class EventCellNode: ASCellNode {
 	}
 
   private func setupLocationSection() {
-    styleLayerBackedText(
-      textNode: locationTextNode,
-      text: event.location.fullName,
-      size: 18,
-      color: .fontLabel,
-      style: .medium
-    )
     locationTextNode.maximumNumberOfLines = 1
     locationIconImageNode.contentMode = .center
     locationIconImageNode.isLayerBacked = true
   }
 
   private func setupAuthorSection() {
-    styleLayerBackedText(
-      textNode: authorNameTextNode,
-      text: author.fullName,
-      size: 18,
-      color: .fontLabel,
-      style: .medium
-    )
     authorNameTextNode.maximumNumberOfLines = 1
     authorAvatarImageNode.contentMode = .scaleAspectFill
     authorAvatarImageNode.clipsToBounds = true
-  }
-
-  private func setupDateSection() {
-    styleLayerBackedText(
-      textNode: dateTextNode,
-      text: event.dateLabelText,
-      size: 18,
-      color: .fontLabel,
-      style: .medium
-    )
   }
 
   private func setLoadedEventImage(_ image: UIImage) {
@@ -203,32 +216,4 @@ class EventCellNode: ASCellNode {
 		authorAvatarImageNode.cornerRoundingType = .precomposited
 		authorAvatarImageNode.image = image
 	}
-
-  private func loadMainImage() {
-    guard let url = event.mainImageUrl, let delegate = delegate else { return }
-    delegate
-			.loadImage(RootScreenViewController.LoadImageParams(
-				url: url,
-				size: Constants.eventImageSize
-			))
-      .then {[weak self] image in
-        self?.setLoadedEventImage(image)
-      }
-  }
-	
-	private func loadAvatarImage() {
-		guard let url = author.avatar, let delegate = delegate else { return }
-		delegate
-			.loadImage(RootScreenViewController.LoadImageParams(
-				url: url,
-				size: Constants.authorImageSize
-			))
-			.then {[weak self] image in
-				self?.setLoadedAvatarImage(image)
-			}
-	}
-}
-
-protocol EventCellNodeDelegate: class {
-	var loadImage: (_: RootScreenViewController.LoadImageParams) -> Promise<UIImage> { get }
 }

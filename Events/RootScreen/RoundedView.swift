@@ -1,5 +1,5 @@
 //
-//  EventCellImageBackground.swift
+//  RoundedView.swift
 //  Events
 //
 //  Created by Дмитрий Андриянов on 19/03/2020.

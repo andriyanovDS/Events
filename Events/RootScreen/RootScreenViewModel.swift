@@ -17,23 +17,23 @@ import AVFoundation
 class RootScreenViewModel: Stepper {
   let steps = PublishRelay<Step>()
   weak var delegate: RootScreenViewModelDelegate?
-  var eventList: [Event] { _eventList }
-  private var authors: [String: User] = [:]
+  private(set) var authors: [String: User] = [:]
   private lazy var firestoreDb = Firestore.firestore()
-  private var _eventList: [Event] = [] {
-    didSet {
-      delegate?.onAppendEventList(
-        Array(_eventList.dropFirst(oldValue.count))
-      )
-    }
+  private(set) var eventList: [Event] = [] {
+    didSet { self.delegate?.reloadList() }
   }
-
-  init() {
-    loadEventList()
-  }
-
-  func author(id: String) -> User? {
-    authors[id]
+  
+  func loadEventList() {
+    firestoreDb
+      .collection("event-list")
+      .whereField("isRemoved", isEqualTo: false)
+      .getDocuments()
+      .then {[weak self] (events: [Event]) in
+        guard let self = self else { return }
+        self.eventList = events
+        self.loadAuthors(ids: events.map { $0.author })
+      }
+      .catch { print($0.localizedDescription) }
   }
 
   func openEvent(at index: Int, sharedImage: UIImage?) {
@@ -46,63 +46,21 @@ class RootScreenViewModel: Stepper {
 		))
   }
 
-  private func loadAuthors(ids: [String]) -> Promise<[User]> {
-    Promise(on: .global()) { resolve, reject in
-      self.firestoreDb
-        .collection("user_details")
-        .whereField("id", in: ids)
-        .getDocuments(completion: { snapshot, error in
-          if let error = error {
-            reject(error)
-            return
-          }
-          do {
-            guard let documents = snapshot?.documents else {
-              print("Empty snapshot for user_details collection")
-              return
-            }
-            let users = try documents.compactMap {
-              try $0.data(as: User.self)
-            }
-            resolve(users)
-          } catch {
-            reject(error)
-          }
-        })
-      }
-  }
-
-  private func loadEventList() {
+  private func loadAuthors(ids: [String]) {
+    guard !ids.isEmpty else { return }
     firestoreDb
-      .collection("event-list")
-		  .whereField("isRemoved", isEqualTo: false)
-      .getDocuments(completion: {[weak self] snapshot, error in
+      .collection("user_details")
+      .whereField("id", in: ids)
+      .getDocuments()
+      .then {[weak self] (users: [User]) in
         guard let self = self else { return }
-        if let error = error {
-          // TODO: handle error on UI
-          print("error", error.localizedDescription)
-          return
-        }
-        guard let documents = snapshot?.documents else {
-          print("Empty snapshot for event-list collection")
-          return
-        }
-        Promise<Void>(on: .global()) {
-          let list = try documents.compactMap {
-             try $0.data(as: Event.self)
-           }
-          if !list.isEmpty {
-            let authors = try await(self.loadAuthors(ids: list.map { $0.author }))
-            authors.forEach { user in self.authors[user.id] = user }
-          }
-          DispatchQueue.main.async {
-            self._eventList = list
-          }
-        }
-    })
+        users.forEach { user in self.authors[user.id] = user }
+        self.delegate?.reloadList()
+      }
+      .catch { print($0.localizedDescription) }
   }
 }
 
 protocol RootScreenViewModelDelegate: class {
-  func onAppendEventList(_: [Event])
+  func reloadList()
 }

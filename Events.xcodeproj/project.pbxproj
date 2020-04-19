@@ -14,6 +14,7 @@
 		0A3A48762448B37F00B7BFB9 /* CalendarDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3A48752448B37F00B7BFB9 /* CalendarDayCell.swift */; };
 		0A3A48782448D4E800B7BFB9 /* CalendarSectionTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3A48772448D4E800B7BFB9 /* CalendarSectionTitleView.swift */; };
 		0A3A4880244A418B00B7BFB9 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3A487F244A418B00B7BFB9 /* Icon.swift */; };
+		0A3D8D66244CC08500801ABF /* FirestoreQuery+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D65244CC08500801ABF /* FirestoreQuery+Promise.swift */; };
 		0A42AF312430E84F00902B35 /* CreatedEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */; };
 		0A42AF332430E85A00902B35 /* CreatedEventsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */; };
 		0A42AF352431048800902B35 /* CreatedEventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */; };
@@ -215,6 +216,7 @@
 		0A3A48752448B37F00B7BFB9 /* CalendarDayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayCell.swift; sourceTree = "<group>"; };
 		0A3A48772448D4E800B7BFB9 /* CalendarSectionTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSectionTitleView.swift; sourceTree = "<group>"; };
 		0A3A487F244A418B00B7BFB9 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
+		0A3D8D65244CC08500801ABF /* FirestoreQuery+Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreQuery+Promise.swift"; sourceTree = "<group>"; };
 		0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsViewController.swift; sourceTree = "<group>"; };
 		0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsNode.swift; sourceTree = "<group>"; };
 		0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsViewModel.swift; sourceTree = "<group>"; };
@@ -896,6 +898,7 @@
 				0A201D7F244250230060C828 /* UIImage+resize.swift */,
 				0AB1DA102443B47900E33F41 /* Observable+Promise.swift */,
 				0AB1DA122443C22300E33F41 /* Observable+Firestore.swift */,
+				0A3D8D65244CC08500801ABF /* FirestoreQuery+Promise.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1279,6 +1282,7 @@
 				74D9655F22F2272D00D828C1 /* UserDetailsView.swift in Sources */,
 				74F0F5632300168900170C6C /* Array.swift in Sources */,
 				0A52F851242AAEC900CACEAF /* EventLocationView.swift in Sources */,
+				0A3D8D66244CC08500801ABF /* FirestoreQuery+Promise.swift in Sources */,
 				7478F50B22F7760E00A43F52 /* UITextFieldExtension+setupLeftView.swift in Sources */,
 				0AFA14AF240518CB00F07E82 /* ObservableType+Nwise.swift in Sources */,
 				74F0F56723008BAC00170C6C /* HintView.swift in Sources */,
