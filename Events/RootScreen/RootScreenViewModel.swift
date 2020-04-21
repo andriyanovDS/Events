@@ -19,9 +19,7 @@ class RootScreenViewModel: Stepper {
   weak var delegate: RootScreenViewModelDelegate?
   private(set) var authors: [String: User] = [:]
   private lazy var firestoreDb = Firestore.firestore()
-  private(set) var eventList: [Event] = [] {
-    didSet { self.delegate?.reloadList() }
-  }
+  private(set) var eventList: [Event] = []
   
   func loadEventList() {
     firestoreDb
@@ -31,6 +29,10 @@ class RootScreenViewModel: Stepper {
       .then {[weak self] (events: [Event]) in
         guard let self = self else { return }
         self.eventList = events
+        let indexPaths = events
+          .enumerated()
+          .map {(index, _) in IndexPath(item: index, section: 0)}
+        self.delegate?.viewModel(self, didAddEventsAt: indexPaths)
         self.loadAuthors(ids: events.map { $0.author })
       }
       .catch { print($0.localizedDescription) }
@@ -55,12 +57,16 @@ class RootScreenViewModel: Stepper {
       .then {[weak self] (users: [User]) in
         guard let self = self else { return }
         users.forEach { user in self.authors[user.id] = user }
-        self.delegate?.reloadList()
+        let indexPaths = self.eventList
+          .enumerated()
+          .map {(index, _) in IndexPath(item: index, section: 0)}
+        self.delegate?.viewModel(self, didUpdateAuthorsAt: indexPaths)
       }
       .catch { print($0.localizedDescription) }
   }
 }
 
 protocol RootScreenViewModelDelegate: class {
-  func reloadList()
+  func viewModel(_ viewModel: RootScreenViewModel, didAddEventsAt: [IndexPath])
+  func viewModel(_ viewModel: RootScreenViewModel, didUpdateAuthorsAt: [IndexPath])
 }

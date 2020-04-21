@@ -66,11 +66,48 @@ class RootScreenViewController: ASViewController<RootScreenNode>, ViewModelBased
   private func setupView() {
     node.eventTableNode.dataSource = self
   }
+  
+  private func configureCellNode(_ cell: EventCellNode, event: Event, author: User?) {
+    cell.setNameNodeText(event.name)
+    cell.setLocationNodeText(event.location.fullName)
+    cell.setDateNodeText(event.dateLabelText)
+    if let author = author {
+      cell.setUserNameNodeText(author.fullName)
+    }
+    if cell.loadMainImage == nil, let url = event.mainImageUrl {
+      cell.loadMainImage = {[unowned self] in
+        return self.loadImage(LoadImageParams(
+          url: url,
+          size: EventCellNode.Constants.eventImageSize
+        ))
+      }
+    }
+    if cell.loadAvatarImage == nil, let avatarUrl = author?.avatar {
+      cell.loadAvatarImage = {[unowned self] in
+        self.loadImage(LoadImageParams(
+          url: avatarUrl,
+          size: EventCellNode.Constants.authorImageSize
+        ))
+      }
+    }
+  }
 }
 
 extension RootScreenViewController: RootScreenViewModelDelegate {
-  func reloadList() {
-    node.eventTableNode.reloadData()
+  func viewModel(_ viewModel: RootScreenViewModel, didAddEventsAt indexPaths: [IndexPath]) {
+    node.eventTableNode.performBatchUpdates({
+      node.eventTableNode.insertRows(at: indexPaths, with: .bottom)
+    }, completion: nil)
+  }
+  
+  func viewModel(_ viewModel: RootScreenViewModel, didUpdateAuthorsAt indexPaths: [IndexPath]) {
+    indexPaths.forEach { indexPath in
+      let cellOptional = node.eventTableNode.nodeForRow(at: indexPath)
+      guard let cell = cellOptional as? EventCellNode else { return }
+      let event = viewModel.eventList[indexPath.item]
+      configureCellNode(cell, event: event, author: viewModel.authors[event.author])
+      cell.forceAvatarLoading()
+    }
   }
 }
 
@@ -85,28 +122,7 @@ extension RootScreenViewController: ASTableDataSource {
     let authorOptional = viewModel.authors[event.author]
     let block = {[unowned self] () -> EventCellNode in
       let cell = EventCellNode(sharedId: event.id, reusablePinIcon: pinIcon)
-      cell.setNameNodeText(event.name)
-      cell.setLocationNodeText(event.location.fullName)
-      cell.setDateNodeText(event.dateLabelText)
-      if let author = authorOptional {
-        cell.setUserNameNodeText(author.fullName)
-      }
-      if let url = event.mainImageUrl {
-        cell.loadMainImage = {[unowned self] in
-          return self.loadImage(LoadImageParams(
-            url: url,
-            size: EventCellNode.Constants.eventImageSize
-          ))
-        }
-      }
-      if let avatarUrl = authorOptional?.avatar {
-        cell.loadAvatarImage = {[unowned self] in
-          self.loadImage(LoadImageParams(
-            url: avatarUrl,
-            size: EventCellNode.Constants.authorImageSize
-          ))
-        }
-      }
+      self.configureCellNode(cell, event: event, author: authorOptional)
       return cell
     }
     return block

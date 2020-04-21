@@ -70,6 +70,12 @@ class EventCellNode: ASCellNode {
     backgroundColor = .background
   }
   
+  func forceAvatarLoading() {
+    loadAvatarImage?().then {[weak self] image in
+      self?.setLoadedAvatarImage(image)
+    }
+  }
+  
   func setNameNodeText(_ text: String) {
     styleLayerBackedText(
       textNode: nameTextNode,
@@ -190,25 +196,11 @@ class EventCellNode: ASCellNode {
   }
 
   private func setLoadedEventImage(_ image: UIImage) {
-		if isEventImageLoaded {
-			eventImageNode.image = image
-			return
-		}
+    eventImageNode.image = image
+		guard !isEventImageLoaded else { return }
 		isEventImageLoaded = true
 		eventImageNode.backgroundColor = .background
 		eventImageNode.cornerRoundingType = .precomposited
-    DispatchQueue.main.async {
-			UIView.transition(
-				with: self.eventImageNode.view,
-				duration: 0.5,
-				options: [.curveEaseOut, .transitionCrossDissolve],
-				animations: {
-					self.eventImageNode.image = image
-					self.setNeedsLayout()
-				},
-				completion: nil
-			)
-		}
   }
 	
 	private func setLoadedAvatarImage(_ image: UIImage) {
