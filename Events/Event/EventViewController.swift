@@ -10,22 +10,25 @@ import UIKit
 import Promises
 import AsyncDisplayKit
 
-class EventViewController: UIViewController, EventNodeDataSource {
+class EventViewController: UIViewController {
 	var viewModel: EventViewModel
   let sharedImage: UIImage?
 	var isInsideContextMenu: Bool
-	var event: Event { viewModel.event }
-	var author: User { viewModel.author }
 	var isCloseAnimationInProgress: Bool = false
-	var userFollowEventState: EventViewController.FollowEventState = .inProgress
 	var contextMenuImage: UIImage? { eventView?.eventImageView.image }
 	
   private var eventView: EventView?
+  private let configurator: EventViewConfigurator
 	private var originalViewCenter: CGPoint = CGPoint.zero
 
-	init(viewModel: EventViewModel, sharedImage: UIImage? = nil, isInsideContextMenu: Bool) {
+	init(
+    viewModel: EventViewModel,
+    sharedImage: UIImage? = nil,
+    isInsideContextMenu: Bool
+  ) {
     self.viewModel = viewModel
     self.sharedImage = sharedImage
+    configurator = EventViewConfigurator(dataSource: viewModel)
 		self.isInsideContextMenu = isInsideContextMenu
     super.init(nibName: nil, bundle: nil)
   }
@@ -34,36 +37,6 @@ class EventViewController: UIViewController, EventNodeDataSource {
     fatalError("init(coder:) has not been implemented")
   }
 	
-	enum FollowEventState {
-		case followed, notFollowed, inProgress
-		
-		var iconColor: UIColor {
-			switch self {
-			case .followed:
-				return .destructive
-			case .notFollowed:
-				return .fontLabelInverted
-			case .inProgress:
-				return .clear
-			}
-		}
-		
-		var iconName: String? {
-			switch self {
-			case .followed:
-				return String.fontMaterialIcon("favorite")
-			case .notFollowed:
-				return String.fontMaterialIcon("favorite.border")
-			case .inProgress:
-				return nil
-			}
-		}
-		
-		static func fromBool(_ value: Bool) -> Self {
-			value ? .followed : .notFollowed
-		}
-	}
-	
 	struct Constants {
 		static let maxScale: CGFloat = 0.6
 		static let closeAnimationBound: CGFloat = 75.0
@@ -71,11 +44,16 @@ class EventViewController: UIViewController, EventNodeDataSource {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    if !isInsideContextMenu {
+      viewModel.loadUserEvent(completion: {[unowned self] in
+        self.handleUserEventDidLoad()
+      })
+    }
     setupView()
   }
 	
 	func disableSharedAnimationOnViewDisappear() {
-		guard let view = eventView else { return }
+    guard let view = eventView else { return }
 		view.eventImageView.hero.id = nil
 		view.eventImageView.hero.modifiers = nil
 		view.scrollView.hero.modifiers = nil
@@ -87,55 +65,64 @@ class EventViewController: UIViewController, EventNodeDataSource {
 		view.eventImageView.hero.modifiers = [.duration(0.4)]
 		view.hero.modifiers = [.translate(y: 100), .fade, .duration(0.4)]
 	}
+  
+  private func handleUserEventDidLoad() {
+    guard let view = eventView else { return }
+    view
+      .setupHeaderView(configurator: configurator)
+      .setupFooterView(configurator: configurator)
+    
+    view.headerView?.closeButton.addTarget(
+      viewModel,
+      action: #selector(viewModel.onClose),
+      for: .touchUpInside
+    )
+    view.headerView?.followButton.addTarget(
+      self,
+      action: #selector(onPressFollowEventButton),
+      for: .touchUpInside
+    )
+    view.footerView?.joinEventButton.addTarget(
+      self,
+      action: #selector(onPressJoinEventButton),
+      for: .touchUpInside
+    )
+  }
 
   private func setupView() {
-    let eventView = EventView(sharedImage: sharedImage, dataSource: self)
+    let eventView = EventView(sharedImage: sharedImage)
+    eventView.delegate = self
+    eventView
+      .setupMainInfoView(configurator: configurator)
+      .setupAdditionalInfoView(configurator: configurator)
+      .setupDescriptionViews(configurator: configurator)
+      .setupLocationView(configurator: configurator)
+      .setupAuthorView(configurator: configurator)
+    
+    if let url = viewModel.event.mainImageUrl {
+      eventView.eventImageView.fromExternalUrl(
+        url,
+        withResizeTo: EventView.Constants.eventImageSize
+      )
+    }
+    
     setupAppearanceAnimation(view: eventView)
-    eventView.closeButtonView.addTarget(self, action: #selector(onClose), for: .touchUpInside)
-		eventView.footerView.joinEventButton.addTarget(
-			self,
-			action: #selector(onPressJoinEventButton),
-			for: .touchUpInside
-		)
-		eventView.followButtonView.addTarget(
-			self,
-			action: #selector(onPressFollowEventButton),
-			for: .touchUpInside
-		)
 		eventView.scrollView.panGestureRecognizer.addTarget(
 			self,
 			action: #selector(handleScrollViewPanGesture)
 		)
     view = eventView
     self.eventView = eventView
-		viewModel.loadUserEvent()
-			.then {[weak self] userEvent in
-				self?.handleLoadedUserEvent(userEvent)
-			}
   }
-	
-	private func handleLoadedUserEvent(_ userEvent: UserEvent) {
-		let followState = FollowEventState.fromBool(
-			userEvent.isFollow
-		)
-		viewModel.userEvent = userEvent
-		userFollowEventState = followState
-		eventView?.followButtonView.setTitleColor(followState.iconColor, for: .normal)
-		eventView?.followButtonView.setTitle(followState.iconName, for: .normal)
-		eventView?.footerView.joinButtonState = userEvent.isJoin
-			? .joined
-			: .notJoined
-	}
-	
+
 	private func scrollViewPanGestureEnded(translation: CGPoint) {
 		isCloseAnimationInProgress = false
 		if translation.y > Constants.closeAnimationBound {
-			
 			view.topConstraint?.constant = (view.topConstraint?.constant ?? 0) + translation.y
 			view.rightConstraint?.constant = (view.rightConstraint?.constant ?? 0) + translation.x
 			view.leftConstraint?.constant = (view.leftConstraint?.constant ?? 0) + translation.x
 			eventView?.scrollView.hero.modifiers = nil
-			onClose()
+      viewModel.onClose()
 			return
 		}
 
@@ -157,7 +144,7 @@ class EventViewController: UIViewController, EventNodeDataSource {
 		let translation = recognizer.translation(in: scrollView)
 		switch recognizer.state {
 		case .began:
-			if scrollView.contentOffset.y + view.safeAreaInsets.top < 0 {
+			if scrollView.contentOffset.y < 0 {
 				isCloseAnimationInProgress = true
 				originalViewCenter = view.center
 			}
@@ -179,55 +166,31 @@ class EventViewController: UIViewController, EventNodeDataSource {
 			if isCloseAnimationInProgress {
 				scrollViewPanGestureEnded(translation: translation)
 			}
-		default:
-			return
-		}
+		default: return
+    }
 	}
 	
 	@objc private func onPressJoinEventButton() {
-		let currentButtonState = eventView!.footerView.joinButtonState
-		guard currentButtonState != .joinInProgress else {
-			return
-		}
-		eventView?.footerView.joinButtonState = .joinInProgress
-		let value = currentButtonState != .joined
-		viewModel.updateUserEvent(value: ["isJoin": value])
-			.then {[weak self] _ in
-				self?.viewModel.userEvent?.isJoin = value
-				self?.eventView?.footerView.joinButtonState = value
-					? .joined
-					: .notJoined
-			}
-			.catch {[weak self] error in
-				print("Failed to set join event \(error)")
-				self?.eventView?.footerView.joinButtonState = currentButtonState
-			}
+    self.eventView?.footerView?.joinButtonState = .joinInProgress
+    viewModel.toggleJoinEventState {[unowned self] isJoin in
+      self.eventView?.footerView?.joinButtonState = isJoin
+        ? .joined
+        : .notJoined
+    }
 	}
 	
 	@objc private func onPressFollowEventButton() {
-		let currentState = userFollowEventState
-		if userFollowEventState == .inProgress { return }
-		userFollowEventState = .inProgress
-		let nextState: FollowEventState = currentState == .followed
-			? .notFollowed
-			: .followed
-		eventView?.followButtonView.setTitleColor(nextState.iconColor, for: .normal)
-		eventView?.followButtonView.setTitle(nextState.iconName, for: .normal)
-		let value = nextState == .followed
-		viewModel.updateUserEvent(value: ["isFollow": value])
-			.then {[weak self] _ in
-				self?.viewModel.userEvent?.isFollow = value
-				self?.userFollowEventState = nextState
-			}
-			.catch {[weak self] error in
-				print("Failed to set join event \(error)")
-				self?.userFollowEventState = currentState
-				self?.eventView?.followButtonView.setTitleColor(currentState.iconColor, for: .normal)
-				self?.eventView?.followButtonView.setTitle(currentState.iconName, for: .normal)
-			}
+    let currentValue = viewModel.userEvent?.isFollow ?? false
+    eventView?.headerView?.isFollowButtonActive = !currentValue
+    viewModel.toggleFollowEventState {[unowned self] isFollow in
+      self.eventView?.headerView?.isFollowButtonActive = isFollow
+    }
 	}
+}
 
-  @objc private func onClose() {
-    viewModel.onClose()
+extension EventViewController: EventViewDelegate {
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    guard isCloseAnimationInProgress else { return }
+    scrollView.contentOffset.y = 0
   }
 }

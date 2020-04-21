@@ -10,12 +10,12 @@ import UIKit
 import Stevia
 
 class EventFooterView: UIView {
-	let joinEventButton = ButtonScale()
 	var joinButtonState: JoinButtonState {
 		didSet {
 			joinButtonStateDidChange()
 		}
 	}
+  let joinEventButton = ButtonScale()
 	private let priceLabel = UILabel()
 	private let pricePerPerson: Float?
 	lazy var activityIndicatorView: UIView = {
@@ -34,6 +34,12 @@ class EventFooterView: UIView {
 		super.init(frame: CGRect.zero)
 		setupView()
 	}
+  
+  override func didMoveToSuperview() {
+    UIView.animate(withDuration: 0.3, delay: 0.4, animations: {
+      self.alpha = 1
+    })
+  }
 	
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
@@ -66,6 +72,7 @@ class EventFooterView: UIView {
 	}
 	
 	private func setupView() {
+    alpha = 0
 		backgroundColor = .background
 		styleText(
 			label: priceLabel,

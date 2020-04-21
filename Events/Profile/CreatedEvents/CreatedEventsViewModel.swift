@@ -300,7 +300,7 @@ extension CreatedEventsViewModel {
 			let viewController = contextMenuViewController
 			else { return }
 		let sharedImage = viewController.contextMenuImage
-		let event = viewController.event
+    let event = viewController.viewModel.event
 		steps.accept(EventStep.event(event: event, author: author, sharedImage: sharedImage))
 	}
 	

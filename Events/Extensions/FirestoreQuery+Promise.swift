@@ -34,3 +34,26 @@ extension Query {
     }
   }
 }
+
+extension DocumentReference {
+  func getDocument<T: Decodable>() -> Promise<T?> {
+    Promise { resolve, reject in
+      self.getDocument(completion: { snapshot, error in
+        if let error = error {
+          reject(error)
+          return
+        }
+        guard let snapshot = snapshot else {
+          resolve(nil)
+          return
+        }
+        do {
+          let data = try snapshot.data(as: T.self)
+          resolve(data)
+        } catch let decodeError {
+          reject(decodeError)
+        }
+      })
+    }
+  }
+}

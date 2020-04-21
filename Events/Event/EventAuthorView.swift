@@ -9,18 +9,11 @@
 import UIKit
 
 class EventAuthorView: UIStackView {
-	weak var delegate: EventViewSectionDelegate? {
-		didSet {
-			attemptToLoadAvatarImage()
-		}
-	}
-	private let author: User
-	private let titleLabel = UILabel()
-	private let avatarImageView = UIImageView()
-	private let nameLabel = UILabel()
+  let avatarImageView = UIImageView()
+  let nameLabel = UILabel()
+  private let titleLabel = UILabel()
 	
-	init(author: User) {
-		self.author = author
+	init() {
 		super.init(frame: CGRect.zero)
 		setupView()
 	}
@@ -29,21 +22,21 @@ class EventAuthorView: UIStackView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	private struct Constants {
-		static let avatarImageSize: CGFloat = 70.0
+  struct Constants {
+    static let avatarImageSize: CGSize = CGSize(width: 70.0, height: 70.0)
 	}
 	
 	private func setupView() {
 		styleText(
 			label: titleLabel,
-			text: NSLocalizedString("Organizator", comment: "Event user section title"),
+			text: NSLocalizedString("Author", comment: "Event user section title"),
 			size: 20,
 			color: .fontLabel,
 			style: .bold
 		)
 		styleText(
 			label: nameLabel,
-			text: author.fullName,
+			text: "",
 			size: 16,
 			color: .fontLabel,
 			style: .medium
@@ -52,31 +45,18 @@ class EventAuthorView: UIStackView {
 			v.clipsToBounds = true
 			v.backgroundColor = .skeletonBackground
 			v.contentMode = .scaleAspectFill
-			v.layer.cornerRadius = Constants.avatarImageSize / 2.0
-			v.width(Constants.avatarImageSize).height(Constants.avatarImageSize)
+      let size = Constants.avatarImageSize
+      v.layer.cornerRadius = size.width / 2.0
+      v.width(size.width).height(size.height)
 		}
 		
 		axis = .vertical
 		alignment = .leading
 		spacing = 10
+    isLayoutMarginsRelativeArrangement = true
+    layoutMargins = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
 		addArrangedSubview(titleLabel)
 		addArrangedSubview(avatarImageView)
 		addArrangedSubview(nameLabel)
-	}
-	
-	private func attemptToLoadAvatarImage() {
-		guard let url = author.avatar, let delegate = delegate else {
-			return
-		}
-		let size = CGSize(
-			width: Constants.avatarImageSize,
-			height: Constants.avatarImageSize
-		)
-		avatarImageView.fromExternalUrl(
-			url,
-			withResizeTo: size,
-			loadOn: delegate.loadImageQueue,
-			transitionConfig: UIImageView.TransitionConfig(duration: 0.3)
-		)
 	}
 }

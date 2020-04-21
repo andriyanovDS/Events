@@ -11,56 +11,41 @@ import Stevia
 import Promises
 
 class EventDescriptionView: UIStackView {
-	weak var delegate: EventDescriptionDelegate?
-  var isExpanded: Bool {
-    didSet {
-      if isExpanded == oldValue { return }
-			toggleExpand()
-    }
-  }
-  let eventDescription: DescriptionWithImageUrls
   let titleButton = UIButtonScaleOnPress()
-	private var isImageLoadingDidStarted: Bool = false
-  private let descriptionLabel = UILabel()
-  private var imageViews: [UIImageView]
-  private let imageSizes = [
-    Constants.largeImageSize,
-    Constants.smallImageSize,
-    Constants.mediumImageSize
-  ]
-	private var arrangedSubviewsExceptTitle: ArraySlice<UIView> {
-    arrangedSubviews.dropFirst()
-	}
+  let descriptionLabel = UILabel()
+  var startImagesLoading: (() -> Void)!
+  weak var delegate: EventDescriptionDelegate?
+  private var isExpanded: Bool
+  private var isImagesLoadingStarted: Bool = false
+  private var isAnimationInProgress: Bool = false
+  private let imagesStackView = UIStackView()
 
-  private struct Constants {
-    static let largeImageSize = CGSize(
+  struct Constants {
+    private static let largeImageSize = CGSize(
       width: UIScreen.main.bounds.width - 40,
       height: UIScreen.main.bounds.height * 0.35
     )
-    static let mediumImageSize = CGSize(
+    private static let mediumImageSize = CGSize(
       width: UIScreen.main.bounds.width / 2 - 25,
       height: 200
     )
-    static let smallImageSize = CGSize(
+    private static let smallImageSize = CGSize(
       width: UIScreen.main.bounds.width / 2 - 25,
       height: 100
     )
+    private static let imageSizes = [
+      Constants.largeImageSize,
+      Constants.smallImageSize,
+      Constants.mediumImageSize
+    ]
+    
+    static func imageSize(at index: Int) -> CGSize {
+      imageSizes[Int(ceil(Double(index) / 2)) % imageSizes.count]
+    }
   }
 
-  init(description: DescriptionWithImageUrls) {
-    eventDescription = description
-    if description.isMain {
-      imageViews = []
-    } else {
-      imageViews = description.imageUrls.map { _ in
-        let view = UIImageView()
-				view.clipsToBounds = true
-				view.contentMode = .scaleAspectFill
-        view.layer.cornerRadius = 10
-        return view
-      }
-    }
-    isExpanded = description.isMain
+  init(isExpanded: Bool) {
+    self.isExpanded = isExpanded
     super.init(frame: CGRect.zero)
 		setupView()
   }
@@ -69,100 +54,95 @@ class EventDescriptionView: UIStackView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  private func addImageStackView(initialView: UIView) {
+    let stackView = UIStackView()
+    stackView.axis = .horizontal
+    stackView.spacing = 10
+    stackView.distribution = .fill
+    stackView.addArrangedSubview(initialView)
+    imagesStackView.addArrangedSubview(stackView)
+  }
+  
+  private func isStackViewSuitable(_ stackView: UIStackView, for size: CGSize) -> Bool {
+    if stackView.arrangedSubviews.count != 1 { return false }
+    return stackView.arrangedSubviews[0].heightConstraint!.constant == size.height
+  }
+  
+  func addImage(_ image: UIImage, withSize size: CGSize) {
+    let suitableStackView = imagesStackView.arrangedSubviews
+      .compactMap { $0 as? UIStackView }
+      .first(where: { isStackViewSuitable($0, for: size) })
+    
+    let view = UIImageView()
+    view.image = image
+    view.clipsToBounds = true
+    view.contentMode = .scaleAspectFill
+    view.layer.cornerRadius = 10
+    view.width(size.width).height(size.height)
+    
+    guard let stackView = suitableStackView else {
+      addImageStackView(initialView: view)
+      return
+    }
+    stackView.addArrangedSubview(view)
+  }
+
   private func setupView() {
     styleText(
       button: titleButton,
-      text: eventDescription.title ?? NSLocalizedString("What you'll do", comment: "Event description title"),
+      text: "",
       size: 24,
       color: .fontLabel,
       style: .bold
     )
     styleText(
       label: descriptionLabel,
-      text: eventDescription.text,
+      text: "",
       size: 18,
       color: .fontLabel,
       style: .medium
     )
+    
+    axis = .vertical
+    spacing = 8
+    alignment = .leading
+    
 		descriptionLabel.numberOfLines = 0
-		spacing = 10
-		axis = .vertical
-		alignment = .leading
-		addArrangedSubview(titleButton)
-		addArrangedSubview(descriptionLabel)
-		setupImageViews()
-		if !eventDescription.isMain {
-			arrangedSubviewsExceptTitle
-				.forEach { $0.isHidden = !self.isExpanded }
-		}
+    imagesStackView.spacing = 10
+    imagesStackView.axis = .vertical
+    imagesStackView.alignment = .leading
+    
+    titleButton.addTarget(self, action: #selector(toggleExpand), for: .touchUpInside)
+    
+    addArrangedSubview(titleButton)
+    addArrangedSubview(descriptionLabel)
+    addArrangedSubview(imagesStackView)
+    sv([titleButton, descriptionLabel, imagesStackView])
+    if !isExpanded {
+      descriptionLabel.isHidden = true
+      imagesStackView.isHidden = true
+    }
   }
 	
-	private func setupImageViews() {
-		if eventDescription.isMain { return }
-		if imageViews.isEmpty { return }
-		let firstImage = imageViews.first!
-		firstImage
-			.height(Constants.largeImageSize.height)
-			.width(Constants.largeImageSize.width)
-		addArrangedSubview(firstImage)
-		if imageViews.count > 1 {
-      let restImages = Array(imageViews.dropFirst())
-			restImages
-				.chunks(2)
-				.enumerated()
-				.map { (index, images) in
-					let stackView = UIStackView()
-					stackView.axis = .horizontal
-					stackView.spacing = 10
-					stackView.distribution = .fill
-					let size = imageSize(at: index + 1)
-					images.forEach { v in
-						v.height(size.height).width(size.width)
-						stackView.addArrangedSubview(v)
-					}
-					return stackView
-				}
-				.forEach { addArrangedSubview($0) }
+	@objc private func toggleExpand() {
+    isExpanded = !isExpanded
+		if isExpanded && !isImagesLoadingStarted {
+			startImagesLoading()
 		}
-	}
-	
-	private func toggleExpand() {
-		if isExpanded {
-			attemptToLoadDescriptionImages()
-		}
+    isAnimationInProgress = true
 		UIView.animate(
 			withDuration: 0.4,
 			animations: {
-				self.arrangedSubviewsExceptTitle
-					.forEach { $0.isHidden = !self.isExpanded }
+        self.arrangedSubviews
+          .dropFirst()
+          .forEach { $0.isHidden = !self.isExpanded }
 				if self.isExpanded {
-					self.delegate?.scrollTo(description: self.eventDescription)
+					self.delegate?.scrollToView(self)
 				}
 			})
 	}
-
-  private func imageSize(at index: Int) -> CGSize {
-    return imageSizes[index % imageSizes.count]
-  }
-
-  private func attemptToLoadDescriptionImages() {
-		if isImageLoadingDidStarted { return }
-		if eventDescription.isMain { return }
-    guard let delegate = delegate else { return }
-		isImageLoadingDidStarted = true
-    eventDescription.imageUrls
-      .enumerated()
-      .forEach { (index, url) in
-				imageViews[index].fromExternalUrl(
-					url,
-					withResizeTo: Constants.largeImageSize,
-					loadOn: delegate.loadImageQueue,
-					semaphore: delegate.loadImageSemaphore
-				)
-      }
-  }
 }
 
-protocol EventDescriptionDelegate: EventViewSectionDelegate {
-  func scrollTo(description: DescriptionWithImageUrls)
+protocol EventDescriptionDelegate: class {
+  func scrollToView(_: UIView)
 }

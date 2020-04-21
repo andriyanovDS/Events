@@ -15,6 +15,10 @@
 		0A3A48782448D4E800B7BFB9 /* CalendarSectionTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3A48772448D4E800B7BFB9 /* CalendarSectionTitleView.swift */; };
 		0A3A4880244A418B00B7BFB9 /* Icon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3A487F244A418B00B7BFB9 /* Icon.swift */; };
 		0A3D8D66244CC08500801ABF /* FirestoreQuery+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D65244CC08500801ABF /* FirestoreQuery+Promise.swift */; };
+		0A3D8D68244CE3B300801ABF /* EventHeaderActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D67244CE3B300801ABF /* EventHeaderActionsView.swift */; };
+		0A3D8D6A244DE66900801ABF /* EventViewConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D69244DE66900801ABF /* EventViewConfigurator.swift */; };
+		0A3D8D6C244E183200801ABF /* EventMainInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D6B244E183200801ABF /* EventMainInfoView.swift */; };
+		0A3D8D6E244E223900801ABF /* EventAdditionalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D6D244E223900801ABF /* EventAdditionalInfoView.swift */; };
 		0A42AF312430E84F00902B35 /* CreatedEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */; };
 		0A42AF332430E85A00902B35 /* CreatedEventsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */; };
 		0A42AF352431048800902B35 /* CreatedEventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */; };
@@ -217,6 +221,10 @@
 		0A3A48772448D4E800B7BFB9 /* CalendarSectionTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSectionTitleView.swift; sourceTree = "<group>"; };
 		0A3A487F244A418B00B7BFB9 /* Icon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icon.swift; sourceTree = "<group>"; };
 		0A3D8D65244CC08500801ABF /* FirestoreQuery+Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreQuery+Promise.swift"; sourceTree = "<group>"; };
+		0A3D8D67244CE3B300801ABF /* EventHeaderActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHeaderActionsView.swift; sourceTree = "<group>"; };
+		0A3D8D69244DE66900801ABF /* EventViewConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewConfigurator.swift; sourceTree = "<group>"; };
+		0A3D8D6B244E183200801ABF /* EventMainInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMainInfoView.swift; sourceTree = "<group>"; };
+		0A3D8D6D244E223900801ABF /* EventAdditionalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAdditionalInfoView.swift; sourceTree = "<group>"; };
 		0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsViewController.swift; sourceTree = "<group>"; };
 		0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsNode.swift; sourceTree = "<group>"; };
 		0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsViewModel.swift; sourceTree = "<group>"; };
@@ -937,11 +945,15 @@
 			children = (
 				74E882EB2426BBFF00DAF4B4 /* EventViewController.swift */,
 				74E882ED2426BC5B00DAF4B4 /* EventViewModel.swift */,
+				0A3D8D69244DE66900801ABF /* EventViewConfigurator.swift */,
 				74E882EF2426BC6600DAF4B4 /* EventView.swift */,
+				0A3D8D67244CE3B300801ABF /* EventHeaderActionsView.swift */,
+				0A3D8D6B244E183200801ABF /* EventMainInfoView.swift */,
+				0A3D8D6D244E223900801ABF /* EventAdditionalInfoView.swift */,
 				74E882F32428C09300DAF4B4 /* EventInfoSection.swift */,
 				74E882F72428E5FE00DAF4B4 /* EventDescriptionView.swift */,
-				0A52F84E242AA3AC00CACEAF /* EventAuthorView.swift */,
 				0A52F850242AAEC900CACEAF /* EventLocationView.swift */,
+				0A52F84E242AA3AC00CACEAF /* EventAuthorView.swift */,
 				0A52F852242ABB0E00CACEAF /* EventFooterView.swift */,
 			);
 			path = Event;
@@ -1167,6 +1179,7 @@
 				742334542413C7A100B46037 /* CreateEventStep.swift in Sources */,
 				74D5A2112302AA6500806695 /* TextFormattingsTextStorage.swift in Sources */,
 				0AB8553E243B8C6D00E209AD /* EventNameView.swift in Sources */,
+				0A3D8D6A244DE66900801ABF /* EventViewConfigurator.swift in Sources */,
 				74E882DB2426069400DAF4B4 /* memoize.swift in Sources */,
 				0AB8553C243B8C6500E209AD /* EventNameViewModel.swift in Sources */,
 				7478F50022F60CC900A43F52 /* User.swift in Sources */,
@@ -1176,6 +1189,7 @@
 				74697FC022D0E69B00D5B5F4 /* CalendarViewController.swift in Sources */,
 				745243AC22CE85BA00C930C8 /* RootScreenViewController.swift in Sources */,
 				742EF141231F1879002092CA /* ImagesPreviewView.swift in Sources */,
+				0A3D8D6E244E223900801ABF /* EventAdditionalInfoView.swift in Sources */,
 				0AB8DC2A2433C00100C5C1CC /* CounterCircleView.swift in Sources */,
 				74E882F82428E5FE00DAF4B4 /* EventDescriptionView.swift in Sources */,
 				748E0B0022D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift in Sources */,
@@ -1269,9 +1283,11 @@
 				74E882EC2426BBFF00DAF4B4 /* EventViewController.swift in Sources */,
 				74AD9F5A23DDD10400F07871 /* RootScreenView.swift in Sources */,
 				74F0F56122FF7E8800170C6C /* CategoryButton.swift in Sources */,
+				0A3D8D6C244E183200801ABF /* EventMainInfoView.swift in Sources */,
 				748E0B1222DA24DD00B061C7 /* APIClient.swift in Sources */,
 				742EF13F231F1850002092CA /* ImagesPreviewViewModel.swift in Sources */,
 				748E0B1A22DB6B9200B061C7 /* LocationSearchViewController.swift in Sources */,
+				0A3D8D68244CE3B300801ABF /* EventHeaderActionsView.swift in Sources */,
 				0A42AF37243133D600902B35 /* CreatedEventCellNode.swift in Sources */,
 				74F0F5752300B5BF00170C6C /* HintPopupView.swift in Sources */,
 				7423346A2415666300B46037 /* DescriptionViewController.swift in Sources */,
