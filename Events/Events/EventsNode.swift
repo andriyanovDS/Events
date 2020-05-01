@@ -29,11 +29,6 @@ class EventsNode: ASDisplayNode {
 		)
 	}
 	
-	override func didLoad() {
-		super.didLoad()
-	
-	}
-	
 	override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
 		return ASWrapperLayoutSpec(layoutElement: collectionNode)
 	}

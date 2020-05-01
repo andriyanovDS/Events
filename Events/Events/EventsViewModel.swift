@@ -96,7 +96,7 @@ class EventsViewModel: Stepper {
 					}
 					do {
 						let userEvents = try snapshot.documents.compactMap {
-              try $0.data(as: UserEvent.self)
+              try $0.data(as: UserEventState.self)
             }
 						resolve(userEvents.map(\.eventId))
 					} catch let error {

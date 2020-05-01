@@ -185,7 +185,7 @@ extension CreatedEventsViewModel {
 				}
 				do {
 					let userEvents = try documents.compactMap {
-						try $0.data(as: UserEvent.self)
+						try $0.data(as: UserEventState.self)
 					}
 					resolve(userEvents.map(\.eventId))
 				} catch let error {
@@ -285,8 +285,11 @@ extension CreatedEventsViewModel {
 		return UIContextMenuConfiguration(
 			identifier: event.id as NSString,
 			previewProvider: {[weak self] () -> UIViewController in
-				let viewModel = EventViewModel(event: event, author: user)
-				let viewController = EventViewController(viewModel: viewModel, isInsideContextMenu: true)
+        let viewController = EventModuleConfigurator().configure(
+          with: event,
+          and: user,
+          isInsideContextMenu: true
+        )
 				self?.contextMenuViewController = viewController
 				return viewController
 			},

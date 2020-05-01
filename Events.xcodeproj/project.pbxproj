@@ -19,6 +19,10 @@
 		0A3D8D6A244DE66900801ABF /* EventViewConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D69244DE66900801ABF /* EventViewConfigurator.swift */; };
 		0A3D8D6C244E183200801ABF /* EventMainInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D6B244E183200801ABF /* EventMainInfoView.swift */; };
 		0A3D8D6E244E223900801ABF /* EventAdditionalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D6D244E223900801ABF /* EventAdditionalInfoView.swift */; };
+		0A406E26245C6FC900E697C8 /* RootScreenRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A406E25245C6FC900E697C8 /* RootScreenRepository.swift */; };
+		0A406E28245C721800E697C8 /* RootScreenModuleConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A406E27245C721800E697C8 /* RootScreenModuleConfigurator.swift */; };
+		0A406E2A245C73FE00E697C8 /* EventRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A406E29245C73FE00E697C8 /* EventRepository.swift */; };
+		0A406E2C245C811F00E697C8 /* EventModuleConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A406E2B245C811F00E697C8 /* EventModuleConfigurator.swift */; };
 		0A42AF312430E84F00902B35 /* CreatedEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */; };
 		0A42AF332430E85A00902B35 /* CreatedEventsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */; };
 		0A42AF352431048800902B35 /* CreatedEventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */; };
@@ -225,6 +229,10 @@
 		0A3D8D69244DE66900801ABF /* EventViewConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewConfigurator.swift; sourceTree = "<group>"; };
 		0A3D8D6B244E183200801ABF /* EventMainInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMainInfoView.swift; sourceTree = "<group>"; };
 		0A3D8D6D244E223900801ABF /* EventAdditionalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAdditionalInfoView.swift; sourceTree = "<group>"; };
+		0A406E25245C6FC900E697C8 /* RootScreenRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenRepository.swift; sourceTree = "<group>"; };
+		0A406E27245C721800E697C8 /* RootScreenModuleConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenModuleConfigurator.swift; sourceTree = "<group>"; };
+		0A406E29245C73FE00E697C8 /* EventRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRepository.swift; sourceTree = "<group>"; };
+		0A406E2B245C811F00E697C8 /* EventModuleConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModuleConfigurator.swift; sourceTree = "<group>"; };
 		0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsViewController.swift; sourceTree = "<group>"; };
 		0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsNode.swift; sourceTree = "<group>"; };
 		0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsViewModel.swift; sourceTree = "<group>"; };
@@ -880,9 +888,11 @@
 			children = (
 				745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */,
 				741DCF8822D38264005783A3 /* RootScreenViewModel.swift */,
+				0A406E25245C6FC900E697C8 /* RootScreenRepository.swift */,
 				74AD9F5923DDD10400F07871 /* RootScreenView.swift */,
 				7430406A2420EE7F007F50A2 /* EventCellNode.swift */,
 				74D3A4262423A80B00E6CDF4 /* RoundedView.swift */,
+				0A406E27245C721800E697C8 /* RootScreenModuleConfigurator.swift */,
 				746697472326FDEE00406CD8 /* HomeFlow.swift */,
 			);
 			path = RootScreen;
@@ -945,6 +955,7 @@
 			children = (
 				74E882EB2426BBFF00DAF4B4 /* EventViewController.swift */,
 				74E882ED2426BC5B00DAF4B4 /* EventViewModel.swift */,
+				0A406E29245C73FE00E697C8 /* EventRepository.swift */,
 				0A3D8D69244DE66900801ABF /* EventViewConfigurator.swift */,
 				74E882EF2426BC6600DAF4B4 /* EventView.swift */,
 				0A3D8D67244CE3B300801ABF /* EventHeaderActionsView.swift */,
@@ -955,6 +966,7 @@
 				0A52F850242AAEC900CACEAF /* EventLocationView.swift */,
 				0A52F84E242AA3AC00CACEAF /* EventAuthorView.swift */,
 				0A52F852242ABB0E00CACEAF /* EventFooterView.swift */,
+				0A406E2B245C811F00E697C8 /* EventModuleConfigurator.swift */,
 			);
 			path = Event;
 			sourceTree = "<group>";
@@ -1170,6 +1182,7 @@
 				0A52F853242ABB0E00CACEAF /* EventFooterView.swift in Sources */,
 				0AEE5CF4242D2337007A2D10 /* EventsViewModel.swift in Sources */,
 				748E0B0622DA132F00B061C7 /* UserLocationManager.swift in Sources */,
+				0A406E28245C721800E697C8 /* RootScreenModuleConfigurator.swift in Sources */,
 				0A5CD06A2405DC9F00BC9B2C /* LoginTextField.swift in Sources */,
 				74A1AE2122D5DF0300C39525 /* OptionalExtension.swift in Sources */,
 				7478F4F522F6022100A43F52 /* CreateEventVC.swift in Sources */,
@@ -1298,10 +1311,12 @@
 				74D9655F22F2272D00D828C1 /* UserDetailsView.swift in Sources */,
 				74F0F5632300168900170C6C /* Array.swift in Sources */,
 				0A52F851242AAEC900CACEAF /* EventLocationView.swift in Sources */,
+				0A406E2A245C73FE00E697C8 /* EventRepository.swift in Sources */,
 				0A3D8D66244CC08500801ABF /* FirestoreQuery+Promise.swift in Sources */,
 				7478F50B22F7760E00A43F52 /* UITextFieldExtension+setupLeftView.swift in Sources */,
 				0AFA14AF240518CB00F07E82 /* ObservableType+Nwise.swift in Sources */,
 				74F0F56723008BAC00170C6C /* HintView.swift in Sources */,
+				0A406E2C245C811F00E697C8 /* EventModuleConfigurator.swift in Sources */,
 				0AEE5CF8242D4B37007A2D10 /* SectionHeaderCellNode.swift in Sources */,
 				0AB2C4872438CF0C001FB3EB /* EditButton.swift in Sources */,
 				0AEE5CFE242E7CE3007A2D10 /* EventsEmptyListCellNode.swift in Sources */,
@@ -1323,6 +1338,7 @@
 				0AD3284E243B4C630099CC13 /* DatePickerModalViewModel.swift in Sources */,
 				74E882F62428E13900DAF4B4 /* ButtonNodeScaledOnPress.swift in Sources */,
 				0A5519BB243762E800CC308C /* EventEventFlow.swift in Sources */,
+				0A406E26245C6FC900E697C8 /* RootScreenRepository.swift in Sources */,
 				74D48E6D232994FB00FB3012 /* SavedFlow.swift in Sources */,
 				74E5DAD22329974D00E1557D /* ViewModelBased.swift in Sources */,
 				0AE899DE242CE63800EF427E /* UIImageView+fromExternalUrl.swift in Sources */,

@@ -84,17 +84,16 @@ class CreatedEventsFlow: Flow {
 	}
 	
 	private func navigateToEvent(_ event: Event, author: User, sharedImage: UIImage?) -> FlowContributors {
-		let viewModel = EventViewModel(event: event, author: author)
-    let viewController = EventViewController(
-			viewModel: viewModel,
-			sharedImage: sharedImage,
-			isInsideContextMenu: false
-		)
+    let viewController = EventModuleConfigurator().configure(
+      with: event,
+      and: author,
+      sharedImage: sharedImage
+    )
 		viewController.modalPresentationStyle = .overFullScreen
 		rootNavigationController.present(viewController, animated: true)
 		return .one(flowContributor: .contribute(
 			withNextPresentable: viewController,
-			withNextStepper: viewModel
+      withNextStepper: viewController.viewModel
 			))
   }
 }

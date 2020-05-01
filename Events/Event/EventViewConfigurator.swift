@@ -98,5 +98,5 @@ class EventViewConfigurator {
 protocol EventViewConfiguratorDataSource {
   var event: Event { get }
   var author: User { get }
-  var userEvent: UserEvent? { get }
+  var userEvent: UserEventState? { get }
 }

@@ -42,10 +42,12 @@ class HomeFlow: Flow {
   }
 
   private func navigateToHomeScreen() -> FlowContributors {
-    let viewModel = RootScreenViewModel()
-    let viewController = RootScreenViewController.instantiate(with: viewModel)
+    let viewController = RootScreenModuleConfigurator().configure()
     rootViewController.pushViewController(viewController, animated: false)
-    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: viewController.viewModel
+      ))
   }
 
   private func openCalendarScreen(
@@ -75,18 +77,17 @@ class HomeFlow: Flow {
   }
 
 	private func openEvent(_ event: Event, author: User, sharedImage: UIImage?) -> FlowContributors {
-		let viewModel = EventViewModel(event: event, author: author)
-		let viewController = EventViewController(
-			viewModel: viewModel,
-			sharedImage: sharedImage,
-			isInsideContextMenu: false
-		)
+    let viewController = EventModuleConfigurator().configure(
+      with: event,
+      and: author,
+      sharedImage: sharedImage
+    )
     viewController.modalPresentationStyle = .overFullScreen
     viewController.hero.isEnabled = true
     rootViewController.present(viewController, animated: true)
     return .one(flowContributor: .contribute(
       withNextPresentable: viewController,
-      withNextStepper: viewModel,
+      withNextStepper: viewController.viewModel,
       allowStepWhenNotPresented: false
       ))
   }

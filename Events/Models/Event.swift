@@ -75,6 +75,15 @@ struct Event: Codable {
 	var lastUpdateAt: Date?
   var categories: [CategoryId]
   var description: [DescriptionWithImageUrls]
+}
+
+extension Event: Equatable {
+	static func == (lhs: Self, rhs: Self) -> Bool {
+		 return lhs.id == rhs.id
+	 }
+}
+
+extension Event {
   var mainImageUrl: String? {
     description
       .first(where: { !$0.imageUrls.isEmpty })
@@ -107,16 +116,12 @@ struct Event: Codable {
   }
 }
 
-extension Event: Equatable {
-	static func == (lhs: Self, rhs: Self) -> Bool {
-		 return lhs.id == rhs.id
-	 }
-}
-
-struct UserEvent: Codable {
+struct UserEventState: Codable {
 	let eventId: String
 	let userId: String
 	var isFollow: Bool
 	var isJoin: Bool
 	let isAuthor: Bool
 }
+
+

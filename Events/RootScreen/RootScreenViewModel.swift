@@ -10,23 +10,23 @@ import Foundation
 import RxFlow
 import RxCocoa
 import Promises
-import UIKit
-import FirebaseFirestore
+import UIKit.UIImage
 import AVFoundation
 
 class RootScreenViewModel: Stepper {
   let steps = PublishRelay<Step>()
   weak var delegate: RootScreenViewModelDelegate?
   private(set) var authors: [String: User] = [:]
-  private lazy var firestoreDb = Firestore.firestore()
   private(set) var eventList: [Event] = []
+  private let db: RootScreenRepository
+  
+  init(db: RootScreenRepository) {
+    self.db = db
+  }
   
   func loadEventList() {
-    firestoreDb
-      .collection("event-list")
-      .whereField("isRemoved", isEqualTo: false)
-      .getDocuments()
-      .then {[weak self] (events: [Event]) in
+    db.eventList()
+     .then {[weak self] (events: [Event]) in
         guard let self = self else { return }
         self.eventList = events
         let indexPaths = events
@@ -49,11 +49,7 @@ class RootScreenViewModel: Stepper {
   }
 
   private func loadAuthors(ids: [String]) {
-    guard !ids.isEmpty else { return }
-    firestoreDb
-      .collection("user_details")
-      .whereField("id", in: ids)
-      .getDocuments()
+    db.authors(with: ids)
       .then {[weak self] (users: [User]) in
         guard let self = self else { return }
         users.forEach { user in self.authors[user.id] = user }

@@ -23,8 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
     
-    // Use for live reload http://johnholdsworth.com/injection.html
-    Bundle(path: "/Applications/InjectionIII.app/Contents/Resources/iOSInjection.bundle")?.load()
     FirebaseApp.configure()
 
     let mainFlow = MainFlow()

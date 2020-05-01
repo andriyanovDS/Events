@@ -99,7 +99,7 @@ class CreateEventViewModel: Stepper {
   }
 	
 	private func setUserEvent(id: String, uid: String, db: Firestore) {
-		let userEvent = UserEvent(
+		let userEvent = UserEventState(
 			eventId: id,
 			userId: uid,
 			isFollow: false,

@@ -11,24 +11,24 @@ import RxCocoa
 import RxFlow
 import Promises
 import FirebaseAuth
-import FirebaseFirestore
 
 class EventViewModel: Stepper, EventViewConfiguratorDataSource {
   let steps = PublishRelay<Step>()
-	lazy private var db = Firestore.firestore()
 	lazy private var uid: String = {
 		Auth.auth().currentUser!.uid
 	}()
 
   let event: Event
 	let author: User
-	private(set) var userEvent: UserEvent?
+	private(set) var userEvent: UserEventState?
   private var isFollowStateUpdateInProgress: Bool = false
   private var isJoinStateUpdateInProgress: Bool = false
+  private let db: EventRepository
 
-	init(event: Event, author: User) {
+  init(event: Event, author: User, db: EventRepository) {
     self.event = event
 		self.author = author
+    self.db = db
   }
 
   @objc func onClose() {
@@ -37,23 +37,25 @@ class EventViewModel: Stepper, EventViewConfiguratorDataSource {
   }
 	
   func loadUserEvent(completion: @escaping () -> Void) {
-    let eventId = event.id
-    let userId = uid
 		db
-			.collection("event-list")
-			.document(event.id)
-			.collection("users")
-			.document(uid)
-      .getDocument()
-      .then {[weak self] (userEvent: UserEvent?) in
-        self?.userEvent = userEvent
+      .userEventState(by: event.id, userId: uid)
+      .then {[weak self] (userEvent: UserEventState?) in
+        guard let self = self else { return }
+        self.userEvent = userEvent ?? UserEventState(
+          eventId: self.event.id,
+          userId: self.uid,
+          isFollow: false,
+          isJoin: false,
+          isAuthor: true
+        )
       }
       .always { completion() }
       .catch {[weak self] error in
+        guard let self = self else { return }
         print(error.localizedDescription)
-        self?.userEvent = UserEvent(
-          eventId: eventId,
-          userId: userId,
+        self.userEvent = UserEventState(
+          eventId: self.event.id,
+          userId: self.uid,
           isFollow: false,
           isJoin: false,
           isAuthor: true
@@ -67,7 +69,20 @@ class EventViewModel: Stepper, EventViewConfiguratorDataSource {
       return
     }
     isFollowStateUpdateInProgress = true
-    updateUserEvent(value: ["isFollow": !currentValue])
+    db.updateUserEventStateValue(
+      ["isFollow": !currentValue],
+      eventId: event.id,
+      userId: uid,
+      getStateFallback: {[unowned self] in
+        UserEventState(
+          eventId: self.event.id,
+          userId: self.uid,
+          isFollow: !currentValue,
+          isJoin: false,
+          isAuthor: self.uid == self.event.id
+        )
+      }
+     )
       .then {[weak self] in
         self?.userEvent?.isFollow = !currentValue
         completion(!currentValue)
@@ -87,10 +102,23 @@ class EventViewModel: Stepper, EventViewConfiguratorDataSource {
       return
     }
     isJoinStateUpdateInProgress = true
-    updateUserEvent(value: ["isJoin": !currentValue])
-      .then {[weak self] in
-        self?.userEvent?.isJoin = !currentValue
-        completion(!currentValue)
+    db.updateUserEventStateValue(
+      ["isJoin": !currentValue],
+      eventId: event.id,
+      userId: uid,
+      getStateFallback: {[unowned self] in
+        UserEventState(
+          eventId: self.event.id,
+          userId: self.uid,
+          isFollow: false,
+          isJoin: !currentValue,
+          isAuthor: self.uid == self.event.id
+        )
+      }
+    )
+    .then {[weak self] in
+      self?.userEvent?.isJoin = !currentValue
+      completion(!currentValue)
     }
     .catch {error in
       print(error.localizedDescription)
@@ -100,62 +128,4 @@ class EventViewModel: Stepper, EventViewConfiguratorDataSource {
       self?.isJoinStateUpdateInProgress = false
     }
   }
-	
-	private func updateUserEvent(
-		value: [String: Bool]
-	) -> Promise<Void> {
-		let eventListReference = db
-			.collection("event-list")
-			.document(event.id)
-			.collection("users")
-			.document(uid)
-		let userDetailsReference = db
-			.collection("user_details")
-			.document(uid)
-			.collection("events")
-			.document(event.id)
-		let eventId = event.id
-		return Promise<Void>(on: .global(qos: .default)) {
-			_ = try await(self.updateUserEventInFirestore(
-				value: value,
-				eventId: eventId,
-				reference: eventListReference
-			))
-			_ = try await(self.updateUserEventInFirestore(
-				value: value,
-				eventId: eventId,
-				reference: userDetailsReference
-			))
-		}
-	}
-	
-	private func updateUserEventInFirestore(
-		value: [String: Bool],
-		eventId: String,
-		reference: DocumentReference
-	) -> Promise<Any?> {
-		return wrap(on: .global(qos: .default)) { handler in
-			self.db.runTransaction({[unowned self] (transaction, errorPointer) in
-				do {
-					let document = try transaction.getDocument(reference)
-					if !document.exists {
-						let user = UserEvent(
-							eventId: eventId,
-							userId: self.uid,
-							isFollow: false,
-							isJoin: true,
-							isAuthor: eventId == self.uid
-						)
-						try reference.setData(from: user)
-						return nil
-					}
-					transaction.updateData(value, forDocument: reference)
-				} catch let fetchError as NSError {
-					errorPointer?.pointee = fetchError
-					return nil
-				}
-				return nil
-			}, completion: handler)
-		}
-	}
 }
