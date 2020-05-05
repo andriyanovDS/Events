@@ -48,7 +48,9 @@
 		0A588B88245F372F00268E5E /* EventDismissAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A588B87245F372F00268E5E /* EventDismissAnimationController.swift */; };
 		0A594CBD245F7D8F003C19D6 /* EventTransitionDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A594CBC245F7D8F003C19D6 /* EventTransitionDriver.swift */; };
 		0A5CD06A2405DC9F00BC9B2C /* LoginTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5CD0692405DC9F00BC9B2C /* LoginTextField.swift */; };
-		0AA2312D2461B02900E43906 /* TableViewSingleSectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA2312C2461B02900E43906 /* TableViewSingleSectionDataSource.swift */; };
+		0AA2312D2461B02900E43906 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA2312C2461B02900E43906 /* DataSource.swift */; };
+		0AA2312F2461EC0800E43906 /* DescriptionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA2312E2461EC0800E43906 /* DescriptionDataSource.swift */; };
+		0AA23131246205FF00E43906 /* DescriptionCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA23130246205FF00E43906 /* DescriptionCollectionViewDelegate.swift */; };
 		0AA421812415A74400554121 /* DateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421802415A74400554121 /* DateViewModel.swift */; };
 		0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421842416351000554121 /* DescriptionCellButton.swift */; };
 		0AB1DA112443B47900E33F41 /* Observable+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1DA102443B47900E33F41 /* Observable+Promise.swift */; };
@@ -262,7 +264,9 @@
 		0A588B87245F372F00268E5E /* EventDismissAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDismissAnimationController.swift; sourceTree = "<group>"; };
 		0A594CBC245F7D8F003C19D6 /* EventTransitionDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTransitionDriver.swift; sourceTree = "<group>"; };
 		0A5CD0692405DC9F00BC9B2C /* LoginTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextField.swift; sourceTree = "<group>"; };
-		0AA2312C2461B02900E43906 /* TableViewSingleSectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSingleSectionDataSource.swift; sourceTree = "<group>"; };
+		0AA2312C2461B02900E43906 /* DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
+		0AA2312E2461EC0800E43906 /* DescriptionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionDataSource.swift; sourceTree = "<group>"; };
+		0AA23130246205FF00E43906 /* DescriptionCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		0AA421802415A74400554121 /* DateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewModel.swift; sourceTree = "<group>"; };
 		0AA421842416351000554121 /* DescriptionCellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCellButton.swift; sourceTree = "<group>"; };
 		0AB1DA102443B47900E33F41 /* Observable+Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Promise.swift"; sourceTree = "<group>"; };
@@ -634,6 +638,8 @@
 			children = (
 				742334692415666300B46037 /* DescriptionViewController.swift */,
 				7423346B2415666B00B46037 /* DescriptionViewModel.swift */,
+				0AA2312E2461EC0800E43906 /* DescriptionDataSource.swift */,
+				0AA23130246205FF00E43906 /* DescriptionCollectionViewDelegate.swift */,
 				74F0F5642300438C00170C6C /* DescriptionView.swift */,
 				749898B424019E08007EF352 /* SelectedImageCell.swift */,
 				747961E9240DB120006B8EB0 /* DescriptionCellView.swift */,
@@ -896,12 +902,12 @@
 			children = (
 				745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */,
 				741DCF8822D38264005783A3 /* RootScreenViewModel.swift */,
-				0AA2312C2461B02900E43906 /* TableViewSingleSectionDataSource.swift */,
 				0A406E25245C6FC900E697C8 /* RootScreenRepository.swift */,
 				74AD9F5923DDD10400F07871 /* RootScreenView.swift */,
 				7430406A2420EE7F007F50A2 /* EventCellView.swift */,
 				0A406E27245C721800E697C8 /* RootScreenModuleConfigurator.swift */,
 				746697472326FDEE00406CD8 /* HomeFlow.swift */,
+				0AA2312C2461B02900E43906 /* DataSource.swift */,
 			);
 			path = RootScreen;
 			sourceTree = "<group>";
@@ -1211,7 +1217,7 @@
 				74155CA923F8114B00E6A66C /* ImageCacheManager.swift in Sources */,
 				742EF13D231F1822002092CA /* ImagesPreviewVC.swift in Sources */,
 				7467B6E222D50AEE00A1BFE9 /* EventsViewController.swift in Sources */,
-				0AA2312D2461B02900E43906 /* TableViewSingleSectionDataSource.swift in Sources */,
+				0AA2312D2461B02900E43906 /* DataSource.swift in Sources */,
 				74697FC022D0E69B00D5B5F4 /* CalendarViewController.swift in Sources */,
 				745243AC22CE85BA00C930C8 /* RootScreenViewController.swift in Sources */,
 				742EF141231F1879002092CA /* ImagesPreviewView.swift in Sources */,
@@ -1327,6 +1333,7 @@
 				74D9655F22F2272D00D828C1 /* UserDetailsView.swift in Sources */,
 				74F0F5632300168900170C6C /* Array.swift in Sources */,
 				0A52F851242AAEC900CACEAF /* EventLocationView.swift in Sources */,
+				0AA2312F2461EC0800E43906 /* DescriptionDataSource.swift in Sources */,
 				0A406E2A245C73FE00E697C8 /* EventRepository.swift in Sources */,
 				0A3D8D66244CC08500801ABF /* FirestoreQuery+Promise.swift in Sources */,
 				7478F50B22F7760E00A43F52 /* UITextFieldExtension+setupLeftView.swift in Sources */,
@@ -1353,6 +1360,7 @@
 				746697462326FBDE00406CD8 /* LoginFlow.swift in Sources */,
 				0AD3284E243B4C630099CC13 /* DatePickerModalViewModel.swift in Sources */,
 				74E882F62428E13900DAF4B4 /* ButtonNodeScaledOnPress.swift in Sources */,
+				0AA23131246205FF00E43906 /* DescriptionCollectionViewDelegate.swift in Sources */,
 				0A5519BB243762E800CC308C /* EventEventFlow.swift in Sources */,
 				0A406E26245C6FC900E697C8 /* RootScreenRepository.swift in Sources */,
 				74D48E6D232994FB00FB3012 /* SavedFlow.swift in Sources */,

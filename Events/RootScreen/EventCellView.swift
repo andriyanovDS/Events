@@ -12,7 +12,7 @@ import SwiftIconFont
 import UIKit
 import func AVFoundation.AVMakeRect
 
-class EventCellView: UITableViewCell, UITableViewCellIdentifiable {
+class EventCellView: UITableViewCell, ReuseIdentifiable {
   var id: String?
   let cardView = EventCardView()
   let shadowView = UIView()

@@ -12,6 +12,8 @@ import Photos
 import Promises
 
 class ImageCacheManager {
+  typealias AssetGetter = (Int) -> PHAsset
+  
   private var targetSize: CGSize
   private let imageManager = PHCachingImageManager()
   private var previousPreheatRect = CGRect.zero
@@ -46,7 +48,7 @@ class ImageCacheManager {
     )
   }
 
-  func attemptToCacheAssets(_ collectionView: UICollectionView, assetGetter: (Int) -> PHAsset) {
+  func attemptToCacheAssets(_ collectionView: UICollectionView, assetGetter: AssetGetter) {
     let visibleRect = CGRect(
       origin: CGPoint(x: collectionView.contentOffset.x, y: 0),
       size: collectionView.bounds.size

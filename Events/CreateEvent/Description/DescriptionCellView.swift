@@ -10,14 +10,14 @@ import UIKit
 import Stevia
 import RxSwift
 
-class DescriptionCellView: UICollectionViewCell {
+class DescriptionCellView: UICollectionViewCell, ReuseIdentifiable {
   
   private struct Constants {
     static let animationDuration: CGFloat = 0.3
     static let addButtonSize: CGFloat = 27
   }
   
-  static let reuseIdentifier = String(describing: SelectedImageCell.self)
+  static let reuseIdentifier = String(describing: DescriptionCellView.self)
 
   var selectAnimation: UIViewPropertyAnimator {
     let scaleAnimator = UIViewPropertyAnimator(

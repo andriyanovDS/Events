@@ -9,7 +9,8 @@
 import UIKit
 import Photos.PHAsset
 
-class SelectedImageCell: UICollectionViewCell {
+class SelectedImageCell: UICollectionViewCell, ReuseIdentifiable {
+  var id: String?
   let removeButton = UIButtonScaleOnPress()
   private let imageView = UIImageView()
   
@@ -32,7 +33,7 @@ class SelectedImageCell: UICollectionViewCell {
   }
 
   override func prepareForReuse() {
-    super.prepareForReuse()
+    id = nil
     imageView.image = nil
     removeButton.uniqueData = nil
   }

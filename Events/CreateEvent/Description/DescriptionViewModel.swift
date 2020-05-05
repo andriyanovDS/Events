@@ -14,7 +14,6 @@ import Promises
 class DescriptionViewModel: Stepper {
   weak var delegate: DescriptionViewModelDelegate?
   let steps = PublishRelay<Step>()
-  let storage: Storage<DescriptionWithAssets>
   private let imageCacheManager: ImageCacheManager
 	private lazy var imageLoadingOptions: PHContentEditingInputRequestOptions = {
 		let options = PHContentEditingInputRequestOptions()
@@ -23,9 +22,6 @@ class DescriptionViewModel: Stepper {
 	}()
 	
   init() {
-    storage = Storage(values: [
-      DescriptionWithAssets(isMain: true, title: nil, assets: [], text: "")
-    ])!
     let scale = UIScreen.main.scale
     let transform = CGAffineTransform(scaleX: scale, y: scale)
     imageCacheManager = ImageCacheManager(
@@ -33,80 +29,18 @@ class DescriptionViewModel: Stepper {
       imageRequestOptions: nil
     )
   }
-  
-  func moveAsset(at position: Int, to: Int) {
-    var assets = storage.assets
-    let asset = assets.remove(at: position)
-    assets.insert(asset, at: to)
-    storage.assets = assets
-  }
-  
-  func descriptionDidSelected(at index: Int) {
-    storage.activeIndex = index
-  }
 
   func openNextScreen() {
-    delegate?.onResult(storage.values)
     steps.accept(CreateEventStep.descriptionDidComplete)
   }
-
-  func addDescription() {
-    storage.add(DescriptionWithAssets(isMain: false))
-    storage.activeIndex = storage.endIndex
-   }
-
-  func removeDescription(at index: Int) {
-    storage.remove(at: index)
-    if storage.activeIndex == index {
-      storage.activeIndex = index - 1
-    } else {
-      storage.activeIndex = max(0, storage.activeIndex - 1)
-    }
-  }
-
-  func removeAsset(_ asset: PHAsset) {
-    var selectedAssets = storage.assets
-		guard let assetIndex = selectedAssets.firstIndex(where: { $0.asset == asset }) else { return }
-		selectedAssets.remove(at: assetIndex)
-    storage.assets = selectedAssets
-		delegate?.performCellsUpdate(
-			removedIndexPaths: [IndexPath(item: assetIndex, section: 0)],
-			insertedIndexPaths: []
-		)
-   }
-
-  private func update(assets: [DescriptionWithAssets.Asset]) {
-		let newAssetsSet = Set(assets.map { $0.asset.localIdentifier })
-    var selectedAssets = storage.assets
-		let currentAssetsSet = Set(selectedAssets.map { $0.asset.localIdentifier })
-		let removedIndices = selectedAssets
-			.enumerated()
-			.filter { _, v in !newAssetsSet.contains(v.asset.localIdentifier) }
-			.map { index, _ in index }
-		let newAssets: [DescriptionWithAssets.Asset] = assets.filter {
-      !currentAssetsSet.contains($0.asset.localIdentifier)
-    }
-		removedIndices
-			.enumerated()
-			.map { $1 - $0 }
-			.forEach { selectedAssets.remove(at: $0) }
-		selectedAssets.insert(contentsOf: newAssets, at: selectedAssets.count)
-    storage.assets = assets
-		delegate?.performCellsUpdate(
-			removedIndexPaths: removedIndices.map { IndexPath(item: $0, section: 0) },
-			insertedIndexPaths: newAssets
-				.enumerated()
-				.map { index, _ in
-					IndexPath(item: selectedAssets.count - newAssets.count + index, section: 0)
-				}
-		)
-	}
 	
 	// https://stackoverflow.com/a/58541993
-  private func createTemporaryURL(forFileAt url: URL) -> URL {
+  private func createTemporaryURL(forFileAt url: URL, assetId: String) -> URL {
 		let fileManager = FileManager.default
 		let temporaryDirectoryURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
-		let temporaryFileURL = temporaryDirectoryURL.appendingPathComponent(url.lastPathComponent)
+    let temporaryFileURL = temporaryDirectoryURL.appendingPathComponent(
+      assetId.replacingOccurrences(of: "/", with: "-")
+    )
 		if fileManager.fileExists(atPath: temporaryFileURL.path) {
 			return temporaryFileURL
 		}
@@ -130,7 +64,10 @@ class DescriptionViewModel: Stepper {
 				}
 				resolve(DescriptionWithAssets.Asset(
 					asset: asset,
-					localUrl: self.createTemporaryURL(forFileAt: input.fullSizeImageURL!)
+          localUrl: self.createTemporaryURL(
+            forFileAt: input.fullSizeImageURL!,
+            assetId: asset.localIdentifier
+          )
 				))
 			})
 		}
@@ -142,16 +79,18 @@ extension DescriptionViewModel {
     steps.accept(EventStep.hintPopup(popup: popup))
   }
 
-  @objc func openImagePicker() {
-    let selectedAssets = storage.assets
+  func openImagePicker(
+    withSelectedAssets assets: [DescriptionWithAssets.Asset],
+    completion: @escaping ([DescriptionWithAssets.Asset]) -> Void
+  ) {
 		steps.accept(EventStep.imagePicker(
-			selectedAssets: selectedAssets.map { $0.asset },
+			selectedAssets: assets.map { $0.asset },
 			onComplete: {[weak self] assets in
 				guard let self = self else { return }
 				self.delegate?.showProgress()
 				let urlsPromise = all(on: .global(), assets.map { self.loadUrl(for: $0) })
 				urlsPromise
-					.then {[weak self] in self?.update(assets: $0) }
+					.then { completion($0) }
 					.always {[weak self] in self?.delegate?.hideProgress() }
 					.catch { error in
 						print("Failed to load assets", error.localizedDescription)
@@ -166,50 +105,14 @@ extension DescriptionViewModel {
     return imageCacheManager.getImage(for: asset, onResult: onResult)
   }
 
-  func attemptToCacheAssets(_ collectionView: UICollectionView) {
-    imageCacheManager.attemptToCacheAssets(collectionView, assetGetter: { index in
-			storage.assets[index].asset
-    })
-  }
-}
-
-extension DescriptionViewModel {
-  @dynamicMemberLookup
-  class Storage<T> {
-    var activeIndex: Int = 0
-    private var _values: [T]
-    var endIndex: Int { _values.endIndex }
-    var count: Int { _values.count }
-    var values: [T] { _values }
-    
-    init?(values: [T]) {
-      if values.isEmpty { return nil }
-      self._values = values
-    }
-    
-    subscript<V>(dynamicMember keyPath: WritableKeyPath<T, V>) -> V {
-      get { _values[activeIndex][keyPath: keyPath] }
-      set { _values[activeIndex][keyPath: keyPath] = newValue }
-    }
-    
-    subscript(dynamicMember member: Int) -> T { _values[member] }
-    
-    func add(_ value: T) {
-      _values.append(value)
-    }
-    
-    @discardableResult
-    func remove(at index: Int) -> T {
-      _values.remove(at: index)
-    }
+  func attemptToCacheAssets(_ collectionView: UICollectionView, assetGetter: ImageCacheManager.AssetGetter) {
+    imageCacheManager.attemptToCacheAssets(collectionView, assetGetter: assetGetter)
   }
 }
 
 protocol DescriptionViewModelDelegate: class {
-  var onResult: (([DescriptionWithAssets]) -> Void)! { get }
 	func showProgress()
 	func hideProgress()
-  func performCellsUpdate(removedIndexPaths: [IndexPath], insertedIndexPaths: [IndexPath])
 }
 
 struct FailedToLoadBackgroundImage: Error {}

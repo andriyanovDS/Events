@@ -51,7 +51,7 @@ class RootScreenViewController: UIViewController, ViewModelBased {
   
   init() {
     super.init(nibName: nil, bundle: nil)
-    self.dataSource = TableViewSingleSectionDataSource { (event, cell) in
+    self.dataSource = TableViewSingleSectionDataSource { (event, cell, _) in
       cell.id = event.id
       cell.cardView.categoryLabel.text = event.categories.first!.translatedLabel()
       cell.cardView.titleLabel.text = event.name
@@ -93,7 +93,7 @@ class RootScreenViewController: UIViewController, ViewModelBased {
     let indexPaths = events
       .enumerated()
       .map {(index, _) in IndexPath(item: index, section: 0)}
-    dataSource.appendModels(events)
+    dataSource.append(events)
     rootView.eventTableView.performBatchUpdates({
       rootView.eventTableView.insertRows(at: indexPaths, with: .bottom)
     }, completion: nil)
