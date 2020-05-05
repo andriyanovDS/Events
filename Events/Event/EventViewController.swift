@@ -96,6 +96,7 @@ class EventViewController: UIViewController {
 	}
   
   @objc private func onClose() {
+    eventView?.scrollView.contentOffset = CGPoint.zero
     viewModel.onClose()
   }
 }
