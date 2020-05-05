@@ -78,7 +78,7 @@ class EventViewConfigurator {
       description.title ?? NSLocalizedString("What you'll do", comment: "Event description title"),
       for: .normal
     )
-    view.startImagesLoading = {
+    view.startImagesLoading = {[weak view] in
       description.imageUrls
         .enumerated()
         .forEach { (index, image) in
@@ -88,7 +88,7 @@ class EventViewConfigurator {
               let resizedImage = UIImage.resize(image, expectedSize: size)
               guard let image = resizedImage else { return }
               DispatchQueue.main.async {
-                view.addImage(image, withSize: size)
+                view?.addImage(image, withSize: size)
               }
             }
         }
