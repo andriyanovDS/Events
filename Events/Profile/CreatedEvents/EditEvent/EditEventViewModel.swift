@@ -26,7 +26,7 @@ class EditEventViewModel: Stepper {
     let isSelected: Bool
   }
 
-  func toogleEventAccess() {
+  func toggleEventAccess() {
     event.isPublic = !event.isPublic
   }
 

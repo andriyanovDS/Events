@@ -105,7 +105,7 @@ extension EventsViewController: ASCollectionDataSource {
 	func collectionNode(_ collectionNode: ASCollectionNode, didSelectItemAt indexPath: IndexPath) {
 		let cellOption = collectionNode.nodeForItem(at: indexPath) as? UserEventCellNode
 		guard let cell = cellOption else { return }
-		viewModel.openEvent(cell.event, sharedImage: cell.eventImageNode.image)
+		viewModel.openEvent(cell.event)
 	}
 }
 
@@ -120,7 +120,6 @@ extension EventsViewController: ASCollectionDelegateFlowLayout {
 }
 
 extension EventsViewController: EventsViewModelDelegate {
-	
 	func listDidUpdated() {
 		node.collectionNode.reloadData()
 	}

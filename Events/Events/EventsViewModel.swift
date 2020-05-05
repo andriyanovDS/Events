@@ -20,7 +20,6 @@ class EventsViewModel: Stepper {
 	let db = Firestore.firestore()
 	weak var delegate: EventsViewModelDelegate?
 	private var _events: [Event] = []
-	private var authors: [String: User] = [:]
 	
 	func clearEvents() {
 		_events = []
@@ -36,26 +35,12 @@ class EventsViewModel: Stepper {
 		delegate?.listDidUpdated()
 	}
 	
-	func openEvent(_ event: Event, sharedImage: UIImage?) {
-		if let author = authors[event.author] {
-			steps.accept(EventStep.event(
-				event: event,
-				author: author,
-				sharedImage: sharedImage
-			))
-			return
-		}
-		User.load(by: event.author, from: db)
-			.then {[weak self] author in
-				guard let self = self else { return }
-				self.authors[author.id] = author
-				self.steps.accept(EventStep.event(
-					event: event,
-					author: author,
-					sharedImage: sharedImage
-				))
-			}
-			.catch { print($0) }
+	func openEvent(_ event: Event) {
+    steps.accept(EventStep.event(
+      event: event,
+      sharedImage: nil,
+      sharedCardInfo: nil
+    ))
 	}
 	
 	func loadList() {

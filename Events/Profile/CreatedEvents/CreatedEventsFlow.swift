@@ -38,8 +38,8 @@ class CreatedEventsFlow: Flow {
 			return .none
 		case .alert(let title, let message, let actions):
 			return navigateToAlert(title: title, message: message, actions: actions)
-		case .event(let event, let author, let sharedImage):
-			return navigateToEvent(event, author: author, sharedImage: sharedImage)
+		case .event(let event, let sharedImage, _):
+			return navigateToEvent(event, sharedImage: sharedImage)
 		case .eventDidComplete:
 			rootNavigationController.dismiss(animated: true, completion: nil)
 			return .none
@@ -83,10 +83,9 @@ class CreatedEventsFlow: Flow {
     )
 	}
 	
-	private func navigateToEvent(_ event: Event, author: User, sharedImage: UIImage?) -> FlowContributors {
+	private func navigateToEvent(_ event: Event, sharedImage: UIImage?) -> FlowContributors {
     let viewController = EventModuleConfigurator().configure(
       with: event,
-      and: author,
       sharedImage: sharedImage
     )
 		viewController.modalPresentationStyle = .overFullScreen

@@ -6,27 +6,45 @@
 //  Copyright © 2020 Дмитрий Андриянов. All rights reserved.
 //
 
-import AsyncDisplayKit
+import UIKit
 import Stevia
 
-class RootScreenNode: ASDisplayNode {
-  let eventTableNode: ASTableNode
+class RootScreenView: UIView {
+  let eventTableView = UITableView()
   let defaultDatesButtonLabel = NSLocalizedString(
      "Dates",
      comment: "Select calendar dates label"
    )
 
-  override init() {
-    eventTableNode = ASTableNode(style: .plain)
-    super.init()
-    addSubnode(eventTableNode)
+  init() {
+    super.init(frame: CGRect.zero)
+    setupView()
   }
-
-  override func didLoad() {
-    super.didLoad()
-    eventTableNode.view.separatorStyle = .none
-    eventTableNode.clipsToBounds = false
-
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  private func setupView() {
+    backgroundColor = .background
+    eventTableView.separatorStyle = .none
+    eventTableView.clipsToBounds = false
+    eventTableView.showsVerticalScrollIndicator = false
+    eventTableView.isDirectionalLockEnabled = true
+    
+    eventTableView.contentInset = UIEdgeInsets(
+      top: 30,
+      left: 0,
+      bottom: 0,
+      right: 0
+    )
+    
+    sv(eventTableView)
+    eventTableView.top(0).right(15).left(15).bottom(0)
+    setupHeaderView()
+  }
+  
+  private func setupHeaderView() {
     let headerView = UIView()
     let titleLabel = UILabel()
     styleText(
@@ -39,23 +57,9 @@ class RootScreenNode: ASDisplayNode {
     titleLabel.numberOfLines = 0
     headerView.translatesAutoresizingMaskIntoConstraints = false
     headerView.sv(titleLabel)
-    eventTableNode.view.tableHeaderView = headerView
-    eventTableNode.view.showsVerticalScrollIndicator = false
-    headerView.left(0).right(0).height(100).Width == eventTableNode.view.Width
+    eventTableView.tableHeaderView = headerView
+    
+    headerView.left(0).right(0).height(100).Width == eventTableView.Width
     titleLabel.left(10).right(0).top(30)
-  }
-
-  override func layout() {
-    super.layout()
-    backgroundColor = .background
-  }
-
-  override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-    let padding = EventCellNode.Constants.cellPaddingHorizontal
-    let insetLayoutSpec = ASInsetLayoutSpec(
-      insets: UIEdgeInsets(top: 30, left: padding, bottom: 0, right: padding),
-      child: eventTableNode
-    )
-    return ASWrapperLayoutSpec(layoutElement: insetLayoutSpec)
   }
 }

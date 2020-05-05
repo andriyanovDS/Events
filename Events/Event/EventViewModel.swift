@@ -17,26 +17,25 @@ class EventViewModel: Stepper, EventViewConfiguratorDataSource {
 	lazy private var uid: String = {
 		Auth.auth().currentUser!.uid
 	}()
-
+  weak var delegate: EventViewModelDelegate?
   let event: Event
-	let author: User
+	private(set) var author: User?
 	private(set) var userEvent: UserEventState?
   private var isFollowStateUpdateInProgress: Bool = false
   private var isJoinStateUpdateInProgress: Bool = false
   private let db: EventRepository
 
-  init(event: Event, author: User, db: EventRepository) {
+  init(event: Event, db: EventRepository) {
     self.event = event
-		self.author = author
     self.db = db
   }
 
-  @objc func onClose() {
+  func onClose() {
 		guard let userEvent = userEvent else { return }
 		steps.accept(EventStep.eventDidComplete(userEvent: userEvent))
   }
-	
-  func loadUserEvent(completion: @escaping () -> Void) {
+  
+  func loadUserEvent() {
 		db
       .userEventState(by: event.id, userId: uid)
       .then {[weak self] (userEvent: UserEventState?) in
@@ -49,7 +48,10 @@ class EventViewModel: Stepper, EventViewConfiguratorDataSource {
           isAuthor: true
         )
       }
-      .always { completion() }
+      .always {[weak self] in
+        guard let self = self else { return }
+        self.delegate?.viewModelDidLoadUserEventState(self)
+      }
       .catch {[weak self] error in
         guard let self = self else { return }
         print(error.localizedDescription)
@@ -128,4 +130,20 @@ class EventViewModel: Stepper, EventViewConfiguratorDataSource {
       self?.isJoinStateUpdateInProgress = false
     }
   }
+  
+  func loadAuthor() {
+    db.user(by: event.author)
+      .then {[weak self] author in
+        guard let self = self, let author = author else {
+          return
+        }
+        self.author = author
+        self.delegate?.viewModelDidLoadAuthor(self)
+      }
+  }
+}
+
+protocol EventViewModelDelegate: class {
+  func viewModelDidLoadUserEventState(_: EventViewModel)
+  func viewModelDidLoadAuthor(_: EventViewModel)
 }

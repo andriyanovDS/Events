@@ -27,12 +27,8 @@ class EventsFlow: Flow {
 		switch step {
 		case .events:
 			return navigateToEventsScreen()
-		case .event(let event, let author, let sharedImage):
-			return navigateToEvent(
-				event,
-				author: author,
-				sharedImage: sharedImage
-			)
+		case .event(let event, _, _):
+			return navigateToEvent(event)
 		case .home:
 			return navigateToHomeScreen()
 		case .eventDidComplete(let userEvent):
@@ -62,14 +58,13 @@ class EventsFlow: Flow {
 			))
   }
 	
-	private func navigateToEvent(_ event: Event, author: User, sharedImage: UIImage?) -> FlowContributors {
+	private func navigateToEvent(_ event: Event) -> FlowContributors {
     let viewController = EventModuleConfigurator().configure(
       with: event,
-      and: author,
-      sharedImage: sharedImage
+      sharedImage: nil
     )
-    viewController.modalPresentationStyle = .overFullScreen
-    viewController.hero.isEnabled = true
+    viewController.modalPresentationStyle = .fullScreen
+    viewController.modalTransitionStyle = .coverVertical
     rootNavigationController.present(viewController, animated: true)
     return .one(flowContributor: .contribute(
       withNextPresentable: viewController,

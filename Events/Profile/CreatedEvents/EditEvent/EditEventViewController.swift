@@ -72,7 +72,7 @@ class EditEventViewController: UIViewController, ViewModelBased {
 		
 		accessButton.rx.tap
 			.subscribe(onNext: {[unowned self] _ in
-        self.viewModel.toogleEventAccess()
+        self.viewModel.toggleEventAccess()
         accessButton.type = .access(isPrivate: self.viewModel.event.isPublic)
       })
 			.disposed(by: disposeBag)

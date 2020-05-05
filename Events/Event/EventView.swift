@@ -13,9 +13,9 @@ import Promises
 import AVFoundation
 
 class EventView: UIView {
-  let eventImageView = UIImageView()
 	let scrollView = UIScrollView()
   weak var delegate: EventViewDelegate?
+  let cardView = EventCardView()
 	private(set) var footerView: EventFooterView?
   private(set) var headerView: EventHeaderActionsView?
 	private let contentView = UIView()
@@ -29,16 +29,16 @@ class EventView: UIView {
     static let actionsStackHeight: CGFloat = 60.0
     static let eventImageSize: CGSize = CGSize(
       width: UIScreen.main.bounds.width,
-      height: UIScreen.main.bounds.height * 0.3
+      height: UIScreen.main.bounds.height * 0.4
     )
     static let actionStackAnimationDelayFactor: CGFloat =
       1 - Constants.actionsStackHeight / Constants.eventImageSize.height
   }
 
-  init(sharedImage: UIImage?) {
+  init() {
     super.init(frame: CGRect.zero)
 		scrollView.delegate = self
-    setupView(sharedImage: sharedImage)
+    setupView()
   }
 
   required init?(coder: NSCoder) {
@@ -59,7 +59,7 @@ class EventView: UIView {
     sv(view)
     headerView = view
     view
-      .top(-safeAreaTopPadding)
+      .top(0)
       .left(0)
       .right(0)
       .height(Constants.actionsStackHeight)
@@ -77,10 +77,9 @@ class EventView: UIView {
   }
   
   @discardableResult
-  func setupMainInfoView(configurator: EventViewConfigurator) -> EventView {
-    let view = EventMainInfoView()
-    configurator.configureMainInfoView(view)
-    infoStackView.addArrangedSubview(view)
+  func setupCardView(configurator: EventViewConfigurator, sharedImage: UIImage?) -> EventView {
+    cardView.imageView.image = sharedImage
+    configurator.configureCardView(cardView)
     return self
   }
   
@@ -99,7 +98,7 @@ class EventView: UIView {
       view.delegate = self
       configurator.configureDescriptionView(view, at: index)
       if index == 0, let lastView = infoStackView.arrangedSubviews.last {
-        infoStackView.setCustomSpacing(25, after: lastView)
+        infoStackView.setCustomSpacing(15, after: lastView)
       }
       infoStackView.addArrangedSubview(view)
     }
@@ -122,23 +121,23 @@ class EventView: UIView {
     return self
   }
 
-  private func setupView(sharedImage: UIImage?) {
-		backgroundColor = .background
+  private func setupView() {
 		isOpaque = false
-		layer.cornerRadius = 15
-		clipsToBounds = true
+    scrollView.clipsToBounds = true
+    scrollView.layer.cornerRadius = 15
+    contentView.backgroundColor = .background
+    scrollView.backgroundColor = .background
+    scrollView.isDirectionalLockEnabled = true
+    scrollView.showsVerticalScrollIndicator = false
 		scrollView.contentInsetAdjustmentBehavior = .never
 		scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 120, right: 0)
-    eventImageView.image = sharedImage
-    eventImageView.clipsToBounds = true
-		eventImageView.contentMode = .scaleAspectFill
     
 		setupAnimations()
     infoStackView.axis = .vertical
     infoStackView.spacing = 8
     infoStackView.distribution = .fill
 		
-    contentView.sv(eventImageView, infoStackView)
+    contentView.sv([cardView, infoStackView])
     scrollView.sv(contentView)
     sv(scrollView)
     setupConstraints()
@@ -151,19 +150,14 @@ class EventView: UIView {
 	}
 
   private func setupConstraints() {
-		scrollView
-			.top(0)
-		  .left(0)
-			.right(0)
-			.bottom(0)
-			.Width == Width
-		contentView.fillContainer().width(100%)
-    eventImageView
-      .top(0)
-      .left(0)
-      .width(Constants.eventImageSize.width)
-      .height(Constants.eventImageSize.height)
-    infoStackView.left(15).right(15).bottom(0).Top == eventImageView.Bottom + 25
+    scrollView.fillContainer()
+    contentView.Width == Width
+		contentView.fillContainer()
+    cardView.top(0).left(0).right(0)
+    cardView.imageView.height(Constants.eventImageSize.height)
+    cardView.imageView.Width == Width
+    infoStackView.Top == cardView.Bottom
+    infoStackView.left(15).right(15).bottom(0)
   }
 }
 

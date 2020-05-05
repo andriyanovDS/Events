@@ -17,12 +17,14 @@
 		0A3D8D66244CC08500801ABF /* FirestoreQuery+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D65244CC08500801ABF /* FirestoreQuery+Promise.swift */; };
 		0A3D8D68244CE3B300801ABF /* EventHeaderActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D67244CE3B300801ABF /* EventHeaderActionsView.swift */; };
 		0A3D8D6A244DE66900801ABF /* EventViewConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D69244DE66900801ABF /* EventViewConfigurator.swift */; };
-		0A3D8D6C244E183200801ABF /* EventMainInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D6B244E183200801ABF /* EventMainInfoView.swift */; };
 		0A3D8D6E244E223900801ABF /* EventAdditionalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3D8D6D244E223900801ABF /* EventAdditionalInfoView.swift */; };
 		0A406E26245C6FC900E697C8 /* RootScreenRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A406E25245C6FC900E697C8 /* RootScreenRepository.swift */; };
 		0A406E28245C721800E697C8 /* RootScreenModuleConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A406E27245C721800E697C8 /* RootScreenModuleConfigurator.swift */; };
 		0A406E2A245C73FE00E697C8 /* EventRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A406E29245C73FE00E697C8 /* EventRepository.swift */; };
 		0A406E2C245C811F00E697C8 /* EventModuleConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A406E2B245C811F00E697C8 /* EventModuleConfigurator.swift */; };
+		0A406E2E245C9EF400E697C8 /* EventCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A406E2D245C9EF400E697C8 /* EventCardView.swift */; };
+		0A406E30245DDC5E00E697C8 /* EventViewControllerTransitionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A406E2F245DDC5E00E697C8 /* EventViewControllerTransitionDelegate.swift */; };
+		0A406E32245DDCF600E697C8 /* EventPresentationAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A406E31245DDCF600E697C8 /* EventPresentationAnimationController.swift */; };
 		0A42AF312430E84F00902B35 /* CreatedEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */; };
 		0A42AF332430E85A00902B35 /* CreatedEventsNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */; };
 		0A42AF352431048800902B35 /* CreatedEventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */; };
@@ -43,7 +45,10 @@
 		0A5519B924375FB100CC308C /* EditEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5519B824375FB100CC308C /* EditEventView.swift */; };
 		0A5519BB243762E800CC308C /* EventEventFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5519BA243762E800CC308C /* EventEventFlow.swift */; };
 		0A5519BD24376CFF00CC308C /* SendButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5519BC24376CFF00CC308C /* SendButtonView.swift */; };
+		0A588B88245F372F00268E5E /* EventDismissAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A588B87245F372F00268E5E /* EventDismissAnimationController.swift */; };
+		0A594CBD245F7D8F003C19D6 /* EventTransitionDriver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A594CBC245F7D8F003C19D6 /* EventTransitionDriver.swift */; };
 		0A5CD06A2405DC9F00BC9B2C /* LoginTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5CD0692405DC9F00BC9B2C /* LoginTextField.swift */; };
+		0AA2312D2461B02900E43906 /* TableViewSingleSectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA2312C2461B02900E43906 /* TableViewSingleSectionDataSource.swift */; };
 		0AA421812415A74400554121 /* DateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421802415A74400554121 /* DateViewModel.swift */; };
 		0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421842416351000554121 /* DescriptionCellButton.swift */; };
 		0AB1DA112443B47900E33F41 /* Observable+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1DA102443B47900E33F41 /* Observable+Promise.swift */; };
@@ -102,7 +107,7 @@
 		742EF13D231F1822002092CA /* ImagesPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742EF13C231F1822002092CA /* ImagesPreviewVC.swift */; };
 		742EF13F231F1850002092CA /* ImagesPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742EF13E231F1850002092CA /* ImagesPreviewViewModel.swift */; };
 		742EF141231F1879002092CA /* ImagesPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742EF140231F1879002092CA /* ImagesPreviewView.swift */; };
-		7430406B2420EE7F007F50A2 /* EventCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7430406A2420EE7F007F50A2 /* EventCellNode.swift */; };
+		7430406B2420EE7F007F50A2 /* EventCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7430406A2420EE7F007F50A2 /* EventCellView.swift */; };
 		7434FDDD2402D684003E376F /* loginStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7434FDDC2402D684003E376F /* loginStyles.swift */; };
 		744921E323D39F1F00B5BB43 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 744921E523D39F1F00B5BB43 /* Localizable.strings */; };
 		744921E923D3B1C000B5BB43 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 744921EB23D3B1C000B5BB43 /* Localizable.stringsdict */; };
@@ -172,7 +177,6 @@
 		74D3A41F2422A36300E6CDF4 /* text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D3A41E2422A36300E6CDF4 /* text.swift */; };
 		74D3A42324239A6600E6CDF4 /* UIImage+makeRoundedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D3A42224239A6600E6CDF4 /* UIImage+makeRoundedImage.swift */; };
 		74D3A42524239FFD00E6CDF4 /* UIView+shadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D3A42424239FFD00E6CDF4 /* UIView+shadow.swift */; };
-		74D3A4272423A80B00E6CDF4 /* RoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D3A4262423A80B00E6CDF4 /* RoundedView.swift */; };
 		74D48E6D232994FB00FB3012 /* SavedFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D48E6C232994FB00FB3012 /* SavedFlow.swift */; };
 		74D5A2112302AA6500806695 /* TextFormattingsTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D5A2102302AA6500806695 /* TextFormattingsTextStorage.swift */; };
 		74D7E9F02348E5A90022BAC1 /* ImageViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D7E9EF2348E5A90022BAC1 /* ImageViewCell.swift */; };
@@ -227,12 +231,14 @@
 		0A3D8D65244CC08500801ABF /* FirestoreQuery+Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FirestoreQuery+Promise.swift"; sourceTree = "<group>"; };
 		0A3D8D67244CE3B300801ABF /* EventHeaderActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHeaderActionsView.swift; sourceTree = "<group>"; };
 		0A3D8D69244DE66900801ABF /* EventViewConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewConfigurator.swift; sourceTree = "<group>"; };
-		0A3D8D6B244E183200801ABF /* EventMainInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventMainInfoView.swift; sourceTree = "<group>"; };
 		0A3D8D6D244E223900801ABF /* EventAdditionalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventAdditionalInfoView.swift; sourceTree = "<group>"; };
 		0A406E25245C6FC900E697C8 /* RootScreenRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenRepository.swift; sourceTree = "<group>"; };
 		0A406E27245C721800E697C8 /* RootScreenModuleConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenModuleConfigurator.swift; sourceTree = "<group>"; };
 		0A406E29245C73FE00E697C8 /* EventRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRepository.swift; sourceTree = "<group>"; };
 		0A406E2B245C811F00E697C8 /* EventModuleConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventModuleConfigurator.swift; sourceTree = "<group>"; };
+		0A406E2D245C9EF400E697C8 /* EventCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCardView.swift; sourceTree = "<group>"; };
+		0A406E2F245DDC5E00E697C8 /* EventViewControllerTransitionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewControllerTransitionDelegate.swift; sourceTree = "<group>"; };
+		0A406E31245DDCF600E697C8 /* EventPresentationAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPresentationAnimationController.swift; sourceTree = "<group>"; };
 		0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsViewController.swift; sourceTree = "<group>"; };
 		0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsNode.swift; sourceTree = "<group>"; };
 		0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsViewModel.swift; sourceTree = "<group>"; };
@@ -253,7 +259,10 @@
 		0A5519B824375FB100CC308C /* EditEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEventView.swift; sourceTree = "<group>"; };
 		0A5519BA243762E800CC308C /* EventEventFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEventFlow.swift; sourceTree = "<group>"; };
 		0A5519BC24376CFF00CC308C /* SendButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendButtonView.swift; sourceTree = "<group>"; };
+		0A588B87245F372F00268E5E /* EventDismissAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDismissAnimationController.swift; sourceTree = "<group>"; };
+		0A594CBC245F7D8F003C19D6 /* EventTransitionDriver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTransitionDriver.swift; sourceTree = "<group>"; };
 		0A5CD0692405DC9F00BC9B2C /* LoginTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTextField.swift; sourceTree = "<group>"; };
+		0AA2312C2461B02900E43906 /* TableViewSingleSectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewSingleSectionDataSource.swift; sourceTree = "<group>"; };
 		0AA421802415A74400554121 /* DateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewModel.swift; sourceTree = "<group>"; };
 		0AA421842416351000554121 /* DescriptionCellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCellButton.swift; sourceTree = "<group>"; };
 		0AB1DA102443B47900E33F41 /* Observable+Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Promise.swift"; sourceTree = "<group>"; };
@@ -312,7 +321,7 @@
 		742EF13C231F1822002092CA /* ImagesPreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesPreviewVC.swift; sourceTree = "<group>"; };
 		742EF13E231F1850002092CA /* ImagesPreviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesPreviewViewModel.swift; sourceTree = "<group>"; };
 		742EF140231F1879002092CA /* ImagesPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesPreviewView.swift; sourceTree = "<group>"; };
-		7430406A2420EE7F007F50A2 /* EventCellNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCellNode.swift; sourceTree = "<group>"; };
+		7430406A2420EE7F007F50A2 /* EventCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCellView.swift; sourceTree = "<group>"; };
 		7434FDDC2402D684003E376F /* loginStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loginStyles.swift; sourceTree = "<group>"; };
 		744921E023D39E7F00B5BB43 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		744921E423D39F1F00B5BB43 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -387,7 +396,6 @@
 		74D3A41E2422A36300E6CDF4 /* text.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = text.swift; sourceTree = "<group>"; };
 		74D3A42224239A6600E6CDF4 /* UIImage+makeRoundedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+makeRoundedImage.swift"; sourceTree = "<group>"; };
 		74D3A42424239FFD00E6CDF4 /* UIView+shadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+shadow.swift"; sourceTree = "<group>"; };
-		74D3A4262423A80B00E6CDF4 /* RoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedView.swift; sourceTree = "<group>"; };
 		74D48E6C232994FB00FB3012 /* SavedFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedFlow.swift; sourceTree = "<group>"; };
 		74D5A2102302AA6500806695 /* TextFormattingsTextStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormattingsTextStorage.swift; sourceTree = "<group>"; };
 		74D7E9EF2348E5A90022BAC1 /* ImageViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewCell.swift; sourceTree = "<group>"; };
@@ -888,10 +896,10 @@
 			children = (
 				745243AB22CE85BA00C930C8 /* RootScreenViewController.swift */,
 				741DCF8822D38264005783A3 /* RootScreenViewModel.swift */,
+				0AA2312C2461B02900E43906 /* TableViewSingleSectionDataSource.swift */,
 				0A406E25245C6FC900E697C8 /* RootScreenRepository.swift */,
 				74AD9F5923DDD10400F07871 /* RootScreenView.swift */,
-				7430406A2420EE7F007F50A2 /* EventCellNode.swift */,
-				74D3A4262423A80B00E6CDF4 /* RoundedView.swift */,
+				7430406A2420EE7F007F50A2 /* EventCellView.swift */,
 				0A406E27245C721800E697C8 /* RootScreenModuleConfigurator.swift */,
 				746697472326FDEE00406CD8 /* HomeFlow.swift */,
 			);
@@ -959,14 +967,18 @@
 				0A3D8D69244DE66900801ABF /* EventViewConfigurator.swift */,
 				74E882EF2426BC6600DAF4B4 /* EventView.swift */,
 				0A3D8D67244CE3B300801ABF /* EventHeaderActionsView.swift */,
-				0A3D8D6B244E183200801ABF /* EventMainInfoView.swift */,
 				0A3D8D6D244E223900801ABF /* EventAdditionalInfoView.swift */,
 				74E882F32428C09300DAF4B4 /* EventInfoSection.swift */,
 				74E882F72428E5FE00DAF4B4 /* EventDescriptionView.swift */,
 				0A52F850242AAEC900CACEAF /* EventLocationView.swift */,
 				0A52F84E242AA3AC00CACEAF /* EventAuthorView.swift */,
 				0A52F852242ABB0E00CACEAF /* EventFooterView.swift */,
+				0A406E2D245C9EF400E697C8 /* EventCardView.swift */,
 				0A406E2B245C811F00E697C8 /* EventModuleConfigurator.swift */,
+				0A406E2F245DDC5E00E697C8 /* EventViewControllerTransitionDelegate.swift */,
+				0A406E31245DDCF600E697C8 /* EventPresentationAnimationController.swift */,
+				0A588B87245F372F00268E5E /* EventDismissAnimationController.swift */,
+				0A594CBC245F7D8F003C19D6 /* EventTransitionDriver.swift */,
 			);
 			path = Event;
 			sourceTree = "<group>";
@@ -1199,6 +1211,7 @@
 				74155CA923F8114B00E6A66C /* ImageCacheManager.swift in Sources */,
 				742EF13D231F1822002092CA /* ImagesPreviewVC.swift in Sources */,
 				7467B6E222D50AEE00A1BFE9 /* EventsViewController.swift in Sources */,
+				0AA2312D2461B02900E43906 /* TableViewSingleSectionDataSource.swift in Sources */,
 				74697FC022D0E69B00D5B5F4 /* CalendarViewController.swift in Sources */,
 				745243AC22CE85BA00C930C8 /* RootScreenViewController.swift in Sources */,
 				742EF141231F1879002092CA /* ImagesPreviewView.swift in Sources */,
@@ -1208,8 +1221,10 @@
 				748E0B0022D8E89000B061C7 /* UIViewControllerWithActivityIndicator.swift in Sources */,
 				74F0F5692300A3C800170C6C /* shadow.swift in Sources */,
 				746E10652310A03B00B5B19D /* ImagePickerViewModel.swift in Sources */,
+				0A406E30245DDC5E00E697C8 /* EventViewControllerTransitionDelegate.swift in Sources */,
 				745DAFC2243A494A00BFBADA /* EditEventFooterView.swift in Sources */,
 				0A3A4880244A418B00B7BFB9 /* Icon.swift in Sources */,
+				0A406E32245DDCF600E697C8 /* EventPresentationAnimationController.swift in Sources */,
 				6079370F23225BEB003AAD2B /* PermissionModalViewController.swift in Sources */,
 				0AD32855243B4FF40099CC13 /* BottomModalView.swift in Sources */,
 				74F6F210233178ED00A69F61 /* ScreenWithResult.swift in Sources */,
@@ -1217,7 +1232,6 @@
 				0A5519B924375FB100CC308C /* EditEventView.swift in Sources */,
 				7470AEAB2439183800A9C59F /* ListModalView.swift in Sources */,
 				0ACFF2AA243695CA00E045F8 /* AvatarImageView.swift in Sources */,
-				74D3A4272423A80B00E6CDF4 /* RoundedView.swift in Sources */,
 				0A42AF332430E85A00902B35 /* CreatedEventsNode.swift in Sources */,
 				74D3A42524239FFD00E6CDF4 /* UIView+shadow.swift in Sources */,
 				746F22E42332CC0D000713A0 /* PermissionModalFlow.swift in Sources */,
@@ -1236,9 +1250,10 @@
 				745243C122CFE2B400C930C8 /* UIColor+AppColors.swift in Sources */,
 				0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */,
 				741DCF9022D3AA81005783A3 /* Category.swift in Sources */,
-				7430406B2420EE7F007F50A2 /* EventCellNode.swift in Sources */,
+				7430406B2420EE7F007F50A2 /* EventCellView.swift in Sources */,
 				0AB8553A243B8C5E00E209AD /* EventNameViewController.swift in Sources */,
 				7467B6ED22D510AA00A1BFE9 /* LoginViewController.swift in Sources */,
+				0A406E2E245C9EF400E697C8 /* EventCardView.swift in Sources */,
 				0AB8DC282433919000C5C1CC /* UndoActionCounterView.swift in Sources */,
 				7467B6EA22D5107400A1BFE9 /* CurrentUser.swift in Sources */,
 				74D7E9F02348E5A90022BAC1 /* ImageViewCell.swift in Sources */,
@@ -1275,6 +1290,7 @@
 				740C352023DC700600F00714 /* CalendarCloseByGestureRecognizer.swift in Sources */,
 				7463A49B22DE6E47009171E1 /* UserDetailsSection.swift in Sources */,
 				7478F4F922F6033C00A43F52 /* CreateEventViewModel.swift in Sources */,
+				0A594CBD245F7D8F003C19D6 /* EventTransitionDriver.swift in Sources */,
 				74F6F21223318C8700A69F61 /* ProfileFlow.swift in Sources */,
 				0AD32850243B4C6D0099CC13 /* DatePickerModalView.swift in Sources */,
 				74F0F5792300C5B700170C6C /* HintPopup.swift in Sources */,
@@ -1296,7 +1312,6 @@
 				74E882EC2426BBFF00DAF4B4 /* EventViewController.swift in Sources */,
 				74AD9F5A23DDD10400F07871 /* RootScreenView.swift in Sources */,
 				74F0F56122FF7E8800170C6C /* CategoryButton.swift in Sources */,
-				0A3D8D6C244E183200801ABF /* EventMainInfoView.swift in Sources */,
 				748E0B1222DA24DD00B061C7 /* APIClient.swift in Sources */,
 				742EF13F231F1850002092CA /* ImagesPreviewViewModel.swift in Sources */,
 				748E0B1A22DB6B9200B061C7 /* LocationSearchViewController.swift in Sources */,
@@ -1306,6 +1321,7 @@
 				7423346A2415666300B46037 /* DescriptionViewController.swift in Sources */,
 				7478F4FE22F60CB900A43F52 /* Event.swift in Sources */,
 				74D3A42324239A6600E6CDF4 /* UIImage+makeRoundedImage.swift in Sources */,
+				0A588B88245F372F00268E5E /* EventDismissAnimationController.swift in Sources */,
 				0A201D80244250230060C828 /* UIImage+resize.swift in Sources */,
 				0A4919A4241E9CF80068BDFE /* StartViewModel.swift in Sources */,
 				74D9655F22F2272D00D828C1 /* UserDetailsView.swift in Sources */,

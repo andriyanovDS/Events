@@ -12,16 +12,17 @@ import UIKit.UIImage
 class EventModuleConfigurator {
   func configure(
     with event: Event,
-    and author: User,
     sharedImage: UIImage? = nil,
     isInsideContextMenu: Bool = false
   ) -> EventViewController {
     let db = EventRepositoryFirestore()
-    let viewModel = EventViewModel(event: event, author: author, db: db)
-    return EventViewController(
+    let viewModel = EventViewModel(event: event, db: db)
+    let viewController = EventViewController(
       viewModel: viewModel,
       sharedImage: sharedImage,
       isInsideContextMenu: isInsideContextMenu
     )
+    viewModel.delegate = viewController
+    return viewController
   }
 }

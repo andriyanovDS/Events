@@ -11,6 +11,7 @@ import FirebaseFirestore
 import Foundation
 
 protocol EventRepository {
+  func user(by: String) -> Promise<User?>
   func userEventState(by: String, userId: String) -> Promise<UserEventState?>
   func updateUserEventStateValue(
     _ value: [String: Bool],
@@ -22,6 +23,13 @@ protocol EventRepository {
 
 class EventRepositoryFirestore: EventRepository {
   private lazy var db = Firestore.firestore()
+  
+  func user(by id: String) -> Promise<User?> {
+    db
+      .collection("user_details")
+      .document(id)
+      .getDocument()
+  }
   
   func userEventState(by id: String, userId: String) -> Promise<UserEventState?> {
     db

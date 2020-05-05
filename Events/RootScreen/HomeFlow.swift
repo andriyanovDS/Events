@@ -16,6 +16,7 @@ class HomeFlow: Flow {
   }
 
   private var rootViewController = UINavigationController()
+  private var eventViewControllerTransitionDelegate: EventViewControllerTransitionDelegate?
 
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? EventStep else {
@@ -34,8 +35,12 @@ class HomeFlow: Flow {
     case .locationSearchDidCompete:
       rootViewController.dismiss(animated: true, completion: nil)
       return .none
-    case .event(let event, let author, let sharedImage):
-			return openEvent(event, author: author, sharedImage: sharedImage)
+    case .event(let event, let sharedImage, let sharedCardInfo):
+      guard let info = sharedCardInfo else {
+        assertionFailure("Provide shared card info for transition animation")
+        return .none
+      }
+      return openEvent(event, sharedImage: sharedImage, sharedCardInfo: info)
     default:
       return .none
     }
@@ -53,8 +58,7 @@ class HomeFlow: Flow {
   private func openCalendarScreen(
     selectedDates: SelectedDates,
     onComplete: @escaping (SelectedDates?) -> Void
-    ) -> FlowContributors {
-
+  ) -> FlowContributors {
     let viewModel = CalendarViewModel()
     let dataSource = CalendarDataSource(selectedDates: selectedDates)
     let viewController = CalendarViewController(dataSource: dataSource, viewModel: viewModel)
@@ -76,14 +80,27 @@ class HomeFlow: Flow {
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
   }
 
-	private func openEvent(_ event: Event, author: User, sharedImage: UIImage?) -> FlowContributors {
+  private func openEvent(
+    _ event: Event,
+    sharedImage: UIImage?,
+    sharedCardInfo: SharedEventCardInfo
+  ) -> FlowContributors {
     let viewController = EventModuleConfigurator().configure(
       with: event,
-      and: author,
       sharedImage: sharedImage
     )
     viewController.modalPresentationStyle = .overFullScreen
-    viewController.hero.isEnabled = true
+    let driver = EventTransitionDriver(sharedViewOrigin: sharedCardInfo.origin) {[weak viewController] in
+      viewController?.dismiss(animated: true, completion: nil)
+    }
+    eventViewControllerTransitionDelegate = EventViewControllerTransitionDelegate(
+      sharedCardInfo: sharedCardInfo,
+      transitionDriver: driver
+    ) {[weak self] in
+      self?.eventViewControllerTransitionDelegate = nil
+    }
+    viewController.transitioningDelegate = eventViewControllerTransitionDelegate
+    viewController.transitionDriver = driver
     rootViewController.present(viewController, animated: true)
     return .one(flowContributor: .contribute(
       withNextPresentable: viewController,

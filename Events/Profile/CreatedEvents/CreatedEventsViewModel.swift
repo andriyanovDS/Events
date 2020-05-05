@@ -20,7 +20,6 @@ class CreatedEventsViewModel: Stepper {
 	var isListLoadedAndEmpty: Bool = false
 	let steps = PublishRelay<Step>()
 	var events: [Event] { _filteredEvents }
-	private var user: User?
 	private var searchQuery: String = ""
 	private var _events: [Event] = []
 	private var _filteredEvents: [Event] = []
@@ -56,10 +55,6 @@ class CreatedEventsViewModel: Stepper {
 	private struct RemovedEvent {
 		let event: Event
 		let position: Int
-	}
-	
-	init() {
-		loadUser()
 	}
 	
 	deinit {
@@ -128,10 +123,7 @@ class CreatedEventsViewModel: Stepper {
 	}
 	
 	private func viewEvent(at index: Int) {
-		guard let author = user else { return }
-		steps.accept(
-			EventStep.event(event: events[index], author: author, sharedImage: nil)
-		)
+    steps.accept(EventStep.event(event: events[index], sharedImage: nil, sharedCardInfo: nil))
 	}
 	
 	private func deleteEventFromContextMenu(at index: Int) {
@@ -139,15 +131,6 @@ class CreatedEventsViewModel: Stepper {
 			guard isSucceed, let self = self else { return }
 			self.delegate?.removeCellWithUndoAction(at: IndexPath(item: index, section: 0))
 		})
-	}
-	
-	private func loadUser() {
-		guard let uid = Auth.auth().currentUser?.uid else { return }
-		User.load(by: uid, from: db)
-			.then {[weak self] user in
-				self?.user = user
-			}
-			.catch { print($0.localizedDescription) }
 	}
 }
 
@@ -280,14 +263,12 @@ extension CreatedEventsViewModel {
 	}
 
 	func contextMenuConfigurationForEvent(at index: Int) -> UIContextMenuConfiguration? {
-		guard let user = user else { return nil }
 		let event = events[index]
 		return UIContextMenuConfiguration(
 			identifier: event.id as NSString,
 			previewProvider: {[weak self] () -> UIViewController in
         let viewController = EventModuleConfigurator().configure(
           with: event,
-          and: user,
           isInsideContextMenu: true
         )
 				self?.contextMenuViewController = viewController
@@ -298,13 +279,9 @@ extension CreatedEventsViewModel {
 	}
 	
 	func openEventFromContextMenu() {
-		guard
-			let author = user,
-			let viewController = contextMenuViewController
-			else { return }
-		let sharedImage = viewController.contextMenuImage
+		guard let viewController = contextMenuViewController else { return }
     let event = viewController.viewModel.event
-		steps.accept(EventStep.event(event: event, author: author, sharedImage: sharedImage))
+		steps.accept(EventStep.event(event: event, sharedImage: nil, sharedCardInfo: nil))
 	}
 	
 	private func contextMenuActionsForEvent(at index: Int) -> ([UIMenuElement]) -> UIMenu {

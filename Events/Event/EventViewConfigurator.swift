@@ -31,13 +31,13 @@ class EventViewConfigurator {
       : .notJoined
   }
   
-  func configureMainInfoView(_ view: EventMainInfoView) {
+  func configureCardView(_ view: EventCardView) {
     let event = dataSource.event
-    view.categoryNameLabel.text = event.categories
+    view.categoryLabel.text = event.categories
       .map { $0.translatedLabel() }
       .joined(separator: ", ")
-    view.eventNameLabel.text = event.name
-    view.locationNameLabel.text = event.location.fullName
+    view.titleLabel.text = event.name
+    view.locationLabel.text = event.location.fullName
   }
   
   func configureAdditionalInfoView(_ view: EventAdditionalInfoView) {
@@ -53,8 +53,9 @@ class EventViewConfigurator {
   }
   
   func configureAuthorView(_ view: EventAuthorView) {
-    view.nameLabel.text = dataSource.author.fullName
-    if let avatar = dataSource.author.avatar {
+    guard let author = dataSource.author else { return }
+    view.nameLabel.text = author.fullName
+    if let avatar = author.avatar {
       view.avatarImageView.fromExternalUrl(
         avatar,
         withResizeTo: EventAuthorView.Constants.avatarImageSize
@@ -97,6 +98,6 @@ class EventViewConfigurator {
 
 protocol EventViewConfiguratorDataSource {
   var event: Event { get }
-  var author: User { get }
+  var author: User? { get }
   var userEvent: UserEventState? { get }
 }

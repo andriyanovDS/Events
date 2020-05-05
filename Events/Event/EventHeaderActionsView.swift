@@ -57,7 +57,7 @@ class EventHeaderActionsView: UIView {
     stackView.distribution = .equalSpacing
     stackView.isLayoutMarginsRelativeArrangement = true
     stackView.layoutMargins = UIEdgeInsets(
-      top: UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0 + 10,
+      top: 0,
       left: 20,
       bottom: 0,
       right: 20

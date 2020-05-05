@@ -12,14 +12,6 @@ import FirebaseFirestore
 class RootScreenRepositoryFirestore: RootScreenRepository {
   private lazy var db = Firestore.firestore()
   
-  func authors(with ids: [String]) -> Promise<[User]> {
-    guard !ids.isEmpty else { return Promise([]) }
-    return db
-      .collection("user_details")
-      .whereField("id", in: ids)
-      .getDocuments()
-  }
-  
   func eventList() -> Promise<[Event]> {
     return db
       .collection("event-list")
@@ -29,6 +21,5 @@ class RootScreenRepositoryFirestore: RootScreenRepository {
 }
 
 protocol RootScreenRepository {
-  func authors(with: [String]) -> Promise<[User]>
   func eventList() -> Promise<[Event]>
 }
