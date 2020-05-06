@@ -70,6 +70,7 @@ class EventCellView: UITableViewCell, ReuseIdentifiable {
   private func setupView() {
     clipsToBounds = false
     selectionStyle = .none
+    backgroundColor = .clear
     shadowView.layer.shadowRadius = 7
     shadowView.layer.shadowOpacity = 0.3
     shadowView.layer.shadowColor = UIColor.black.cgColor
