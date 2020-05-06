@@ -9,24 +9,21 @@
 import UIKit
 import RxFlow
 import RxCocoa
+import RxSwift
 import Promises
-import FirebaseAuth
-import FirebaseFirestore
 
-class CreatedEventsViewModel: Stepper {
-	weak var delegate: CreatedEventsViewModelDelegate? {
-		didSet { loadEvents() }
-	}
-	var isListLoadedAndEmpty: Bool = false
+class CreatedEventsViewModel: Stepper, CreatedEventPresenter {
 	let steps = PublishRelay<Step>()
-	var events: [Event] { _filteredEvents }
-	private var searchQuery: String = ""
-	private var _events: [Event] = []
-	private var _filteredEvents: [Event] = []
-	private lazy var db = Firestore.firestore()
-	private var lastRemovedEvent: RemovedEvent?
-	private var eventsListener: ListenerRegistration?
-	private weak var contextMenuViewController: EventViewController?
+  @FilteredList<Event>(keyPath: \.name) var events
+  var isListLoaded: Bool = false
+  weak var delegate: CreatedEventPresenterDelegate?
+  private let disposeBag = DisposeBag()
+  private let repository: CreatedEventsFirestoreRepository
+  private weak var contextMenuViewController: EventViewController?
+  
+  init(repository: CreatedEventsFirestoreRepository) {
+    self.repository = repository
+  }
 	
 	@available(iOS 13.0, *)
 	private lazy var contextMenuActions: [ContextMenuAction] = [
@@ -41,7 +38,7 @@ class CreatedEventsViewModel: Stepper {
       title: "Edit"
     ) {[weak self] index in
 			guard let self = self else { return }
-			self.onEditEvent(self.events[index])
+      self.editEvent(at: index)
 		},
 		ContextMenuAction(
 			iconCode: Icon(material: "delete", sfSymbol: "trash"),
@@ -51,37 +48,39 @@ class CreatedEventsViewModel: Stepper {
 			self?.deleteEventFromContextMenu(at: index)
 		}
 	]
+  
+  func viewDidLoad() {
+    repository.makeCreatedEventObservable()
+      .subscribe(onNext: {[unowned self] (events: [Event]) in
+        self.events = events
+        self.isListLoaded = true
+        self.delegate?.viewModelDidUpdateList(self)
+      })
+      .disposed(by: disposeBag)
+  }
 	
-	private struct RemovedEvent {
-		let event: Event
-		let position: Int
-	}
-	
-	deinit {
-		eventsListener?.remove()
-	}
-	
-	@objc func closeScreen() {
+  func onClose() {
 		steps.accept(EventStep.createdEventsDidComplete)
 	}
 	
-	func onEditEvent(_ event: Event) {
+  func editEvent(at index: Int) {
+    let event = events[index]
 		steps.accept(EventStep.editEvent(event: event))
 	}
 	
-	func confirmEventDelete(at index: Int, completionHandler: @escaping (Bool) -> Void) {
+	func confirmEventDeletion(at index: Int, completion: @escaping (Bool) -> Void) {
 		let submitAction = UIAlertAction(
 			title: NSLocalizedString("Delete", comment: "Delete event"),
 			style: .destructive,
 			handler: {[weak self] _ in
 				self?.removeEvent(at: index)
-				completionHandler(true)
+				completion(true)
 			}
 		)
 		let cancelAction = UIAlertAction(
 			title: NSLocalizedString("Cancel", comment: "Cancel alert"),
 			style: .default,
-			handler: { _ in completionHandler(false) }
+			handler: { _ in completion(false) }
 		)
 		steps.accept(EventStep.alert(
 			title: NSLocalizedString("Warning", comment: "Alert title: waring"),
@@ -93,150 +92,42 @@ class CreatedEventsViewModel: Stepper {
 		))
 	}
 	
-	func filterEvents(whereEventName input: String) {
-		defer { searchQuery = input }
-		
-		if input.isEmpty {
-			let isArrayChanged = _events != _filteredEvents
-			_filteredEvents = _events
-			if isArrayChanged { delegate?.listDidUpdate() }
-			return
-		}
-		let eventsWithSuitableName = _events.filter { $0.name.contains(input) }
-		let isArrayChanged = eventsWithSuitableName != _filteredEvents
-		_filteredEvents = eventsWithSuitableName
-		if isArrayChanged { delegate?.listDidUpdate() }
+	func setSearchQuery(_ query: String) {
+    let currentEvents = events
+    _events.query = query
+    let newEvents = events
+    if currentEvents != newEvents {
+      delegate?.viewModelDidUpdateList(self)
+    }
 	}
 	
 	func undoEventDeletion() {
-		guard let removedEvent = lastRemovedEvent else { return }
-		let ref = db
-			.collection("event-list")
-			.document(removedEvent.event.id)
-		ref.updateData(["isRemoved": false])
-		
-		_events.insert(removedEvent.event, at: removedEvent.position)
-		_filteredEvents = searchQuery.isEmpty
-			? _events
-			: _events.filter { $0.name.contains(searchQuery) }
-		delegate?.listDidUpdate()
+    let event = _events.revertLastRemove()
+    guard let removedEvent = event else { return }
+    repository.undoEventDeletion(withId: removedEvent.id)
 	}
 	
 	private func viewEvent(at index: Int) {
-    steps.accept(EventStep.event(event: events[index], sharedImage: nil, sharedCardInfo: nil))
+    steps.accept(EventStep.event(
+      event: events[index],
+      sharedImage: nil,
+      sharedCardInfo: nil
+    ))
 	}
 	
 	private func deleteEventFromContextMenu(at index: Int) {
-		confirmEventDelete(at: index, completionHandler: {[weak self] isSucceed in
+		confirmEventDeletion(at: index, completion: {[weak self] isSucceed in
 			guard isSucceed, let self = self else { return }
-			self.delegate?.removeCellWithUndoAction(at: IndexPath(item: index, section: 0))
+			self.delegate?.viewModel(self, didRemoveCellAt: IndexPath(item: index, section: 0))
 		})
 	}
 }
 
 extension CreatedEventsViewModel {
 	private func removeEvent(at index: Int) {
-		let event = _filteredEvents[index]
-		guard let removeIndex = _events.firstIndex(of: event) else {
-			return
-		}
-		_events.remove(at: removeIndex)
-		_filteredEvents.remove(at: index)
-		
-		let ref = db.collection("event-list").document(event.id)
-		ref.updateData(["isRemoved": true])
-		lastRemovedEvent = RemovedEvent(event: event, position: removeIndex)
-	}
-	
-	private func loadCreatedEventIds(uid: String) -> Promise<[String]> {
-		let ref = db
-			.collection("user_details")
-			.document(uid)
-			.collection("events")
-			.whereField("isAuthor", isEqualTo: true)
-		
-		return Promise(on: .global(qos: .background)) { resolve, _ in
-			ref.getDocuments(completion: { snapshots, error in
-				if let error = error {
-					print("Failed to load events", error)
-					resolve([])
-					return
-				}
-				guard let documents = snapshots?.documents else {
-					resolve([])
-					return
-				}
-				do {
-					let userEvents = try documents.compactMap {
-						try $0.data(as: UserEventState.self)
-					}
-					resolve(userEvents.map(\.eventId))
-				} catch let error {
-					print(error)
-					resolve([])
-				}
-			})
-		}
-	}
-	
-	private func subscribeCreatedEvents(
-		by ids: [String],
-		onReceive: @escaping ([Event]) -> Void
-	) {
-		let ref = db
-			.collection("event-list")
-			.whereField("id", in: ids)
-			.whereField("isRemoved", isEqualTo: false)
-
-		eventsListener = ref.addSnapshotListener(
-			includeMetadataChanges: false,
-			listener: { snapshots, error in
-				if let error = error {
-					print("Failed to load events", error)
-					onReceive([])
-					return
-				}
-				guard let documents = snapshots?.documents else {
-					onReceive([])
-					return
-				}
-				do {
-					let events = try documents.compactMap {
-						try $0.data(as: Event.self)
-					}
-					onReceive(events)
-				} catch let error {
-					print(error)
-					onReceive([])
-				}
-			}
-		)
-	}
-	
-	private func handleReceivedEvents(_ events: [Event]) {
-		isListLoadedAndEmpty = events.isEmpty
-		_events = events
-		filterEvents(whereEventName: searchQuery)
-		DispatchQueue.main.async {
-			self.delegate?.didFinishLoading()
-			self.delegate?.listDidUpdate()
-		}
-	}
-	
-	private func loadEvents() {
-		guard let uid = Auth.auth().currentUser?.uid else { return }
-		loadCreatedEventIds(uid: uid)
-			.then(on: .global()) {[weak self] ids in
-				guard let self = self else { return }
-				guard !ids.isEmpty else {
-					self.isListLoadedAndEmpty = true
-					return
-				}
-				self.subscribeCreatedEvents(by: ids, onReceive: {[weak self] events in
-					self?.handleReceivedEvents(events)
-				})
-			}
-			.catch { print($0.localizedDescription) }
+		let event = events[index]
+    _events.remove(element: event)
+    repository.removeEvent(withId: event.id)
 	}
 }
 
@@ -299,8 +190,30 @@ extension CreatedEventsViewModel {
 	}
 }
 
-protocol CreatedEventsViewModelDelegate: class {
-	func didFinishLoading()
-	func listDidUpdate()
-	func removeCellWithUndoAction(at: IndexPath)
+extension CreatedEventsViewModel {
+  private struct RemovedEvent {
+    let event: Event
+    let position: Int
+  }
+}
+
+protocol CreatedEventPresenter: Stepper {
+  var events: [Event] { get }
+  var isListLoaded: Bool { get set }
+  var delegate: CreatedEventPresenterDelegate? { get set }
+  
+  func viewDidLoad()
+  func onClose()
+  func editEvent(at: Int)
+  func setSearchQuery(_: String)
+  func undoEventDeletion()
+  func confirmEventDeletion(at: Int, completion: @escaping (Bool) -> Void)
+  
+  @available(iOS 13, *)
+  func contextMenuConfigurationForEvent(at: Int) -> UIContextMenuConfiguration?
+}
+
+protocol CreatedEventPresenterDelegate: class {
+  func viewModelDidUpdateList(_: CreatedEventPresenter)
+  func viewModel(_: CreatedEventPresenter, didRemoveCellAt: IndexPath)
 }

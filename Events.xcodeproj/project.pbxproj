@@ -51,6 +51,9 @@
 		0AA2312D2461B02900E43906 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA2312C2461B02900E43906 /* DataSource.swift */; };
 		0AA2312F2461EC0800E43906 /* DescriptionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA2312E2461EC0800E43906 /* DescriptionDataSource.swift */; };
 		0AA23131246205FF00E43906 /* DescriptionCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA23130246205FF00E43906 /* DescriptionCollectionViewDelegate.swift */; };
+		0AA23133246329E800E43906 /* FilteredList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA23132246329E800E43906 /* FilteredList.swift */; };
+		0AA23135246350DC00E43906 /* CreatedEventsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA23134246350DC00E43906 /* CreatedEventsRepository.swift */; };
+		0AA231372463530000E43906 /* CreatedEventsConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA231362463530000E43906 /* CreatedEventsConfigurator.swift */; };
 		0AA421812415A74400554121 /* DateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421802415A74400554121 /* DateViewModel.swift */; };
 		0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA421842416351000554121 /* DescriptionCellButton.swift */; };
 		0AB1DA112443B47900E33F41 /* Observable+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB1DA102443B47900E33F41 /* Observable+Promise.swift */; };
@@ -267,6 +270,9 @@
 		0AA2312C2461B02900E43906 /* DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSource.swift; sourceTree = "<group>"; };
 		0AA2312E2461EC0800E43906 /* DescriptionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionDataSource.swift; sourceTree = "<group>"; };
 		0AA23130246205FF00E43906 /* DescriptionCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCollectionViewDelegate.swift; sourceTree = "<group>"; };
+		0AA23132246329E800E43906 /* FilteredList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredList.swift; sourceTree = "<group>"; };
+		0AA23134246350DC00E43906 /* CreatedEventsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsRepository.swift; sourceTree = "<group>"; };
+		0AA231362463530000E43906 /* CreatedEventsConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatedEventsConfigurator.swift; sourceTree = "<group>"; };
 		0AA421802415A74400554121 /* DateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateViewModel.swift; sourceTree = "<group>"; };
 		0AA421842416351000554121 /* DescriptionCellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionCellButton.swift; sourceTree = "<group>"; };
 		0AB1DA102443B47900E33F41 /* Observable+Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observable+Promise.swift"; sourceTree = "<group>"; };
@@ -470,11 +476,14 @@
 				0A5519B324375F6F00CC308C /* EditEvent */,
 				0A42AF302430E84F00902B35 /* CreatedEventsViewController.swift */,
 				0A42AF342431048800902B35 /* CreatedEventsViewModel.swift */,
+				0AA23134246350DC00E43906 /* CreatedEventsRepository.swift */,
 				0A42AF322430E85A00902B35 /* CreatedEventsNode.swift */,
 				0AB8DC2524334FCF00C5C1CC /* UndoActionNode.swift */,
 				0AB8DC272433919000C5C1CC /* UndoActionCounterView.swift */,
 				0AB8DC292433C00100C5C1CC /* CounterCircleView.swift */,
 				0A42AF36243133D600902B35 /* CreatedEventCellNode.swift */,
+				0AA23132246329E800E43906 /* FilteredList.swift */,
+				0AA231362463530000E43906 /* CreatedEventsConfigurator.swift */,
 				0AB8DC2324324F2100C5C1CC /* CreatedEventsFlow.swift */,
 			);
 			path = CreatedEvents;
@@ -1270,6 +1279,7 @@
 				0A42AF312430E84F00902B35 /* CreatedEventsViewController.swift in Sources */,
 				0A48948C23F9C10C0035A4A4 /* UnsplashResponse.swift in Sources */,
 				74278ACB23D4D88900B8A5BB /* CalendarHeaderView.swift in Sources */,
+				0AA23135246350DC00E43906 /* CreatedEventsRepository.swift in Sources */,
 				741DCFA022D3E3E1005783A3 /* ProfileScreenViewController.swift in Sources */,
 				7423345B2413CB8700B46037 /* LocationViewModel.swift in Sources */,
 				744B7C9222E3C6DF00A839A6 /* ButtonScale.swift in Sources */,
@@ -1370,8 +1380,10 @@
 				0A5519B524375F8E00CC308C /* EditEventViewController.swift in Sources */,
 				0AB1DA132443C22300E33F41 /* Observable+Firestore.swift in Sources */,
 				0A3A48762448B37F00B7BFB9 /* CalendarDayCell.swift in Sources */,
+				0AA23133246329E800E43906 /* FilteredList.swift in Sources */,
 				0AB8DC2624334FCF00C5C1CC /* UndoActionNode.swift in Sources */,
 				742334632415626800B46037 /* CategoryViewController.swift in Sources */,
+				0AA231372463530000E43906 /* CreatedEventsConfigurator.swift in Sources */,
 				7478F50422F60D2700A43F52 /* Prediction.swift in Sources */,
 				0A3A48782448D4E800B7BFB9 /* CalendarSectionTitleView.swift in Sources */,
 				7453637C22EE4940004C9717 /* ProfileActionSection.swift in Sources */,

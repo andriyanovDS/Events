@@ -35,4 +35,28 @@ extension Observable {
 			return Disposables.create { listener.remove() }
 		}
 	}
+  
+  static func fromSnapshotListener<T: Decodable>(query: Query) -> Observable<[T]> {
+    Observable<[T]>.create { observer in
+      let listener = query.addSnapshotListener(
+        includeMetadataChanges: false,
+        listener: { snapshot, error in
+          if let error = error {
+            observer.onError(error)
+            return
+          }
+          guard let snapshot = snapshot else { return }
+          do {
+            let data = try snapshot.documents.compactMap {
+              try $0.data(as: T.self)
+            }
+            observer.onNext(data)
+          } catch let error {
+            observer.onError(error)
+          }
+      }
+      )
+      return Disposables.create { listener.remove() }
+    }
+  }
 }

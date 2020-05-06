@@ -49,10 +49,12 @@ class CreatedEventsFlow: Flow {
 	}
 	
 	private func navigateToCreatedEvents() -> FlowContributors {
-		let viewModel = CreatedEventsViewModel()
-		let viewController = CreatedEventsViewController.instantiate(with: viewModel)
+    let viewController = CreatedEventsConfigurator().configure()
 		rootNavigationController.pushViewController(viewController, animated: false)
-		return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: viewController.viewModel
+      ))
 	}
 	
 	private func navigateToAlert(

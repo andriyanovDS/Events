@@ -18,6 +18,13 @@ class UndoActionNode: ASDisplayNode {
 		super.init()
 		setupNode()
 	}
+  
+  func restartAction() {
+    guard let counterView = counterNode.view as? UndoActionCounterView else {
+      return
+    }
+    counterView.restartTimer()
+  }
 	
 	override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
 		counterNode.style.preferredSize = CGSize(
@@ -39,14 +46,14 @@ class UndoActionNode: ASDisplayNode {
 	
 	private func setupNode() {
 		automaticallyManagesSubnodes = true
-		backgroundColor = UIColor.backgroundInverted.withAlphaComponent(0.4)
+		backgroundColor = UIColor.backgroundInverted.withAlphaComponent(0.6)
 		cornerRadius = 10
 		cornerRoundingType = .defaultSlowCALayer
 		styleLayerBackedText(
 			textNode: descriptionTextNode,
 			text: NSLocalizedString("Event deleted", comment: "Action description: Event deleted"),
 			size: 16,
-			color: .fontLabel,
+			color: .fontLabelInverted,
 			style: .medium
 		)
 		styleText(

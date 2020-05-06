@@ -38,6 +38,11 @@ class UndoActionCounterView: UIView {
 			startTimer()
 		}
 	}
+  
+  func restartTimer() {
+    invalidateTimer()
+    startTimer()
+  }
 	
 	private func startTimer() {
 		timer = Timer.scheduledTimer(

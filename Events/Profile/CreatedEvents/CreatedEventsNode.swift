@@ -117,7 +117,10 @@ class CreatedEventNode: ASDisplayNode {
 	}
 	
 	func showUndoAction() {
-		guard !isUndoActionRequired else { return }
+		guard !isUndoActionRequired else {
+      undoActionNode.restartAction()
+      return
+    }
 		isUndoActionRequired = true
 		transitionLayout(withAnimation: true, shouldMeasureAsync: false)
 	}

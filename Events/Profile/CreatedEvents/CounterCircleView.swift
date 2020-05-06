@@ -29,17 +29,17 @@ class CounterCircleView: UIView {
 	}
 	
 	func startAnimation() {
-		shapeLayer.strokeEnd = 0
+		shapeLayer.strokeEnd = 1
 		let animation = CABasicAnimation(keyPath: "strokeEnd")
 		animation.fromValue = 1
 		animation.toValue = 0
 		animation.duration = 5
-		shapeLayer.add(animation, forKey: nil)
+		shapeLayer.add(animation, forKey: "strokeAnimation")
 	}
 	
 	func stopAnimation() {
 		shapeLayer.removeAllAnimations()
-		shapeLayer.strokeEnd = 1
+		shapeLayer.strokeEnd = 0
 	}
 	
 	private func setupView() {

@@ -9,9 +9,7 @@
 import AsyncDisplayKit
 
 class CreatedEventsViewController: ASViewController<CreatedEventNode>, ViewModelBased {
-	var viewModel: CreatedEventsViewModel! {
-		didSet { viewModel.delegate = self }
-	}
+	var viewModel: CreatedEventPresenter!
 	private var undoEventDeletionTask: DispatchWorkItem?
 
 	init() {
@@ -28,6 +26,8 @@ class CreatedEventsViewController: ASViewController<CreatedEventNode>, ViewModel
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+    viewModel.delegate = self
+    viewModel.viewDidLoad()
 		
 		node.searchTextField.delegate = self
 		node.tableNode.dataSource = self
@@ -39,8 +39,8 @@ class CreatedEventsViewController: ASViewController<CreatedEventNode>, ViewModel
 			forControlEvents: .touchUpInside
 		)
 		node.closeButton.addTarget(
-			viewModel,
-			action: #selector(viewModel.closeScreen),
+			self,
+			action: #selector(handleCloseButtonPress),
 			forControlEvents: .touchUpInside
 		)
 	}
@@ -53,31 +53,44 @@ class CreatedEventsViewController: ASViewController<CreatedEventNode>, ViewModel
 		viewModel.undoEventDeletion()
 		node.hideUndoAction()
 	}
+  
+  @objc func handleCloseButtonPress() {
+    viewModel.onClose()
+  }
 }
 
-extension CreatedEventsViewController: CreatedEventsViewModelDelegate {
-	func removeCellWithUndoAction(at indexPath: IndexPath) {
-		node.showUndoAction()
-		undoEventDeletionTask = DispatchWorkItem {[weak self] in
-			self?.node.hideUndoAction()
-			self?.undoEventDeletionTask = nil
-		}
-		DispatchQueue.main.asyncAfter(
-			deadline: DispatchTime.now() + .seconds(Constants.undoActionTimeoutInSeconds),
-			execute: undoEventDeletionTask!
-		)
-		node.tableNode.performBatchUpdates({
-			self.node.tableNode.deleteRows(at: [indexPath], with: .left)
-		}, completion: nil)
-	}
-	
-	func listDidUpdate() {
-		node.tableNode.reloadData()
-	}
-	
-	func didFinishLoading() {
-		node.hideLoadingNode()
-	}
+extension CreatedEventsViewController {
+  func removeCellWithUndoAction(at indexPath: IndexPath) {
+    node.showUndoAction()
+    if let currentTask = undoEventDeletionTask {
+      currentTask.cancel()
+      undoEventDeletionTask = nil
+    }
+    let task = DispatchWorkItem {[weak self] in
+      self?.node.hideUndoAction()
+      self?.undoEventDeletionTask = nil
+    }
+    undoEventDeletionTask = task
+    DispatchQueue.main.asyncAfter(
+      deadline: DispatchTime.now() + .seconds(Constants.undoActionTimeoutInSeconds),
+      execute: task
+    )
+    node.tableNode.performBatchUpdates({
+      self.node.tableNode.deleteRows(at: [indexPath], with: .left)
+    }, completion: nil)
+  }
+}
+
+extension CreatedEventsViewController: CreatedEventPresenterDelegate {
+  
+  func viewModel(_: CreatedEventPresenter, didRemoveCellAt indexPath: IndexPath) {
+    removeCellWithUndoAction(at: indexPath)
+  }
+  
+  func viewModelDidUpdateList(_: CreatedEventPresenter) {
+    node.hideLoadingNode()
+    node.tableNode.reloadData()
+  }
 }
 
 extension CreatedEventsViewController: ASTableDataSource {
@@ -110,9 +123,9 @@ extension CreatedEventsViewController: ASTableDelegate, UITableViewDelegate {
 					completionHandler(false)
 					return
 				}
-				self.viewModel.confirmEventDelete(
+				self.viewModel.confirmEventDeletion(
 					at: indexPath.item,
-					completionHandler: { isSucceed in
+					completion: { isSucceed in
 						if isSucceed { self.removeCellWithUndoAction(at: indexPath) }
 						completionHandler(isSucceed)
 					}
@@ -130,8 +143,7 @@ extension CreatedEventsViewController: ASTableDelegate, UITableViewDelegate {
 	}
 	
 	func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
-		let event = viewModel.events[indexPath.item]
-		viewModel.onEditEvent(event)
+    viewModel.editEvent(at: indexPath.item)
 	}
 	
 	@available(iOS 13, *)
@@ -146,8 +158,6 @@ extension CreatedEventsViewController: ASTableDelegate, UITableViewDelegate {
 
 extension CreatedEventsViewController: ASEditableTextNodeDelegate {
 	func editableTextNodeDidUpdateText(_ editableTextNode: ASEditableTextNode) {
-		viewModel.filterEvents(
-			whereEventName: editableTextNode.attributedText?.string ?? ""
-		)
+		viewModel.setSearchQuery(editableTextNode.attributedText?.string ?? "")
 	}
 }

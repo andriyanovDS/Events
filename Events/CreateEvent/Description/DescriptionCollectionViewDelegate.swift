@@ -9,7 +9,6 @@
 import UIKit
 
 class DescriptionCollectionViewDelegate: NSObject, UICollectionViewDelegate {
-  
   private let updateView: () -> Void
   private let dataSource: DescriptionDataSource
   
