@@ -10,15 +10,19 @@ import Foundation
 import RxFlow
 import RxCocoa
 
-class StartViewModel: Stepper {
+class StartViewModel: Stepper, ResultProvider {
 	let steps = PublishRelay<Step>()
-	weak var delegate: StartViewModelDelegate?
+	let onResult: ResultHandler<StartViewResult>
 	var isEventPiblic: Bool = true
 	var eventName: String?
+
+  init(onResult: @escaping ResultHandler<StartViewResult>) {
+    self.onResult = onResult
+  }
 	
 	func onNextScreen() {
 		guard let name = eventName else { return }
-		delegate?.onResult(StartViewResult(
+		onResult(StartViewResult(
 			name: name,
 			isPublic: isEventPiblic
 		))
@@ -28,8 +32,4 @@ class StartViewModel: Stepper {
 struct StartViewResult {
 	let name: String
 	let isPublic: Bool
-}
-
-protocol StartViewModelDelegate: class {
-  var onResult: ((StartViewResult) -> Void)! { get }
 }

@@ -59,20 +59,18 @@ class HomeFlow: Flow {
     selectedDates: SelectedDates,
     onComplete: @escaping (SelectedDates?) -> Void
   ) -> FlowContributors {
-    let viewModel = CalendarViewModel()
+    let viewModel = CalendarViewModel(onResult: onComplete)
     let dataSource = CalendarDataSource(selectedDates: selectedDates)
     let viewController = CalendarViewController(dataSource: dataSource, viewModel: viewModel)
     viewController.modalPresentationStyle = .overFullScreen
     viewController.isModalInPopover = true
-    viewController.onResult = onComplete
     viewController.hero.isEnabled = true
     rootViewController.present(viewController, animated: true, completion: nil)
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
   }
 
   private func openLocationSearch(onResult: @escaping (Geocode) -> Void) -> FlowContributors {
-    let viewModel = LocationSearchViewModel()
-		viewModel.onResult = onResult
+    let viewModel = LocationSearchViewModel(onResult: onResult)
 		let viewController = LocationSearchViewController.instantiate(with: viewModel)
     viewController.modalPresentationStyle = .overFullScreen
     viewController.modalTransitionStyle = .coverVertical

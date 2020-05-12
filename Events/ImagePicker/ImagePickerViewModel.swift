@@ -15,144 +15,55 @@ import RxCocoa
 import RxSwift
 import Promises
 
-class ImagePickerViewModel: Stepper {
+class ImagePickerViewModel: NSObject, Stepper, ResultProvider {
   let steps = PublishRelay<Step>()
-  private let onResult: ([PHAsset]) -> Void
+  let onResult: ResultHandler<[PHAsset]>
 
-  var targetSize: CGSize = CGSize.zero {
-    didSet {
-      self.imageCacheManager.setTargetSize(self.targetSize)
-    }
-  }
-  var selectedAssetIndices: [Int] = []
   weak var delegate: ImagePickerViewModelDelegate?
-  private let imageCacheManager: ImageCacheManager
-	private var assets: PHFetchResult<PHAsset>?
-	private var lastCachedAssetIndex: Int = 0
-  private var previouslySelectedAssets: [PHAsset]
-	private let imageRequestOptions = PHImageRequestOptions()
-  private var previousPreheatRect = CGRect.zero
-	var assetsCount: Int {
-		assets?.count ?? 0
-	}
+  private let previouslySelectedAssets: [PHAsset]
 
-  init(
-    selectedAssets: [PHAsset],
-    onResult: @escaping (([PHAsset]) -> Void)
-  ) {
-    self.previouslySelectedAssets = selectedAssets
+  init(selectedAssets: [PHAsset], onResult: @escaping ResultHandler<[PHAsset]>) {
     self.onResult = onResult
-    imageCacheManager = ImageCacheManager(targetSize: targetSize, imageRequestOptions: nil)
+    self.previouslySelectedAssets = selectedAssets
   }
 
   func onViewReady() {
     requestLibraryUsagePermission(
       onOpenLibrary: handleLibrary,
       openLibraryAccessModal: {
-        self.steps.accept(EventStep.permissionModal(withType: .library))
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+          self.steps.accept(EventStep.permissionModal(withType: .library))
+        })
       }
     )
   }
 
-  func asset(at index: Int) -> PHAsset {
-    assets!.object(at: index)
-  }
-
-  func image(for asset: PHAsset, onResult: @escaping (UIImage) -> Void) {
-    return imageCacheManager.getImage(for: asset, onResult: onResult)
-  }
-
-  func attemptToCacheAssets(_ collectionView: UICollectionView) {
-    guard let assets = self.assets else { return }
-    imageCacheManager.attemptToCacheAssets(collectionView, assetGetter: {
-      assets.object(at: $0)
-    })
-  }
-  
   func onSelectImageSource(source: ImageSource) {
-    switch source {
-    case .camera:
-      openCamera()
-    case .library:
-      openLibrary()
-    }
+    steps.accept(EventStep.defaultImagePicker(source: source.type, delegate: self))
   }
 
-  func onSelectImage(at index: Int) {
-    if let selectedImageIndex = selectedAssetIndices.firstIndex(of: index) {
-      selectedAssetIndices.remove(at: selectedImageIndex)
-    } else {
-      selectedAssetIndices.append(index)
-    }
-    delegate?.onImageDidSelected(at: index)
+  func confirmSelectedAssets(_ assets: [PHAsset]) {
+    onResult(assets)
+    steps.accept(EventStep.imagePickerDidComplete)
   }
 
-  func onConfirmSendImages() {
-    delegate?.performCloseAnimation {[weak self] in
-      self?.onCloseAnimationDidComplete()
-    }
-  }
+  private func handleCamera() {}
 
-  private func onCloseAnimationDidComplete() {
-		defer {
-			steps.accept(EventStep.imagePickerDidComplete)
-		}
-		
-		guard let imageAssets = assets else {
-			return
-		}
-    onResult(imageAssets.objects(at: IndexSet(selectedAssetIndices)))
-  }
-
-  private func handleCamera() {
-
-  }
-
-  func closeImagePicker(with result: [PHAsset]) {
-    self.onResult(result)
-    self.steps.accept(EventStep.imagePickerDidComplete)
-  }
-
-  func openImagesPreview(startAt index: Int) {
-		guard let assets = assets else { return }
-		let indices = selectedAssetIndices
-
-    loadSharedImage(for: asset(at: index), onResult: {[weak self] image, isICloudAsset in
-      self?.steps.accept(EventStep.imagesPreview(
-        assets: assets,
-        sharedImage: SharedImage(index: index, image: image, isICloudAsset: isICloudAsset),
-        selectedImageIndices: indices,
-        onImageDidSelected: {[weak self] index in
-          self?.onSelectImage(at: index)
-        }
-      ))
-    })
-  }
-
-  private func loadSharedImage(for asset: PHAsset, onResult: @escaping (UIImage, Bool) -> Void) {
-    let options = PHImageRequestOptions()
-    options.isSynchronous = false
-    options.deliveryMode = .highQualityFormat
-    let scale = UIScreen.main.scale
-    PHImageManager.default().requestImage(
-      for: asset,
-      targetSize: CGSize(
-        width: UIScreen.main.bounds.width * scale,
-        height: UIScreen.main.bounds.height * scale
-      ),
-      contentMode: .aspectFit,
-      options: options,
-      resultHandler: {[weak self] image, _ in
-        image.foldL(
-          none: {
-            self?.imageCacheManager.getImage(for: asset, onResult: { image in
-              onResult(image, true)
-            })
-          },
-          some: { onResult($0, false) }
-        )
+  func openImagesPreview(
+    with assets: PHFetchResult<PHAsset>,
+    whereSelected selectedIndices: [Int],
+    startAt index: Int,
+    sharedImage: SharedImage
+  ) {
+    steps.accept(EventStep.imagesPreview(
+      assets: assets,
+      sharedImage: sharedImage,
+      selectedImageIndices: selectedIndices,
+      onImageDidSelected: {[weak self] index in
+        guard let self = self else { return }
+        self.delegate?.viewModel(self, didSelectImageAt: index)
       }
-    )
+    ))
   }
 
   private func handleLibrary() {
@@ -161,37 +72,29 @@ class ImagePickerViewModel: Stepper {
 		let sortByDateDescriptor = NSSortDescriptor(key: "creationDate", ascending: false)
 		fetchOptions.sortDescriptors = [sortByDateDescriptor]
     let assets = PHAsset.fetchAssets(with: .image, options: fetchOptions)
-    self.assets = assets
-    selectedAssetIndices = previouslySelectedAssets.map {
-      assets.index(of: $0)
-    }
-    previouslySelectedAssets = []
+    delegate?.viewModel(
+      self,
+      didLoadAssets: assets,
+      whereSelected: previouslySelectedAssets.map { assets.index(of: $0)}
+    )
   }
+}
 
-  private func openCamera() {
-    if !UIImagePickerController.isSourceTypeAvailable(.camera) {
-      return
+extension ImagePickerViewModel: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+  func imagePickerController(
+    _ picker: UIImagePickerController,
+    didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+  ) {
+    steps.accept(EventStep.defaultImagePickerDidComplete)
+    if let asset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset {
+      confirmSelectedAssets([asset])
     }
-    let controller = UIImagePickerController()
-    controller.delegate = delegate
-    controller.sourceType = .camera
-    self.delegate?.present(controller, animated: true, completion: nil)
-  }
-
-  private func openLibrary() {
-    if !UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-      return
-    }
-    let controller = UIImagePickerController()
-    controller.delegate = delegate
-    controller.sourceType = .photoLibrary
-    self.delegate?.present(controller, animated: true, completion: nil)
   }
 }
 
 func requestCameraUsagePermission(
   onOpenCamera: @escaping () -> Void,
-  openCameraAccessModal: @escaping () -> Void
+  openCameraAccessModal: () -> Void
   ) {
   let status = AVCaptureDevice.authorizationStatus(for: .video)
   switch status {
@@ -199,10 +102,8 @@ func requestCameraUsagePermission(
     onOpenCamera()
     return
   case .notDetermined:
-    AVCaptureDevice.requestAccess(for: .video, completionHandler: { isAuthorized in
-      if !isAuthorized {
-        return
-      }
+    AVCaptureDevice.requestAccess(for: .video, completionHandler: { isAuthorised in
+      if !isAuthorised { return }
       DispatchQueue.main.async {
         onOpenCamera()
       }
@@ -215,7 +116,7 @@ func requestCameraUsagePermission(
 
 func requestLibraryUsagePermission(
   onOpenLibrary: @escaping () -> Void,
-  openLibraryAccessModal: @escaping () -> Void
+  openLibraryAccessModal: () -> Void
   ) {
   let status = PHPhotoLibrary.authorizationStatus()
   switch status {
@@ -224,9 +125,7 @@ func requestLibraryUsagePermission(
     return
   case .notDetermined:
     PHPhotoLibrary.requestAuthorization({ authStatus in
-      if authStatus != .authorized {
-        return
-      }
+      if authStatus != .authorized { return }
       DispatchQueue.main.async {
         onOpenLibrary()
       }
@@ -240,24 +139,21 @@ func requestLibraryUsagePermission(
 enum ImageSource: CaseIterable {
   case camera, library
 
-  func localizedString() -> String {
+  var type: UIImagePickerController.SourceType {
     switch self {
-    case .camera: return NSLocalizedString(
-      "Camera",
-      comment: "Image picker: open camera"
-    )
-    case .library: return NSLocalizedString(
-      "Gallery",
-      comment: "Image picker: open gallery"
-    )
+    case .camera:
+      return .camera
+    case .library:
+      return .photoLibrary
     }
   }
 }
 
-protocol ImagePickerViewModelDelegate: UIImagePickerControllerDelegate,
-  UIViewController,
-  UINavigationControllerDelegate {
-  func onImageDidSelected(at index: Int)
-  func updateImagePreviews(selectedImageIndices: [Int])
-  func performCloseAnimation(onComplete: @escaping () -> Void)
+protocol ImagePickerViewModelDelegate: class {
+  func viewModel(
+    _: ImagePickerViewModel,
+    didLoadAssets: PHFetchResult<PHAsset>,
+    whereSelected: [Int]
+  )
+  func viewModel(_: ImagePickerViewModel, didSelectImageAt: Int)
 }

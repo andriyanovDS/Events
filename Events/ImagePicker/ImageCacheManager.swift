@@ -12,7 +12,7 @@ import Photos
 import Promises
 
 class ImageCacheManager {
-  typealias AssetGetter = (Int) -> PHAsset
+  typealias AssetProvider = (Int) -> PHAsset
   
   private var targetSize: CGSize
   private let imageManager = PHCachingImageManager()
@@ -31,24 +31,19 @@ class ImageCacheManager {
     targetSize = size
   }
 
-  func getImage(for asset: PHAsset, onResult: @escaping (UIImage) -> Void) {
+  func getImage(for asset: PHAsset, completion: @escaping (UIImage?) -> Void) {
     imageManager.requestImage(
       for: asset,
       targetSize: targetSize,
       contentMode: .aspectFit,
       options: imageRequestOptions,
-      resultHandler: {[weak self] imageNullable, _ in
-        imageNullable.foldL(
-          none: {
-            self?.fallbackGetImage(for: asset, onResult: onResult)
-          },
-          some: onResult
-        )
+      resultHandler: { image, _ in
+        completion(image)
       }
     )
   }
 
-  func attemptToCacheAssets(_ collectionView: UICollectionView, assetGetter: AssetGetter) {
+  func attemptToCacheAssets(_ collectionView: UICollectionView, assetProvider: AssetProvider) {
     let visibleRect = CGRect(
       origin: CGPoint(x: collectionView.contentOffset.x, y: 0),
       size: collectionView.bounds.size
@@ -62,11 +57,11 @@ class ImageCacheManager {
     let addedAssets = added
       .flatMap { indices(in: $0, inside: collectionView) }
       .uniq()
-      .map { assetGetter($0) }
+      .map { assetProvider($0) }
     let removedAssets = removed
       .flatMap { indices(in: $0, inside: collectionView) }
       .uniq()
-      .map { assetGetter($0) }
+      .map { assetProvider($0) }
 
     imageManager.startCachingImages(
       for: addedAssets,
@@ -84,32 +79,19 @@ class ImageCacheManager {
     previousPreheatRect = preheatRect
   }
 
-  private func fallbackGetImage(for asset: PHAsset, onResult: @escaping (UIImage) -> Void) {
-    imageManager.requestImageData(
-      for: asset,
-      options: imageRequestOptions,
-      resultHandler: { data, _, _, _ in
-        data
-          .chain { UIImage(data: $0) }
-          .foldL(
-            none: {},
-            some: onResult
-          )
-        }
-    )
-  }
-
   private func indices(in rect: CGRect, inside collectionView: UICollectionView) -> [Int] {
     guard let layout = collectionView.collectionViewLayout as? ImagePickerCollectionViewLayout else {
       return []
     }
+    let cellCount = collectionView.numberOfItems(inSection: 0)
+    guard cellCount > 0 else { return [] }
     let cellTotalWidth = layout.cellSize.width + layout.minimumLineSpacing
     let lastCellIndex = collectionView.numberOfItems(inSection: 0) - 1
     let cellsInOffset = min(lastCellIndex, Int(ceil(rect.minX / cellTotalWidth)))
     let startIndex = max(0, cellsInOffset)
 
     let endIndex = min(
-      collectionView.numberOfItems(inSection: 0) - 1,
+      cellCount - 1,
       max(0, Int(ceil(rect.maxX / cellTotalWidth)))
     )
     return [Int](startIndex...endIndex)
@@ -137,7 +119,7 @@ class ImageCacheManager {
       }
       return (added, removed)
     } else {
-        return ([new], [old])
+      return ([new], [old])
     }
   }
 }

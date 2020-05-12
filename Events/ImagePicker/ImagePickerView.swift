@@ -9,35 +9,37 @@
 import UIKit
 import Stevia
 
-let PICKER_IMAGE_HEIGHT: CGFloat = 80.0
-let PICKER_IMAGE_WIDTH: CGFloat = 100.0
-let PICKER_ACTION_BUTTON_HEIGHT: CGFloat = 50
-let PICKER_IMAGE_MAX_SIZE = PICKER_IMAGE_WIDTH + PICKER_ACTION_BUTTON_HEIGHT
-private let PICKER_HEIGHT: CGFloat = 265.0
-
-class ImagePickerView: UIView, ImagePickerActionsViewDelegate {
+class ImagePickerView: UIView {
   var actionsView: ImagePickerActionsView!
-  let closeButton: ImagePickerItem
-  var state: ImagePickerState = .preview
+  let closeButton = UIButton()
+  var state: ImagePickerState
+  let collectionView: UICollectionView
+  let backgroundView = UIView()
+  private let dataSource: ImagePickerViewDataSource
+  private let layout: ImagePickerCollectionViewLayout
   private let contentView = UIView()
+  private let containerView = UIView()
   private let onSelectImageSource: (ImageSource) -> Void
   private let onConfirmSendImages: () -> Void
+  
+  struct Constants {
+    static let imageSize = CGSize(width: 100, height: 90)
+    static let actionButtonHeight: CGFloat = 50.0
+  }
 
   init(
+    dataSource: ImagePickerViewDataSource,
     onSelectImageSource: @escaping (ImageSource) -> Void,
     onConfirmSendImages: @escaping () -> Void
     ) {
+    self.dataSource = dataSource
     self.onSelectImageSource = onSelectImageSource
     self.onConfirmSendImages = onConfirmSendImages
-    closeButton = ImagePickerItem(
-      action: .close,
-      labelText: NSLocalizedString(
-        "Close",
-        comment: "Image picker: close"
-      ),
-      isBoldLabel: true,
-      hasBorder: false
-    )
+    let selectedAssetCount = dataSource.selectedAssetIndices.count
+    state = .makeFromSelectedAssetsCount(selectedAssetCount)
+    layout = ImagePickerCollectionViewLayout(cellSize: Constants.imageSize)
+    collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+
     super.init(frame: CGRect.zero)
     setupView()
   }
@@ -46,35 +48,57 @@ class ImagePickerView: UIView, ImagePickerActionsViewDelegate {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func animateShowContent() {
-    UIView.animate(
-      withDuration: 0.4,
-      delay: 0,
-      usingSpringWithDamping: 0.8,
-      initialSpringVelocity: 0.75,
-      options: .curveEaseIn,
-      animations: {[weak self] in
-        self?.contentView.bottomConstraint?.constant = -(self?.safeAreaInsets.bottom ?? 0)
-        self?.layoutIfNeeded()
-      },
-      completion: nil
-    )
+  func animateAppearance() {
+    contentView.transform = CGAffineTransform(translationX: 0, y: contentView.frame.height)
+    UIView.animate(withDuration: 0.2, animations: {
+      self.contentView.transform = .identity
+    })
   }
 
-  func animateHideContent(onComplete: @escaping () -> Void) {
-    contentView.bottomConstraint?.constant = PICKER_HEIGHT
+  func animateDisappearance(completion: @escaping () -> Void) {
     UIView.animate(
-      withDuration: 0.1,
+      withDuration: 0.2,
       animations: {
-        self.layoutIfNeeded()
+        self.contentView.transform = CGAffineTransform(
+          translationX: 0,
+          y: self.contentView.frame.height
+        )
       },
-      completion: { _ in
-        onComplete()
-      }
+      completion: { _ in completion() }
     )
   }
 
-  func onSelectAction(_ action: ImagePickerAction) {
+  func scrollToCell(at index: Int, scale: CGFloat) {
+    let offset = contentOffset(forCellAt: index, scale: scale)
+    collectionView.setContentOffset(offset, animated: scale == 1.0)
+  }
+
+  func showCollectionView() {
+    let insets = collectionView.contentInset
+    let collectionViewPreviewHeight = Constants.imageSize.height + insets.top + insets.bottom
+    let collectionViewHeight = state == .preview
+      ? collectionViewPreviewHeight
+      : state.scale * collectionViewPreviewHeight
+    collectionView.heightConstraint?.constant = collectionViewHeight
+    collectionView.contentOffset = CGPoint(x: -insets.left, y: insets.top)
+    layoutIfNeeded()
+  }
+
+  func onImageDidSelected(at index: Int) {
+    let selectedAssetIndices = dataSource.selectedAssetIndices
+    updateCellSelectionCount(selectedAssetIndices: selectedAssetIndices)
+    let currentState = state
+    state = .makeFromSelectedAssetsCount(selectedAssetIndices.count)
+    changeFirstAction()
+
+    if (state == .preview) != (currentState == .preview) {
+      changeCollectionHeight(andFocusAt: index)
+      return
+    }
+    self.scrollToCell(at: index, scale: 1.0)
+  }
+
+  private  func handleSelectedAction(_ action: ImagePickerActionsView.ImagePickerAction) {
     switch action {
     case .openCamera:
       onSelectImageSource(.camera)
@@ -82,129 +106,212 @@ class ImagePickerView: UIView, ImagePickerActionsViewDelegate {
       onSelectImageSource(.library)
     case .selectImages:
       onConfirmSendImages()
-      return
-    default:
-      return
     }
-  }
-
-  func updateImagePreviews(selectedImageIndices: [Int]) {
-    actionsView.collectionView.visibleCells
-      .compactMap { $0 as? ImagePreviewCell }
-      .forEach({ v in
-        guard let indexPath = actionsView.collectionView.indexPath(for: v) else {
-          return
-        }
-        guard let selectedImageIndex = selectedImageIndices.firstIndex(of: indexPath.item) else {
-          v.selectedCount = 0
-          return
-        }
-        v.selectedCount = selectedImageIndex + 1
-      })
-    changeFirstAction(selectedImageCount: selectedImageIndices.count)
-  }
-
-  func collectionViewDidScroll() {
-    actionsView.adjustImageViewSelectButtonAfterScroll()
-  }
-
-  func onImageDidSelected(at index: Int, selectedImageIndices: [Int]) {
-    updateImagePreviews(selectedImageIndices: selectedImageIndices)
-
-    if selectedImageIndices.count == 0 {
-      setupPreviewView(activeIndex: index)
-      return
-    }
-    if selectedImageIndices.count == 1 && state == .preview {
-      setupSelectImageView(activeIndex: index)
-      return
-    }
-    UIView.animate(withDuration: 0.2, animations: {
-      _ = self.actionsView.scrollToSelectedImageView(at: index, scale: 1.0)
-      self.layoutIfNeeded()
-    })
-    return
   }
 
   private func setupView() {
-    backgroundColor = UIColor.backgroundInverted.withAlphaComponent(0.4)
-    closeButton.layer.cornerRadius = 10
-    actionsView = ImagePickerActionsView()
-    actionsView.delegate = self
-    sv(contentView.sv(actionsView, closeButton))
-    setupConstraints()
-  }
+    backgroundColor = .clear
+    backgroundView.backgroundColor = UIColor.backgroundInverted.withAlphaComponent(0.4)
+    setupCollectionView()
+    setupCloseButton()
 
-  private func setupConstraints() {
-    contentView.left(10).right(10).height(PICKER_HEIGHT).bottom(-PICKER_HEIGHT)
-    closeButton.left(0).right(0).bottom(0).height(PICKER_ACTION_BUTTON_HEIGHT)
-    actionsView.left(0).right(0).height(200)
-    actionsView.Bottom == closeButton.Top - 15
-  }
-
-  private func setupSelectImageView(activeIndex: Int) {
-    state = .selectImage
-    let scale = state.scale()
-    changeFirstAction(selectedImageCount: 1)
-    actionsView.layout.cellWidthForContentSizeCalculation = PICKER_IMAGE_WIDTH + PICKER_ACTION_BUTTON_HEIGHT
-    actionsView.layout.invalidateLayout()
-    actionsView.layoutIfNeeded()
-    actionsView.layout.cellSize = CGSize(
-      width: PICKER_IMAGE_WIDTH + PICKER_ACTION_BUTTON_HEIGHT,
-      height: PICKER_IMAGE_HEIGHT + PICKER_ACTION_BUTTON_HEIGHT
-    )
-    UIView.animate(withDuration: 0.2, animations: {
-      self.actionsView.collectionView.heightConstraint?.constant += PICKER_ACTION_BUTTON_HEIGHT
-      let contentOffsetX = self.actionsView.scrollToSelectedImageView(at: activeIndex, scale: scale)
-      self.actionsView.adjustImageViewSelectButton(contentOffsetX: contentOffsetX)
-      self.layoutIfNeeded()
+    actionsView = ImagePickerActionsView(actionHandler: {[unowned self] action in
+      self.handleSelectedAction(action)
     })
+    actionsView.setupActions(actions: ImageSource.allCases.map {
+      ImagePickerActionsView.ImagePickerAction.makeActionByImageSource($0)
+    })
+    containerView.layer.cornerRadius = 10
+    containerView.clipsToBounds = true
+    containerView.sv(collectionView, actionsView)
+    contentView.sv([containerView, closeButton])
+    sv(backgroundView, contentView)
+
+    contentView.left(10).right(10).Bottom == safeAreaLayoutGuide.Bottom
+    closeButton.left(0).right(0).bottom(0).height(Constants.actionButtonHeight)
+    collectionView.left(0).right(0).height(0).top(0).Bottom == actionsView.Top
+    actionsView.left(0).right(0).bottom(0)
+    containerView.left(0).right(0).top(0).Bottom == closeButton.Top - 15
+    backgroundView.fillContainer()
   }
 
-  private func changeFirstAction(selectedImageCount: Int) {
-    let changedAction = actionsView.actions[0]
-    if selectedImageCount == 0 {
-      changedAction.action = .openCamera
-      changedAction.labelText = ImageSource.camera.localizedString()
-      return
-    }
-    let formatString = NSLocalizedString("image count", comment: "Image picker: select image")
-    changedAction.action = .selectImages
-    changedAction.labelText = NSLocalizedString("Select", comment: "Select images")
-      + " "
-      + String.localizedStringWithFormat(formatString, selectedImageCount)
-  }
-
-  private func setupPreviewView(activeIndex: Int) {
-    state = .preview
-    self.changeFirstAction(selectedImageCount: 0)
-    actionsView.layout.cellWidthForContentSizeCalculation = PICKER_IMAGE_WIDTH
-    actionsView.layout.cellSize = CGSize(
-      width: PICKER_IMAGE_WIDTH,
-      height: PICKER_IMAGE_HEIGHT
-    )
-    let scale = state.scale()
-    UIView.animate(withDuration: 0.2, animations: {
-      self.actionsView.collectionView.heightConstraint?.constant = 100
-      let contentOffsetX = self.actionsView.scrollToSelectedImageView(
-        at: activeIndex,
-        scale: scale
+  private func setupCollectionView() {
+    layout.scrollDirection = .horizontal
+    layout.minimumInteritemSpacing = 6
+    collectionView.style { v in
+      v.contentInset = UIEdgeInsets(
+        top: 5,
+        left: 5,
+        bottom: 5,
+        right: 5
       )
-      self.actionsView.adjustImageViewSelectButton(contentOffsetX: contentOffsetX)
+      v.showsVerticalScrollIndicator = false
+      v.showsHorizontalScrollIndicator = false
+      v.backgroundColor = .background
+      v.register(ImagePreviewCell.self, forCellWithReuseIdentifier: ImagePreviewCell.reuseIdentifier)
+    }
+  }
+
+  private func setupCloseButton() {
+    let closeButtonTitle = NSLocalizedString(
+      "Close",
+      comment: "Image picker: close"
+    )
+    styleText(
+      button: closeButton,
+      text: closeButtonTitle,
+      size: 20,
+      color: .blueButtonBackground,
+      style: .bold
+    )
+    closeButton.backgroundColor = .background
+    closeButton.layer.cornerRadius = 10
+  }
+
+  private func changeCollectionHeight(andFocusAt activeIndex: Int) {
+    let scale = state.scale
+    let transform = CGAffineTransform(scaleX: scale, y: scale)
+    let imageSize = layout.cellSize.applying(transform)
+    layout.cellWidthForContentSizeCalculation = imageSize.width
+    if scale > 1 {
+      layout.invalidateLayout()
+      layoutIfNeeded()
+    }
+    layout.cellSize = imageSize
+    UIView.animate(withDuration: 0.2, animations: {
+      self.collectionView.heightConstraint?.constant *= scale
+      self.scrollToCell(at: activeIndex, scale: scale)
       self.layoutIfNeeded()
+    }, completion: { _ in
+      self.adjustCellSelectionButtonHorizontally()
     })
+  }
+
+  private func changeFirstAction() {
+    switch state {
+    case .preview:
+      actionsView.changeFirstAction(to: .openCamera)
+    case .expanded(let selectedAssetsCount):
+      actionsView.changeFirstAction(to: .selectImages(count: selectedAssetsCount))
+    }
   }
 }
 
-enum ImagePickerState {
-  case preview, selectImage
+extension ImagePickerView {
+  func adjustCellSelectionButtonHorizontally() {
+    let cells = collectionView.visibleCells.compactMap { $0 as? ImagePreviewCell }
+    let padding = ImagePreviewCell.Constants.selectionButtonPadding
+    let rightmostIndex = rightmostCellIndex()
 
-  func scale() -> CGFloat {
-    switch self {
-    case .preview:
-      return 1 / (1 + (PICKER_ACTION_BUTTON_HEIGHT / PICKER_IMAGE_WIDTH))
-    case .selectImage:
-      return 1 + PICKER_ACTION_BUTTON_HEIGHT / PICKER_IMAGE_WIDTH
+    for cell in cells {
+      let indexPath = collectionView.indexPath(for: cell)!
+      if indexPath.item == rightmostIndex {
+        let nextPosition = selectionButtonOffset(forCellAt: indexPath.item)
+        if nextPosition != -cell.selectButtonRightPadding {
+          cell.setSelectButtonPosition(nextPosition)
+        }
+        continue
+      }
+      if cell.selectButtonRightPadding == padding {
+        continue
+      }
+      cell.setSelectButtonPosition(padding)
     }
   }
+
+  func selectionButtonOffset(forCellAt index: Int) -> CGFloat {
+    let cellWidth = layout.cellSize.width
+    let padding = ImagePreviewCell.Constants.selectionButtonPadding
+    let cellTotalWidth = cellWidth + layout.minimumInteritemSpacing
+    let scrollViewMaxX = collectionView.contentOffset.x + collectionView.bounds.width
+    let cellMaxX = (CGFloat(index) * cellTotalWidth) + cellWidth
+    if scrollViewMaxX > cellMaxX {
+      return padding
+    }
+    let offset = abs(scrollViewMaxX - cellMaxX)
+    var resultOffset: CGFloat = offset
+    if offset + ImagePreviewCell.Constants.selectionButtonSize > cellWidth - padding {
+      resultOffset = cellWidth - padding - ImagePreviewCell.Constants.selectionButtonSize
+    }
+    if offset < padding {
+      resultOffset = padding
+    }
+    return resultOffset
+  }
+
+  private func rightmostCellIndex() -> Int {
+    let maxX = collectionView.contentOffset.x + collectionView.bounds.width
+    let index = Int(maxX / (layout.cellSize.width + layout.minimumLineSpacing))
+
+    let itemsInCollectionView = collectionView.numberOfItems(inSection: 0)
+    if index >= itemsInCollectionView {
+      return itemsInCollectionView - 1
+    }
+    return index
+  }
+
+  private func contentOffset(forCellAt index: Int, scale: CGFloat) -> CGPoint {
+    let top = -collectionView.adjustedContentInset.top
+    if scale == 1 {
+      if index == 0 { return CGPoint(x: 0, y: top) }
+
+      if index == collectionView.numberOfItems(inSection: 0) - 1 {
+        return CGPoint(
+          x: collectionView.contentSize.width - collectionView.bounds.width,
+          y: top
+        )
+      }
+    }
+
+    let indexPath = IndexPath(item: index, section: 0)
+    guard let attributes = collectionView.layoutAttributesForItem(at: indexPath) else {
+      return CGPoint(
+        x: collectionView.contentSize.width - collectionView.bounds.width,
+        y: top
+      )
+    }
+    let frame = attributes.frame
+    let totalSpacingWidth = CGFloat(index) * layout.minimumInteritemSpacing
+    let scaledMinX = (abs(frame.minX) - totalSpacingWidth) * scale + totalSpacingWidth
+    let imageCenterX = scaledMinX + (frame.width * scale) / 2
+    return CGPoint(
+      x: imageCenterX - collectionView.bounds.width / 2,
+      y: top
+    )
+  }
+
+  private func updateCellSelectionCount(selectedAssetIndices: [Int]) {
+    let cells = collectionView.visibleCells.compactMap { $0 as? ImagePreviewCell }
+
+    for cell in cells {
+      let indexPath = collectionView.indexPath(for: cell)!
+      guard let selectionIndex = selectedAssetIndices.firstIndex(of: indexPath.item) else {
+        cell.selectionCount = 0
+        continue
+      }
+      cell.selectionCount = selectionIndex + 1
+    }
+  }
+}
+
+enum ImagePickerState: Equatable {
+  case preview, expanded(selectedAssetsCount: Int)
+
+  static func makeFromSelectedAssetsCount(_ count: Int) -> Self {
+    count == 0 ? .preview : .expanded(selectedAssetsCount: count)
+  }
+
+  var scale: CGFloat {
+    let ratio = ImagePickerView.Constants.actionButtonHeight / ImagePickerView.Constants.imageSize.width
+    switch self {
+    case .preview:
+      return 1 / (1 + ratio)
+    case .expanded:
+      return 1 + ratio
+    }
+  }
+}
+
+protocol ImagePickerViewDataSource: class {
+  var selectedAssetIndices: [Int] { get }
 }

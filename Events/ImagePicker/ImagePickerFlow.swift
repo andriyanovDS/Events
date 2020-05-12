@@ -46,7 +46,13 @@ class ImagePickerFlow: Flow {
         selectedImageIndices: selectedImageIndices,
         onImageDidSelected: onImageDidSelected
       )
-    case .imagesPreviewDidComplete:
+    case .permissionModal(let type):
+      return navigateToPermissionModal(withType: type)
+    case .defaultImagePicker(let source, let delegate):
+      return navigateToDefaultImagePicker(source: source, delegate: delegate)
+    case .imagesPreviewDidComplete,
+         .defaultImagePickerDidComplete,
+         .permissionModalDidComplete:
       rootNavigationController.dismiss(animated: true, completion: nil)
       return .none
     default:
@@ -54,20 +60,26 @@ class ImagePickerFlow: Flow {
     }
   }
 
+  func navigateToPermissionModal(withType type: PermissionModalType) -> FlowContributors {
+    let flow = PermissionModalFlow()
+    Flows.whenReady(flow1: flow, block: {
+      self.rootNavigationController.present($0, animated: true)
+    })
+    return .one(flowContributor: .contribute(
+      withNextPresentable: flow,
+      withNextStepper: OneStepper(withSingleStep: EventStep.permissionModal(withType: type))
+      ))
+  }
+
   func navigateToImagePicker(
     selectedAssets: [PHAsset],
-    onComplete: @escaping ([PHAsset]
-    ) -> Void) -> FlowContributors {
-    let viewModel = ImagePickerViewModel(
-      selectedAssets: selectedAssets,
-      onResult: onComplete
-    )
-     let viewController = ImagePickerVC(viewModel: viewModel)
-     viewController.modalTransitionStyle = .coverVertical
-     viewController.modalPresentationStyle = .overFullScreen
-     rootNavigationController.pushViewController(viewController, animated: true)
-     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
-   }
+    onComplete: @escaping ([PHAsset]) -> Void
+  ) -> FlowContributors {
+    let viewModel = ImagePickerViewModel(selectedAssets: selectedAssets, onResult: onComplete)
+    let viewController = ImagePickerVC.instantiate(with: viewModel)
+    rootNavigationController.pushViewController(viewController, animated: true)
+    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
+  }
 
   func navigateToImagesPreview(
     assets: PHFetchResult<PHAsset>,
@@ -86,5 +98,19 @@ class ImagePickerFlow: Flow {
 		viewController.modalPresentationStyle = .overFullScreen
     rootNavigationController.present(viewController, animated: true, completion: nil)
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
+  }
+  
+  func navigateToDefaultImagePicker(
+    source: UIImagePickerController.SourceType,
+    delegate: UIImagePickerControllerDelegate & UINavigationControllerDelegate
+  ) -> FlowContributors {
+    if !UIImagePickerController.isSourceTypeAvailable(source) {
+      return .none
+    }
+    let controller = UIImagePickerController()
+    controller.delegate = delegate
+    controller.sourceType = source
+    rootNavigationController.present(controller, animated: true, completion: nil)
+    return .none
   }
 }

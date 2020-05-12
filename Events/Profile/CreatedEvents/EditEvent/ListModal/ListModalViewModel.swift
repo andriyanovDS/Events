@@ -15,16 +15,17 @@ protocol ListModalButton {
   var isSelected: Bool { get }
 }
 
-class ListModalViewModel: Stepper, ScreenWithResult {
+class ListModalViewModel: Stepper, ResultProvider {
   let steps = PublishRelay<Step>()
-  var onResult: ((ListModalButton) -> Void)!
+  let onResult: ResultHandler<ListModalButton>
   private let buttons: [ListModalButton]
   var buttonLabelTexts: [String] {
     buttons.map(\.labelText)
   }
 
-  init(buttons: [ListModalButton]) {
+  init(buttons: [ListModalButton], onResult: @escaping ResultHandler<ListModalButton>) {
     self.buttons = buttons
+    self.onResult = onResult
   }
 
   func buttonLabel(at index: Int) -> String {

@@ -10,15 +10,16 @@ import Foundation
 import RxCocoa
 import RxFlow
 
-class DatePickerModalViewModel: Stepper, ScreenWithResult {
+class DatePickerModalViewModel: Stepper, ResultProvider {
 	let steps = PublishRelay<Step>()
 	var selectedDate: Date
 	let mode: UIDatePicker.Mode
-	var onResult: ((Date) -> Void)!
+	let onResult: ResultHandler<Date>
 	
-	init(initialDate: Date, mode: UIDatePicker.Mode) {
+  init(initialDate: Date, mode: UIDatePicker.Mode, onResult: @escaping ResultHandler<Date>) {
 		selectedDate = initialDate
 		self.mode = mode
+    self.onResult = onResult
 	}
 	
 	func submitDate() {

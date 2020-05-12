@@ -65,8 +65,7 @@ class EditEventFlow: Flow {
     buttons: [ListModalButton],
     onComplete: @escaping (ListModalButton) -> Void
   ) -> FlowContributors {
-    let viewModel = ListModalViewModel(buttons: buttons)
-    viewModel.onResult = onComplete
+    let viewModel = ListModalViewModel(buttons: buttons, onResult: onComplete)
 		let view = ListModalView(titleText: title)
     let viewController = ListModalViewController.instantiate(with: viewModel)
 		viewController.modalView = view
@@ -80,8 +79,7 @@ class EditEventFlow: Flow {
 		mode: UIDatePicker.Mode,
 		onComplete: @escaping (Date) -> Void
 	) -> FlowContributors {
-		let viewModel = DatePickerModalViewModel(initialDate: initialDate, mode: mode)
-		viewModel.onResult = onComplete
+		let viewModel = DatePickerModalViewModel(initialDate: initialDate, mode: mode, onResult: onComplete)
 		let view = DatePickerModalView()
 		let viewController = DatePickerModalViewController.instantiate(with: viewModel)
 		viewController.modalView = view
@@ -94,19 +92,17 @@ class EditEventFlow: Flow {
     withSelectedDates: SelectedDates,
     onComplete: @escaping (SelectedDates?) -> Void
   ) -> FlowContributors {
-    let viewModel = CalendarViewModel()
+    let viewModel = CalendarViewModel(onResult: onComplete)
     let dataSource = CalendarDataSource(selectedDates: withSelectedDates)
     let viewController = CalendarViewController(dataSource: dataSource, viewModel: viewModel)
     viewController.modalPresentationStyle = .overFullScreen
     viewController.hero.isEnabled = true
-    viewController.onResult = onComplete
     rootNavigationController.present(viewController, animated: true, completion: nil)
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
    }
 
   private func navigateToLocationSearchBar(onResult: @escaping (Geocode) -> Void) -> FlowContributors {
-    let viewModel = LocationSearchViewModel()
-    viewModel.onResult = onResult
+    let viewModel = LocationSearchViewModel(onResult: onResult)
     let viewController = LocationSearchViewController.instantiate(with: viewModel)
     viewController.modalPresentationStyle = .overFullScreen
     viewController.modalTransitionStyle = .coverVertical
@@ -118,8 +114,7 @@ class EditEventFlow: Flow {
 		initialName: String?,
 		onComplete: @escaping (String?) -> Void
 	) -> FlowContributors {
-		let viewModel = EventNameViewModel(initialName: initialName)
-		viewModel.onResult = onComplete
+		let viewModel = EventNameViewModel(eventName: initialName ?? "", onResult: onComplete)
 		let viewController = EventNameViewController.instantiate(with: viewModel)
 		viewController.modalPresentationStyle = .overFullScreen
     viewController.modalTransitionStyle = .coverVertical

@@ -9,8 +9,9 @@
 import RxCocoa
 import RxFlow
 
-class DateViewModel: Stepper {
+class DateViewModel: Stepper, ResultProvider {
 	let steps = PublishRelay<Step>()
+  let onResult: ResultHandler<DateScreenResult>
 	weak var delegate: DateViewModelDelegate?
 	var dates: [Date] = generateInitialDates()
 	var duration: EventDurationRange?
@@ -23,7 +24,8 @@ class DateViewModel: Stepper {
 	]
   private var selectedDates = SelectedDates(from: nil, to: nil)
 	
-	init() {
+  init(onResult: @escaping ResultHandler<DateScreenResult>) {
+    self.onResult = onResult
 		duration = durations[0]
 	}
 	
@@ -61,7 +63,7 @@ class DateViewModel: Stepper {
 		guard let duration = self.duration else {
 			fatalError("Duration must be selected")
 		}
-		delegate?.onResult(DateScreenResult(
+		onResult(DateScreenResult(
 			dates: dates,
 			duration: duration
 		))
@@ -90,6 +92,5 @@ struct DateScreenResult {
 }
 
 protocol DateViewModelDelegate: class {
-	var onResult: ((DateScreenResult) -> Void)! { get }
 	func onDatesDidSelected(formattedDate: String, daysCount: Int)
 }

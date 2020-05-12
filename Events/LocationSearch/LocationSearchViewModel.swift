@@ -12,15 +12,19 @@ import RxFlow
 import RxCocoa
 import CoreLocation
 
-class LocationSearchViewModel: Stepper, ScreenWithResult {
+class LocationSearchViewModel: Stepper, ResultProvider {
   let steps = PublishRelay<Step>()
-	var onResult: ((Geocode) -> Void)!
+  let onResult: ResultHandler<Geocode>
 	weak var delegate: LocationSearchViewModelDelegate? {
 		didSet { locationManager.delegate = self }
 	}
 	var predictions: [Prediction] = []
 	private let disposeBag = DisposeBag()
 	private let locationManager = UserLocationManagerRequestOnce()
+
+  init(onResult: @escaping ResultHandler<Geocode>) {
+    self.onResult = onResult
+  }
 
 	func register(textField: UITextField) {
 		let scheduler = SerialDispatchQueueScheduler(qos: .userInitiated)

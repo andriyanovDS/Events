@@ -10,8 +10,7 @@ import UIKit
 import RxSwift
 import Photos.PHAsset
 
-class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewModelBased, ScreenWithResult {  
-	var onResult: (([DescriptionWithAssets]) -> Void)!
+class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewModelBased {
   var viewModel: DescriptionViewModel!
   private let disposeBag = DisposeBag()
   private var descriptionView: DescriptionView?
@@ -122,8 +121,7 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
   }
   
   private func onSubmit() {
-    onResult(dataSource.descriptions)
-    viewModel.openNextScreen()
+    viewModel.openNextScreen(with: dataSource.descriptions)
   }
   
   private func configure(
@@ -134,7 +132,7 @@ class DescriptionViewController: UIViewControllerWithActivityIndicator, ViewMode
     let id = asset.asset.localIdentifier
     cell.id = id
     viewModel.image(for: asset.asset, onResult: {[weak cell] image in
-      guard let cell = cell, cell.id == id else { return }
+      guard let image = image, let cell = cell, cell.id == id else { return }
       cell.setImage(image, asset: asset.asset)
     })
     cell.removeButton.addTarget(self, action: #selector(onRemoveImage(_:)), for: .touchUpInside)

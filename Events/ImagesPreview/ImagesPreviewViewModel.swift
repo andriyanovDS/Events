@@ -55,12 +55,12 @@ class ImagesPreviewViewModel: Stepper {
     return assets.object(at: index)
   }
 
-  func image(for asset: PHAsset, onResult: @escaping (UIImage) -> Void) {
-    imageManager.getImage(for: asset, onResult: onResult)
+  func image(for asset: PHAsset, onResult: @escaping (UIImage?) -> Void) {
+    imageManager.getImage(for: asset, completion: onResult)
   }
 
   func attemptToCacheAssets(_ collectionView: UICollectionView) {
-    imageManager.attemptToCacheAssets(collectionView, assetGetter: {
+    imageManager.attemptToCacheAssets(collectionView, assetProvider: {
       self.assets.object(at: $0)
     })
   }

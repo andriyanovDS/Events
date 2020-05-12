@@ -8,13 +8,8 @@
 
 import UIKit
 
-class CategoryViewController: UIViewController, ViewModelBased, ScreenWithResult, CategoryViewModelDelegate {
-  var onResult: ((CategoryId) -> Void)!
-  var viewModel: CategoryViewModel! {
-    didSet {
-      viewModel.delegate = self
-    }
-  }
+class CategoryViewController: UIViewController, ViewModelBased {
+  var viewModel: CategoryViewModel!
   private var categoryView: CategoriesView?
 
   override func viewDidLoad() {
