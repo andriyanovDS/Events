@@ -9,14 +9,9 @@
 import UIKit
 import RxSwift
 
-class StartViewController: UIViewController, ViewModelBased, ScreenWithResult, StartViewModelDelegate {
-	var viewModel: StartViewModel! {
-		didSet {
-			viewModel.delegate = self
-		}
-	}
+class StartViewController: UIViewController, ViewModelBased {
+	var viewModel: StartViewModel!
 	var onBackAction: (() -> Void)!
-	var onResult: ((StartViewResult) -> Void)!
 	private var startView: StartView?
 	private var disposeBag = DisposeBag()
 	

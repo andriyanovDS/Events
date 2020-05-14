@@ -69,4 +69,9 @@ indirect enum EventStep: Step {
 	case datePickerModalDidComplete
 	case eventName(initialName: String?, onComplete: (String?) -> Void)
 	case eventNameDidComplete
+  case defaultImagePicker(
+    source: UIImagePickerController.SourceType,
+    delegate: UIImagePickerControllerDelegate & UINavigationControllerDelegate
+  )
+  case defaultImagePickerDidComplete
 }

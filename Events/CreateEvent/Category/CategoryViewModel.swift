@@ -9,18 +9,18 @@
 import RxFlow
 import RxCocoa
 
-class CategoryViewModel: Stepper {
-  weak var delegate: CategoryViewModelDelegate?
+class CategoryViewModel: Stepper, ResultProvider {
   let steps = PublishRelay<Step>()
   var category: CategoryId?
+  let onResult: ResultHandler<CategoryId>
+
+  init(onResult: @escaping ResultHandler<CategoryId>) {
+    self.onResult = onResult
+  }
 
   func openNextScreen() {
     guard let category = self.category else { return }
-    delegate?.onResult(category)
+    onResult(category)
     steps.accept(CreateEventStep.categoryDidComplete)
   }
-}
-
-protocol CategoryViewModelDelegate: class {
-  var onResult: ((CategoryId) -> Void)! { get }
 }

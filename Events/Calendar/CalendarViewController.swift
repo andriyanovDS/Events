@@ -9,8 +9,7 @@
 import UIKit
 import RxSwift
 
-class CalendarViewController: UIViewController, ScreenWithResult {
-  var onResult: ((SelectedDates?) -> Void)!
+class CalendarViewController: UIViewController {
   private var calendarCloseByGestureRecognizer: CalendarCloseByGestureRecognizer?
   private let dataSource: CalendarDataSource
   private let viewModel: CalendarViewModel
@@ -61,8 +60,7 @@ class CalendarViewController: UIViewController, ScreenWithResult {
       .disposed(by: disposeBag)
     view.footerView.saveButton.rx.tap
       .subscribe(onNext: {[unowned self] in
-        self.onResult(self.dataSource.selectedDates)
-        self.viewModel.onClose()
+        self.viewModel.onClose(with: self.dataSource.selectedDates)
       })
       .disposed(by: disposeBag)
     
@@ -82,8 +80,7 @@ class CalendarViewController: UIViewController, ScreenWithResult {
   }
   
   @objc private func onClose() {
-    onResult(nil)
-    viewModel.onClose()
+    viewModel.onClose(with: nil)
   }
   
   private func clearDates() {

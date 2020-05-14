@@ -11,9 +11,10 @@ import RxCocoa
 import Photos
 import Promises
 
-class DescriptionViewModel: Stepper {
+class DescriptionViewModel: Stepper, ResultProvider {
   weak var delegate: DescriptionViewModelDelegate?
   let steps = PublishRelay<Step>()
+  let onResult: ResultHandler<[DescriptionWithAssets]>
   private let imageCacheManager: ImageCacheManager
 	private lazy var imageLoadingOptions: PHContentEditingInputRequestOptions = {
 		let options = PHContentEditingInputRequestOptions()
@@ -21,7 +22,8 @@ class DescriptionViewModel: Stepper {
 		return options
 	}()
 	
-  init() {
+  init(onResult: @escaping ResultHandler<[DescriptionWithAssets]>) {
+    self.onResult = onResult
     let scale = UIScreen.main.scale
     let transform = CGAffineTransform(scaleX: scale, y: scale)
     imageCacheManager = ImageCacheManager(
@@ -30,7 +32,8 @@ class DescriptionViewModel: Stepper {
     )
   }
 
-  func openNextScreen() {
+  func openNextScreen(with result: [DescriptionWithAssets]) {
+    onResult(result)
     steps.accept(CreateEventStep.descriptionDidComplete)
   }
 	
@@ -101,12 +104,12 @@ extension DescriptionViewModel {
 }
 
 extension DescriptionViewModel {
-  func image(for asset: PHAsset, onResult: @escaping (UIImage) -> Void) {
-    return imageCacheManager.getImage(for: asset, onResult: onResult)
+  func image(for asset: PHAsset, onResult: @escaping (UIImage?) -> Void) {
+    return imageCacheManager.getImage(for: asset, completion: onResult)
   }
 
-  func attemptToCacheAssets(_ collectionView: UICollectionView, assetGetter: ImageCacheManager.AssetGetter) {
-    imageCacheManager.attemptToCacheAssets(collectionView, assetGetter: assetGetter)
+  func attemptToCacheAssets(_ collectionView: UICollectionView, assetGetter: ImageCacheManager.AssetProvider) {
+    imageCacheManager.attemptToCacheAssets(collectionView, assetProvider: assetGetter)
   }
 }
 

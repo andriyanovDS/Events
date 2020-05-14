@@ -8,8 +8,7 @@
 
 import UIKit
 
-class DateViewController: UIViewController, ViewModelBased, ScreenWithResult {
-  var onResult: ((DateScreenResult) -> Void)!
+class DateViewController: UIViewController, ViewModelBased {
   var viewModel: DateViewModel! {
     didSet {
       viewModel.delegate = self

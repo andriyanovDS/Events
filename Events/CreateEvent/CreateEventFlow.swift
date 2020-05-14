@@ -127,8 +127,7 @@ class CreateEventFlow: Flow {
   }
 	
 	private func navigateToLocationSearchBar(onResult: @escaping (Geocode) -> Void) -> FlowContributors {
-    let viewModel = LocationSearchViewModel()
-		viewModel.onResult = onResult
+    let viewModel = LocationSearchViewModel(onResult: onResult)
 		let viewController = LocationSearchViewController.instantiate(with: viewModel)
     viewController.modalPresentationStyle = .overFullScreen
     viewController.modalTransitionStyle = .coverVertical
@@ -140,12 +139,11 @@ class CreateEventFlow: Flow {
     with selectedDates: SelectedDates,
     onComplete: @escaping (SelectedDates?) -> Void
   ) -> FlowContributors {
-    let viewModel = CalendarViewModel()
+    let viewModel = CalendarViewModel(onResult: onComplete)
     let dataSource = CalendarDataSource(selectedDates: selectedDates)
     let viewController = CalendarViewController(dataSource: dataSource, viewModel: viewModel)
     viewController.modalPresentationStyle = .overFullScreen
     viewController.hero.isEnabled = true
-    viewController.onResult = onComplete
     rootNavigationController.present(viewController, animated: true, completion: nil)
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
    }
@@ -166,11 +164,10 @@ class CreateEventFlow: Flow {
     let createEventViewController = CreateEventViewController.instantiate(with: createEventViewModel)
     rootNavigationController.pushViewController(createEventViewController, animated: false)
 
-    let startViewModel = StartViewModel()
+    let startViewModel = StartViewModel(onResult: { data in
+      createEventViewModel.eventStartDataDidSelected(data: data)
+    })
     let startViewController = StartViewController.instantiate(with: startViewModel)
-    startViewController.onResult = { data in
-			createEventViewModel.eventStartDataDidSelected(data: data)
-    }
     startViewController.onBackAction = {
       createEventViewModel.onClose()
     }
@@ -191,33 +188,29 @@ class CreateEventFlow: Flow {
   }
 	
 	private func navigateToLocationScreen(onResult: @escaping (Geocode) -> Void) -> FlowContributors {
-    let viewModel = LocationViewModel()
-		viewModel.onResult = onResult
+    let viewModel = LocationViewModel(onResult: onResult)
     let viewController = LocationViewController.instantiate(with: viewModel)
     rootNavigationController.pushViewController(viewController, animated: true)
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
   }
 
   private func navigateToDateScreen(onResult: @escaping (DateScreenResult) -> Void) -> FlowContributors {
-    let viewModel = DateViewModel()
+    let viewModel = DateViewModel(onResult: onResult)
     let viewController = DateViewController.instantiate(with: viewModel)
-    viewController.onResult = onResult
     rootNavigationController.pushViewController(viewController, animated: true)
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
   }
 
   private func navigateToCategoryScreen(onResult: @escaping (CategoryId) -> Void) -> FlowContributors {
-    let viewModel = CategoryViewModel()
+    let viewModel = CategoryViewModel(onResult: onResult)
     let viewController = CategoryViewController.instantiate(with: viewModel)
-    viewController.onResult = onResult
     rootNavigationController.pushViewController(viewController, animated: true)
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
   }
 
   private func navigateToDescriptionScreen(onResult: @escaping ([DescriptionWithAssets]) -> Void) -> FlowContributors {
-    let viewModel = DescriptionViewModel()
+    let viewModel = DescriptionViewModel(onResult: onResult)
     let viewController = DescriptionViewController.instantiate(with: viewModel)
-    viewController.onResult = onResult
     rootNavigationController.pushViewController(viewController, animated: true)
     return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
   }

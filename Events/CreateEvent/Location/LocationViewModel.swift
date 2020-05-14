@@ -11,14 +11,15 @@ import RxFlow
 import RxCocoa
 import CoreLocation
 
-class LocationViewModel: Stepper, ScreenWithResult {
-	var onResult: ((Geocode) -> Void)!
+class LocationViewModel: Stepper, ResultProvider {
+  let onResult: ResultHandler<Geocode>
 	weak var delegate: LocationViewModelDelegate?
   let steps = PublishRelay<Step>()
   var geocode: Geocode?
 	let locationManager = UserLocationManagerRequestOnce()
 	
-	init() {
+  init(onResult: @escaping ResultHandler<Geocode>) {
+    self.onResult = onResult
 		locationManager.delegate = self
 	}
 

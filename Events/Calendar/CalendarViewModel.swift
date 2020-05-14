@@ -11,10 +11,16 @@ import RxSwift
 import RxCocoa
 import Foundation
 
-class CalendarViewModel: Stepper {
+class CalendarViewModel: Stepper, ResultProvider {
   let steps = PublishRelay<Step>()
+  let onResult: ResultHandler<SelectedDates?>
 
-  func onClose() {
+  init(onResult: @escaping ResultHandler<SelectedDates?>) {
+    self.onResult = onResult
+  }
+
+  func onClose(with result: SelectedDates?) {
+    onResult(result)
     self.steps.accept(EventStep.calendarDidComplete)
   }
 }

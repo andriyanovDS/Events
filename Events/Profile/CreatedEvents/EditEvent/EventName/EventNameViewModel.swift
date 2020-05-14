@@ -10,13 +10,14 @@ import Foundation
 import RxCocoa
 import RxFlow
 
-class EventNameViewModel: Stepper, ScreenWithResult {
+class EventNameViewModel: Stepper, ResultProvider {
 	let steps = PublishRelay<Step>()
-	var onResult: ((String?) -> Void)!
+  let onResult: ResultHandler<String?>
 	var eventName: String
 
-	init(initialName: String?) {
-		eventName = initialName ?? ""
+  init(eventName: String = "", onResult: @escaping ResultHandler<String?>) {
+    self.eventName = eventName
+    self.onResult = onResult
 	}
 	
 	func submitName() {

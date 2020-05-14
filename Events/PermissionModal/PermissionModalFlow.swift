@@ -24,7 +24,6 @@ class PermissionModalFlow: Flow {
     case .permissionModal(let withType):
       return navigateToPermissionModal(with: withType)
     case .permissionModalDidComplete:
-      rootNavigationController.dismiss(animated: true, completion: nil)
       return .end(forwardToParentFlowWithStep: EventStep.permissionModalDidComplete)
     default:
       return .none

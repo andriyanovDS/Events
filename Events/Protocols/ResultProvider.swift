@@ -9,7 +9,10 @@
 import UIKit
 import Foundation
 
-protocol ScreenWithResult {
+protocol ResultProvider {
   associatedtype ResultType
-  var onResult: ((ResultType) -> Void)! { get set }
+  typealias ResultHandler<T> = (T) -> Void
+  
+  var onResult: ResultHandler<ResultType> { get }
 }
+

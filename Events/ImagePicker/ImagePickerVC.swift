@@ -9,154 +9,139 @@
 import UIKit
 import Photos
 
-class ImagePickerVC: UIViewController {
-  weak var viewModel: ImagePickerViewModel!
-  var imagePickerView: ImagePickerView?
-
-  init(viewModel: ImagePickerViewModel) {
-    self.viewModel = viewModel
-    let scale = UIScreen.main.scale
-    viewModel.targetSize = CGSize(
-      width: PICKER_IMAGE_MAX_SIZE * scale,
-      height: PICKER_IMAGE_MAX_SIZE * scale
-    )
-    super.init(nibName: nil, bundle: nil)
-  }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+class ImagePickerVC: UIViewController, ViewModelBased {
+  var viewModel: ImagePickerViewModel!
+  private var imagePickerView: ImagePickerView!
+  private var dataSource: ImagePickerDataSource!
+  private var isAppearanceAnimationPerformed: Bool = false
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    setupView()
+
+    dataSource = ImagePickerDataSource(
+      cellConfigurator: {[unowned self] (configuration, cell) in
+        self.configure(cell: cell, with: configuration)
+      }
+    )
+    dataSource.changeTargetSize(ImagePickerView.Constants.imageSize)
+    setupView()    
     viewModel.delegate = self
     viewModel.onViewReady()
-    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-      self.imagePickerView?.animateShowContent()
+  }
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    if !isAppearanceAnimationPerformed {
+      imagePickerView.animateAppearance()
+      isAppearanceAnimationPerformed = true
     }
-  }
-
-  private func onSelectImageSource(source: ImageSource) {
-    viewModel.onSelectImageSource(source: source)
-  }
-
-  private func onConfirmSendImages() {
-    viewModel.onConfirmSendImages()
   }
 
   private func setupView() {
     imagePickerView = ImagePickerView(
+      dataSource: dataSource,
       onSelectImageSource: {[unowned self] source in
-        self.onSelectImageSource(source: source)
+        self.viewModel.onSelectImageSource(source: source)
       },
       onConfirmSendImages: {[unowned self] in
-        self.onConfirmSendImages()
+        self.imagePickerView.animateDisappearance(
+          completion: {[weak self] in
+            guard let self = self else { return }
+            self.viewModel.confirmSelectedAssets(self.dataSource.selectedAssets)
+          }
+        )
       }
     )
-    imagePickerView?.actionsView.collectionView.delegate = self
-    imagePickerView?.actionsView.collectionView.dataSource = self
-    imagePickerView?.closeButton.addTarget(
+    imagePickerView.collectionView.delegate = self
+    imagePickerView.collectionView.dataSource = dataSource
+    imagePickerView.closeButton.addTarget(
       self,
       action: #selector(onClose),
       for: .touchUpInside
     )
+    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(onTapBackgroundView(_:)))
+    imagePickerView.backgroundView.addGestureRecognizer(tapGestureRecognizer)
     view = imagePickerView
   }
 
   @objc func onClose() {
-    imagePickerView?.animateHideContent(onComplete: {[unowned self] in
-      self.viewModel?.closeImagePicker(with: [])
-    })
+    imagePickerView.animateDisappearance(
+      completion: {[weak self] in
+        guard let self = self else { return }
+        self.viewModel.confirmSelectedAssets(self.dataSource.initialSelectedAssets)
+      }
+    )
   }
 
-  @objc private func onPressSelectButton(_ button: SelectImageButton) {
-    let index = button.tag
-    viewModel.onSelectImage(at: index)
+  @objc func onTapBackgroundView(_ recognizer: UITapGestureRecognizer) {
+    if recognizer.state == .ended {
+      onClose()
+    }
+  }
+
+  private func selectAsset(at index: Int) {
+    dataSource.selectAsset(at: index)
+    let collectionView = imagePickerView.collectionView
+    let cellIndexPath = IndexPath(item: index, section: 0)
+    if collectionView.cellForItem(at: cellIndexPath) == nil {
+      collectionView.scrollToItem(at: cellIndexPath, at: .centeredHorizontally, animated: false)
+    }
+    imagePickerView.onImageDidSelected(at: index)
   }
 }
 
 extension ImagePickerVC: ImagePickerViewModelDelegate {
-  func onImageDidSelected(at index: Int) {
-    guard let collectionView = imagePickerView?.actionsView.collectionView else { return }
-    let indexPath = IndexPath(item: index, section: 0)
-    guard let cell = collectionView.cellForItem(at: indexPath) as? ImagePreviewCell else {
-      collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: false)
-      imagePickerView?.onImageDidSelected(at: index, selectedImageIndices: viewModel.selectedAssetIndices)
-      return
-    }
-    cell.selectButton.setCount(viewModel.selectedAssetIndices.count)
-    imagePickerView?.onImageDidSelected(at: index, selectedImageIndices: viewModel.selectedAssetIndices)
+  func viewModel(
+    _: ImagePickerViewModel,
+    didLoadAssets assets: PHFetchResult<PHAsset>,
+    whereSelected indices: [Int]
+  ) {
+    dataSource.updateAssets(assets, whereSelected: indices)
+    imagePickerView.showCollectionView()
+    imagePickerView.collectionView.reloadData()
   }
 
-  func performCloseAnimation(onComplete: @escaping () -> Void) {
-    imagePickerView?.animateHideContent(onComplete: onComplete)
-  }
-
-  func imagePickerController(
-    _ picker: UIImagePickerController,
-    didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
-    ) {
-    defer {
-      self.dismiss(animated: true, completion: nil)
-    }
-		
-    guard let asset = info[UIImagePickerController.InfoKey.phAsset] as? PHAsset else {
-      return
-    }
-    viewModel.closeImagePicker(with: [asset])
-  }
-
-  func updateImagePreviews(selectedImageIndices: [Int]) {
-    imagePickerView?.updateImagePreviews(selectedImageIndices: selectedImageIndices)
+  func viewModel(_: ImagePickerViewModel, didSelectImageAt index: Int) {
+    selectAsset(at: index)
   }
 }
 
-extension ImagePickerVC: UICollectionViewDataSource {
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return viewModel.assetsCount
-  }
-
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    guard let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: "ImagePreviewCell",
-      for: indexPath
-      ) as? ImagePreviewCell else {
-        fatalError("unexpected cell in collection view")
+extension ImagePickerVC {
+  private func configure(
+    cell: ImagePreviewCell,
+    with configuration: ImagePickerDataSource.CellConfiguration
+  ) {
+    cell.assetIdentifier = configuration.assetIdentifier
+    if let selectedPosition = configuration.selectedPosition {
+      cell.selectionCount = selectedPosition
     }
-    let asset = viewModel.asset(at: indexPath.item)
-    cell.assetIndentifier = asset.localIdentifier
-    cell.selectButton.addTarget(self, action: #selector(onPressSelectButton(_:)), for: .touchUpInside)
-    viewModel.image(for: asset, onResult: { image in
-      guard cell.assetIndentifier == asset.localIdentifier else { return }
-      cell.reuseCell(image: image, index: indexPath.item)
-    })
-    let selectButtonOffset = imagePickerView!.actionsView.selectButtonOffset(
-      forCellAt: indexPath.item,
-      contentOffsetX: collectionView.contentOffset.x
-    )
+    cell.previewImageView.hero.id = configuration.index.description
+    cell.onPressSelectButton = {[unowned self] in
+      self.selectAsset(at: configuration.index)
+    }
+   
+    let selectButtonOffset = imagePickerView.selectionButtonOffset(forCellAt: configuration.index)
     cell.setSelectButtonPosition(selectButtonOffset)
-    if let index = viewModel.selectedAssetIndices.firstIndex(of: indexPath.item) {
-      cell.selectedCount = index + 1
-    }
-    cell.previewImageView.hero.id = indexPath.item.description
-    return cell
-  }
-
-  func numberOfSections(in collectionView: UICollectionView) -> Int {
-    return 1
   }
 }
 
 extension ImagePickerVC: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    viewModel.openImagesPreview(startAt: indexPath.item)
+    dataSource.loadSharedImage(forAssetAt: indexPath.item, completion: {[weak self] sharedImage in
+      guard let self = self, let sharedImage = sharedImage else { return }
+
+      self.viewModel.openImagesPreview(
+        with: self.dataSource.assets,
+        whereSelected: self.dataSource.selectedAssetIndices,
+        startAt: indexPath.item,
+        sharedImage: sharedImage
+      )
+    })
   }
 
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    imagePickerView?.collectionViewDidScroll()
+    imagePickerView?.adjustCellSelectionButtonHorizontally()
 		guard let collectionView = scrollView as? UICollectionView else { return }
-    if viewModel == nil { return }
-		viewModel.attemptToCacheAssets(collectionView)
+		dataSource.attemptToCacheAssets(collectionView)
   }
 }
