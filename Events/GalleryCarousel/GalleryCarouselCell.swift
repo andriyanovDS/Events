@@ -1,5 +1,5 @@
 //
-//  ImageViewCell.swift
+//  GalleryCarouselCell.swift
 //  Events
 //
 //  Created by Дмитрий Андриянов on 05/10/2019.
@@ -11,10 +11,11 @@ import UIKit
 import Stevia
 import AVFoundation
 
-class ImageViewCell: UICollectionViewCell {
-  var selectedCount: Int?
+class GalleryCarouselCell: UICollectionViewCell, FetchResultDataSourceCell {
   var assetIdentifier: String?
   let previewImageView = UIImageView()
+  
+  static var reuseIdentifier = String(describing: GalleryCarouselCell.self)
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -32,19 +33,13 @@ class ImageViewCell: UICollectionViewCell {
     previewImageView.centerInContainer()
   }
 
-  func setSharedImage(image: UIImage) {
+  func setImage(_ image: UIImage) {
     let size = AVMakeRect(aspectRatio: image.size, insideRect: UIScreen.main.bounds)
     previewImageView.image = image
     previewImageView.width(size.width).height(size.height)
   }
 
-  func setImage(image: UIImage) {
-    previewImageView.image = image
-    previewImageView.fillContainer().centerInContainer()
-  }
-
   override func prepareForReuse() {
-    selectedCount = nil
     assetIdentifier = nil
     previewImageView.image = nil
   }

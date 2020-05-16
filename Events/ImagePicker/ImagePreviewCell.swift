@@ -9,7 +9,7 @@
 import UIKit
 import Stevia
 
-class ImagePreviewCell: UICollectionViewCell, ReuseIdentifiable {
+class ImagePreviewCell: UICollectionViewCell, FetchResultDataSourceCell {
   var image: UIImage?
   var assetIdentifier: String?
   let previewImageView = UIImageView()
@@ -22,12 +22,6 @@ class ImagePreviewCell: UICollectionViewCell, ReuseIdentifiable {
   struct Constants {
     static let selectionButtonPadding: CGFloat = 4.0
     static let selectionButtonSize: CGFloat = 25.0
-  }
-
-  var selectionCount: Int = 0 {
-    didSet {
-      selectionCountDidUpdate()
-    }
   }
   
   static var reuseIdentifier = String(describing: ImagePreviewCell.self)
@@ -48,13 +42,17 @@ class ImagePreviewCell: UICollectionViewCell, ReuseIdentifiable {
   }
   
   override func prepareForReuse() {
-    selectionCount = 0
     assetIdentifier = nil
     previewImageView.image = nil
     onPressSelectButton = nil
+    selectButton.count = nil
+  }
+  
+  func setSelectionCount(_ count: Int?) {
+    selectButton.count = count
   }
 
-	func setImage(image: UIImage) {
+	func setImage(_ image: UIImage) {
     previewImageView.image = image
   }
 
@@ -76,13 +74,5 @@ class ImagePreviewCell: UICollectionViewCell, ReuseIdentifiable {
     selectButton
       .top(Constants.selectionButtonPadding)
       .right(Constants.selectionButtonPadding)
-  }
-
-  private func selectionCountDidUpdate() {
-    if selectionCount == 0 {
-      selectButton.clearCount()
-      return
-    }
-    selectButton.setCount(selectionCount)
   }
 }

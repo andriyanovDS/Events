@@ -282,14 +282,11 @@ extension ImagePickerView {
 
   private func updateCellSelectionCount(selectedAssetIndices: [Int]) {
     let cells = collectionView.visibleCells.compactMap { $0 as? ImagePreviewCell }
-
+    
     for cell in cells {
       let indexPath = collectionView.indexPath(for: cell)!
-      guard let selectionIndex = selectedAssetIndices.firstIndex(of: indexPath.item) else {
-        cell.selectionCount = 0
-        continue
-      }
-      cell.selectionCount = selectionIndex + 1
+      let selectionIndex = selectedAssetIndices.firstIndex(of: indexPath.item).map { $0 + 1 }
+      cell.setSelectionCount(selectionIndex)
     }
   }
 }

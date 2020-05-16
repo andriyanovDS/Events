@@ -10,7 +10,11 @@ import UIKit
 import Stevia
 
 class SelectImageButton: UIButton {
-  private var count: Int?
+  var count: Int? {
+    didSet {
+      countDidChange(from: oldValue, to: count)
+    }
+  }
 
   init(size: CGSize) {
     super.init(frame: CGRect.zero)
@@ -20,17 +24,22 @@ class SelectImageButton: UIButton {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+  
+  func countDidChange(from: Int?, to: Int?) {
+    guard from != to else { return }
+    if let currentValue = to {
+      setCount(currentValue)
+      return
+    }
+    clearCount()
+  }
 
-  func clearCount() {
-    if count == nil { return }
-    count = nil
+  private func clearCount() {
     backgroundColor = .clear
     setTitle("", for: .normal)
   }
 
-  func setCount(_ count: Int) {
-    if self.count == count { return }
-    self.count = count
+  private func setCount(_ count: Int) {
     backgroundColor = .blueButtonBackground
     setTitle(count.description, for: .normal)
   }

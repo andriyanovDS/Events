@@ -18,11 +18,11 @@ class ImagePickerVC: UIViewController, ViewModelBased {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    dataSource = ImagePickerDataSource(
-      cellConfigurator: {[unowned self] (configuration, cell) in
-        self.configure(cell: cell, with: configuration)
-      }
-    )
+    dataSource = ImagePickerDataSource()
+    dataSource.cellConfigurator = {[unowned self] (index, cell) in
+      self.configure(cell: cell, at: index)
+    }
+    dataSource.cellImageSetter = { $2.setImage($0) }
     dataSource.changeTargetSize(ImagePickerView.Constants.imageSize)
     setupView()    
     viewModel.delegate = self
@@ -109,18 +109,17 @@ extension ImagePickerVC: ImagePickerViewModelDelegate {
 extension ImagePickerVC {
   private func configure(
     cell: ImagePreviewCell,
-    with configuration: ImagePickerDataSource.CellConfiguration
+    at index: Int
   ) {
-    cell.assetIdentifier = configuration.assetIdentifier
-    if let selectedPosition = configuration.selectedPosition {
-      cell.selectionCount = selectedPosition
+    if let selectionIndex = dataSource.selectionIndex(forAssetAt: index) {
+      cell.setSelectionCount(selectionIndex + 1)
     }
-    cell.previewImageView.hero.id = configuration.index.description
+    cell.previewImageView.hero.id = index.description
     cell.onPressSelectButton = {[unowned self] in
-      self.selectAsset(at: configuration.index)
+      self.selectAsset(at: index)
     }
    
-    let selectButtonOffset = imagePickerView.selectionButtonOffset(forCellAt: configuration.index)
+    let selectButtonOffset = imagePickerView.selectionButtonOffset(forCellAt: index)
     cell.setSelectButtonPosition(selectButtonOffset)
   }
 }
@@ -129,7 +128,6 @@ extension ImagePickerVC: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     dataSource.loadSharedImage(forAssetAt: indexPath.item, completion: {[weak self] sharedImage in
       guard let self = self, let sharedImage = sharedImage else { return }
-
       self.viewModel.openImagesPreview(
         with: self.dataSource.assets,
         whereSelected: self.dataSource.selectedAssetIndices,

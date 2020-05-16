@@ -87,17 +87,17 @@ class ImagePickerFlow: Flow {
     selectedImageIndices: [Int],
     onImageDidSelected: @escaping (Int) -> Void
   ) -> FlowContributors {
-    let viewModel = ImagesPreviewViewModel(assets: assets)
-    let viewController = ImagesPreviewVC(
-      viewModel: viewModel,
-			sharedImage: sharedImage,
-      selectedImageIndices: selectedImageIndices,
-      onImageDidSelected: onImageDidSelected
+    
+    let viewController = GalleryCarouselBuilder().make(
+      assets: assets,
+      selectedAssetIndices: selectedImageIndices,
+      sharedImage: sharedImage,
+      onAssetDidSelected: onImageDidSelected
     )
     viewController.hero.isEnabled = true
 		viewController.modalPresentationStyle = .overFullScreen
     rootNavigationController.present(viewController, animated: true, completion: nil)
-    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewModel))
+    return .one(flowContributor: .contribute(withNextPresentable: viewController, withNextStepper: viewController.viewModel))
   }
   
   func navigateToDefaultImagePicker(

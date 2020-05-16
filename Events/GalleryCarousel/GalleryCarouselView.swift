@@ -1,5 +1,5 @@
 //
-//  ImagesPreviewView.swift
+//  GalleryCarouselView.swift
 //  Events
 //
 //  Created by Дмитрий Андриянов on 04/09/2019.
@@ -10,19 +10,19 @@ import UIKit
 import Stevia
 import Hero
 
-class ImagesPreviewView: UIView {
+class GalleryCarouselView: UIView {
   let closeButton = UIButtonScaleOnPress()
   let backButton = UIButtonScaleOnPress()
 	let selectButton: SelectImageButton
-  private let collectionView: UICollectionView
+  let collectionView: UICollectionView
 
-  init(collectionView: UICollectionView) {
-    self.collectionView = collectionView
-		selectButton = SelectImageButton(size: CGSize(
-			width: 35,
-			height: 35
-		))
-		
+  init() {
+    let layout = ImagePickerCollectionViewLayout(
+      cellSize: UIScreen.main.bounds.size
+    )
+    layout.scrollDirection = .horizontal
+    collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+    selectButton = SelectImageButton(size: Constants.selectionButtonSize)
     super.init(frame: CGRect.zero)
     setupView()
   }
@@ -34,10 +34,8 @@ class ImagesPreviewView: UIView {
   private func setupView() {
     isOpaque = false
     backgroundColor = .backgroundInverted
-    collectionView.style { v in
-      v.showsVerticalScrollIndicator = false
-      v.showsHorizontalScrollIndicator = false
-    }
+    collectionView.showsVerticalScrollIndicator = false
+    collectionView.showsHorizontalScrollIndicator = false
     collectionView.backgroundColor = .clear
     sv(collectionView, selectButton)
     collectionView.fillContainer().centerInContainer()
@@ -68,10 +66,8 @@ class ImagesPreviewView: UIView {
   }
 }
 
-private func getBoundsAreaSize() -> CGSize {
-   return CGSize(width: UIScreen.main.bounds.width / 3, height: 0)
- }
-
- private func getAnimationAreaSize() -> CGSize {
-   return CGSize(width: UIScreen.main.bounds.width, height: 0)
- }
+extension GalleryCarouselView {
+  struct Constants {
+    static let selectionButtonSize = CGSize(width: 35, height: 35)
+  }
+}
