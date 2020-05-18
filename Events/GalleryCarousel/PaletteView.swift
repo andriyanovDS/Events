@@ -10,15 +10,18 @@ import UIKit
 
 class PaletteView: UIView {
   var totalHeight: CGFloat {
-    let centerIndex = CGFloat((layers.endIndex - 1) / 2)
-    return Constants.colorCircleRadius * 2 + centerIndex * Constants.colorCircleRadius / 2
+    let rect = CGRect(x: 0, y: 0, width: totalWidth, height: 0)
+    guard let firstPosition = layerPositions(in: rect, neededCount: 1).first else {
+      return CGFloat.zero
+    }
+    return firstPosition.y + Constants.colorCircleRadius * 2
   }
   var totalWidth: CGFloat {
     let count = CGFloat(layers.count)
-    return Constants.colorCircleRadius * 2 * count + Constants.colorSpacing * (count - 1)
+    return Constants.colorCircleRadius * 2 * count + Constants.colorSpacing * count
   }
+  var selectedColor = PaletteColor.allCases[0]
   private var layers: [CAShapeLayer] = []
-  private var selectedColor = PaletteColor.allCases[0]
   private var selectedLayer: CAShapeLayer?
   private var selectionAnimation: CABasicAnimation = {
     let animation = CABasicAnimation(keyPath: "transform.scale")
@@ -60,24 +63,38 @@ class PaletteView: UIView {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+  
+  private func layerPositions(in rect: CGRect, neededCount: Int) -> [CGPoint] {
+    let radius = Double(rect.width / 2)
+    let circumference = .pi * radius
+    let count = circumference / Double(Constants.colorCircleRadius * 2 + Constants.colorSpacing)
+    let step = .pi / count.rounded(.down)
+    let radiansOffset: Double = .pi/2 + Double(layers.count - 1)/2 * step
+    
+    return [Int](0..<neededCount).map { index in
+      let angel = step * Double(index) - radiansOffset
+      return CGPoint(
+        x: radius * cos(angel) + radius - Double(Constants.colorCircleRadius),
+        y: radius * sin(angel) + radius
+      )
+    }
+  }
 
   override func draw(_ rect: CGRect) {
-    let centerLayerIndex = (layers.endIndex - 1) / 2
-    var index = 0
-    var pairIndex = layers.endIndex - index - 1
-    while index <= centerLayerIndex {
-      let verticalDiff = CGFloat(centerLayerIndex - index) * Constants.colorCircleRadius
-       layers[index].position = CGPoint(
-         x: CGFloat(index) * (Constants.colorCircleRadius * 2 + Constants.colorSpacing),
-         y: verticalDiff
-       )
-       layers[pairIndex].position = CGPoint(
-         x: CGFloat(pairIndex) * (Constants.colorCircleRadius * 2 + Constants.colorSpacing),
-         y: verticalDiff
-       )
-       index += 1
-       pairIndex -= 1
-     }
+    let positions = layerPositions(in: rect, neededCount: layers.count)
+    
+    let initialPosition = CGPoint(x: rect.width/2, y: rect.height)
+    layers.forEach { $0.position = initialPosition }
+    
+    for index in 0..<layers.count {
+      let appearanceAnimation = CASpringAnimation(keyPath: "position")
+      appearanceAnimation.fromValue = initialPosition
+      appearanceAnimation.toValue = positions[index]
+      appearanceAnimation.damping = 10
+      appearanceAnimation.duration = appearanceAnimation.settlingDuration
+      layers[index].add(appearanceAnimation, forKey: nil)
+      layers[index].position = positions[index]
+    }
   }
 
   private func layer(filled color: PaletteColor) -> CAShapeLayer {
@@ -119,6 +136,7 @@ class PaletteView: UIView {
       layers.endIndex - 1
     )
 
+    guard layers[index] != selectedLayer else { return }
     selectLayer(at: index)
     feedbackGenerator.selectionChanged()
     feedbackGenerator.prepare()

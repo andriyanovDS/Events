@@ -141,10 +141,33 @@ class GalleryCarouselViewController: UIViewControllerWithActivityIndicator {
     switch action {
     case .brush:
       guard drawer == nil else { return }
-      drawer = Drawer(inside: view)
+      let cell = collectionView.cellForItem(at: IndexPath(item: activeCellIndex, section: 0))
+      guard
+        let galleryCell = cell as? GalleryCarouselCell,
+        let image = galleryCell.previewImageView.image
+      else { return }
+      imagesPreviewView.changeAccessoryViewsVisibility(isHidden: true)
+      drawer = Drawer(
+        size: galleryCell.previewImageView.frame.size,
+        image: image,
+        containerView: view
+      ) {[weak galleryCell, unowned self] image in
+        guard let cell = galleryCell else { return }
+        self.drawingDidComplete(with: image, forCell: cell)
+      }
       collectionView.isScrollEnabled = false
       interactiveTransition.isTransitionEnabled = false
     }
+  }
+  
+  private func drawingDidComplete(with image: UIImage?, forCell cell: GalleryCarouselCell) {
+    if let image = image {
+      cell.previewImageView.image = image
+    }
+    drawer = nil
+    imagesPreviewView.changeAccessoryViewsVisibility(isHidden: false)
+    collectionView.isScrollEnabled = true
+    interactiveTransition.isTransitionEnabled = true
   }
   
   private func movementDistance(at offsetX: CGFloat) -> CGFloat {

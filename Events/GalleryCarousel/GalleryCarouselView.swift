@@ -36,12 +36,20 @@ class GalleryCarouselView: UIView {
     for action in actions {
       let button = GenericButton(value: action)
       button.setTitle(String.fontMaterialIcon(action.icon), for: .normal)
-      button.titleLabel?.font = UIFont.icon(from: .materialIcon, ofSize: 30)
+      button.titleLabel?.font = UIFont.icon(from: .materialIcon, ofSize: 35)
       button.setTitleColor(.fontLabelInverted, for: .normal)
       button.size(44)
       button.onTouch = actionHandler
       actionsStackView.addArrangedSubview(button)
     }
+  }
+  
+  func changeAccessoryViewsVisibility(isHidden: Bool) {
+    let alpha: CGFloat = isHidden ? 0 : 1
+    UIView.animate(withDuration: 0.2, animations: {
+      self.actionsStackView.alpha = alpha
+      self.selectButton.alpha = alpha
+    })
   }
 
   private func setupView() {
@@ -62,21 +70,10 @@ class GalleryCarouselView: UIView {
     actionsStackView.alignment = .center
     actionsStackView.distribution = .equalSpacing
     actionsStackView.spacing = 10
-
-    backButton.style { v in
-      v.layer.cornerRadius = 17
-      v.layer.borderWidth = 2
-      v.layer.borderColor = UIColor.background.cgColor
-      let image = UIImage(
-        from: .materialIcon,
-        code: "chevron.left",
-        textColor: .background,
-        backgroundColor: .clear,
-        size: CGSize(width: 30, height: 30)
-      )
-      v.setImage(image, for: .normal)
-    }
-    backButton.size(35)
+    
+    let icon = Icon(material: "chevron.left", sfSymbol: "arrow.left.circle")
+    backButton.setIcon(icon, size: 35, color: .fontLabelInverted)
+    backButton.size(44)
     actionsStackView.addArrangedSubview(backButton)
     sv(actionsStackView)
     actionsStackView.left(20)
