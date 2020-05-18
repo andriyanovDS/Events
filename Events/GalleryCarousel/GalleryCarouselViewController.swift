@@ -29,6 +29,7 @@ class GalleryCarouselViewController: UIViewControllerWithActivityIndicator {
     imagesPreviewView.collectionView
   }
   private var interactiveTransition: InteractiveTransitioning!
+  private var drawer: Drawer?
 
   init(
     viewModel: GalleryCarouselViewModel,
@@ -91,6 +92,9 @@ class GalleryCarouselViewController: UIViewControllerWithActivityIndicator {
       GalleryCarouselCell.self,
       forCellWithReuseIdentifier: GalleryCarouselCell.reuseIdentifier
     )
+    view.setupActions(actions: EditingAction.allCases) {[unowned self] action in
+      self.handleEditingAction(action)
+    }
     view.collectionView.panGestureRecognizer.addTarget(self, action: #selector(handleHorizontalPanGesture))
     
     interactiveTransition = InteractiveTransitioning(
@@ -131,6 +135,16 @@ class GalleryCarouselViewController: UIViewControllerWithActivityIndicator {
     
     self.view = view
     imagesPreviewView = view
+  }
+
+  private func handleEditingAction(_ action: EditingAction) {
+    switch action {
+    case .brush:
+      guard drawer == nil else { return }
+      drawer = Drawer(inside: view)
+      collectionView.isScrollEnabled = false
+      interactiveTransition.isTransitionEnabled = false
+    }
   }
   
   private func movementDistance(at offsetX: CGFloat) -> CGFloat {
@@ -217,6 +231,10 @@ extension GalleryCarouselViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     activeAssetDidSelected()
   }
+
+  func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+    return drawer == nil
+  }
   
 	func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
     collectionView.isUserInteractionEnabled = true
@@ -260,6 +278,18 @@ extension GalleryCarouselViewController {
   enum Direction {
     case left
     case right
+  }
+}
+
+enum EditingAction: CaseIterable {
+  case brush
+}
+
+extension EditingAction: GalleryCarouselViewAction {
+  var icon: String {
+    switch self {
+    case .brush: return "brush"
+    }
   }
 }
 

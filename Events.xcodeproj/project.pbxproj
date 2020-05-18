@@ -93,6 +93,9 @@
 		6079371123225CBF003AAD2B /* PermissionModalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6079371023225CBF003AAD2B /* PermissionModalViewModel.swift */; };
 		6079371323225D5B003AAD2B /* PermissionModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6079371223225D5B003AAD2B /* PermissionModalView.swift */; };
 		6079371523225DA5003AAD2B /* PermissionModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6079371423225DA5003AAD2B /* PermissionModal.swift */; };
+		740648822471A82A0006BCFD /* GenericButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740648812471A82A0006BCFD /* GenericButton.swift */; };
+		740648842471B1D30006BCFD /* Drawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740648832471B1D20006BCFD /* Drawer.swift */; };
+		740648862471B5C60006BCFD /* PaletteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740648852471B5C60006BCFD /* PaletteView.swift */; };
 		7408541F2302030900220B23 /* TipSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7408541E2302030900220B23 /* TipSectionView.swift */; };
 		7408542123020C0700220B23 /* Tip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7408542023020C0700220B23 /* Tip.swift */; };
 		740C352023DC700600F00714 /* CalendarCloseByGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 740C351F23DC700600F00714 /* CalendarCloseByGestureRecognizer.swift */; };
@@ -315,6 +318,9 @@
 		6079371023225CBF003AAD2B /* PermissionModalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionModalViewModel.swift; sourceTree = "<group>"; };
 		6079371223225D5B003AAD2B /* PermissionModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionModalView.swift; sourceTree = "<group>"; };
 		6079371423225DA5003AAD2B /* PermissionModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionModal.swift; sourceTree = "<group>"; };
+		740648812471A82A0006BCFD /* GenericButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericButton.swift; sourceTree = "<group>"; };
+		740648832471B1D20006BCFD /* Drawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drawer.swift; sourceTree = "<group>"; };
+		740648852471B5C60006BCFD /* PaletteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteView.swift; sourceTree = "<group>"; };
 		7408541E2302030900220B23 /* TipSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipSectionView.swift; sourceTree = "<group>"; };
 		7408542023020C0700220B23 /* Tip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tip.swift; sourceTree = "<group>"; };
 		740C351F23DC700600F00714 /* CalendarCloseByGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCloseByGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -674,6 +680,8 @@
 				0A45F6F3246F27BE003C8A0D /* GalleryCarouselBuilder.swift */,
 				0A45F6F1246EF5FF003C8A0D /* FetchResultDataSource.swift */,
 				0A45F6F5247055D1003C8A0D /* InteractiveTransitioning.swift */,
+				740648832471B1D20006BCFD /* Drawer.swift */,
+				740648852471B5C60006BCFD /* PaletteView.swift */,
 			);
 			path = GalleryCarousel;
 			sourceTree = "<group>";
@@ -752,6 +760,7 @@
 				744B7C9122E3C6DF00A839A6 /* ButtonScale.swift */,
 				74E882F52428E13900DAF4B4 /* ButtonNodeScaledOnPress.swift */,
 				0AF5A4652434DEB50044D558 /* LoadingView.swift */,
+				740648812471A82A0006BCFD /* GenericButton.swift */,
 			);
 			path = CommonUIComponents;
 			sourceTree = "<group>";
@@ -1209,6 +1218,7 @@
 				74F0F5732300B55A00170C6C /* HintPopupVC.swift in Sources */,
 				74697FCE22D2022700D5B5F4 /* CalendarViewModel.swift in Sources */,
 				74E882F02426BC6600DAF4B4 /* EventView.swift in Sources */,
+				740648822471A82A0006BCFD /* GenericButton.swift in Sources */,
 				0AE899E0242D194C00EF427E /* EventsNode.swift in Sources */,
 				74F0F5772300B7EC00170C6C /* HintPopupViewModel.swift in Sources */,
 				7478F50622F6251900A43F52 /* LocationView.swift in Sources */,
@@ -1270,6 +1280,7 @@
 				746E10632310A01B00B5B19D /* ImagePickerVC.swift in Sources */,
 				0A3A48742448A31600B7BFB9 /* CalendarDataSource.swift in Sources */,
 				7465235822EFA0320027FB22 /* ProfileScreenView.swift in Sources */,
+				740648842471B1D30006BCFD /* Drawer.swift in Sources */,
 				74A1AE2322D64BFB00C39525 /* LoginViewModel.swift in Sources */,
 				745243C122CFE2B400C930C8 /* UIColor+AppColors.swift in Sources */,
 				0AA421852416351000554121 /* DescriptionCellButton.swift in Sources */,
@@ -1308,6 +1319,7 @@
 				74A1AE1F22D5D18800C39525 /* keyboardAttach.swift in Sources */,
 				0AEE5CF6242D2E82007A2D10 /* UserEventCellNode.swift in Sources */,
 				7423345E2413CF3700B46037 /* DateViewController.swift in Sources */,
+				740648862471B5C60006BCFD /* PaletteView.swift in Sources */,
 				742334652415627300B46037 /* CategoryViewModel.swift in Sources */,
 				0A4919A2241E9CEC0068BDFE /* StartViewController.swift in Sources */,
 				74D8DB2E22DD265500E70CB4 /* UserDetailsViewController.swift in Sources */,

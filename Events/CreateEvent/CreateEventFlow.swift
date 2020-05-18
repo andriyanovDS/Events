@@ -164,13 +164,16 @@ class CreateEventFlow: Flow {
     let createEventViewController = CreateEventViewController.instantiate(with: createEventViewModel)
     rootNavigationController.pushViewController(createEventViewController, animated: false)
 
-    let startViewModel = StartViewModel(onResult: { data in
-      createEventViewModel.eventStartDataDidSelected(data: data)
-    })
-    let startViewController = StartViewController.instantiate(with: startViewModel)
-    startViewController.onBackAction = {
-      createEventViewModel.onClose()
-    }
+//    let startViewModel = StartViewModel(onResult: { data in
+//      createEventViewModel.eventStartDataDidSelected(data: data)
+//    })
+//    let startViewController = StartViewController.instantiate(with: startViewModel)
+//    startViewController.onBackAction = {
+//      createEventViewModel.onClose()
+//    }
+
+    let startViewModel = DescriptionViewModel(onResult: { _ in })
+    let startViewController = DescriptionViewController.instantiate(with: startViewModel)
     rootNavigationController.pushViewController(startViewController, animated: false)
 
     return .multiple(flowContributors: [

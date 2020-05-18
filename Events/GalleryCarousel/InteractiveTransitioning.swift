@@ -11,7 +11,8 @@ import UIKit
 class InteractiveTransitioning: NSObject {
   typealias CompletionHandler = () -> Void
   typealias ActiveViewProvider = () -> UIView
-  
+
+  var isTransitionEnabled: Bool = true
   var translationYBound: CGFloat = 75.0
   var revertAnimationDuration: TimeInterval = 0.3
   weak var delegate: InteractiveTransitioningDelegate?
@@ -86,6 +87,7 @@ class InteractiveTransitioning: NSObject {
 
 extension InteractiveTransitioning: UIGestureRecognizerDelegate {
   func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    guard isTransitionEnabled else { return false }
     guard let view = gestureRecognizer.view else { return false }
     guard let panGestureRecognizer = gestureRecognizer as? UIPanGestureRecognizer else {
       return false

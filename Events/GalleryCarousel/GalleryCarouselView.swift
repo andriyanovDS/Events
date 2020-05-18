@@ -15,6 +15,7 @@ class GalleryCarouselView: UIView {
   let backButton = UIButtonScaleOnPress()
 	let selectButton: SelectImageButton
   let collectionView: UICollectionView
+  private let actionsStackView = UIStackView()
 
   init() {
     let layout = ImagePickerCollectionViewLayout(
@@ -31,6 +32,18 @@ class GalleryCarouselView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  func setupActions<T: GalleryCarouselViewAction>(actions: [T], actionHandler: @escaping (T) -> Void) {
+    for action in actions {
+      let button = GenericButton(value: action)
+      button.setTitle(String.fontMaterialIcon(action.icon), for: .normal)
+      button.titleLabel?.font = UIFont.icon(from: .materialIcon, ofSize: 30)
+      button.setTitleColor(.fontLabelInverted, for: .normal)
+      button.size(44)
+      button.onTouch = actionHandler
+      actionsStackView.addArrangedSubview(button)
+    }
+  }
+
   private func setupView() {
     isOpaque = false
     backgroundColor = .backgroundInverted
@@ -45,7 +58,11 @@ class GalleryCarouselView: UIView {
   }
 
   private func setupFooter() {
-    let footerView = UIView()
+    actionsStackView.axis = .horizontal
+    actionsStackView.alignment = .center
+    actionsStackView.distribution = .equalSpacing
+    actionsStackView.spacing = 10
+
     backButton.style { v in
       v.layer.cornerRadius = 17
       v.layer.borderWidth = 2
@@ -59,10 +76,11 @@ class GalleryCarouselView: UIView {
       )
       v.setImage(image, for: .normal)
     }
-    sv(footerView.sv(backButton))
-    footerView.left(0).right(0).bottom(0)
-    backButton.left(20).width(35).height(35).top(10)
-    backButton.Bottom == footerView.safeAreaLayoutGuide.Bottom + 10
+    backButton.size(35)
+    actionsStackView.addArrangedSubview(backButton)
+    sv(actionsStackView)
+    actionsStackView.left(20)
+    actionsStackView.Bottom == safeAreaLayoutGuide.Bottom - 10
   }
 }
 
@@ -70,4 +88,8 @@ extension GalleryCarouselView {
   struct Constants {
     static let selectionButtonSize = CGSize(width: 35, height: 35)
   }
+}
+
+protocol GalleryCarouselViewAction {
+  var icon: String { get }
 }
