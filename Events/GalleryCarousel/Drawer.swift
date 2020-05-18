@@ -11,16 +11,31 @@ import Stevia
 
 class Drawer {
   private let view: UIView
-  private let paletteView = PaletteView()
+  private let palette = PaletteView()
 
   init(inside view: UIView) {
     self.view = view
-
-    view.sv(paletteView)
-    paletteView.CenterX == view.CenterX
-    paletteView
+    setupGestureRecognisers()
+    view.sv(palette)
+    palette.CenterX == view.CenterX
+    palette
       .bottom(120)
-      .width(paletteView.totalWidth)
-      .height(paletteView.totalHeight)
+      .width(palette.totalWidth)
+      .height(palette.totalHeight)
+  }
+
+  private func setupGestureRecognisers() {
+    let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+    let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
+    view.addGestureRecognizer(panGestureRecognizer)
+    view.addGestureRecognizer(tapGestureRecognizer)
+  }
+
+  @objc private func handlePanGesture(_ recognizer: UIPanGestureRecognizer) {
+
+  }
+
+  @objc private func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
+
   }
 }

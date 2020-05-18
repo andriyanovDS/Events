@@ -18,32 +18,38 @@ class PaletteView: UIView {
     return Constants.colorCircleRadius * 2 * count + Constants.colorSpacing * (count - 1)
   }
   private var layers: [CAShapeLayer] = []
-  private var selectedColor: PaletteColor?
+  private var selectedColor = PaletteColor.allCases[0]
   private var selectedLayer: CAShapeLayer?
-  private var selectionAnimation: CABasicAnimation {
+  private var selectionAnimation: CABasicAnimation = {
     let animation = CABasicAnimation(keyPath: "transform.scale")
     animation.fromValue = 1
-    animation.toValue = 1.1
+    animation.toValue = 0.9
     animation.autoreverses = true
-    animation.duration = 0.1
+    animation.duration = 0.2
+    animation.timingFunction = .easeOut
     return animation
-  }
-  private let selectionPath: CGPath
-  private lazy var feedbackGenerator = UISelectionFeedbackGenerator()
-
-  init() {
-    selectionPath = UIBezierPath(
-      arcCenter: CGPoint(x: Constants.colorCircleRadius, y: Constants.colorCircleRadius),
-      radius: 2,
+  }()
+  private var selectionLayer: CALayer = {
+    let layer = CAShapeLayer()
+    layer.fillColor = UIColor.white.cgColor
+    let path = UIBezierPath(
+      arcCenter: CGPoint(x: 0, y: 0),
+      radius: Constants.selectionCircleRadius,
       startAngle: 0,
       endAngle: .pi * 2,
       clockwise: true
-    ).cgPath
+    )
+    layer.path = path.cgPath
+    return layer
+  }()
+  private lazy var feedbackGenerator = UISelectionFeedbackGenerator()
 
+  init() {
     super.init(frame: CGRect.zero)
 
     layers = PaletteColor.allCases.map { layer(filled: $0) }
     layers.forEach { layer.addSublayer($0) }
+    selectLayer(at: 0, animated: false)
 
     let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
@@ -79,6 +85,7 @@ class PaletteView: UIView {
     layer.lineWidth = 4
     layer.strokeColor = UIColor.white.cgColor
     layer.fillColor = color.value.cgColor
+    layer.fillRule = .evenOdd
     let path = UIBezierPath(
       arcCenter: CGPoint(x: Constants.colorCircleRadius, y: Constants.colorCircleRadius),
       radius: Constants.colorCircleRadius,
@@ -90,25 +97,29 @@ class PaletteView: UIView {
     return layer
   }
 
+  private func selectLayer(at index: Int, animated: Bool = true) {
+    let touchedLayer = layers[index]
+    if touchedLayer == selectedLayer { return }
+
+    selectionLayer.removeFromSuperlayer()
+    selectedLayer = touchedLayer
+
+    touchedLayer.addSublayer(selectionLayer)
+    selectionLayer.position = CGPoint(x: Constants.colorCircleRadius, y: Constants.colorCircleRadius)
+    selectedColor = PaletteColor.allCases[index]
+    if animated {
+      touchedLayer.add(selectionAnimation, forKey: "scale")
+    }
+  }
+
   private func didPerformGesture(at location: CGPoint) {
     let hitSize = Constants.colorCircleRadius * 2 + Constants.colorSpacing
     let index = min(
       max(Int((location.x + Constants.colorSpacing) / hitSize), 0),
       layers.endIndex - 1
     )
-    let touchedLayer = layers[index]
-    if touchedLayer == selectedLayer { return }
 
-    selectedLayer?.path = touchedLayer.path
-    selectedLayer = touchedLayer
-
-    if let mutablePath = touchedLayer.path?.mutableCopy() {
-      mutablePath.addPath(selectionPath)
-      touchedLayer.path = mutablePath
-    }
-    selectedColor = PaletteColor.allCases[index]
-    touchedLayer.add(selectionAnimation, forKey: "scale")
-
+    selectLayer(at: index)
     feedbackGenerator.selectionChanged()
     feedbackGenerator.prepare()
   }
@@ -132,8 +143,9 @@ class PaletteView: UIView {
 
 extension PaletteView {
   struct Constants {
-    static let colorCircleRadius: CGFloat = 20.0
-    static let colorSpacing: CGFloat = 20.0
+    static let colorCircleRadius: CGFloat = 17.0
+    static let colorSpacing: CGFloat = 17.0
+    static let selectionCircleRadius: CGFloat = 6.0
   }
 
   enum PaletteColor: CaseIterable {
