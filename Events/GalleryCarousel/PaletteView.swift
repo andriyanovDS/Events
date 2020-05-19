@@ -14,7 +14,7 @@ class PaletteView: UIView {
     guard let firstPosition = layerPositions(in: rect, neededCount: 1).first else {
       return CGFloat.zero
     }
-    return firstPosition.y + Constants.colorCircleRadius * 2
+    return firstPosition.y + layers[0].bounds.height / 2
   }
   var totalWidth: CGFloat {
     let count = CGFloat(layers.count)
@@ -53,6 +53,7 @@ class PaletteView: UIView {
     layers = PaletteColor.allCases.map { layer(filled: $0) }
     layers.forEach { layer.addSublayer($0) }
     selectLayer(at: 0, animated: false)
+    layer.backgroundColor = UIColor.red.cgColor
 
     let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
@@ -67,15 +68,15 @@ class PaletteView: UIView {
   private func layerPositions(in rect: CGRect, neededCount: Int) -> [CGPoint] {
     let radius = Double(rect.width / 2)
     let circumference = .pi * radius
-    let count = circumference / Double(Constants.colorCircleRadius * 2 + Constants.colorSpacing)
+    let count = circumference / Double(layers[0].bounds.width)
     let step = .pi / count.rounded(.down)
     let radiansOffset: Double = .pi/2 + Double(layers.count - 1)/2 * step
     
     return [Int](0..<neededCount).map { index in
       let angel = step * Double(index) - radiansOffset
       return CGPoint(
-        x: radius * cos(angel) + radius - Double(Constants.colorCircleRadius),
-        y: radius * sin(angel) + radius
+        x: radius * cos(angel) + radius,
+        y: radius * sin(angel) + radius + Double(Constants.colorCircleRadius)
       )
     }
   }
@@ -103,8 +104,15 @@ class PaletteView: UIView {
     layer.strokeColor = UIColor.white.cgColor
     layer.fillColor = color.value.cgColor
     layer.fillRule = .evenOdd
+    let size = Constants.colorCircleRadius * 2 + Constants.colorSpacing
+    layer.bounds = CGRect(
+      x: 0,
+      y: 0,
+      width: size,
+      height: size
+    )
     let path = UIBezierPath(
-      arcCenter: CGPoint(x: Constants.colorCircleRadius, y: Constants.colorCircleRadius),
+      arcCenter: CGPoint(x: layer.bounds.midX, y: layer.bounds.midY),
       radius: Constants.colorCircleRadius,
       startAngle: 0,
       endAngle: .pi * 2,
@@ -122,7 +130,7 @@ class PaletteView: UIView {
     selectedLayer = touchedLayer
 
     touchedLayer.addSublayer(selectionLayer)
-    selectionLayer.position = CGPoint(x: Constants.colorCircleRadius, y: Constants.colorCircleRadius)
+    selectionLayer.position = CGPoint(x: touchedLayer.bounds.midX, y: touchedLayer.bounds.midY)
     selectedColor = PaletteColor.allCases[index]
     if animated {
       touchedLayer.add(selectionAnimation, forKey: "scale")
@@ -130,11 +138,9 @@ class PaletteView: UIView {
   }
 
   private func didPerformGesture(at location: CGPoint) {
-    let hitSize = Constants.colorCircleRadius * 2 + Constants.colorSpacing
-    let index = min(
-      max(Int((location.x + Constants.colorSpacing) / hitSize), 0),
-      layers.endIndex - 1
-    )
+    guard let index = layers.firstIndex(where: { $0.frame.contains(location) }) else {
+      return
+    }
 
     guard layers[index] != selectedLayer else { return }
     selectLayer(at: index)
