@@ -53,7 +53,6 @@ class PaletteView: UIView {
     layers = PaletteColor.allCases.map { layer(filled: $0) }
     layers.forEach { layer.addSublayer($0) }
     selectLayer(at: 0, animated: false)
-    layer.backgroundColor = UIColor.red.cgColor
 
     let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
     let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))

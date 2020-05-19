@@ -17,7 +17,7 @@ class Drawer {
   private let containerView: UIView
   private let image: UIImage
   private let completionHandler: CompletionHandler
-  private let historyActionStackView = UIStackView()
+  private let historyActionView = UIView()
   private let footerStackView = UIStackView()
   private var contextActionButtons: [UIButton] = []
   private var activeContextAction: ContextAction = .coloredLine
@@ -37,7 +37,7 @@ class Drawer {
   
   deinit {
     canvasView.removeFromSuperview()
-    historyActionStackView.removeFromSuperview()
+    historyActionView.removeFromSuperview()
     footerStackView.removeFromSuperview()
     palette.removeFromSuperview()
   }
@@ -139,10 +139,10 @@ class Drawer {
 extension Drawer {
   private func setupCanvasView(withSize size: CGSize) {
     canvasView.backgroundColor = .clear
-    setupHistoryActions()
-    setupFooterView()
     
     containerView.sv([canvasView, palette])
+    setupHistoryActions()
+    setupFooterView()
     canvasView
       .height(size.height)
       .width(size.width)
@@ -155,9 +155,11 @@ extension Drawer {
   }
   
   private func setupHistoryActions() {
-    historyActionStackView.axis = .horizontal
-    historyActionStackView.alignment = .center
-    historyActionStackView.distribution = .equalCentering
+    historyActionView.backgroundColor = UIColor.backgroundInverted.withAlphaComponent(0.7)
+    let stackView = UIStackView()
+    stackView.axis = .horizontal
+    stackView.alignment = .center
+    stackView.distribution = .equalCentering
     
     let undoButton = GenericButton(value: HistoryAction.undo)
     let undoIcon = Icon(material: "undo", sfSymbol: "arrow.turn.up.left")
@@ -179,12 +181,15 @@ extension Drawer {
     }
     
     undoButton.size(44)
-    historyActionStackView.addArrangedSubview(undoButton)
-    historyActionStackView.addArrangedSubview(clearButton)
+    stackView.addArrangedSubview(undoButton)
+    stackView.addArrangedSubview(clearButton)
     contextActionButtons.append(contentsOf: [undoButton, clearButton])
     disableContextActions()
-    containerView.sv(historyActionStackView)
-    historyActionStackView.left(10).right(10).Top == containerView.safeAreaLayoutGuide.Top + 20
+    historyActionView.sv(stackView)
+    containerView.sv(historyActionView)
+    historyActionView.top(0).left(0).right(0)
+    let insetTop = UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0
+    stackView.left(10).right(10).top(insetTop + 10).bottom(0)
   }
   
   private func handleContextAction(_ action: ContextAction) {

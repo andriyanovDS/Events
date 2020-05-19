@@ -61,11 +61,15 @@ class GalleryCarouselView: UIView {
     sv(collectionView, selectButton)
     collectionView.fillContainer().centerInContainer()
     selectButton.right(20)
+    
+    addShadow(view: selectButton, radius: 3)
     selectButton.Top == safeAreaLayoutGuide.Top + 20
     setupFooter()
   }
 
   private func setupFooter() {
+    let backgroundView = UIView()
+    backgroundView.backgroundColor = UIColor.backgroundInverted.withAlphaComponent(0.7)
     actionsStackView.axis = .horizontal
     actionsStackView.alignment = .center
     actionsStackView.distribution = .equalSpacing
@@ -75,9 +79,13 @@ class GalleryCarouselView: UIView {
     backButton.setIcon(icon, size: 35, color: .fontLabelInverted)
     backButton.size(44)
     actionsStackView.addArrangedSubview(backButton)
-    sv(actionsStackView)
-    actionsStackView.left(20)
-    actionsStackView.Bottom == safeAreaLayoutGuide.Bottom - 10
+    
+    backgroundView.sv(actionsStackView)
+    sv(backgroundView)
+    
+    backgroundView.left(0).right(0).bottom(0)
+    let safeAreaInsetBottom = UIApplication.shared.keyWindow!.safeAreaInsets.bottom
+    actionsStackView.left(20).bottom(safeAreaInsetBottom + 10).top(10)
   }
 }
 
