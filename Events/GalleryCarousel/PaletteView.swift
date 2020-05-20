@@ -64,6 +64,31 @@ class PaletteView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
   
+  func performDisappearAnimation(duration: CFTimeInterval) {
+    let opacityAnimation = CABasicAnimation(keyPath: "opacity")
+    opacityAnimation.fromValue = 1
+    opacityAnimation.toValue = 0
+    opacityAnimation.duration = duration
+    
+    let destinationPosition = CGPoint(x: bounds.midX, y: bounds.maxY)
+    for layer in layers {
+      layer.removeAllAnimations()
+      
+      let positionAnimation = CABasicAnimation(keyPath: "position")
+      positionAnimation.fromValue = layer.position
+      positionAnimation.toValue = destinationPosition
+      positionAnimation.duration = duration
+      
+      let animationGroup = CAAnimationGroup()
+      animationGroup.duration = duration
+      animationGroup.animations = [positionAnimation, opacityAnimation]
+      layer.add(animationGroup, forKey: nil)
+      
+      layer.opacity = 0
+      layer.position = destinationPosition
+    }
+  }
+  
   private func layerPositions(in rect: CGRect, neededCount: Int) -> [CGPoint] {
     let radius = Double(rect.width / 2)
     let circumference = .pi * radius
@@ -92,7 +117,7 @@ class PaletteView: UIView {
       appearanceAnimation.toValue = positions[index]
       appearanceAnimation.damping = 10
       appearanceAnimation.duration = appearanceAnimation.settlingDuration
-      layers[index].add(appearanceAnimation, forKey: nil)
+      layers[index].add(appearanceAnimation, forKey: "position")
       layers[index].position = positions[index]
     }
   }

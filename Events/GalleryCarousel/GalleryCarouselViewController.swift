@@ -146,11 +146,10 @@ class GalleryCarouselViewController: UIViewControllerWithActivityIndicator {
         let galleryCell = cell as? GalleryCarouselCell,
         let image = galleryCell.previewImageView.image
       else { return }
-      imagesPreviewView.changeAccessoryViewsVisibility(isHidden: true)
       drawer = Drawer(
         size: galleryCell.previewImageView.frame.size,
         image: image,
-        containerView: view
+        containerView: imagesPreviewView
       ) {[weak galleryCell, unowned self] image in
         guard let cell = galleryCell else { return }
         self.drawingDidComplete(with: image, forCell: cell)
@@ -165,7 +164,6 @@ class GalleryCarouselViewController: UIViewControllerWithActivityIndicator {
       cell.previewImageView.image = image
     }
     drawer = nil
-    imagesPreviewView.changeAccessoryViewsVisibility(isHidden: false)
     collectionView.isScrollEnabled = true
     interactiveTransition.isTransitionEnabled = true
   }

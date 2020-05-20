@@ -14,7 +14,7 @@ class Drawer {
   
   private let canvasView = CanvasView()
   private let palette = PaletteView()
-  private let containerView: UIView
+  private let containerView: GalleryCarouselView
   private let image: UIImage
   private let completionHandler: CompletionHandler
   private let historyActionView = UIView()
@@ -25,7 +25,7 @@ class Drawer {
   init(
     size: CGSize,
     image: UIImage,
-    containerView: UIView,
+    containerView: GalleryCarouselView,
     completionHandler: @escaping CompletionHandler
   ) {
     self.image = image
@@ -33,6 +33,7 @@ class Drawer {
     self.completionHandler = completionHandler
     setupCanvasView(withSize: size)
     setupGestureRecognisers()
+    containerView.changeAccessoryViewsVisibility(isHidden: true)
   }
   
   deinit {
@@ -40,6 +41,17 @@ class Drawer {
     historyActionView.removeFromSuperview()
     footerStackView.removeFromSuperview()
     palette.removeFromSuperview()
+  }
+  
+  private func dismiss(with result: UIImage?) {
+    palette.performDisappearAnimation(duration: 0.2)
+    containerView.changeAccessoryViewsVisibility(isHidden: false)
+    UIView.animate(withDuration: 0.2, animations: {
+      self.footerStackView.alpha = 0
+      self.historyActionView.alpha = 0
+    }, completion: {[weak self] _ in
+      self?.completionHandler(result)
+    })
   }
   
   private func undo() {
@@ -117,7 +129,7 @@ class Drawer {
   
   private func saveContext() {
     if canvasView.lines.isEmpty {
-      completionHandler(image)
+      dismiss(with: image)
       return
     }
     UIGraphicsBeginImageContextWithOptions(canvasView.frame.size, true, 0)
@@ -128,11 +140,11 @@ class Drawer {
     canvasView.layer.render(in: context)
     let image = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
-    completionHandler(image)
+    dismiss(with: image)
   }
   
   private func endEditing() {
-    completionHandler(nil)
+    dismiss(with: nil)
   }
 }
 
