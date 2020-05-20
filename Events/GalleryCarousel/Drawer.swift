@@ -8,31 +8,39 @@
 
 import UIKit
 import Stevia
+import AVFoundation
 
 class Drawer {
-  typealias CompletionHandler = (UIImage?) -> Void
+  typealias CompletionHandler = () -> Void
   
   private let canvasView = CanvasView()
   private let palette = PaletteView()
   private let containerView: GalleryCarouselView
   private let image: UIImage
+  private let imageView: UIImageView
+  private let originImageViewSize: CGSize
   private let completionHandler: CompletionHandler
   private let historyActionView = UIView()
   private let footerStackView = UIStackView()
   private var contextActionButtons: [UIButton] = []
   private var activeContextAction: ContextAction = .coloredLine
 
-  init(
-    size: CGSize,
-    image: UIImage,
+  init?(
+    imageView: UIImageView,
     containerView: GalleryCarouselView,
     completionHandler: @escaping CompletionHandler
   ) {
+    guard let image = imageView.image else {
+      return nil
+    }
     self.image = image
+    self.imageView = imageView
     self.containerView = containerView
     self.completionHandler = completionHandler
-    setupCanvasView(withSize: size)
+    self.originImageViewSize = imageView.bounds.size
+    setupCanvasView(withSize: imageView.frame.size)
     setupGestureRecognisers()
+    updateImageViewSizeIfNeeded()
     containerView.changeAccessoryViewsVisibility(isHidden: true)
   }
   
@@ -43,14 +51,39 @@ class Drawer {
     palette.removeFromSuperview()
   }
   
-  private func dismiss(with result: UIImage?) {
+  private func updateImageViewSizeIfNeeded() {
+    containerView.layoutIfNeeded()
+    let height = footerStackView.frame.minY - historyActionView.frame.maxY - 20
+    let rect = CGRect(x: 0, y: 0, width: containerView.frame.width, height: height)
+    let size = AVMakeRect(aspectRatio: image.size, insideRect: rect)
+    guard height.rounded(.down) < imageView.bounds.height.rounded(.down) else {
+      return
+    }
+    
+    UIView.animate(withDuration: 0.4, animations: {
+      self.imageView.widthConstraint?.constant = size.width
+      self.imageView.heightConstraint?.constant = size.height
+      self.imageView.setNeedsLayout()
+      self.imageView.superview?.layoutIfNeeded()
+      
+      self.canvasView.heightConstraint?.constant = size.height
+      self.containerView.layoutIfNeeded()
+    })
+  }
+  
+  private func dismiss() {
     palette.performDisappearAnimation(duration: 0.2)
     containerView.changeAccessoryViewsVisibility(isHidden: false)
     UIView.animate(withDuration: 0.2, animations: {
       self.footerStackView.alpha = 0
       self.historyActionView.alpha = 0
+      
+      if self.originImageViewSize.height > self.imageView.bounds.height {
+        self.imageView.heightConstraint?.constant = self.originImageViewSize.height
+        self.imageView.superview?.layoutIfNeeded()
+      }
     }, completion: {[weak self] _ in
-      self?.completionHandler(result)
+      self?.completionHandler()
     })
   }
   
@@ -129,7 +162,7 @@ class Drawer {
   
   private func saveContext() {
     if canvasView.lines.isEmpty {
-      dismiss(with: image)
+      dismiss()
       return
     }
     UIGraphicsBeginImageContextWithOptions(canvasView.frame.size, true, 0)
@@ -140,11 +173,9 @@ class Drawer {
     canvasView.layer.render(in: context)
     let image = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
-    dismiss(with: image)
-  }
-  
-  private func endEditing() {
-    dismiss(with: nil)
+    canvasView.removeFromSuperview()
+    imageView.image = image
+    dismiss()
   }
 }
 
@@ -207,7 +238,7 @@ extension Drawer {
   private func handleContextAction(_ action: ContextAction) {
     switch action {
     case .cancel:
-      endEditing()
+      dismiss()
     case .coloredLine, .eraser:
       activeContextAction = action
       for button in footerStackView.arrangedSubviews {

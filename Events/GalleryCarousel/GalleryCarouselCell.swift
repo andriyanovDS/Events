@@ -27,16 +27,20 @@ class GalleryCarouselCell: UICollectionViewCell, FetchResultDataSourceCell {
   }
 
   func setupView() {
+    backgroundColor = .backgroundInverted
     previewImageView.contentMode = .scaleAspectFit
 
     sv(previewImageView)
     previewImageView.centerInContainer()
+    let size = UIScreen.main.bounds.size
+    previewImageView.height(size.height).left(0).right(0)
   }
 
   func setImage(_ image: UIImage) {
     let size = AVMakeRect(aspectRatio: image.size, insideRect: UIScreen.main.bounds)
     previewImageView.image = image
-    previewImageView.width(size.width).height(size.height)
+    previewImageView.heightConstraint?.constant = size.height
+    previewImageView.layoutIfNeeded()
   }
 
   override func prepareForReuse() {
